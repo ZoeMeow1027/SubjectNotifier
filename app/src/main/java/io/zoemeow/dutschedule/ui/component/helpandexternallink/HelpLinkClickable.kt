@@ -10,7 +10,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import io.zoemeow.dutschedule.model.helpandexternallink.HelpLinkInfo
+import io.zoemeow.dutschedule.model.HelpLinkInfo
 
 @Composable
 fun HelpLinkClickable(

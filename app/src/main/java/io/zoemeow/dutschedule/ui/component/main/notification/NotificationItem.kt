@@ -41,7 +41,7 @@ fun NotificationItem(
         color = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = opacity),
         content = {
             Row(
-                modifier = Modifier.fillMaxWidth().padding(horizontal = 6.dp, vertical = 3.dp),
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 10.dp, vertical = 3.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 content = {
                     Column(
@@ -61,14 +61,14 @@ fun NotificationItem(
                         }
                         Text(
                             item.title,
-                            style = MaterialTheme.typography.titleSmall,
+                            style = MaterialTheme.typography.titleMedium,
                             overflow = TextOverflow.Ellipsis,
                             maxLines = 2
                         )
                         Spacer(modifier = Modifier.size(3.dp))
                         Text(
                             item.description,
-                            style = MaterialTheme.typography.bodySmall,
+                            style = MaterialTheme.typography.bodyMedium,
                             overflow = TextOverflow.Ellipsis,
                             maxLines = 3
                         )

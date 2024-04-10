@@ -1,6 +1,9 @@
 package io.zoemeow.dutschedule.ui.view.settings
 
+import android.content.ComponentName
 import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -26,12 +29,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat
 import io.zoemeow.dutschedule.activity.SettingsActivity
 import io.zoemeow.dutschedule.model.settings.BackgroundImageOption
 import io.zoemeow.dutschedule.ui.component.base.DividerItem
 import io.zoemeow.dutschedule.ui.component.base.OptionItem
+import io.zoemeow.dutschedule.ui.component.base.OptionSwitchItem
 import io.zoemeow.dutschedule.ui.component.settings.ContentRegion
 import io.zoemeow.dutschedule.ui.component.settings.dialog.DialogSchoolYearSettings
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -134,6 +140,43 @@ fun SettingsActivity.ExperimentSettings(
                                 onClick = {
                                     showSnackBar("This option is in development. Check back soon.", true)
                                     /* TODO: Implement here: Component opacity */
+                                }
+                            )
+                            // https://stackoverflow.com/questions/72932093/jetpack-compose-is-there-a-way-to-restart-whole-app-programmatically
+                            OptionSwitchItem(
+                                modifierInside = Modifier.padding(horizontal = 20.dp, vertical = 15.dp),
+                                title = "Main screen dashboard view",
+                                isVisible = true,
+                                isEnabled = true,
+                                isChecked = getMainViewModel().appSettings.value.mainScreenDashboardView,
+                                description = String.format(
+                                    "%s",
+                                    if (getMainViewModel().appSettings.value.mainScreenDashboardView) "Enabled" else "Disabled (tab view)"
+                                ),
+                                onValueChanged = {
+                                    showSnackBar(
+                                        text = String.format(
+                                            "This will %s your dashboard view. Application will restart. To confirm, click Confirm button.",
+                                            if (getMainViewModel().appSettings.value.mainScreenDashboardView) "disable" else "enable",
+                                        ),
+                                        clearPrevious = true,
+                                        actionText = "Confirm",
+                                        action = {
+                                            getMainViewModel().appSettings.value = getMainViewModel().appSettings.value.clone(
+                                                mainScreenDashboardView = !getMainViewModel().appSettings.value.mainScreenDashboardView
+                                            )
+                                            getMainViewModel().saveSettings(
+                                                onCompleted = {
+                                                    val packageManager: PackageManager = context.packageManager
+                                                    val intent: Intent = packageManager.getLaunchIntentForPackage(context.packageName)!!
+                                                    val componentName: ComponentName = intent.component!!
+                                                    val restartIntent: Intent = Intent.makeRestartActivityTask(componentName)
+                                                    context.startActivity(restartIntent)
+                                                    Runtime.getRuntime().exit(0)
+                                                }
+                                            )
+                                        }
+                                    )
                                 }
                             )
                         }

@@ -19,7 +19,7 @@ import io.zoemeow.dutschedule.ui.component.base.DialogBase
 import io.zoemeow.dutschedule.ui.component.base.DialogRadioButton
 
 @Composable
-fun SettingsActivity.DialogAppBackgroundSettings(
+fun DialogAppBackgroundSettings(
     context: Context,
     isVisible: Boolean = false,
     value: BackgroundImageOption,

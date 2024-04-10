@@ -24,7 +24,7 @@ import io.zoemeow.dutschedule.ui.component.base.OutlinedTextBox
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SettingsActivity.DialogSchoolYearSettings(
+fun DialogSchoolYearSettings(
     isVisible: Boolean = false,
     dismissRequested: (() -> Unit)? = null,
     currentSchoolYearItem: SchoolYearItem,

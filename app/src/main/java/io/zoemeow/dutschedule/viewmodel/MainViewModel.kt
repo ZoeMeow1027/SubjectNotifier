@@ -10,11 +10,11 @@ import com.google.gson.reflect.TypeToken
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.dutwrapper.dutwrapper.Utils
 import io.dutwrapper.dutwrapper.model.utils.DutSchoolYearItem
-import io.zoemeow.dutschedule.model.DUTAccountInstance
-import io.zoemeow.dutschedule.model.DUTNewsInstance
 import io.zoemeow.dutschedule.model.NotificationHistory
 import io.zoemeow.dutschedule.model.ProcessVariable
 import io.zoemeow.dutschedule.model.account.AccountSession
+import io.zoemeow.dutschedule.model.account.DUTAccountInstance
+import io.zoemeow.dutschedule.model.news.DUTNewsInstance
 import io.zoemeow.dutschedule.model.news.NewsFetchType
 import io.zoemeow.dutschedule.model.settings.AppSettings
 import io.zoemeow.dutschedule.repository.DutRequestRepository
@@ -60,6 +60,7 @@ class MainViewModel @Inject constructor(
         }
     )
 
+    // TODO: Change this to VariableState
     /**
      * Get current school week if possible.
      */
@@ -88,7 +89,10 @@ class MainViewModel @Inject constructor(
     /**
      * Save all current settings to file in storage.
      */
-    fun saveSettings(saveSettingsOnly: Boolean = false) {
+    fun saveSettings(
+        saveSettingsOnly: Boolean = false,
+        onCompleted: (() -> Unit)? = null
+    ) {
         launchOnScope(
             script = {
                 fileModuleRepository.saveAppSettings(appSettings.value)
@@ -98,7 +102,8 @@ class MainViewModel @Inject constructor(
                     fileModuleRepository.saveAccountSubjectScheduleCache(ArrayList(accountSession.getSubjectScheduleCache()))
                     fileModuleRepository.saveNotificationHistory(ArrayList(notificationHistory.toList()))
                 }
-            }
+            },
+            invokeOnCompleted = { onCompleted?.let { it() } }
         )
     }
 
@@ -140,11 +145,6 @@ class MainViewModel @Inject constructor(
                         } catch (_: Exception) { }
                     }
                 }
-
-                // TODO: Get account subject schedule from cache
-//                fileModuleRepository.getAccountSubjectScheduleCache().also {
-//                    subjectSchedule.data.value = it
-//                }
             }
         )
     }

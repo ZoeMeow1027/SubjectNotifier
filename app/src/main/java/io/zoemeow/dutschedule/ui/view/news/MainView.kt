@@ -6,8 +6,10 @@ import androidx.activity.ComponentActivity
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
@@ -24,6 +26,10 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.ScaffoldDefaults
+import androidx.compose.material3.SegmentedButton
+import androidx.compose.material3.SegmentedButtonDefaults
+import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
@@ -39,6 +45,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import com.google.gson.Gson
+import io.dutwrapper.dutwrapper.model.enums.NewsSearchType
 import io.dutwrapper.dutwrapper.model.news.NewsGlobalItem
 import io.zoemeow.dutschedule.R
 import io.zoemeow.dutschedule.activity.NewsActivity
@@ -46,12 +53,12 @@ import io.zoemeow.dutschedule.model.ProcessState
 import io.zoemeow.dutschedule.model.news.NewsFetchType
 import io.zoemeow.dutschedule.ui.component.base.ButtonBase
 import io.zoemeow.dutschedule.ui.component.news.NewsListPage
+import io.zoemeow.dutschedule.viewmodel.MainViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun NewsActivity.MainView(
     context: Context,
@@ -60,12 +67,39 @@ fun NewsActivity.MainView(
     contentColor: Color,
     searchRequested: (() -> Unit)? = null
 ) {
+    NewsMainView(
+        context = context,
+        snackBarHostState = snackBarHostState,
+        containerColor = containerColor,
+        contentColor = contentColor,
+        searchRequested = searchRequested,
+        componentBackgroundAlpha = getControlBackgroundAlpha(),
+        mainViewModel = getMainViewModel(),
+        onBack = {
+            setResult(ComponentActivity.RESULT_OK)
+            finish()
+        }
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
+@Composable
+fun NewsMainView(
+    context: Context,
+    snackBarHostState: SnackbarHostState? = null,
+    containerColor: Color,
+    contentColor: Color,
+    componentBackgroundAlpha: Float = 1f,
+    mainViewModel: MainViewModel,
+    searchRequested: (() -> Unit)? = null,
+    onBack: (() -> Unit)? = null
+) {
     val pagerState = rememberPagerState(initialPage = 0, pageCount = { 2 })
     val scope = rememberCoroutineScope()
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
-        snackbarHost = { SnackbarHost(hostState = snackBarHostState) },
+        snackbarHost = { snackBarHostState?.let { SnackbarHost(hostState = it) } },
         containerColor = containerColor,
         contentColor = contentColor,
         topBar = {
@@ -73,19 +107,20 @@ fun NewsActivity.MainView(
                 title = { Text(text = "News") },
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent),
                 navigationIcon = {
-                    IconButton(
-                        onClick = {
-                            setResult(ComponentActivity.RESULT_OK)
-                            finish()
-                        },
-                        content = {
-                            Icon(
-                                Icons.AutoMirrored.Filled.ArrowBack,
-                                "",
-                                modifier = Modifier.size(25.dp)
-                            )
-                        }
-                    )
+                    if (onBack != null) {
+                        IconButton(
+                            onClick = {
+                                onBack()
+                            },
+                            content = {
+                                Icon(
+                                    Icons.AutoMirrored.Filled.ArrowBack,
+                                    "",
+                                    modifier = Modifier.size(25.dp)
+                                )
+                            }
+                        )
+                    }
                 },
                 actions = {
                     IconButton(
@@ -102,96 +137,78 @@ fun NewsActivity.MainView(
         bottomBar = {
             BottomAppBar(
                 containerColor = BottomAppBarDefaults.containerColor.copy(
-                    alpha = getControlBackgroundAlpha()
+                    alpha = 0f
                 ),
                 actions = {
                     Row(
+                        modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.Center,
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .wrapContentHeight(),
-                        content = {
-                            ButtonBase(
-                                clicked = {
-                                    scope.launch {
-                                        pagerState.animateScrollToPage(0)
-                                    }
-                                },
-                                isOutlinedButton = pagerState.currentPage != 0,
-                                content = {
-                                    Icon(
-                                        imageVector = ImageVector.vectorResource(id = R.drawable.ic_baseline_newspaper_24),
-                                        "News global",
-                                        modifier = Modifier
-                                            .size(30.dp)
-                                            .padding(end = 7.dp),
-                                    )
-                                    Text("News global")
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        SingleChoiceSegmentedButtonRow {
+                            SegmentedButton(
+                                shape = SegmentedButtonDefaults.itemShape(index = 0, count = 2),
+                                onClick = { scope.launch {
+                                    pagerState.animateScrollToPage(0)
+                                } },
+                                selected = pagerState.currentPage == 0,
+                                label = {
+                                    Text("Global")
                                 }
                             )
-                            ButtonBase(
-                                modifier = Modifier.padding(start = 12.dp),
-                                isOutlinedButton = pagerState.currentPage != 1,
-                                clicked = {
-                                    scope.launch {
-                                        pagerState.animateScrollToPage(1)
-                                    }
-                                },
-                                content = {
-                                    Icon(
-                                        painter = painterResource(id = R.drawable.ic_baseline_newspaper_24),
-                                        "News subject",
-                                        modifier = Modifier
-                                            .size(30.dp)
-                                            .padding(end = 7.dp),
-                                    )
-                                    Text("News subject")
+                            SegmentedButton(
+                                shape = SegmentedButtonDefaults.itemShape(index = 1, count = 2),
+                                onClick = { scope.launch {
+                                    pagerState.animateScrollToPage(1)
+                                } },
+                                selected = pagerState.currentPage == 1,
+                                label = {
+                                    Text("Subject")
                                 }
                             )
                         }
-                    )
-                }
-            )
-        },
-        floatingActionButton = {
-            if (when (pagerState.currentPage) {
-                    0 -> {
-                        getMainViewModel().newsInstance.newsGlobal.processState.value != ProcessState.Running
                     }
-
-                    1 -> {
-                        getMainViewModel().newsInstance.newsSubject.processState.value != ProcessState.Running
-                    }
-
-                    else -> false
-                }
-            ) {
-                FloatingActionButton(
-                    onClick = {
-                        when (pagerState.currentPage) {
+                },
+                floatingActionButton = {
+                    if (when (pagerState.currentPage) {
                             0 -> {
-                                getMainViewModel().newsInstance.fetchGlobalNews(
-                                    fetchType = NewsFetchType.ClearAndFirstPage,
-                                    forceRequest = true
-                                )
+                                mainViewModel.newsInstance.newsGlobal.processState.value != ProcessState.Running
                             }
 
                             1 -> {
-                                getMainViewModel().newsInstance.fetchSubjectNews(
-                                    fetchType = NewsFetchType.ClearAndFirstPage,
-                                    forceRequest = true
-                                )
+                                mainViewModel.newsInstance.newsSubject.processState.value != ProcessState.Running
                             }
 
-                            else -> {}
+                            else -> false
                         }
-                    },
-                    content = {
-                        Icon(Icons.Default.Refresh, "Refresh")
+                    ) {
+                        FloatingActionButton(
+                            onClick = {
+                                when (pagerState.currentPage) {
+                                    0 -> {
+                                        mainViewModel.newsInstance.fetchGlobalNews(
+                                            fetchType = NewsFetchType.ClearAndFirstPage,
+                                            forceRequest = true
+                                        )
+                                    }
+
+                                    1 -> {
+                                        mainViewModel.newsInstance.fetchSubjectNews(
+                                            fetchType = NewsFetchType.ClearAndFirstPage,
+                                            forceRequest = true
+                                        )
+                                    }
+
+                                    else -> {}
+                                }
+                            },
+                            content = {
+                                Icon(Icons.Default.Refresh, "Refresh")
+                            }
+                        )
                     }
-                )
-            }
+                }
+            )
         },
         content = { padding ->
             HorizontalPager(
@@ -201,9 +218,9 @@ fun NewsActivity.MainView(
                 when (pageIndex) {
                     0 -> {
                         NewsListPage(
-                            newsList = getMainViewModel().newsInstance.newsGlobal.data.toList(),
-                            processState = getMainViewModel().newsInstance.newsGlobal.processState.value,
-                            opacity = getControlBackgroundAlpha(),
+                            newsList = mainViewModel.newsInstance.newsGlobal.data.toList(),
+                            processState = mainViewModel.newsInstance.newsGlobal.processState.value,
+                            opacity = componentBackgroundAlpha,
                             itemClicked = { newsItem ->
                                 context.startActivity(
                                     Intent(
@@ -218,7 +235,7 @@ fun NewsActivity.MainView(
                             endOfListReached = {
                                 CoroutineScope(Dispatchers.Main).launch {
                                     withContext(Dispatchers.IO) {
-                                        getMainViewModel().newsInstance.fetchGlobalNews(
+                                        mainViewModel.newsInstance.fetchGlobalNews(
                                             fetchType = NewsFetchType.NextPage,
                                             forceRequest = true
                                         )
@@ -231,9 +248,9 @@ fun NewsActivity.MainView(
                     1 -> {
                         @Suppress("UNCHECKED_CAST")
                         (NewsListPage(
-                            newsList = getMainViewModel().newsInstance.newsSubject.data.toList() as List<NewsGlobalItem>,
-                            processState = getMainViewModel().newsInstance.newsSubject.processState.value,
-                            opacity = getControlBackgroundAlpha(),
+                            newsList = mainViewModel.newsInstance.newsSubject.data.toList() as List<NewsGlobalItem>,
+                            processState = mainViewModel.newsInstance.newsSubject.processState.value,
+                            opacity = componentBackgroundAlpha,
                             itemClicked = { newsItem ->
                                 context.startActivity(
                                     Intent(
@@ -248,7 +265,7 @@ fun NewsActivity.MainView(
                             endOfListReached = {
                                 CoroutineScope(Dispatchers.Main).launch {
                                     withContext(Dispatchers.IO) {
-                                        getMainViewModel().newsInstance.fetchSubjectNews(
+                                        mainViewModel.newsInstance.fetchSubjectNews(
                                             fetchType = NewsFetchType.NextPage,
                                             forceRequest = true
                                         )

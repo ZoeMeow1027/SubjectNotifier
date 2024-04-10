@@ -3,13 +3,17 @@ package io.zoemeow.dutschedule.activity
 import android.content.Context
 import android.content.Intent
 import android.util.Log
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import dagger.hilt.android.AndroidEntryPoint
+import io.zoemeow.dutschedule.model.settings.BackgroundImageOption
 import io.zoemeow.dutschedule.service.BaseService
 import io.zoemeow.dutschedule.service.NewsBackgroundUpdateService
 import io.zoemeow.dutschedule.ui.view.main.MainViewDashboard
+import io.zoemeow.dutschedule.ui.view.main.MainViewTabbed
+import io.zoemeow.dutschedule.utils.BackgroundImageUtil
 import io.zoemeow.dutschedule.utils.NotificationsUtil
 
 @AndroidEntryPoint
@@ -25,6 +29,34 @@ class MainActivity : BaseActivity() {
         NotificationsUtil.initializeNotificationChannel(this)
     }
 
+    // When active
+    val pickMedia =
+        registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+            // Callback is invoked after the user selects a media item or closes the photo picker.
+            if (uri != null) {
+                Log.d("PhotoPicker", "Selected URI: $uri")
+                getMainViewModel().appSettings.value = getMainViewModel().appSettings.value.clone(
+                    backgroundImage = BackgroundImageOption.None
+                )
+                getMainViewModel().saveSettings(
+                    onCompleted = {
+                        BackgroundImageUtil.saveImageToAppData(this, uri)
+                        Log.d("PhotoPicker", "Copied!")
+                        getMainViewModel().appSettings.value = getMainViewModel().appSettings.value.clone(
+                            backgroundImage = BackgroundImageOption.PickFileFromMedia
+                        )
+                        getMainViewModel().saveSettings(
+                            onCompleted = {
+                                Log.d("PhotoPicker", "Copied!")
+                            }
+                        )
+                    }
+                )
+            } else {
+                Log.d("PhotoPicker", "No media selected")
+            }
+        }
+
     @Composable
     override fun OnMainView(
         context: Context,
@@ -32,26 +64,35 @@ class MainActivity : BaseActivity() {
         containerColor: Color,
         contentColor: Color
     ) {
-        MainViewDashboard(
-            context = context,
-            snackBarHostState = snackBarHostState,
-            containerColor = containerColor,
-            contentColor = contentColor,
-            newsClicked = {
-                context.startActivity(Intent(context, NewsActivity::class.java))
-            },
-            accountClicked = {
-                context.startActivity(Intent(context, AccountActivity::class.java))
-            },
-            settingsClicked = {
-                context.startActivity(Intent(context, SettingsActivity::class.java))
-            },
-            externalLinkClicked = {
-                val intent = Intent(context, HelpActivity::class.java)
-                intent.action = "view_externallink"
-                context.startActivity(intent)
-            }
-        )
+        if (getMainViewModel().appSettings.value.mainScreenDashboardView) {
+            MainViewDashboard(
+                context = context,
+                snackBarHostState = snackBarHostState,
+                containerColor = containerColor,
+                contentColor = contentColor,
+                newsClicked = {
+                    context.startActivity(Intent(context, NewsActivity::class.java))
+                },
+                accountClicked = {
+                    context.startActivity(Intent(context, AccountActivity::class.java))
+                },
+                settingsClicked = {
+                    context.startActivity(Intent(context, SettingsActivity::class.java))
+                },
+                externalLinkClicked = {
+                    val intent = Intent(context, HelpActivity::class.java)
+                    intent.action = "view_externallink"
+                    context.startActivity(intent)
+                }
+            )
+        } else {
+            MainViewTabbed(
+                context = context,
+                snackBarHostState = snackBarHostState,
+                containerColor = containerColor,
+                contentColor = contentColor
+            )
+        }
     }
 
     override fun onStop() {

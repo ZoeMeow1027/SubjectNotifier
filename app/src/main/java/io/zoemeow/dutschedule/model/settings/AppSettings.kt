@@ -5,6 +5,9 @@ import io.zoemeow.dutschedule.model.account.SchoolYearItem
 import java.io.Serializable
 
 data class AppSettings(
+    @SerializedName("appsettings.layout.mainview.dashboardview")
+    val mainScreenDashboardView: Boolean = true,
+
     @SerializedName("appsettings.appearance.thememode")
     val themeMode: ThemeMode = ThemeMode.FollowDeviceTheme,
 
@@ -54,6 +57,7 @@ data class AppSettings(
     val currentSchoolYear: SchoolYearItem = SchoolYearItem(),
 ): Serializable {
     fun clone(
+        mainScreenDashboardView: Boolean? = null,
         themeMode: ThemeMode? = null,
         dynamicColor: Boolean? = null,
         blackBackground: Boolean? = null,
@@ -68,6 +72,7 @@ data class AppSettings(
         currentSchoolYear: SchoolYearItem? = null
     ): AppSettings {
         return AppSettings(
+            mainScreenDashboardView = mainScreenDashboardView ?: this.mainScreenDashboardView,
             themeMode = themeMode ?: this.themeMode,
             dynamicColor = dynamicColor ?: this.dynamicColor,
             blackBackground = blackBackground ?: this.blackBackground,

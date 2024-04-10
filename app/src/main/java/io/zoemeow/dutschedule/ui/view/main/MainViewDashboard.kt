@@ -44,15 +44,18 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import io.zoemeow.dutschedule.R
 import io.zoemeow.dutschedule.activity.AccountActivity
+import io.zoemeow.dutschedule.activity.BaseActivity
 import io.zoemeow.dutschedule.activity.MainActivity
 import io.zoemeow.dutschedule.activity.NewsActivity
 import io.zoemeow.dutschedule.model.CustomClock
 import io.zoemeow.dutschedule.model.ProcessState
+import io.zoemeow.dutschedule.model.settings.BackgroundImageOption
 import io.zoemeow.dutschedule.ui.component.main.DateAndTimeSummaryItem
 import io.zoemeow.dutschedule.ui.component.main.LessonTodaySummaryItem
 import io.zoemeow.dutschedule.ui.component.main.SchoolNewsSummaryItem
 import io.zoemeow.dutschedule.ui.component.main.UpdateAvailableSummaryItem
 import io.zoemeow.dutschedule.ui.component.main.notification.NotificationDialogBox
+import io.zoemeow.dutschedule.utils.BackgroundImageUtil
 import io.zoemeow.dutschedule.utils.CustomDateUtil
 import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDateTime
@@ -313,53 +316,64 @@ fun MainActivity.MainViewDashboard(
                     )
                 }
             )
-            NotificationDialogBox(
-                modifier = Modifier.padding(padding),
-                itemList = getMainViewModel().notificationHistory,
-                isVisible = isNotificationOpened.value,
-                onDismiss = { isNotificationOpened.value = false },
-                onClick = { item ->
-                    if (listOf(1, 2).contains(item.tag)) {
-                        Intent(context, NewsActivity::class.java).also {
-                            it.action = "activity_detail"
-                            for (map1 in item.parameters) {
-                                it.putExtra(map1.key, map1.value)
-                            }
-                            context.startActivity(it)
-                        }
+        }
+    )
+    NotificationDialogBox(
+        itemList = getMainViewModel().notificationHistory,
+        snackBarHostState = snackBarHostState,
+        isVisible = isNotificationOpened.value,
+        containerColor = containerColor,
+        contentColor = contentColor,
+        backgroundImage = when (getMainViewModel().appSettings.value.backgroundImage) {
+            BackgroundImageOption.None -> null
+            BackgroundImageOption.YourCurrentWallpaper -> BackgroundImageUtil.getCurrentWallpaperBackground(context)
+            BackgroundImageOption.PickFileFromMedia -> BackgroundImageUtil.getImageFromAppData(context)
+        },
+        onDismiss = {
+            clearSnackBar()
+            isNotificationOpened.value = false
+        },
+        onClick = { item ->
+            if (listOf(1, 2).contains(item.tag)) {
+                Intent(context, NewsActivity::class.java).also {
+                    it.action = "activity_detail"
+                    for (map1 in item.parameters) {
+                        it.putExtra(map1.key, map1.value)
                     }
-                },
-                onClear = {
-                    val itemTemp = it.clone()
-                    getMainViewModel().notificationHistory.remove(it)
+                    context.startActivity(it)
+                }
+            }
+        },
+        onClear = {
+            val itemTemp = it.clone()
+            getMainViewModel().notificationHistory.remove(it)
+            getMainViewModel().saveSettings()
+            showSnackBar(
+                text = "Deleted notifications!",
+                actionText = "Undo",
+                action = {
+                    getMainViewModel().notificationHistory.add(itemTemp)
+                    getMainViewModel().saveSettings()
+                }
+            )
+        },
+        onClearAll = {
+            showSnackBar(
+                text = "This action is undone! To confirm, click \"Confirm\" to clear all.",
+                actionText = "Confirm",
+                action = {
+                    getMainViewModel().notificationHistory.clear()
                     getMainViewModel().saveSettings()
                     showSnackBar(
-                        text = "Deleted notifications!",
-                        actionText = "Undo",
-                        action = {
-                            getMainViewModel().notificationHistory.add(itemTemp)
-                            getMainViewModel().saveSettings()
-                        }
-                    )
-                },
-                onClearAll = {
-                    showSnackBar(
-                        text = "This action is undone! To confirm, click \"Confirm\" to clear all.",
-                        actionText = "Confirm",
-                        action = {
-                            getMainViewModel().notificationHistory.clear()
-                            getMainViewModel().saveSettings()
-                            showSnackBar(
-                                text = "Successfully cleared all notifications!",
-                                clearPrevious = true
-                            )
-                        },
+                        text = "Successfully cleared all notifications!",
                         clearPrevious = true
                     )
                 },
-                height = 1f
+                clearPrevious = true
             )
-        }
+        },
+        height = 1f,
+        opacity = getControlBackgroundAlpha()
     )
 
     BackHandler(isNotificationOpened.value) {

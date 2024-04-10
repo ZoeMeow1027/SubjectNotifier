@@ -1,9 +1,7 @@
-package io.zoemeow.dutschedule.model
+package io.zoemeow.dutschedule.model.news
 
-import androidx.compose.runtime.referentialEqualityPolicy
-import io.zoemeow.dutschedule.model.news.NewsFetchType
-import io.zoemeow.dutschedule.model.news.NewsGlobalItem
-import io.zoemeow.dutschedule.model.news.NewsSubjectItem
+import io.zoemeow.dutschedule.model.ProcessState
+import io.zoemeow.dutschedule.model.VariableListState
 import io.zoemeow.dutschedule.repository.DutRequestRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

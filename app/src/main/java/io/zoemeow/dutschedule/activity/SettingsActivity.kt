@@ -27,12 +27,23 @@ class SettingsActivity : BaseActivity() {
             // Callback is invoked after the user selects a media item or closes the photo picker.
             if (uri != null) {
                 Log.d("PhotoPicker", "Selected URI: $uri")
-                BackgroundImageUtil.saveImageToAppData(this, uri)
                 getMainViewModel().appSettings.value = getMainViewModel().appSettings.value.clone(
-                    backgroundImage = BackgroundImageOption.PickFileFromMedia
+                    backgroundImage = BackgroundImageOption.None
                 )
-                getMainViewModel().saveSettings()
-                Log.d("PhotoPicker", "Copied!")
+                getMainViewModel().saveSettings(
+                    onCompleted = {
+                        BackgroundImageUtil.saveImageToAppData(this, uri)
+                        Log.d("PhotoPicker", "Copied!")
+                        getMainViewModel().appSettings.value = getMainViewModel().appSettings.value.clone(
+                            backgroundImage = BackgroundImageOption.PickFileFromMedia
+                        )
+                        getMainViewModel().saveSettings(
+                            onCompleted = {
+                                Log.d("PhotoPicker", "Copied!")
+                            }
+                        )
+                    }
+                )
             } else {
                 Log.d("PhotoPicker", "No media selected")
             }

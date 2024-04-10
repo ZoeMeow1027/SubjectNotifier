@@ -1,4 +1,4 @@
-package io.zoemeow.dutschedule.model
+package io.zoemeow.dutschedule.model.account
 
 import android.util.Log
 import androidx.compose.runtime.MutableState
@@ -7,9 +7,9 @@ import io.dutwrapper.dutwrapper.model.accounts.AccountInformation
 import io.dutwrapper.dutwrapper.model.accounts.SubjectFeeItem
 import io.dutwrapper.dutwrapper.model.accounts.SubjectScheduleItem
 import io.dutwrapper.dutwrapper.model.accounts.trainingresult.AccountTrainingStatus
-import io.zoemeow.dutschedule.model.account.AccountAuth
-import io.zoemeow.dutschedule.model.account.AccountSession
-import io.zoemeow.dutschedule.model.account.SchoolYearItem
+import io.zoemeow.dutschedule.model.ProcessState
+import io.zoemeow.dutschedule.model.VariableListState
+import io.zoemeow.dutschedule.model.VariableState
 import io.zoemeow.dutschedule.repository.DutRequestRepository
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope

@@ -212,6 +212,12 @@ abstract class BaseActivity: ComponentActivity() {
         }
     }
 
+    fun clearSnackBar() {
+        snackBarScope.launch {
+            snackBarHostState.currentSnackbarData?.dismiss()
+        }
+    }
+
     fun openLink(
         url: String,
         context: Context,

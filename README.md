@@ -19,9 +19,9 @@ A unofficial Android app to provide better UI from [sv.dut.udn.vn](http://sv.dut
 # Build app yourself
 
 - Required Gradle: 8.5
-  - Older version of Gradle will be failed while building.
+  - Older version of Gradle may be failed while building.
 - If you open project with Android Studio, make sure your IDE support Gradle [Gradle](https://gradle.org/releases/) above, which can be fixed by upgrading your IDE. After that, just build and run app normally as you do with another Android project.
-- If you want to build app without IDE, just type command as you build another gradle project (note that you need to [Gradle](https://gradle.org/releases/) installed first):
+- If you want to build app without IDE, just type command as you build another gradle project (note that you still need to [Gradle](https://gradle.org/releases/) installed first):
 
 ```
 Build: gradlew build
@@ -46,10 +46,6 @@ If you want to:
 - You just need to refresh news and this will clear old and get latest one automatically.
 
 ### I'm got issue with this app. Which place can I reproduce issue for you?
-
-- You can report issue via [Issue tab](https://github.com/ZoeMeow1027/DutSchedule/issues) on this repository.
-
-# Known issues
 
 If you found a issue, you can report this via [issue tab](https://github.com/ZoeMeow1027/DutSchedule/issues) on this repository.
 - Global news and subject news were shown not correctly.

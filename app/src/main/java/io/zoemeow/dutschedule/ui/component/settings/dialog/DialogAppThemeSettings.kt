@@ -23,7 +23,7 @@ import io.zoemeow.dutschedule.ui.component.base.DialogCheckboxButton
 import io.zoemeow.dutschedule.ui.component.base.DialogRadioButton
 
 @Composable
-fun SettingsActivity.DialogAppThemeSettings(
+fun DialogAppThemeSettings(
     isVisible: Boolean = false,
     themeModeValue: ThemeMode,
     dynamicColorEnabled: Boolean,

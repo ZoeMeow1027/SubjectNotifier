@@ -6,7 +6,7 @@ import java.io.Serializable
 
 data class AppSettings(
     @SerializedName("appsettings.layout.mainview.dashboardview")
-    val mainScreenDashboardView: Boolean = true,
+    val mainScreenDashboardView: Boolean = false,
 
     @SerializedName("appsettings.appearance.thememode")
     val themeMode: ThemeMode = ThemeMode.FollowDeviceTheme,

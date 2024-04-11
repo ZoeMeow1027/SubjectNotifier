@@ -4,18 +4,15 @@ import android.content.Context
 import android.content.Intent
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Info
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -23,12 +20,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -40,7 +33,6 @@ import androidx.navigation.compose.rememberNavController
 import io.zoemeow.dutschedule.activity.MainActivity
 import io.zoemeow.dutschedule.activity.NewsActivity
 import io.zoemeow.dutschedule.model.NavBarItem
-import io.zoemeow.dutschedule.ui.component.main.notification.NotificationDialogBox
 import io.zoemeow.dutschedule.ui.view.account.AccountMainView
 import io.zoemeow.dutschedule.ui.view.news.NewsMainView
 import io.zoemeow.dutschedule.ui.view.settings.SettingsMainView
@@ -139,7 +131,7 @@ fun MainActivity.MainViewTabbed(
                 }
 
                 composable(NavBarItem.notification.route) {
-                    NotificationDialogBox(
+                    NotificationScaffold(
                         itemList = getMainViewModel().notificationHistory.toList(),
                         snackBarHostState = snackBarHostState,
                         isVisible = true,
@@ -156,9 +148,9 @@ fun MainActivity.MainViewTabbed(
                                 }
                             }
                         },
-                        onClear = {
-                            val itemTemp = it.clone()
-                            getMainViewModel().notificationHistory.remove(it)
+                        onClear = { item ->
+                            val itemTemp = item.clone()
+                            getMainViewModel().notificationHistory.remove(item)
                             getMainViewModel().saveSettings()
                             showSnackBar(
                                 text = "Deleted notifications!",

@@ -44,7 +44,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import io.zoemeow.dutschedule.R
 import io.zoemeow.dutschedule.activity.AccountActivity
-import io.zoemeow.dutschedule.activity.BaseActivity
 import io.zoemeow.dutschedule.activity.MainActivity
 import io.zoemeow.dutschedule.activity.NewsActivity
 import io.zoemeow.dutschedule.model.CustomClock
@@ -54,7 +53,6 @@ import io.zoemeow.dutschedule.ui.component.main.DateAndTimeSummaryItem
 import io.zoemeow.dutschedule.ui.component.main.LessonTodaySummaryItem
 import io.zoemeow.dutschedule.ui.component.main.SchoolNewsSummaryItem
 import io.zoemeow.dutschedule.ui.component.main.UpdateAvailableSummaryItem
-import io.zoemeow.dutschedule.ui.component.main.notification.NotificationDialogBox
 import io.zoemeow.dutschedule.utils.BackgroundImageUtil
 import io.zoemeow.dutschedule.utils.CustomDateUtil
 import kotlinx.datetime.Clock
@@ -318,7 +316,7 @@ fun MainActivity.MainViewDashboard(
             )
         }
     )
-    NotificationDialogBox(
+    NotificationScaffold(
         itemList = getMainViewModel().notificationHistory,
         snackBarHostState = snackBarHostState,
         isVisible = isNotificationOpened.value,
@@ -344,15 +342,15 @@ fun MainActivity.MainViewDashboard(
                 }
             }
         },
-        onClear = {
-            val itemTemp = it.clone()
-            getMainViewModel().notificationHistory.remove(it)
+        onClear = { item ->
+            val item1 = item.clone()
+            getMainViewModel().notificationHistory.remove(item)
             getMainViewModel().saveSettings()
             showSnackBar(
                 text = "Deleted notifications!",
                 actionText = "Undo",
                 action = {
-                    getMainViewModel().notificationHistory.add(itemTemp)
+                    getMainViewModel().notificationHistory.add(item1)
                     getMainViewModel().saveSettings()
                 }
             )
@@ -372,7 +370,6 @@ fun MainActivity.MainViewDashboard(
                 clearPrevious = true
             )
         },
-        height = 1f,
         opacity = getControlBackgroundAlpha()
     )
 

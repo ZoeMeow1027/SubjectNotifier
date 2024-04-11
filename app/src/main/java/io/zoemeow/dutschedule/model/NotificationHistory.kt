@@ -6,7 +6,7 @@ import io.zoemeow.dutschedule.utils.getRandomString
 import java.io.Serializable
 
 data class NotificationHistory(
-    private val id: String = getRandomString(32),
+    val id: String = getRandomString(32),
     val title: String,
     val description: String,
     val tag: Int = 0,
@@ -48,16 +48,13 @@ data class NotificationHistory(
         isReceived: Boolean? = null,
         changeIdAfterCopy: Boolean = false
     ): NotificationHistory {
-        val map: Map<String, String> = mapOf()
-        map.plus(intentArguments ?: this.parameters)
-
         return NotificationHistory(
             id = if (changeIdAfterCopy) getRandomString(32) else id,
             title = title ?: this.title,
             description = description ?: this.description,
             timestamp = timestamp ?: this.timestamp,
             tag = tag ?: this.tag,
-            parameters = map,
+            parameters = intentArguments ?: this.parameters,
             isRead = isRead ?: this.isRead,
             isReceived = isReceived ?: this.isReceived
         )

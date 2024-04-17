@@ -1,5 +1,6 @@
 package io.zoemeow.dutschedule.ui.view.news
 
+import android.content.Context
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -27,12 +28,14 @@ import com.google.gson.reflect.TypeToken
 import io.dutwrapper.dutwrapper.model.enums.NewsType
 import io.dutwrapper.dutwrapper.model.news.NewsGlobalItem
 import io.dutwrapper.dutwrapper.model.news.NewsSubjectItem
+import io.zoemeow.dutschedule.R
 import io.zoemeow.dutschedule.activity.NewsActivity
 import io.zoemeow.dutschedule.ui.component.news.NewsDetailScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NewsActivity.NewsDetail(
+    context: Context,
     snackBarHostState: SnackbarHostState,
     containerColor: Color,
     contentColor: Color
@@ -47,7 +50,7 @@ fun NewsActivity.NewsDetail(
         contentColor = contentColor,
         topBar = {
             TopAppBar(
-                title = { Text("News detail") },
+                title = { Text(context.getString(R.string.news_detail_title)) },
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent),
                 navigationIcon = {
                     IconButton(
@@ -58,7 +61,7 @@ fun NewsActivity.NewsDetail(
                         content = {
                             Icon(
                                 Icons.AutoMirrored.Filled.ArrowBack,
-                                "",
+                                context.getString(R.string.back),
                                 modifier = Modifier.size(25.dp)
                             )
                         }
@@ -71,9 +74,9 @@ fun NewsActivity.NewsDetail(
                 ExtendedFloatingActionButton(
                     content = {
                         Row {
-                            Icon(Icons.Default.Add, "Add to news filter")
+                            Icon(Icons.Default.Add, context.getString(R.string.news_detail_addtofilter_fab))
                             Spacer(modifier = Modifier.size(3.dp))
-                            Text("Add to news filter")
+                            Text(context.getString(R.string.news_detail_addtofilter_fab))
                         }
                     },
                     onClick = {
@@ -82,10 +85,16 @@ fun NewsActivity.NewsDetail(
 //                                    getMainViewModel().appSettings.value.newsFilterList.add()
 //                                }
                             // TODO: Develop a add news filter function for news subject detail.
-                            showSnackBar("This function is in development. Check back soon.")
+                            showSnackBar(
+                                text = context.getString(R.string.feature_not_ready),
+                                clearPrevious = true
+                            )
                         } catch (ex: Exception) {
                             ex.printStackTrace()
-                            showSnackBar("We can't add this subject in this news to your filter! You can instead add manually them.")
+                            showSnackBar(
+                                text = context.getString(R.string.news_detail_addtofilter_failed),
+                                clearPrevious = true
+                            )
                         }
                     }
                 )

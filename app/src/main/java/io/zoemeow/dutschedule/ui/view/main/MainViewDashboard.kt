@@ -101,7 +101,7 @@ fun MainActivity.MainViewDashboard(
         contentColor = contentColor,
         topBar = {
             TopAppBar(
-                title = { Text(text = "DutSchedule") },
+                title = { Text(text = context.getString(R.string.app_name)) },
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent)
             )
         },
@@ -317,6 +317,7 @@ fun MainActivity.MainViewDashboard(
         }
     )
     NotificationScaffold(
+        context = context,
         itemList = getMainViewModel().notificationHistory,
         snackBarHostState = snackBarHostState,
         isVisible = isNotificationOpened.value,

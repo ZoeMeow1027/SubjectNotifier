@@ -1,5 +1,6 @@
 package io.zoemeow.dutschedule.ui.view.main
 
+import android.content.Context
 import android.graphics.Bitmap
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInVertically
@@ -26,8 +27,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -40,11 +39,11 @@ import io.zoemeow.dutschedule.R
 import io.zoemeow.dutschedule.model.NotificationHistory
 import io.zoemeow.dutschedule.ui.component.main.NotificationItem
 import io.zoemeow.dutschedule.utils.CustomDateUtil
-import okhttp3.internal.concurrent.TaskRunner
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NotificationScaffold(
+    context: Context,
     isVisible: Boolean = false,
     itemList: List<NotificationHistory>,
     containerColor: Color,
@@ -83,7 +82,7 @@ fun NotificationScaffold(
                 contentColor = contentColor,
                 topBar = {
                     TopAppBar(
-                        title = { Text(text = "Notifications") },
+                        title = { Text(text = context.getString(R.string.notification_panel_title)) },
                         colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent),
                         actions = {
                             if (itemList.isNotEmpty()) {
@@ -124,7 +123,7 @@ fun NotificationScaffold(
                                         .padding(top = 15.dp),
                                     contentAlignment = Alignment.Center
                                 ) {
-                                    Text("No notifications")
+                                    Text(text = context.getString(R.string.notification_panel_no_notifications))
                                 }
                             } else {
                                 itemList.groupBy { p -> p.timestamp }

@@ -13,7 +13,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import io.zoemeow.dutschedule.activity.PermissionRequestActivity
-import io.zoemeow.dutschedule.activity.SettingsActivity
 import io.zoemeow.dutschedule.model.settings.BackgroundImageOption
 import io.zoemeow.dutschedule.ui.component.base.DialogBase
 import io.zoemeow.dutschedule.ui.component.base.DialogRadioButton
@@ -55,13 +54,13 @@ fun DialogAppBackgroundSettings(
                         title = String.format(
                             "Your current wallpaper%s",
                             when {
-                                // TODO: This isn't unavailable for Android 14
+                                // This isn't unavailable for Android 14
                                 (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) -> {
                                     "\n(This option is unavailable on Android 14)"
                                 }
                                 // Permission is not granted.
                                 (!PermissionRequestActivity.checkPermissionManageExternalStorage().isGranted) -> {
-                                    "\n(You need to grant access all file permission)"
+                                    "\n(You'll need to grant access all file access permission)"
                                 }
                                 // Else, no exception
                                 else -> { "" }

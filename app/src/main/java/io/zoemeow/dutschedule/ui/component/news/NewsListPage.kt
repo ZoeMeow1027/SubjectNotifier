@@ -45,7 +45,7 @@ fun NewsListPage(
                     .padding(start = 20.dp, end = 20.dp)
                     .endOfListReached(
                         lazyListState = lazyListState,
-                        endOfListReached = { endOfListReached?.let { it() } }
+                        onReached = { endOfListReached?.let { it() } }
                     ),
                 horizontalAlignment = if (newsList.isNotEmpty()) Alignment.Start else Alignment.CenterHorizontally,
                 verticalArrangement = if (newsList.isNotEmpty()) Arrangement.Top else Arrangement.Center,

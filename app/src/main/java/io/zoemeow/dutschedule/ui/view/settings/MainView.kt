@@ -111,7 +111,7 @@ fun SettingsMainView(
                             content = {
                                 Icon(
                                     Icons.AutoMirrored.Filled.ArrowBack,
-                                    "",
+                                    context.getString(R.string.back),
                                     modifier = Modifier.size(25.dp)
                                 )
                             }
@@ -188,13 +188,13 @@ fun SettingsMainView(
                                 },
                                 title = context.getString(R.string.settings_option_apptheme),
                                 description = String.format(
-                                    "%s%s",
+                                    "%s %s",
                                     when (mainViewModel.appSettings.value.themeMode) {
-                                        ThemeMode.FollowDeviceTheme -> "Follow device theme"
-                                        ThemeMode.DarkMode -> "Dark mode"
-                                        ThemeMode.LightMode -> "Light mode"
+                                        ThemeMode.FollowDeviceTheme -> context.getString(R.string.settings_option_apptheme_choice_followdevice)
+                                        ThemeMode.DarkMode -> context.getString(R.string.settings_option_apptheme_choice_dark)
+                                        ThemeMode.LightMode -> context.getString(R.string.settings_option_apptheme_choice_light)
                                     },
-                                    if (mainViewModel.appSettings.value.dynamicColor) " (dynamic color enabled)" else ""
+                                    if (mainViewModel.appSettings.value.dynamicColor) context.getString(R.string.settings_option_apptheme_choice_dynamiccolorenabled) else ""
                                 ),
                                 onClick = { dialogAppTheme.value = true }
                             )
@@ -203,12 +203,12 @@ fun SettingsMainView(
                                 leadingIcon = {
                                     Icon(
                                         imageVector = ImageVector.vectorResource(R.drawable.ic_baseline_contrast_24),
-                                        "Black background settings",
+                                        context.getString(R.string.settings_option_blackbackground),
                                         modifier = Modifier.padding(end = 15.dp)
                                     )
                                 },
-                                title = "Black background",
-                                description = "Make app background to black color. Only in dark mode and turned off background image.",
+                                title = context.getString(R.string.settings_option_blackbackground),
+                                description = context.getString(R.string.settings_option_blackbackground_description),
                                 isChecked = mainViewModel.appSettings.value.blackBackground,
                                 onValueChanged = { value ->
                                     mainViewModel.appSettings.value =
@@ -223,15 +223,15 @@ fun SettingsMainView(
                                 leadingIcon = {
                                     Icon(
                                         imageVector = ImageVector.vectorResource(R.drawable.ic_baseline_image_24),
-                                        "Background image settings",
+                                        context.getString(R.string.settings_option_wallpaperbackground),
                                         modifier = Modifier.padding(end = 15.dp)
                                     )
                                 },
-                                title = "Background image",
+                                title = context.getString(R.string.settings_option_wallpaperbackground),
                                 description = when (mainViewModel.appSettings.value.backgroundImage) {
-                                    BackgroundImageOption.None -> "None"
-                                    BackgroundImageOption.YourCurrentWallpaper -> "Your current wallpaper"
-                                    BackgroundImageOption.PickFileFromMedia -> "Your picked image"
+                                    BackgroundImageOption.None -> context.getString(R.string.settings_option_wallpaperbackground_choice_none)
+                                    BackgroundImageOption.YourCurrentWallpaper -> context.getString(R.string.settings_option_wallpaperbackground_choice_currentwallpaper)
+                                    BackgroundImageOption.PickFileFromMedia -> context.getString(R.string.settings_option_wallpaperbackground_choice_pickedimage)
                                 },
                                 onClick = { dialogBackground.value = true }
                             )
@@ -241,18 +241,18 @@ fun SettingsMainView(
                     ContentRegion(
                         modifier = Modifier.padding(top = 10.dp),
                         textModifier = Modifier.padding(horizontal = 20.dp),
-                        text = "Miscellaneous settings",
+                        text = context.getString(R.string.settings_category_miscellaneous),
                         content = {
                             OptionItem(
                                 modifierInside = Modifier.padding(horizontal = 20.dp, vertical = 15.dp),
                                 leadingIcon = {
                                     Icon(
                                         imageVector = ImageVector.vectorResource(R.drawable.google_fonts_globe_24),
-                                        "App language",
+                                        context.getString(R.string.settings_option_applanguage),
                                         modifier = Modifier.padding(end = 15.dp)
                                     )
                                 },
-                                title = "App language",
+                                title = context.getString(R.string.settings_option_applanguage),
                                 description = Locale.getDefault().displayName,
                                 onClick = {
                                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -275,8 +275,8 @@ fun SettingsMainView(
                                         modifier = Modifier.padding(end = 15.dp)
                                     )
                                 },
-                                title = "Application permissions",
-                                description = "Click here for allow and manage app permissions you granted.",
+                                title = context.getString(R.string.settings_option_apppermission),
+                                description = context.getString(R.string.settings_option_apppermission_description),
                                 onClick = {
                                     context.startActivity(
                                         Intent(
@@ -291,12 +291,12 @@ fun SettingsMainView(
                                 leadingIcon = {
                                     Icon(
                                         imageVector = ImageVector.vectorResource(R.drawable.ic_baseline_web_24),
-                                        "App language",
+                                        context.getString(R.string.settings_option_openlinkinsideapp),
                                         modifier = Modifier.padding(end = 15.dp)
                                     )
                                 },
-                                title = "Open link inside app",
-                                description = "Open clicked link without leaving this app. Turn off to open link in default browser.",
+                                title = context.getString(R.string.settings_option_openlinkinsideapp),
+                                description = context.getString(R.string.settings_option_openlinkinsideapp_description),
                                 isChecked = mainViewModel.appSettings.value.openLinkInsideApp,
                                 onValueChanged = { value ->
                                     mainViewModel.appSettings.value =

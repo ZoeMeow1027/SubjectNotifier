@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">DutSchedule</string>
+    <string name="back">Back</string>
+    <string name="clear">Clear</string>
+    <string name="feature_not_ready">This function is in development. Check back soon.</string>
+    <!-- Android notification string -->
     <string name="notification_announcement_title">App updates</string>
     <string name="notification_announcement_description">This will send you app recommend and important updates.</string>
     <string name="notification_newsglobal_title">News Global</string>
@@ -9,13 +13,16 @@
     <string name="notification_newssubject_description">This will receive new messages in \"Thông báo lớp học phần\" on sv.dut.udn.vn.</string>
     <string name="notification_newsbackgroundupdateservice_title">News Background Update Service</string>
     <string name="notification_newsbackgroundupdateservice_description">This will ensure this service will able to run in background. You can turn off this notification if you don\'t want show it.</string>
+    <!-- Service string -->
     <string name="service_newsbackgroundservice_newsglobal_title">News global</string>
-    <string name="service_newsbackgroundservice_newssubject_title_announcement">New announcement with %s about %s</string>
-    <string name="service_newsbackgroundservice_newssubject_title_noannouncement" formatted="false">%s lesson(s) with %s about %s</string>
+    <string name="service_newsbackgroundservice_newssubject_title_announcement">New announcement with %1$s about %2$s</string>
+    <string name="service_newsbackgroundservice_newssubject_title_noannouncement">%1$s lesson(s) with %2$s about %3$s</string>
     <string name="service_newsbackgroundservice_newssubject_title_noannouncement_leaving">Leaving</string>
     <string name="service_newsbackgroundservice_newssubject_title_noannouncement_makeup">Making up</string>
-    <string name="service_newsbackgroundservice_newssubject_date" formatted="false">On %s at lesson(s) %s</string>
-    <string name="service_newsbackgroundservice_newssubject_room">Room will make up: %s</string>
+    <string name="service_newsbackgroundservice_newssubject_lessonunknown">(unknown)</string>
+    <string name="service_newsbackgroundservice_newssubject_date">On %1$s at lesson(s) %2$s</string>
+    <string name="service_newsbackgroundservice_newssubject_room">Room will make up: %1$s</string>
+    <!-- Settings activity string -->
     <string name="settings_name">Settings</string>
     <string name="settings_category_notifications">Notifications</string>
     <string name="settings_option_newsschedule">News schedule in background settings</string>
@@ -24,4 +31,45 @@
     <string name="settings_option_notificationoutside_description">Click here to manage app notifications in Android app settings.</string>
     <string name="settings_category_appearance">Appearance</string>
     <string name="settings_option_apptheme">App theme</string>
+    <string name="settings_option_apptheme_choice_followdevice">Follow device theme</string>
+    <string name="settings_option_apptheme_choice_dark">Dark mode</string>
+    <string name="settings_option_apptheme_choice_light">Light mode</string>
+    <string name="settings_option_apptheme_choice_dynamiccolorenabled">(dynamic color enabled)</string>
+    <string name="settings_option_blackbackground">Black background</string>
+    <string name="settings_option_blackbackground_description">Make app background to black color. Only in dark mode and turned off background image.</string>
+    <string name="settings_option_wallpaperbackground">App background wallpaper</string>
+    <string name="settings_option_wallpaperbackground_choice_none">Disabled</string>
+    <string name="settings_option_wallpaperbackground_choice_currentwallpaper">Your current wallpaper</string>
+    <string name="settings_option_wallpaperbackground_choice_pickedimage">Your picked image</string>
+    <string name="settings_category_miscellaneous">Miscellaneous settings</string>
+    <string name="settings_option_applanguage">App language</string>
+    <string name="settings_option_apppermission">Grant app permissions</string>
+    <string name="settings_option_apppermission_description">Click here for allow and manage app permissions you granted.</string>
+    <string name="settings_option_openlinkinsideapp">Open link inside app</string>
+    <string name="settings_option_openlinkinsideapp_description">Open clicked link without leaving this app. Disable to open link in default browser.</string>
+    <!-- Notification UI string -->
+    <string name="notification_panel_title">Notifications</string>
+    <string name="notification_panel_no_notifications">No notifications</string>
+    <!-- News activity string -->
+    <string name="news_title">News</string>
+    <string name="news_tabname_global">Global</string>
+    <string name="news_tabname_subject">Subject</string>
+    <!-- News detail activity string -->
+    <string name="news_detail_title">News Detail</string>
+    <string name="news_detail_addtofilter_fab">Add to filter</string>
+    <string name="news_detail_addtofilter_failed">We can\'t add this subject in this news to your filter! Try again or manually add them in Settings.</string>
+    <!-- News search activity string -->
+    <string name="news_search_searchbox_placeholder">Type here to search</string>
+    <string name="news_search_getstarted">Tap search on top to get started.</string>
+    <string name="news_search_fetching">Fetching news. Please wait…</string>
+    <string name="news_search_failed">A problem prevent us from getting news from server. Make sure you\'re connected to internet, and try again.</string>
+    <string name="news_search_noavailablenews">No available news matches your query. Try again with new one.</string>
+    <string name="news_search_searchoption_method">Search method</string>
+    <string name="news_search_searchoption_method_bytitle">By title</string>
+    <string name="news_search_searchoption_method_bycontent">By content</string>
+    <string name="news_search_searchoption_type">News type</string>
+    <string name="news_search_searchoption_type_byglobal">News Global</string>
+    <string name="news_search_searchoption_type_bysubject">News Subject</string>
+    <string name="news_search_searchoption_history">Search history</string>
+    <string name="news_search_searchoption_history_data">Search %1$s in %2$s</string>
 </resources>

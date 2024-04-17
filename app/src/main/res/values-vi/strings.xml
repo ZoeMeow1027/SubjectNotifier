@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">DutSchedule</string>
+    <string name="back">Quay lại</string>
+    <string name="clear">Xoá</string>
+    <string name="feature_not_ready">Tính năng này đang được phát triển. Hãy kiểm tra lại sau.</string>
+    <!-- Android notification string -->
     <string name="notification_announcement_title">Thông báo ứng dụng</string>
     <string name="notification_announcement_description">Kênh này sẽ gửi thông báo cập nhật quan trọng của ứng dụng cho bạn.</string>
     <string name="notification_newsglobal_title">Tin tức chung</string>
@@ -9,13 +13,16 @@
     <string name="notification_newssubject_description">Kênh này sẽ gửi thông báo mới trong \"Thông báo lớp học phần\" trên sv.dut.udn.vn.</string>
     <string name="notification_newsbackgroundupdateservice_title">Dịch vụ cập nhật tin tức trong nền</string>
     <string name="notification_newsbackgroundupdateservice_description">Kênh này sẽ đảm bảo dịch vụ này có thể chạy trong nền. Bạn có thể tắt thông báo này nếu bạn không muốn hiển thị chúng.</string>
+    <!-- Service string -->
     <string name="service_newsbackgroundservice_newsglobal_title">Thông báo chung</string>
-    <string name="service_newsbackgroundservice_newssubject_title_announcement">Thông báo mới của %s về %s</string>
-    <string name="service_newsbackgroundservice_newssubject_title_noannouncement" formatted="false">Thông báo %s của %s về %s</string>
+    <string name="service_newsbackgroundservice_newssubject_title_announcement">Thông báo mới của %1$s về %2$s</string>
+    <string name="service_newsbackgroundservice_newssubject_title_noannouncement">Thông báo %1$s của %2$s về %3$s</string>
     <string name="service_newsbackgroundservice_newssubject_title_noannouncement_leaving">nghỉ học</string>
     <string name="service_newsbackgroundservice_newssubject_title_noannouncement_makeup">học bù</string>
-    <string name="service_newsbackgroundservice_newssubject_date" formatted="false">Vào ngày %s với tiết học %s</string>
-    <string name="service_newsbackgroundservice_newssubject_room">Phòng sẽ học bù: %s</string>
+    <string name="service_newsbackgroundservice_newssubject_lessonunknown">(không rõ)</string>
+    <string name="service_newsbackgroundservice_newssubject_date">Vào ngày %1$s với tiết học %2$s</string>
+    <string name="service_newsbackgroundservice_newssubject_room">Phòng sẽ học bù: %1$s</string>
+    <!-- Settings activity string -->
     <string name="settings_name">Cài đặt</string>
     <string name="settings_category_notifications">Thông báo</string>
     <string name="settings_option_newsschedule">Cài đặt cập nhật tin tức trong nền</string>
@@ -24,4 +31,45 @@
     <string name="settings_option_notificationoutside_description">Nhấn vào đây để quản lí thông báo ứng dụng trong cài đặt Android.</string>
     <string name="settings_category_appearance">Hiển thị</string>
     <string name="settings_option_apptheme">Chủ đề ứng dụng</string>
+    <string name="settings_option_apptheme_choice_followdevice">Theo chủ đề hệ thống</string>
+    <string name="settings_option_apptheme_choice_dark">Chủ đề tối</string>
+    <string name="settings_option_apptheme_choice_light">Chủ đề sáng</string>
+    <string name="settings_option_apptheme_choice_dynamiccolorenabled">(dynamic color đang bật)</string>
+    <string name="settings_option_blackbackground">Nền đen</string>
+    <string name="settings_option_blackbackground_description">Đặt màu nền của ứng dụng là màu đen. Chỉ hoạt động trong chế độ tối và bạn không bật hình nền ứng dụng.</string>
+    <string name="settings_option_wallpaperbackground">Hình nền ứng dụng</string>
+    <string name="settings_option_wallpaperbackground_choice_none">Đã vô hiệu hoá</string>
+    <string name="settings_option_wallpaperbackground_choice_currentwallpaper">Hình nền hiện tại của bạn</string>
+    <string name="settings_option_wallpaperbackground_choice_pickedimage">Ảnh bạn đã chọn</string>
+    <string name="settings_category_miscellaneous">Cài đặt linh tinh</string>
+    <string name="settings_option_applanguage">Ngôn ngữ ứng dụng</string>
+    <string name="settings_option_apppermission">Cấp quyền cho ứng dụng</string>
+    <string name="settings_option_apppermission_description">Nhấn vào đây để cho phép và quản lý quyền hạn ứng dụng bạn đã cấp phép.</string>
+    <string name="settings_option_openlinkinsideapp">Mở liên kết trong ứng dụng</string>
+    <string name="settings_option_openlinkinsideapp_description">Mở liên kết đã nhấp mà không rời khỏi ứng dụng. Vô hiệu hoá để mở trong trình duyệt mặc định của bạn.</string>
+    <!-- Notification UI string -->
+    <string name="notification_panel_title">Thông báo</string>
+    <string name="notification_panel_no_notifications">Không có thông báo</string>
+    <!-- News activity string -->
+    <string name="news_title">Tin tức</string>
+    <string name="news_tabname_global">Chung</string>
+    <string name="news_tabname_subject">Lớp học phần</string>
+    <!-- News detail activity string -->
+    <string name="news_detail_title">Chi tiết tin tức</string>
+    <string name="news_detail_addtofilter_fab">Thêm vào bộ lọc</string>
+    <string name="news_detail_addtofilter_failed">Chúng tôi không thể thêm lớp học phần này vào bộ lọc tin tức của bạn! Hãy thử lại hoặc thêm bộ lọc này thủ công trong Cài đặt.</string>
+    <!-- News search activity string -->
+    <string name="news_search_searchbox_placeholder">Nhấn vào đây để tìm kiếm</string>
+    <string name="news_search_getstarted">Nhấn thanh tìm kiếm ở trên cùng để bắt đầu.</string>
+    <string name="news_search_fetching">Đang tải tin tức. Vui lòng chờ…</string>
+    <string name="news_search_failed">Đã có lỗi xảy ra khi chúng tôi tải tin tức từ máy chủ. Đảm bảo rằng bạn có kết nối internet và thử lại.</string>
+    <string name="news_search_noavailablenews">Không có tin tức trùng khớp với từ khoá của bạn. Hãy thử lại với từ khoá mới.</string>
+    <string name="news_search_searchoption_method">Tìm kiếm theo</string>
+    <string name="news_search_searchoption_method_bytitle">Tiêu đề</string>
+    <string name="news_search_searchoption_method_bycontent">Nội dung</string>
+    <string name="news_search_searchoption_type">Kiểu tin tức</string>
+    <string name="news_search_searchoption_type_byglobal">Chung</string>
+    <string name="news_search_searchoption_type_bysubject">Lớp học phần</string>
+    <string name="news_search_searchoption_history">Lịch sử tìm kiếm</string>
+    <string name="news_search_searchoption_history_data">Tìm kiếm %2$s theo %1$s</string>
 </resources>

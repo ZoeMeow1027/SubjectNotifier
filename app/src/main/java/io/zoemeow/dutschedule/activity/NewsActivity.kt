@@ -36,6 +36,7 @@ class NewsActivity : BaseActivity() {
 
             "activity_detail" -> {
                 NewsDetail(
+                    context = context,
                     snackBarHostState = snackBarHostState,
                     containerColor = containerColor,
                     contentColor = contentColor

@@ -13,9 +13,9 @@ import io.dutwrapper.dutwrapper.model.news.NewsGlobalItem
 import io.dutwrapper.dutwrapper.model.news.NewsSubjectItem
 import io.zoemeow.dutschedule.R
 import io.zoemeow.dutschedule.activity.PermissionRequestActivity
-import io.zoemeow.dutschedule.model.news.DUTNewsInstance
 import io.zoemeow.dutschedule.model.NotificationHistory
 import io.zoemeow.dutschedule.model.ProcessState
+import io.zoemeow.dutschedule.model.news.DUTNewsInstance
 import io.zoemeow.dutschedule.model.news.NewsFetchType
 import io.zoemeow.dutschedule.model.settings.AppSettings
 import io.zoemeow.dutschedule.model.settings.SubjectCode
@@ -449,24 +449,24 @@ class NewsBackgroundUpdateService : BaseService(
             // Title will make announcement about lecturer and subjects
             val notifyTitle = when (newsItem.lessonStatus) {
                 LessonStatus.Leaving -> {
-                    String.format(
-                        context.getString(R.string.service_newsbackgroundservice_newssubject_title_noannouncement),
+                    context.getString(
+                        R.string.service_newsbackgroundservice_newssubject_title_noannouncement,
                         context.getString(R.string.service_newsbackgroundservice_newssubject_title_noannouncement_leaving),
                         newsItem.lecturerName,
                         affectedClassrooms
                     )
                 }
                 LessonStatus.MakeUp -> {
-                    String.format(
-                        context.getString(R.string.service_newsbackgroundservice_newssubject_title_noannouncement),
+                    context.getString(
+                        R.string.service_newsbackgroundservice_newssubject_title_noannouncement,
                         context.getString(R.string.service_newsbackgroundservice_newssubject_title_noannouncement_makeup),
                         newsItem.lecturerName,
                         affectedClassrooms
                     )
                 }
                 else -> {
-                    String.format(
-                        context.getString(R.string.service_newsbackgroundservice_newssubject_title_announcement),
+                    context.getString(
+                        R.string.service_newsbackgroundservice_newssubject_title_announcement,
                         newsItem.lecturerName,
                         affectedClassrooms
                     )
@@ -481,18 +481,18 @@ class NewsBackgroundUpdateService : BaseService(
             ) {
                 // Date & lessons
                 notifyContentList.add(
-                    String.format(
-                        context.getString(R.string.service_newsbackgroundservice_newssubject_date),
+                    context.getString(
+                        R.string.service_newsbackgroundservice_newssubject_date,
                         CustomDateUtil.dateUnixToString(newsItem.affectedDate, "dd/MM/yyyy"),
-                        if (newsItem.affectedLesson != null) newsItem.affectedLesson.toString() else "(unknown)"
+                        if (newsItem.affectedLesson != null) newsItem.affectedLesson.toString() else context.getString(R.string.service_newsbackgroundservice_newssubject_lessonunknown)
                     )
                 )
                 // Make-up room
                 if (newsItem.lessonStatus == LessonStatus.MakeUp) {
                     // Make up in room
                     notifyContentList.add(
-                        String.format(
-                            context.getString(R.string.service_newsbackgroundservice_newssubject_room),
+                        context.getString(
+                            R.string.service_newsbackgroundservice_newssubject_room,
                             newsItem.affectedRoom
                         )
                     )

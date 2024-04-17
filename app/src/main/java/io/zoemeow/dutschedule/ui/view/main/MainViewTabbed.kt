@@ -132,6 +132,7 @@ fun MainActivity.MainViewTabbed(
 
                 composable(NavBarItem.notification.route) {
                     NotificationScaffold(
+                        context = context,
                         itemList = getMainViewModel().notificationHistory.toList(),
                         snackBarHostState = snackBarHostState,
                         isVisible = true,

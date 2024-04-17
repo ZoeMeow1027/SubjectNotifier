@@ -6,13 +6,10 @@ import androidx.activity.ComponentActivity
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
@@ -21,12 +18,12 @@ import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.BottomAppBarDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.ScaffoldDefaults
 import androidx.compose.material3.SegmentedButton
 import androidx.compose.material3.SegmentedButtonDefaults
 import androidx.compose.material3.SingleChoiceSegmentedButtonRow
@@ -40,18 +37,13 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import com.google.gson.Gson
-import io.dutwrapper.dutwrapper.model.enums.NewsSearchType
 import io.dutwrapper.dutwrapper.model.news.NewsGlobalItem
 import io.zoemeow.dutschedule.R
 import io.zoemeow.dutschedule.activity.NewsActivity
 import io.zoemeow.dutschedule.model.ProcessState
 import io.zoemeow.dutschedule.model.news.NewsFetchType
-import io.zoemeow.dutschedule.ui.component.base.ButtonBase
 import io.zoemeow.dutschedule.ui.component.news.NewsListPage
 import io.zoemeow.dutschedule.viewmodel.MainViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -104,7 +96,7 @@ fun NewsMainView(
         contentColor = contentColor,
         topBar = {
             TopAppBar(
-                title = { Text(text = "News") },
+                title = { Text(text = context.getString(R.string.news_title)) },
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent),
                 navigationIcon = {
                     if (onBack != null) {
@@ -115,7 +107,7 @@ fun NewsMainView(
                             content = {
                                 Icon(
                                     Icons.AutoMirrored.Filled.ArrowBack,
-                                    "",
+                                    context.getString(R.string.back),
                                     modifier = Modifier.size(25.dp)
                                 )
                             }
@@ -153,7 +145,7 @@ fun NewsMainView(
                                 } },
                                 selected = pagerState.currentPage == 0,
                                 label = {
-                                    Text("Global")
+                                    Text(text = context.getString(R.string.news_tabname_global))
                                 }
                             )
                             SegmentedButton(
@@ -163,50 +155,47 @@ fun NewsMainView(
                                 } },
                                 selected = pagerState.currentPage == 1,
                                 label = {
-                                    Text("Subject")
+                                    Text(text = context.getString(R.string.news_tabname_subject))
                                 }
                             )
                         }
                     }
                 },
                 floatingActionButton = {
-                    if (when (pagerState.currentPage) {
-                            0 -> {
-                                mainViewModel.newsInstance.newsGlobal.processState.value != ProcessState.Running
-                            }
-
-                            1 -> {
-                                mainViewModel.newsInstance.newsSubject.processState.value != ProcessState.Running
-                            }
-
-                            else -> false
-                        }
-                    ) {
-                        FloatingActionButton(
-                            onClick = {
-                                when (pagerState.currentPage) {
-                                    0 -> {
+                    FloatingActionButton(
+                        onClick = {
+                            when (pagerState.currentPage) {
+                                0 -> {
+                                    if (mainViewModel.newsInstance.newsGlobal.processState.value != ProcessState.Running) {
                                         mainViewModel.newsInstance.fetchGlobalNews(
                                             fetchType = NewsFetchType.ClearAndFirstPage,
                                             forceRequest = true
                                         )
                                     }
+                                }
 
-                                    1 -> {
+                                1 -> {
+                                    if (mainViewModel.newsInstance.newsSubject.processState.value != ProcessState.Running) {
                                         mainViewModel.newsInstance.fetchSubjectNews(
                                             fetchType = NewsFetchType.ClearAndFirstPage,
                                             forceRequest = true
                                         )
                                     }
-
-                                    else -> {}
                                 }
-                            },
-                            content = {
+
+                                else -> {}
+                            }
+                        },
+                        content = {
+                            if (pagerState.currentPage == 0 && mainViewModel.newsInstance.newsGlobal.processState.value == ProcessState.Running) {
+                                CircularProgressIndicator(modifier = Modifier.size(24.dp))
+                            } else if (pagerState.currentPage == 1 && mainViewModel.newsInstance.newsSubject.processState.value == ProcessState.Running) {
+                                CircularProgressIndicator(modifier = Modifier.size(24.dp))
+                            } else {
                                 Icon(Icons.Default.Refresh, "Refresh")
                             }
-                        )
-                    }
+                        }
+                    )
                 }
             )
         },

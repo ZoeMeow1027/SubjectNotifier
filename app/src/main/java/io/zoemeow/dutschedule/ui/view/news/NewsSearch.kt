@@ -39,6 +39,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.gson.Gson
 import io.dutwrapper.dutwrapper.model.enums.NewsType
+import io.zoemeow.dutschedule.R
 import io.zoemeow.dutschedule.activity.NewsActivity
 import io.zoemeow.dutschedule.model.ProcessState
 import io.zoemeow.dutschedule.ui.component.news.NewsSearchOptionAndHistory
@@ -86,13 +87,16 @@ fun NewsActivity.NewsSearch(
                                 }
                             },
                         placeholder = {
-                            Text("Type here to search")
+                            Text(context.getString(R.string.news_search_searchbox_placeholder))
                         },
                         trailingIcon = {
                             if (isSearchFocused.targetState) {
                                 IconButton(
                                     content = {
-                                        Icon(Icons.Default.Clear, "")
+                                        Icon(
+                                            Icons.Default.Clear,
+                                            context.getString(R.string.clear)
+                                        )
                                     },
                                     onClick = {
                                         newsSearchViewModel.query.value = ""
@@ -127,7 +131,7 @@ fun NewsActivity.NewsSearch(
                         content = {
                             Icon(
                                 Icons.AutoMirrored.Filled.ArrowBack,
-                                "",
+                                context.getString(R.string.back),
                                 modifier = Modifier.size(25.dp)
                             )
                         }
@@ -150,6 +154,7 @@ fun NewsActivity.NewsSearch(
         },
         content = { padding ->
             NewsSearchResult(
+                context = context,
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(padding)
@@ -175,6 +180,7 @@ fun NewsActivity.NewsSearch(
                 }
             )
             NewsSearchOptionAndHistory(
+                context = context,
                 modifier = Modifier
                     .padding(padding)
                     .padding(horizontal = 10.dp)

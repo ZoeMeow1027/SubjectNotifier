@@ -107,7 +107,7 @@ fun NewsMainView(
                             content = {
                                 Icon(
                                     Icons.AutoMirrored.Filled.ArrowBack,
-                                    context.getString(R.string.back),
+                                    context.getString(R.string.action_back),
                                     modifier = Modifier.size(25.dp)
                                 )
                             }

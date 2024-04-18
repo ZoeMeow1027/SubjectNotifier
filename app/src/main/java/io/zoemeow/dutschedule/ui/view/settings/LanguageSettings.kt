@@ -60,7 +60,7 @@ fun SettingsActivity.LanguageSettings(
         contentColor = contentColor,
         topBar = {
             TopAppBar(
-                title = { Text("App Language") },
+                title = { Text(context.getString(R.string.settings_applanguage_title)) },
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent),
                 navigationIcon = {
                     IconButton(
@@ -120,6 +120,7 @@ fun SettingsActivity.LanguageSettings(
                         Locale.Builder().setLanguageTag(tag).build().apply {
                             LanguageItem(
                                 title = this.displayName,
+                                context = context,
                                 selected = (currentTag.lowercase() == tag.lowercase()),
                                 clicked = {
                                     Log.d("AppLanguage", String.format("Requested changes to %s", this.displayName))
@@ -143,6 +144,7 @@ fun SettingsActivity.LanguageSettings(
 @Composable
 private fun LanguageItem(
     title: String,
+    context: Context,
     selected: Boolean = false,
     clicked: (() -> Unit)? = null
 ) {
@@ -163,7 +165,7 @@ private fun LanguageItem(
                         fontSize = 19.sp
                     )
                     if (selected) {
-                        Icon(Icons.Default.Check, "Selected")
+                        Icon(Icons.Default.Check, context.getString(R.string.tooltip_selected))
                     }
                 }
             )

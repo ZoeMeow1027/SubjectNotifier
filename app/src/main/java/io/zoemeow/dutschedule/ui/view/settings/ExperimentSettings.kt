@@ -30,6 +30,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
+import io.zoemeow.dutschedule.R
 import io.zoemeow.dutschedule.activity.SettingsActivity
 import io.zoemeow.dutschedule.model.settings.BackgroundImageOption
 import io.zoemeow.dutschedule.ui.component.base.DividerItem
@@ -56,7 +57,7 @@ fun SettingsActivity.ExperimentSettings(
         contentColor = contentColor,
         topBar = {
             TopAppBar(
-                title = { Text("Experiment settings") },
+                title = { Text(context.getString(R.string.settings_experiment_title)) },
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent),
                 navigationIcon = {
                     IconButton(
@@ -67,7 +68,7 @@ fun SettingsActivity.ExperimentSettings(
                         content = {
                             Icon(
                                 Icons.AutoMirrored.Filled.ArrowBack,
-                                "",
+                                context.getString(R.string.action_back),
                                 modifier = Modifier.size(25.dp)
                             )
                         }
@@ -84,13 +85,13 @@ fun SettingsActivity.ExperimentSettings(
                     ContentRegion(
                         modifier = Modifier.padding(top = 10.dp),
                         textModifier = Modifier.padding(horizontal = 20.dp),
-                        text = "Global variable settings",
+                        text = context.getString(R.string.settings_experiment_category_globalvar),
                         content = {
                             OptionItem(
                                 modifierInside = Modifier.padding(horizontal = 20.dp, vertical = 15.dp),
-                                title = "Current school year settings",
-                                description = String.format(
-                                    "Year: 20%d-20%d, Semester: %s%s",
+                                title = context.getString(R.string.settings_experiment_option_currentschyear),
+                                description = context.getString(
+                                    R.string.settings_experiment_option_currentschyear_description,
                                     getMainViewModel().appSettings.value.currentSchoolYear.year,
                                     getMainViewModel().appSettings.value.currentSchoolYear.year + 1,
                                     when (getMainViewModel().appSettings.value.currentSchoolYear.semester) {
@@ -98,7 +99,7 @@ fun SettingsActivity.ExperimentSettings(
                                         2 -> "2"
                                         else -> "2"
                                     },
-                                    if (getMainViewModel().appSettings.value.currentSchoolYear.semester > 2) " (in summer)" else ""
+                                    if (getMainViewModel().appSettings.value.currentSchoolYear.semester > 2) " ${context.getString(R.string.settings_experiment_option_currentschyear_insummer)}" else ""
                                 ),
                                 onClick = {
                                     dialogSchoolYear.value = true
@@ -110,57 +111,60 @@ fun SettingsActivity.ExperimentSettings(
                     ContentRegion(
                         modifier = Modifier.padding(top = 10.dp),
                         textModifier = Modifier.padding(horizontal = 20.dp),
-                        text = "Appearance",
+                        text = context.getString(R.string.settings_experiment_category_appearance),
                         content = {
                             OptionItem(
                                 modifierInside = Modifier.padding(horizontal = 20.dp, vertical = 15.dp),
-                                title = "Background opacity",
+                                title = context.getString(R.string.settings_experiment_option_bgopacity),
                                 description = String.format(
                                     "%2.0f%% %s",
                                     (getMainViewModel().appSettings.value.backgroundImageOpacity * 100),
                                     if (getMainViewModel().appSettings.value.backgroundImage == BackgroundImageOption.None) {
-                                        "(You need enable background image to take effect)"
+                                        "(${context.getString(R.string.settings_experiment_option_required_enableimage)})"
                                     } else ""
                                 ),
                                 onClick = {
-                                    showSnackBar("This option is in development. Check back soon.", true)
+                                    showSnackBar(context.getString(R.string.feature_not_ready), true)
                                     /* TODO: Implement here: Background opacity */
                                 }
                             )
                             OptionItem(
                                 modifierInside = Modifier.padding(horizontal = 20.dp, vertical = 15.dp),
-                                title = "Component opacity",
+                                title = context.getString(R.string.settings_experiment_option_componentopacity),
                                 description = String.format(
                                     "%2.0f%% %s",
                                     (getMainViewModel().appSettings.value.componentOpacity * 100),
                                     if (getMainViewModel().appSettings.value.backgroundImage == BackgroundImageOption.None) {
-                                        "(You need enable background image to take effect)"
+                                        "(${context.getString(R.string.settings_experiment_option_required_enableimage)})"
                                     } else ""
                                 ),
                                 onClick = {
-                                    showSnackBar("This option is in development. Check back soon.", true)
+                                    showSnackBar(context.getString(R.string.feature_not_ready), true)
                                     /* TODO: Implement here: Component opacity */
                                 }
                             )
                             // https://stackoverflow.com/questions/72932093/jetpack-compose-is-there-a-way-to-restart-whole-app-programmatically
                             OptionSwitchItem(
                                 modifierInside = Modifier.padding(horizontal = 20.dp, vertical = 15.dp),
-                                title = "Main screen dashboard view",
+                                title = context.getString(R.string.settings_experiment_option_dashboardview),
                                 isVisible = true,
                                 isEnabled = true,
                                 isChecked = getMainViewModel().appSettings.value.mainScreenDashboardView,
-                                description = String.format(
-                                    "%s",
-                                    if (getMainViewModel().appSettings.value.mainScreenDashboardView) "Enabled" else "Disabled (tab view)"
-                                ),
+                                description = when (getMainViewModel().appSettings.value.mainScreenDashboardView) {
+                                    true -> context.getString(R.string.settings_experiment_option_dashboardview_choice_enabled)
+                                    false -> context.getString(R.string.settings_experiment_option_dashboardview_choice_disabled)
+                                },
                                 onValueChanged = {
                                     showSnackBar(
-                                        text = String.format(
-                                            "This will %s your dashboard view. Application will restart. To confirm, click Confirm button.",
-                                            if (getMainViewModel().appSettings.value.mainScreenDashboardView) "disable" else "enable",
+                                        text = context.getString(
+                                            R.string.settings_experiment_option_dashboardview_warning,
+                                            when (getMainViewModel().appSettings.value.mainScreenDashboardView) {
+                                                true -> context.getString(R.string.settings_experiment_option_dashboardview_warning_disable)
+                                                false -> context.getString(R.string.settings_experiment_option_dashboardview_warning_enable)
+                                            }
                                         ),
                                         clearPrevious = true,
-                                        actionText = "Confirm",
+                                        actionText = context.getString(R.string.action_confirm),
                                         action = {
                                             getMainViewModel().appSettings.value = getMainViewModel().appSettings.value.clone(
                                                 mainScreenDashboardView = !getMainViewModel().appSettings.value.mainScreenDashboardView
@@ -185,14 +189,14 @@ fun SettingsActivity.ExperimentSettings(
                     ContentRegion(
                         modifier = Modifier.padding(top = 10.dp),
                         textModifier = Modifier.padding(horizontal = 20.dp),
-                        text = "Troubleshooting",
+                        text = context.getString(R.string.settings_experiment_category_troubleshooting),
                         content = {
                             OptionItem(
                                 modifierInside = Modifier.padding(horizontal = 20.dp, vertical = 15.dp),
-                                title = "Debug log (not work yet)",
-                                description = "Get debug log for this application to troubleshoot issues.",
+                                title = context.getString(R.string.settings_experiment_option_debuglog),
+                                description = context.getString(R.string.settings_experiment_option_debuglog_description),
                                 onClick = {
-                                    showSnackBar("This option is in development. Check back soon.", true)
+                                    showSnackBar(context.getString(R.string.feature_not_ready), true)
                                     /* TODO: Implement here: Debug log */
                                 }
                             )
@@ -203,6 +207,7 @@ fun SettingsActivity.ExperimentSettings(
         }
     )
     DialogSchoolYearSettings(
+        context = context,
         isVisible = dialogSchoolYear.value,
         dismissRequested = { dialogSchoolYear.value = false },
         currentSchoolYearItem = getMainViewModel().appSettings.value.currentSchoolYear,

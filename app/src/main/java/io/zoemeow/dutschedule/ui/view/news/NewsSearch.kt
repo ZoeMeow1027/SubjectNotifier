@@ -95,7 +95,7 @@ fun NewsActivity.NewsSearch(
                                     content = {
                                         Icon(
                                             Icons.Default.Clear,
-                                            context.getString(R.string.clear)
+                                            context.getString(R.string.action_clear)
                                         )
                                     },
                                     onClick = {
@@ -131,7 +131,7 @@ fun NewsActivity.NewsSearch(
                         content = {
                             Icon(
                                 Icons.AutoMirrored.Filled.ArrowBack,
-                                context.getString(R.string.back),
+                                context.getString(R.string.action_back),
                                 modifier = Modifier.size(25.dp)
                             )
                         }

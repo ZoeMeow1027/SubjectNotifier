@@ -111,7 +111,7 @@ fun SettingsMainView(
                             content = {
                                 Icon(
                                     Icons.AutoMirrored.Filled.ArrowBack,
-                                    context.getString(R.string.back),
+                                    context.getString(R.string.action_back),
                                     modifier = Modifier.size(25.dp)
                                 )
                             }
@@ -311,12 +311,12 @@ fun SettingsMainView(
                                 leadingIcon = {
                                     Icon(
                                         imageVector = ImageVector.vectorResource(R.drawable.google_fonts_science_24),
-                                        "Experiment settings",
+                                        context.getString(R.string.settings_option_experiemntsettings),
                                         modifier = Modifier.padding(end = 15.dp)
                                     )
                                 },
-                                title = "Experiment settings",
-                                description = "Our current experiment settings before public.",
+                                title = context.getString(R.string.settings_option_experiemntsettings),
+                                description = context.getString(R.string.settings_option_experiemntsettings_description),
                                 onClick = {
                                     val intent = Intent(context, SettingsActivity::class.java)
                                     intent.action = "settings_experimentsettings"
@@ -330,7 +330,7 @@ fun SettingsMainView(
                         modifier = Modifier
                             .padding(top = 10.dp),
                         textModifier = Modifier.padding(horizontal = 20.dp),
-                        text = "About",
+                        text = context.getString(R.string.settings_category_about),
                         content = {
                             OptionItem(
                                 modifierInside = Modifier.padding(horizontal = 20.dp, vertical = 15.dp),
@@ -341,10 +341,14 @@ fun SettingsMainView(
                                         modifier = Modifier.padding(end = 15.dp)
                                     )
                                 },
-                                title = "Version",
-                                description = "Current version: ${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})\nClick here to check for update",
+                                title = context.getString(R.string.settings_category_about),
+                                description = context.getString(
+                                    R.string.settings_option_version_description,
+                                    BuildConfig.VERSION_NAME,
+                                    BuildConfig.VERSION_CODE
+                                ),
                                 onClick = {
-                                    onShowSnackBar?.let { it("This option is in development. Check back soon.", true, null, null) }
+                                    onShowSnackBar?.let { it(context.getString(R.string.feature_not_ready), true, null, null) }
                                     /* TODO: Implement here: Check for updates */
                                 }
                             )
@@ -357,8 +361,8 @@ fun SettingsMainView(
                                         modifier = Modifier.padding(end = 15.dp)
                                     )
                                 },
-                                title = "Changelogs",
-                                description = "Tap to view app changelog",
+                                title = context.getString(R.string.settings_option_changelog),
+                                description = context.getString(R.string.settings_option_changelog_description),
                                 onClick = {
                                     context.openLink(
                                         url = "https://github.com/ZoeMeow1027/DutSchedule/blob/stable/CHANGELOG.md",
@@ -375,7 +379,7 @@ fun SettingsMainView(
                                         modifier = Modifier.padding(end = 15.dp)
                                     )
                                 },
-                                title = "GitHub (click to open link)",
+                                title = context.getString(R.string.settings_option_github),
                                 description = "https://github.com/ZoeMeow1027/DutSchedule",
                                 onClick = {
                                     context.openLink(
@@ -391,6 +395,7 @@ fun SettingsMainView(
         }
     )
     DialogAppThemeSettings(
+        context = context,
         isVisible = dialogAppTheme.value,
         themeModeValue = mainViewModel.appSettings.value.themeMode,
         dynamicColorEnabled = mainViewModel.appSettings.value.dynamicColor,
@@ -428,9 +433,9 @@ fun SettingsMainView(
                 } else {
                     onShowSnackBar?.let {
                         it(
-                            "You need to grant All files access in application permission to use this feature. You can use \"Choose a image from media\" without this permission.",
+                            context.getString(R.string.permission_missing_all_file_access),
                             true,
-                            "Grant"
+                            context.getString(R.string.action_grant)
                         ) {
                             Intent(context, PermissionRequestActivity::class.java).also {
                                 context.startActivity(it)

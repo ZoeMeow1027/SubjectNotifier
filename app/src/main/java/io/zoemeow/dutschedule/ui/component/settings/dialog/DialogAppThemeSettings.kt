@@ -1,5 +1,6 @@
 package io.zoemeow.dutschedule.ui.component.settings.dialog
 
+import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -24,6 +25,7 @@ import io.zoemeow.dutschedule.ui.component.base.DialogRadioButton
 
 @Composable
 fun DialogAppThemeSettings(
+    context: Context,
     isVisible: Boolean = false,
     themeModeValue: ThemeMode,
     dynamicColorEnabled: Boolean,
@@ -34,7 +36,7 @@ fun DialogAppThemeSettings(
         modifier = Modifier
             .fillMaxWidth()
             .padding(25.dp),
-        title = "App theme",
+        title = context.getString(R.string.settings_dialog_apptheme_title),
         isVisible = isVisible,
         canDismiss = false,
         isTitleCentered = true,
@@ -46,7 +48,7 @@ fun DialogAppThemeSettings(
                 modifier = Modifier.fillMaxWidth(),
                 content = {
                     DialogRadioButton(
-                        title = "Follow device theme",
+                        title = context.getString(R.string.settings_dialog_apptheme_choice_followdevice),
                         selected = themeModeValue == ThemeMode.FollowDeviceTheme,
                         onClick = {
                             onValueChanged(
@@ -56,7 +58,7 @@ fun DialogAppThemeSettings(
                         }
                     )
                     DialogRadioButton(
-                        title = "Light mode",
+                        title = context.getString(R.string.settings_dialog_apptheme_choice_light),
                         selected = themeModeValue == ThemeMode.LightMode,
                         onClick = {
                             onValueChanged(
@@ -66,7 +68,7 @@ fun DialogAppThemeSettings(
                         }
                     )
                     DialogRadioButton(
-                        title = "Dark mode",
+                        title = context.getString(R.string.settings_dialog_apptheme_choice_dark),
                         selected = themeModeValue == ThemeMode.DarkMode,
                         onClick = {
                             onValueChanged(
@@ -76,7 +78,7 @@ fun DialogAppThemeSettings(
                         }
                     )
                     DialogCheckboxButton(
-                        title = "Dynamic color",
+                        title = context.getString(R.string.settings_dialog_apptheme_choice_dynamiccolor),
                         isChecked = dynamicColorEnabled,
                         onValueChanged = { value ->
                             onValueChanged(themeModeValue, value)
@@ -95,11 +97,7 @@ fun DialogAppThemeSettings(
                                 modifier = Modifier.size(24.dp),
                                 // tint = if (mainViewModel.isDarkTheme.value) Color.White else Color.Black
                             )
-                            Text(
-                                "Your OS needs at least:\n" +
-                                        "- Android 9 to follow device theme.\n" +
-                                        "- Android 12 to enable dynamic color."
-                            )
+                            Text(context.getString(R.string.settings_dialog_apptheme_note))
                         }
                     )
                 }
@@ -108,7 +106,7 @@ fun DialogAppThemeSettings(
         actionButtons = {
             TextButton(
                 onClick = onDismiss,
-                content = { Text("OK") },
+                content = { Text(context.getString(R.string.action_ok)) },
                 modifier = Modifier.padding(start = 8.dp),
             )
         }

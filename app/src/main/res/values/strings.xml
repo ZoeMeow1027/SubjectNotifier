@@ -1,9 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">DutSchedule</string>
-    <string name="back">Back</string>
-    <string name="clear">Clear</string>
     <string name="feature_not_ready">This function is in development. Check back soon.</string>
+    <string name="permission_missing_all_file_access">You need to grant All files access in application permissions to use this option.</string>
+    <!-- Action string -->
+    <string name="action_ok">OK</string>
+    <string name="action_save">Save</string>
+    <string name="action_cancel">Cancel</string>
+    <string name="action_back">Back</string>
+    <string name="action_clear">Clear</string>
+    <string name="action_grant">Grant</string>
+    <string name="action_confirm">Confirm</string>
+    <!-- Tooltip string -->
+    <string name="tooltip_selected">Selected</string>
     <!-- Android notification string -->
     <string name="notification_announcement_title">App updates</string>
     <string name="notification_announcement_description">This will send you app recommend and important updates.</string>
@@ -47,6 +56,54 @@
     <string name="settings_option_apppermission_description">Click here for allow and manage app permissions you granted.</string>
     <string name="settings_option_openlinkinsideapp">Open link inside app</string>
     <string name="settings_option_openlinkinsideapp_description">Open clicked link without leaving this app. Disable to open link in default browser.</string>
+    <string name="settings_option_experiemntsettings">Experiment settings</string>
+    <string name="settings_option_experiemntsettings_description">Our current experiment settings before public. Use this at your own risk.</string>
+    <string name="settings_category_about">About</string>
+    <string name="settings_option_version">Version</string>
+    <string name="settings_option_version_description">Current: %1$s (%2$d)\nClick here to check for update.</string>
+    <string name="settings_option_changelog">Changelog</string>
+    <string name="settings_option_changelog_description">Tap to view app changelog</string>
+    <string name="settings_option_github">GitHub (click to open link)</string>
+    <!-- Settings Dialog UI string -->
+    <string name="settings_dialog_apptheme_title">App theme</string>
+    <string name="settings_dialog_apptheme_choice_followdevice">Follow device theme</string>
+    <string name="settings_dialog_apptheme_choice_dark">Dark mode</string>
+    <string name="settings_dialog_apptheme_choice_light">Light mode</string>
+    <string name="settings_dialog_apptheme_choice_dynamiccolor">Dynamic color</string>
+    <string name="settings_dialog_apptheme_note">Your OS needs at least:\n- - Android 9 to follow device theme;\n- Android 12 to enable dynamic color.</string>
+    <string name="settings_dialog_wallpaperbackground_title">App background wallpaper</string>
+    <string name="settings_dialog_wallpaperbackground_choice_none">Disabled</string>
+    <string name="settings_dialog_wallpaperbackground_choice_currentwallpaper">Your current wallpaper</string>
+    <string name="settings_dialog_wallpaperbackground_choice_currentwallpaper_disa14">This option is unavailable on Android 14</string>
+    <string name="settings_dialog_wallpaperbackground_choice_currentwallpaper_dismisperext">You\'ll need to grant access all file access permission</string>
+    <string name="settings_dialog_wallpaperbackground_choice_pickaimage">Pick a image from media</string>
+    <!-- Settings Language activity string-->
+    <string name="settings_applanguage_title">App language</string>
+    <!-- Settings Experiment activity string -->
+    <string name="settings_experiment_title">Experiment Settings</string>
+    <string name="settings_experiment_category_globalvar">Global variable settings</string>
+    <string name="settings_experiment_option_currentschyear">Current school year</string>
+    <string name="settings_experiment_option_currentschyear_description">Year: 20%1$d-20%2$d, semester: %3$s%4$s</string>
+    <string name="settings_experiment_option_currentschyear_insummer">in summer</string>
+    <string name="settings_experiment_category_appearance">Appearance</string>
+    <string name="settings_experiment_option_required_enableimage">You need enable background image to take effect</string>
+    <string name="settings_experiment_option_bgopacity">Background opacity</string>
+    <string name="settings_experiment_option_componentopacity">Component opacity</string>
+    <string name="settings_experiment_option_dashboardview">Main screen dashboard view</string>
+    <string name="settings_experiment_option_dashboardview_choice_enabled">Enabled</string>
+    <string name="settings_experiment_option_dashboardview_choice_disabled">Disabled (navigation tab view)</string>
+    <string name="settings_experiment_option_dashboardview_warning">This will %1$s your dashboard view. Application will restart. Click \"Confirm\" button to continue.</string>
+    <string name="settings_experiment_option_dashboardview_warning_disable">disable</string>
+    <string name="settings_experiment_option_dashboardview_warning_enable">enable</string>
+    <string name="settings_experiment_category_troubleshooting">Troubleshooting</string>
+    <string name="settings_experiment_option_debuglog">Debug log (not working yet)</string>
+    <string name="settings_experiment_option_debuglog_description">Get debug log for this application to find and troubleshoot issues.</string>
+    <!-- Settings school year dialog string -->
+    <string name="settings_dialog_schyear_title">School year variable settings</string>
+    <string name="settings_dialog_schyear_description">Edit your value below to adjust school year variable (Careful when changing settings here. This will affect all functions in application)</string>
+    <string name="settings_dialog_schyear_choice_schyear">School year</string>
+    <string name="settings_dialog_schyear_choice_semester">Semester</string>
+    <string name="settings_dialog_schyear_choice_insummer">in summer</string>
     <!-- Notification UI string -->
     <string name="notification_panel_title">Notifications</string>
     <string name="notification_panel_no_notifications">No notifications</string>

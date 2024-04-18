@@ -1,9 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">DutSchedule</string>
-    <string name="back">Quay lại</string>
-    <string name="clear">Xoá</string>
     <string name="feature_not_ready">Tính năng này đang được phát triển. Hãy kiểm tra lại sau.</string>
+    <string name="permission_missing_all_file_access">Bạn cần phải cho phép Quyền truy cập mọi tệp trong quyền hạn ứng dụng để sử dụng tùy chọn này.</string>
+    <!-- Action string -->
+    <string name="action_ok">OK</string>
+    <string name="action_save">Lưu</string>
+    <string name="action_cancel">Huỷ bỏ</string>
+    <string name="action_back">Quay lại</string>
+    <string name="action_clear">Xoá</string>
+    <string name="action_grant">Cho phép</string>
+    <string name="action_confirm">Xác nhận</string>
+    <!-- Tooltip string -->
+    <string name="tooltip_selected">Đã chọn</string>
     <!-- Android notification string -->
     <string name="notification_announcement_title">Thông báo ứng dụng</string>
     <string name="notification_announcement_description">Kênh này sẽ gửi thông báo cập nhật quan trọng của ứng dụng cho bạn.</string>
@@ -47,6 +56,54 @@
     <string name="settings_option_apppermission_description">Nhấn vào đây để cho phép và quản lý quyền hạn ứng dụng bạn đã cấp phép.</string>
     <string name="settings_option_openlinkinsideapp">Mở liên kết trong ứng dụng</string>
     <string name="settings_option_openlinkinsideapp_description">Mở liên kết đã nhấp mà không rời khỏi ứng dụng. Vô hiệu hoá để mở trong trình duyệt mặc định của bạn.</string>
+    <string name="settings_option_experiemntsettings">Cài đặt thử nghiệm</string>
+    <string name="settings_option_experiemntsettings_description">Các cài đặt thử nghiệm của chúng tôi trước khi đưa vào chính thức. Sử dụng nó một cách thận trọng.</string>
+    <string name="settings_category_about">Về ứng dụng</string>
+    <string name="settings_option_version">Phiên bản</string>
+    <string name="settings_option_version_description">Hiện tại: %1$s (%2$d)\nNhấp vào đây để kiểm tra cập nhật.</string>
+    <string name="settings_option_changelog">Nhật ký thay đổi</string>
+    <string name="settings_option_changelog_description">Nhấn để xem ghi chú phát hành của ứng dụng</string>
+    <string name="settings_option_github">GitHub (nhấp để mở liên kết)</string>
+    <!-- Settings Dialog UI string -->
+    <string name="settings_dialog_apptheme_title">Chủ đề ứng dụng</string>
+    <string name="settings_dialog_apptheme_choice_followdevice">Theo chủ đề hệ thống</string>
+    <string name="settings_dialog_apptheme_choice_dark">Chủ đề tối</string>
+    <string name="settings_dialog_apptheme_choice_light">Chủ đề sáng</string>
+    <string name="settings_dialog_apptheme_choice_dynamiccolor">Dynamic color</string>
+    <string name="settings_dialog_apptheme_note">Hệ điều hành của bạn cần tối thiểu:\n- Android 9 để theo chủ đề hệ thống;\n- Android 12 để bật dynamic color.</string>
+    <string name="settings_dialog_wallpaperbackground_title">Hình nền ứng dụng</string>
+    <string name="settings_dialog_wallpaperbackground_choice_none">Đã vô hiệu hóa</string>
+    <string name="settings_dialog_wallpaperbackground_choice_currentwallpaper">Hình nền hiện tại của bạn</string>
+    <string name="settings_dialog_wallpaperbackground_choice_currentwallpaper_disa14">Tùy chọn này không có sẵn trên Android 14</string>
+    <string name="settings_dialog_wallpaperbackground_choice_currentwallpaper_dismisperext">Bạn cần phải cho phép Quyền truy cập mọi tệp</string>
+    <string name="settings_dialog_wallpaperbackground_choice_pickaimage">Chọn một hình ảnh từ phương tiện</string>
+    <!-- Settings Language activity string-->
+    <string name="settings_applanguage_title">Ngôn ngữ ứng dụng</string>
+    <!-- Settings Experiment activity string -->
+    <string name="settings_experiment_title">Cài đặt thử nghiệm</string>
+    <string name="settings_experiment_category_globalvar">Cài đặt biến công khai</string>
+    <string name="settings_experiment_option_currentschyear">Năm học hiện tại</string>
+    <string name="settings_experiment_option_currentschyear_description">Năm: 20%1$d-20%2$d, học kỳ: %3$s%4$s</string>
+    <string name="settings_experiment_option_currentschyear_insummer">học kỳ hè</string>
+    <string name="settings_experiment_category_appearance">Hiển thị</string>
+    <string name="settings_experiment_option_required_enableimage">Bạn cần bật hình nền ứng dụng để tùy chọn có tác dụng</string>
+    <string name="settings_experiment_option_bgopacity">Độ mờ hình nền</string>
+    <string name="settings_experiment_option_componentopacity">Độ mờ thành phần điều khiển</string>
+    <string name="settings_experiment_option_dashboardview">Chế độ xem bảng tổng quát trên màn hình chính</string>
+    <string name="settings_experiment_option_dashboardview_choice_enabled">Đã bật</string>
+    <string name="settings_experiment_option_dashboardview_choice_disabled">Đã vô hiệu hóa (chế độ xem điều hướng thẻ)</string>
+    <string name="settings_experiment_option_dashboardview_warning">Điều này sẽ %1$s chế độ xem bảng tổng quát của bạn. Ứng dụng sẽ khởi động lại. Nhấn vào \"Xác nhận\" để tiếp tục.</string>
+    <string name="settings_experiment_option_dashboardview_warning_disable">vô hiệu hóa</string>
+    <string name="settings_experiment_option_dashboardview_warning_enable">kích hoạt</string>
+    <string name="settings_experiment_category_troubleshooting">Xử lý sự cố</string>
+    <string name="settings_experiment_option_debuglog">Bản ghi gỡ lỗi (chưa hoạt động)</string>
+    <string name="settings_experiment_option_debuglog_description">Xem bản ghi gỡ lỗi ứng dụng để tìm nguyên nhân và xử lý sự cố.</string>
+    <!-- Settings school year dialog string -->
+    <string name="settings_dialog_schyear_title">Cài đặt biến năm học</string>
+    <string name="settings_dialog_schyear_description">Chỉnh sửa giá trị để điều chỉnh biến năm học (Cẩn thận khi thay đổi tại đây. Điều này sẽ áp dụng tất cả tính năng trong ứng dụng)</string>
+    <string name="settings_dialog_schyear_choice_schyear">Năm học</string>
+    <string name="settings_dialog_schyear_choice_semester">Học kỳ</string>
+    <string name="settings_dialog_schyear_choice_insummer">học kỳ hè</string>
     <!-- Notification UI string -->
     <string name="notification_panel_title">Thông báo</string>
     <string name="notification_panel_no_notifications">Không có thông báo</string>

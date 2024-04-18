@@ -1,5 +1,6 @@
 package io.zoemeow.dutschedule.ui.component.settings.dialog
 
+import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -17,6 +18,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import io.zoemeow.dutschedule.R
 import io.zoemeow.dutschedule.activity.SettingsActivity
 import io.zoemeow.dutschedule.model.account.SchoolYearItem
 import io.zoemeow.dutschedule.ui.component.base.DialogBase
@@ -25,6 +27,7 @@ import io.zoemeow.dutschedule.ui.component.base.OutlinedTextBox
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DialogSchoolYearSettings(
+    context: Context,
     isVisible: Boolean = false,
     dismissRequested: (() -> Unit)? = null,
     currentSchoolYearItem: SchoolYearItem,
@@ -44,7 +47,7 @@ fun DialogSchoolYearSettings(
         modifier = Modifier
             .fillMaxWidth()
             .padding(25.dp),
-        title = "School year settings",
+        title = context.getString(R.string.settings_dialog_schyear_title),
         isVisible = isVisible,
         canDismiss = false,
         isTitleCentered = true,
@@ -58,7 +61,7 @@ fun DialogSchoolYearSettings(
                 modifier = Modifier.fillMaxWidth(),
             ) {
                 Text(
-                    "Edit your value below to adjust school year variable (careful when changing settings here)",
+                    context.getString(R.string.settings_dialog_schyear_description),
                     modifier = Modifier.padding(bottom = 10.dp)
                 )
                 ExposedDropdownMenuBox(
@@ -69,14 +72,14 @@ fun DialogSchoolYearSettings(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .menuAnchor(),
-                            title = "School year",
+                            title = context.getString(R.string.settings_dialog_schyear_choice_schyear),
                             value = String.format("20%d-20%d", currentSettings.value.year, currentSettings.value.year+1)
                         )
                         DropdownMenu(
                             expanded = dropDownSchoolYear.value,
                             onDismissRequest = { dropDownSchoolYear.value = false },
                             content = {
-                                23.downTo(10).forEach {
+                                27.downTo(10).forEach {
                                     DropdownMenuItem(
                                         text = { Text(String.format("20%2d-20%2d", it, it+1)) },
                                         onClick = {
@@ -99,11 +102,12 @@ fun DialogSchoolYearSettings(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .menuAnchor(),
-                            title = "Semester",
+                            title = context.getString(R.string.settings_dialog_schyear_choice_semester),
                             value = String.format(
-                                "Semester %d%s",
+                                "%s %d%s",
+                                context.getString(R.string.settings_dialog_schyear_choice_semester),
                                 if (currentSettings.value.semester <= 2) currentSettings.value.semester else 2,
-                                if (currentSettings.value.semester > 2) " (in summer)" else ""
+                                if (currentSettings.value.semester > 2) " (${context.getString(R.string.settings_dialog_schyear_choice_insummer)})" else ""
                             )
                         )
                         DropdownMenu(
@@ -113,9 +117,10 @@ fun DialogSchoolYearSettings(
                                 1.rangeTo(3).forEach {
                                     DropdownMenuItem(
                                         text = { Text(String.format(
-                                            "Semester %d%s",
+                                            "%s %d%s",
+                                            context.getString(R.string.settings_dialog_schyear_choice_semester),
                                             if (it <= 2) it else 2,
-                                            if (it > 2) " (in summer)" else ""
+                                            if (it > 2) " (${context.getString(R.string.settings_dialog_schyear_choice_insummer)})" else ""
                                         )) },
                                         onClick = {
                                             currentSettings.value = currentSettings.value.clone(
@@ -134,12 +139,12 @@ fun DialogSchoolYearSettings(
         actionButtons = {
             TextButton(
                 onClick = { onSubmit?.let { it(currentSettings.value) } },
-                content = { Text("Save") },
+                content = { Text(context.getString(R.string.action_save)) },
                 modifier = Modifier.padding(start = 8.dp),
             )
             TextButton(
                 onClick = { dismissRequested?.let { it() } },
-                content = { Text("Cancel") },
+                content = { Text(context.getString(R.string.action_cancel)) },
                 modifier = Modifier.padding(start = 8.dp),
             )
         }

@@ -59,6 +59,7 @@ class SettingsActivity : BaseActivity() {
         when (intent.action) {
             "settings_newssubjectnewparse" -> {
                 ParseNewsSubjectNotification(
+                    context = context,
                     snackBarHostState = snackBarHostState,
                     containerColor = containerColor,
                     contentColor = contentColor

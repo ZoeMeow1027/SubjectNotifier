@@ -34,6 +34,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import io.zoemeow.dutschedule.R
 import io.zoemeow.dutschedule.activity.AccountActivity
 import io.zoemeow.dutschedule.model.ProcessState
 import io.zoemeow.dutschedule.ui.component.base.ButtonBase
@@ -66,7 +67,7 @@ fun AccountActivity.TrainingResult(
                         content = {
                             Icon(
                                 Icons.AutoMirrored.Filled.ArrowBack,
-                                "",
+                                context.getString(R.string.action_back),
                                 modifier = Modifier.size(25.dp)
                             )
                         }
@@ -81,7 +82,7 @@ fun AccountActivity.TrainingResult(
                         getMainViewModel().accountSession.fetchAccountTrainingStatus(force = true)
                     },
                     content = {
-                        Icon(Icons.Default.Refresh, "Refresh")
+                        Icon(Icons.Default.Refresh, context.getString(R.string.action_refresh))
                     }
                 )
             }
@@ -200,14 +201,14 @@ fun AccountActivity.TrainingResult(
                                                         .padding(bottom = 5.dp)
                                                 )
                                                 OutlinedTextBox(
-                                                    title = "Khen thuong",
+                                                    title = "Commend and rewards",
                                                     value = it.graduateStatus?.info1 ?: "(unknown)",
                                                     modifier = Modifier
                                                         .fillMaxWidth()
                                                         .padding(bottom = 5.dp)
                                                 )
                                                 OutlinedTextBox(
-                                                    title = "Ky luat",
+                                                    title = "Discipline",
                                                     value = it.graduateStatus?.info2 ?: "(unknown)",
                                                     modifier = Modifier
                                                         .fillMaxWidth()

@@ -47,6 +47,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import io.zoemeow.dutschedule.R
 import io.zoemeow.dutschedule.activity.PermissionRequestActivity
 import io.zoemeow.dutschedule.activity.SettingsActivity
 import io.zoemeow.dutschedule.model.settings.SubjectCode
@@ -98,7 +99,7 @@ fun SettingsActivity.NewsNotificationSettings(
                         content = {
                             Icon(
                                 Icons.AutoMirrored.Filled.ArrowBack,
-                                "Back",
+                                context.getString(R.string.action_back),
                                 modifier = Modifier.size(25.dp)
                             )
                         }
@@ -114,7 +115,7 @@ fun SettingsActivity.NewsNotificationSettings(
             onFetchNewsStateChanged = { duration ->
                 if (duration > 0) {
                     if (PermissionRequestActivity.checkPermissionScheduleExactAlarm(context).isGranted) {
-                        // TODO: Fetch news in background onClick
+                        // Fetch news in background onClick
                         val dataTemp = getMainViewModel().appSettings.value.clone(
                             fetchNewsBackgroundDuration = duration
                         )
@@ -184,30 +185,28 @@ fun SettingsActivity.NewsNotificationSettings(
                 getMainViewModel().appSettings.value = dataTemp
                 getMainViewModel().saveSettings(saveSettingsOnly = true)
                 showSnackBar(
-                    text = "Done! You will notify \"${
-                        when (code) {
-                            -1 -> "nothing"
-                            0 -> "all subject news notifications"
-                            1 -> "news match your subject schedule"
-                            2 -> "news match your filter list"
-                            else -> "(unknown)"
-                        }
-                    }\".",
+                    text = when (code) {
+                        -1 -> "Done! You have disabled news subject notification."
+                        0 -> "Done! You will notify all subject news notifications."
+                        1 -> "Done! You will notify news match your subject schedule."
+                        2 -> "Done! You will notify news match your filter list below."
+                        else -> "(unknown)"
+                    },
                     clearPrevious = true
                 )
             },
             subjectFilterList = getMainViewModel().appSettings.value.newsBackgroundFilterList,
             onSubjectFilterAdd = {
-                // TODO: Add a filter
+                // Add a filter
                 dialogAddNew.value = true
             },
             onSubjectFilterDelete = { data ->
-                // TODO: Delete a filter
+                // Delete a filter
                 tempDeleteItem.value = data
                 dialogDeleteItem.value = true
             },
             onSubjectFilterClear = {
-                // TODO: Delete all filters
+                // Delete all filters
                 dialogDeleteAll.value = true
             },
             opacity = getControlBackgroundAlpha()
@@ -217,7 +216,7 @@ fun SettingsActivity.NewsNotificationSettings(
         isVisible = dialogAddNew.value,
         onDismiss = { dialogAddNew.value = false },
         onDone = { syId, cId, subName ->
-            // TODO: Add item manually
+            // Add item manually
             try {
                 val item = SubjectCode(syId, cId, subName)
                 getMainViewModel().appSettings.value.newsBackgroundFilterList.add(item)
@@ -236,7 +235,7 @@ fun SettingsActivity.NewsNotificationSettings(
         isVisible = dialogDeleteItem.value,
         onDismiss = { dialogDeleteItem.value = false },
         onDone = {
-            // TODO: Clear item on tempDeleteItem.value
+            // Clear item on tempDeleteItem.value
             try {
                 getMainViewModel().appSettings.value.newsBackgroundFilterList.remove(tempDeleteItem.value)
                 getMainViewModel().saveSettings(saveSettingsOnly = true)
@@ -258,7 +257,7 @@ fun SettingsActivity.NewsNotificationSettings(
         isVisible = dialogDeleteAll.value,
         onDismiss = { dialogDeleteAll.value = false },
         onDone = {
-            // TODO: Clear all items
+            // Clear all items
             try {
                 getMainViewModel().appSettings.value.newsBackgroundFilterList.clear()
                 getMainViewModel().saveSettings(saveSettingsOnly = true)
@@ -437,7 +436,7 @@ private fun MainView(
                 isEnabled = fetchNewsInBackgroundDuration > 0,
                 isChecked = isNewsGlobalEnabled,
                 onClick = {
-                    // TODO: Refresh news state changed
+                    // Refresh news state changed
                     onNewsGlobalStateChanged?.let { it(!isNewsGlobalEnabled) }
                 }
             )
@@ -453,7 +452,7 @@ private fun MainView(
                 isEnabled = fetchNewsInBackgroundDuration > 0,
                 isChecked = isNewsSubjectEnabled == -1,
                 onClick = {
-                    // TODO: Subject news notification off - onClick
+                    // Subject news notification off - onClick
                     onNewsSubjectStateChanged?.let { it(-1) }
                 }
             )
@@ -463,7 +462,7 @@ private fun MainView(
                 isEnabled = fetchNewsInBackgroundDuration > 0,
                 isChecked = isNewsSubjectEnabled == 0,
                 onClick = {
-                    // TODO: Subject news notification all - onClick
+                    // Subject news notification all - onClick
                     onNewsSubjectStateChanged?.let { it(0) }
                 }
             )
@@ -473,7 +472,7 @@ private fun MainView(
                 isEnabled = fetchNewsInBackgroundDuration > 0,
                 isChecked = isNewsSubjectEnabled == 1,
                 onClick = {
-                    // TODO: Subject news notification your subject schedule - onClick
+                    // Subject news notification your subject schedule - onClick
                     onNewsSubjectStateChanged?.let { it(1) }
                 }
             )
@@ -483,7 +482,7 @@ private fun MainView(
                 isEnabled = fetchNewsInBackgroundDuration > 0,
                 isChecked = isNewsSubjectEnabled == 2,
                 onClick = {
-                    // TODO: Subject news notification custom list - onClick
+                    // Subject news notification custom list - onClick
                     onNewsSubjectStateChanged?.let { it(2) }
                 }
             )
@@ -561,7 +560,7 @@ private fun MainView(
                 leadingIcon = { Icon(Icons.Default.Add, "Add a subject news filter") },
                 isEnabled = isNewsSubjectEnabled == 2,
                 onClick = {
-                    // TODO: Add a subject news filter
+                    // Add a subject news filter
                     onSubjectFilterAdd?.let { it() }
                 }
             )
@@ -571,7 +570,7 @@ private fun MainView(
                 leadingIcon = { Icon(Icons.Default.Delete, "Clear all subject news filter") },
                 isEnabled = isNewsSubjectEnabled == 2,
                 onClick = {
-                    // TODO: Clear all subject news filter list
+                    // Clear all subject news filter list
                     onSubjectFilterClear?.let { it() }
                 }
             )

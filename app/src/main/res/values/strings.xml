@@ -11,8 +11,10 @@
     <string name="action_clear">Clear</string>
     <string name="action_grant">Grant</string>
     <string name="action_confirm">Confirm</string>
+    <string name="action_refresh">Refresh</string>
     <!-- Tooltip string -->
     <string name="tooltip_selected">Selected</string>
+    <string name="tooltip_info">Information</string>
     <!-- Android notification string -->
     <string name="notification_announcement_title">App updates</string>
     <string name="notification_announcement_description">This will send you app recommend and important updates.</string>
@@ -79,6 +81,14 @@
     <string name="settings_dialog_wallpaperbackground_choice_pickaimage">Pick a image from media</string>
     <!-- Settings Language activity string-->
     <string name="settings_applanguage_title">App language</string>
+    <!-- Settings Parse news subject activity string -->
+    <string name="settings_parsenewssubject_title">Parse subject news in notification</string>
+    <string name="settings_parsenewssubject_preview_titleenabled">{Making up} lesson(s) with {Lecturer} about {Class List}</string>
+    <string name="settings_parsenewssubject_preview_titledisabled">{Lecturer} thông báo đến lớp {Class List}</string>
+    <string name="settings_parsenewssubject_preview_descenabled">On {date} at lesson(s) {lessons}\nRoom will make up: {room}</string>
+    <string name="settings_parsenewssubject_preview_descdisabled">{Lecturer} nhắn: Lớp {Making up} ngày: {date},Tiết:{Lessons}, phòng {Room}</string>
+    <string name="settings_parsenewssubject_choice_enable">Use this feature</string>
+    <string name="settings_parsenewssubject_info">Use the new parser for news subject if supported. Turned off or unsupported news subject won\'t affected.</string>
     <!-- Settings Experiment activity string -->
     <string name="settings_experiment_title">Experiment Settings</string>
     <string name="settings_experiment_category_globalvar">Global variable settings</string>

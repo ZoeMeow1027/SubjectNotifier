@@ -11,8 +11,10 @@
     <string name="action_clear">Xoá</string>
     <string name="action_grant">Cho phép</string>
     <string name="action_confirm">Xác nhận</string>
+    <string name="action_refresh">Làm mới</string>
     <!-- Tooltip string -->
     <string name="tooltip_selected">Đã chọn</string>
+    <string name="tooltip_info">Thông tin</string>
     <!-- Android notification string -->
     <string name="notification_announcement_title">Thông báo ứng dụng</string>
     <string name="notification_announcement_description">Kênh này sẽ gửi thông báo cập nhật quan trọng của ứng dụng cho bạn.</string>
@@ -79,6 +81,14 @@
     <string name="settings_dialog_wallpaperbackground_choice_pickaimage">Chọn một hình ảnh từ phương tiện</string>
     <!-- Settings Language activity string-->
     <string name="settings_applanguage_title">Ngôn ngữ ứng dụng</string>
+    <!-- Settings Parse news subject activity string -->
+    <string name="settings_parsenewssubject_title">Xử lý tin tức lớp học phần trong thông báo</string>
+    <string name="settings_parsenewssubject_preview_titleenabled">Thông báo {học bù} của {giáo viên} về {danh sách lớp học}</string>
+    <string name="settings_parsenewssubject_preview_titledisabled">{Giáo viên} thông báo đến lớp {danh sách lớp học}</string>
+    <string name="settings_parsenewssubject_preview_descenabled">Vào ngày {ngày} với tiết học {tiết học}\nPhòng sẽ học bù: {phòng}</string>
+    <string name="settings_parsenewssubject_preview_descdisabled">{Giáo viên} nhắn: Lớp {học bù} ngày: {ngày},Tiết:{tiết học}, phòng {phòng}</string>
+    <string name="settings_parsenewssubject_choice_enable">Sử dụng tính năng này</string>
+    <string name="settings_parsenewssubject_info">Sử dụng trình xử lý mới cho tin tức lớp học phần nếu có thể. Tắt nó đi hoặc tin tức không được hỗ trợ sẽ không bị ảnh hưởng.</string>
     <!-- Settings Experiment activity string -->
     <string name="settings_experiment_title">Cài đặt thử nghiệm</string>
     <string name="settings_experiment_category_globalvar">Cài đặt biến công khai</string>

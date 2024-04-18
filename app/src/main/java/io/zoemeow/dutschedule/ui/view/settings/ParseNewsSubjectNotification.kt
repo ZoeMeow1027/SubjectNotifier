@@ -1,5 +1,6 @@
 package io.zoemeow.dutschedule.ui.view.settings
 
+import android.content.Context
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -38,6 +39,7 @@ import io.zoemeow.dutschedule.ui.component.base.SwitchWithTextInSurface
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsActivity.ParseNewsSubjectNotification(
+    context: Context,
     snackBarHostState: SnackbarHostState,
     containerColor: Color,
     contentColor: Color
@@ -49,7 +51,7 @@ fun SettingsActivity.ParseNewsSubjectNotification(
         contentColor = contentColor,
         topBar = {
             TopAppBar(
-                title = { Text("New parse method on notification") },
+                title = { Text(context.getString(R.string.settings_parsenewssubject_title)) },
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent),
                 navigationIcon = {
                     IconButton(
@@ -60,7 +62,7 @@ fun SettingsActivity.ParseNewsSubjectNotification(
                         content = {
                             Icon(
                                 Icons.AutoMirrored.Filled.ArrowBack,
-                                "",
+                                context.getString(R.string.action_back),
                                 modifier = Modifier.size(25.dp)
                             )
                         }
@@ -89,14 +91,17 @@ fun SettingsActivity.ParseNewsSubjectNotification(
                                     .padding(20.dp),
                                 content = {
                                     Text(
-                                        "New Making up lesson in a subject",
+                                        when (getMainViewModel().appSettings.value.newsBackgroundParseNewsSubject) {
+                                            true -> context.getString(R.string.settings_parsenewssubject_preview_titleenabled)
+                                            false -> context.getString(R.string.settings_parsenewssubject_preview_titledisabled)
+                                        },
                                         style = MaterialTheme.typography.titleLarge,
                                         modifier = Modifier.padding(bottom = 5.dp)
                                     )
                                     Text(
                                         when (getMainViewModel().appSettings.value.newsBackgroundParseNewsSubject) {
-                                            true -> "Lecturer: ...\nOn ... at lesson(s) ...\nRoom will make up: ..."
-                                            false -> "Person messaged: Class will MAKED UP at lesson 1-4, date: dd/MM/yyyy, at room A123"
+                                            true -> context.getString(R.string.settings_parsenewssubject_preview_descenabled)
+                                            false -> context.getString(R.string.settings_parsenewssubject_preview_descdisabled)
                                         }
                                     )
                                 }
@@ -104,7 +109,7 @@ fun SettingsActivity.ParseNewsSubjectNotification(
                         }
                     )
                     SwitchWithTextInSurface(
-                        text = "Use this feature",
+                        text = context.getString(R.string.settings_parsenewssubject_choice_enable),
                         enabled = true,
                         checked = getMainViewModel().appSettings.value.newsBackgroundParseNewsSubject,
                         onCheckedChange = {
@@ -124,10 +129,10 @@ fun SettingsActivity.ParseNewsSubjectNotification(
                     ) {
                         Icon(
                             imageVector = ImageVector.vectorResource(id = R.drawable.ic_baseline_info_24),
-                            contentDescription = "info_icon",
+                            contentDescription = context.getString(R.string.tooltip_info),
                             modifier = Modifier.size(24.dp),
                         )
-                        Text("Use the new parser for news subject if supported. Turned off or unsupported news subject won't affected.")
+                        Text(context.getString(R.string.settings_parsenewssubject_info))
                     }
                 }
             )

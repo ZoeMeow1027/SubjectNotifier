@@ -19,7 +19,7 @@ data class ProcessVariable<T>(
     val onAfterRefresh: ((Boolean) -> Unit)? = null
 ) {
     private fun isExpired(): Boolean {
-        return (lastRequest.longValue + GlobalVariables.requestExpiredDuration) < System.currentTimeMillis()
+        return (lastRequest.longValue + GlobalVariables.REQUEST_EXPIRED_DURATION) < System.currentTimeMillis()
     }
 
     private fun isSuccessfulRequestExpired(): Boolean {

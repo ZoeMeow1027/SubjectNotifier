@@ -45,6 +45,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.zoemeow.dutschedule.R
@@ -87,7 +88,7 @@ fun SettingsActivity.NewsNotificationSettings(
         contentColor = contentColor,
         topBar = {
             TopAppBar(
-                title = { Text("News Notification Settings") },
+                title = { Text(context.getString(R.string.settings_newsnotify_title)) },
                 // colors = TopAppBarDefaults.largeTopAppBarColors(containerColor = Color.Transparent, scrolledContainerColor = Color.Transparent),
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent, scrolledContainerColor = Color.Transparent),
                 navigationIcon = {
@@ -110,6 +111,7 @@ fun SettingsActivity.NewsNotificationSettings(
         },
     ) {
         MainView(
+            context = context,
             padding = it,
             fetchNewsInBackgroundDuration = getMainViewModel().appSettings.value.newsBackgroundDuration,
             onFetchNewsStateChanged = { duration ->
@@ -122,14 +124,17 @@ fun SettingsActivity.NewsNotificationSettings(
                         getMainViewModel().appSettings.value = dataTemp
                         getMainViewModel().saveSettings(saveSettingsOnly = true)
                         showSnackBar(
-                            text = "Successfully enabled fetch news in background! News will refresh every $duration minute(s).",
+                            text = context.getString(
+                                R.string.settings_newsnotify_fetchnewsinbackground_enabled,
+                                duration
+                            ),
                             clearPrevious = true
                         )
                     } else {
                         showSnackBar(
-                            text = "You need to enable Alarms & Reminders in Android app settings to use this feature.",
+                            text = context.getString(R.string.permission_missing_alarm_and_reminders),
                             clearPrevious = true,
-                            actionText = "Open",
+                            actionText = context.getString(R.string.action_grant),
                             action = {
                                 Intent(context, PermissionRequestActivity::class.java).also { intent ->
                                     context.startActivity(intent)
@@ -144,7 +149,7 @@ fun SettingsActivity.NewsNotificationSettings(
                     getMainViewModel().appSettings.value = dataTemp
                     getMainViewModel().saveSettings(saveSettingsOnly = true)
                     showSnackBar(
-                        text = "Successfully disabled fetch news in background!",
+                        text = context.getString(R.string.settings_newsnotify_fetchnewsinbackground_disabled),
                         clearPrevious = true
                     )
                 }
@@ -163,9 +168,10 @@ fun SettingsActivity.NewsNotificationSettings(
                 getMainViewModel().appSettings.value = dataTemp
                 getMainViewModel().saveSettings(saveSettingsOnly = true)
                 showSnackBar(
-                    text = "Successfully ${
-                        if (enabled) "enabled" else "disabled"
-                    } global news notification!",
+                    text = when (enabled) {
+                        true -> context.getString(R.string.settings_newsnotify_newsglobal_enabled)
+                        false -> context.getString(R.string.settings_newsnotify_newsglobal_disabled)
+                    },
                     clearPrevious = true
                 )
             },
@@ -186,11 +192,12 @@ fun SettingsActivity.NewsNotificationSettings(
                 getMainViewModel().saveSettings(saveSettingsOnly = true)
                 showSnackBar(
                     text = when (code) {
-                        -1 -> "Done! You have disabled news subject notification."
-                        0 -> "Done! You will notify all subject news notifications."
-                        1 -> "Done! You will notify news match your subject schedule."
-                        2 -> "Done! You will notify news match your filter list below."
-                        else -> "(unknown)"
+                        -1 -> context.getString(R.string.settings_newsnotify_newssubject_notify_disabled)
+                        0 -> context.getString(R.string.settings_newsnotify_newssubject_notify_all)
+                        1 -> context.getString(R.string.settings_newsnotify_newssubject_notify_matchsubsch)
+                        2 -> context.getString(R.string.settings_newsnotify_newssubject_notify_matchfilter)
+                        // TODO: No code valid
+                        else -> "----------"
                     },
                     clearPrevious = true
                 )
@@ -213,6 +220,7 @@ fun SettingsActivity.NewsNotificationSettings(
         )
     }
     AddNewSubjectFilterDialog(
+        context = context,
         isVisible = dialogAddNew.value,
         onDismiss = { dialogAddNew.value = false },
         onDone = { syId, cId, subName ->
@@ -222,7 +230,13 @@ fun SettingsActivity.NewsNotificationSettings(
                 getMainViewModel().appSettings.value.newsBackgroundFilterList.add(item)
                 getMainViewModel().saveSettings(saveSettingsOnly = true)
                 showSnackBar(
-                    String.format("Successfully added %s [%s.Nh%s]", subName, syId, subName),
+                    text = context.getString(
+                        R.string.settings_newsnotify_newsfilter_notify_add,
+                        subName,
+                        syId,
+                        ".Nh",
+                        cId
+                    ),
                     clearPrevious = true
                 )
             } catch (_: Exception) { }
@@ -231,6 +245,7 @@ fun SettingsActivity.NewsNotificationSettings(
         }
     )
     DeleteASubjectFilterDialog(
+        context = context,
         subjectCode = tempDeleteItem.value,
         isVisible = dialogDeleteItem.value,
         onDismiss = { dialogDeleteItem.value = false },
@@ -240,10 +255,11 @@ fun SettingsActivity.NewsNotificationSettings(
                 getMainViewModel().appSettings.value.newsBackgroundFilterList.remove(tempDeleteItem.value)
                 getMainViewModel().saveSettings(saveSettingsOnly = true)
                 showSnackBar(
-                    String.format(
-                        "Successfully deleted %s [%s.Nh%s]",
+                    text = context.getString(
+                        R.string.settings_newsnotify_newsfilter_notify_add,
                         tempDeleteItem.value.subjectName,
                         tempDeleteItem.value.studentYearId,
+                        ".Nh",
                         tempDeleteItem.value.classId
                     ),
                     clearPrevious = true
@@ -254,6 +270,7 @@ fun SettingsActivity.NewsNotificationSettings(
         }
     )
     DeleteAllSubjectFilterDialog(
+        context = context,
         isVisible = dialogDeleteAll.value,
         onDismiss = { dialogDeleteAll.value = false },
         onDone = {
@@ -262,7 +279,7 @@ fun SettingsActivity.NewsNotificationSettings(
                 getMainViewModel().appSettings.value.newsBackgroundFilterList.clear()
                 getMainViewModel().saveSettings(saveSettingsOnly = true)
                 showSnackBar(
-                    "Successfully cleared all filters!",
+                    text = context.getString(R.string.settings_newsnotify_newsfilter_notify_deleteall),
                     clearPrevious = true
                 )
             } catch (_: Exception) { }
@@ -285,6 +302,7 @@ fun SettingsActivity.NewsNotificationSettings(
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun MainView(
+    context: Context,
     padding: PaddingValues = PaddingValues(0.dp),
     fetchNewsInBackgroundDuration: Int = 0,
     onFetchNewsStateChanged: ((Int) -> Unit)? = null,
@@ -310,7 +328,7 @@ private fun MainView(
             .verticalScroll(rememberScrollState())
     ) {
         SwitchWithTextInSurface(
-            text = "Refresh news in background",
+            text = context.getString(R.string.settings_newsnotify_fetchnewsinbackground),
             enabled = true,
             checked = fetchNewsInBackgroundDuration > 0,
             onCheckedChange = {
@@ -324,11 +342,11 @@ private fun MainView(
         ContentRegion(
             modifier = Modifier.padding(top = 10.dp),
             textModifier = Modifier.padding(horizontal = 20.dp),
-            text = "Notification settings"
+            text = context.getString(R.string.settings_newsnotify_category_notification)
         ) {
             SimpleCardItem(
                 padding = PaddingValues(horizontal = 20.4.dp, vertical = 5.dp),
-                title = "Fetch news duration",
+                title = context.getString(R.string.settings_newsnotify_fetchnewsinbackground_duration),
                 clicked = { },
                 opacity = opacity,
                 content = {
@@ -386,7 +404,7 @@ private fun MainView(
                                             if (durationTemp.intValue == min) {
                                                 Icon(
                                                     Icons.Default.Check,
-                                                    "Selected",
+                                                    context.getString(R.string.tooltip_selected),
                                                     modifier = Modifier.size(20.dp)
                                                 )
                                             }
@@ -409,7 +427,7 @@ private fun MainView(
                                 }
                             },
                             content = {
-                                Text("Save")
+                                Text(context.getString(R.string.action_save))
                             }
                         )
                     }
@@ -417,10 +435,10 @@ private fun MainView(
             )
             OptionItem(
                 modifierInside = Modifier.padding(horizontal = 20.dp, vertical = 15.dp),
-                title = "News parse method on notification",
+                title = context.getString(R.string.settings_parsenewssubject_title),
                 description = when (isNewSubjectNotificationParseEnabled) {
-                    true -> "Enabled (special notification for news subject)"
-                    false -> "Disabled (regular notification for news subject)"
+                    true -> context.getString(R.string.settings_newsnotify_parsenewssubject_enabled)
+                    false -> context.getString(R.string.settings_newsnotify_parsenewssubject_disabled)
                 },
                 onClick = { onNewSubjectNotificationParseStateChanged?.let { it() } }
             )
@@ -428,10 +446,10 @@ private fun MainView(
         DividerItem(padding = PaddingValues(top = 5.dp, bottom = 15.dp))
         ContentRegion(
             textModifier = Modifier.padding(horizontal = 20.dp),
-            text = "Global news notification"
+            text = context.getString(R.string.settings_newsnotify_newsglobal_title)
         ) {
             CheckboxOption(
-                title = "Enable global news notification",
+                title = context.getString(R.string.settings_newsnotify_newsglobal_enable),
                 modifierInside = Modifier.padding(horizontal = 6.5.dp),
                 isEnabled = fetchNewsInBackgroundDuration > 0,
                 isChecked = isNewsGlobalEnabled,
@@ -444,11 +462,11 @@ private fun MainView(
         ContentRegion(
             modifier = Modifier.padding(top = 10.dp),
             textModifier = Modifier.padding(horizontal = 20.dp),
-            text = "Subject news notification"
+            text = context.getString(R.string.settings_newsnotify_newssubject_title)
         ) {
             RadioButtonOption(
                 modifierInside = Modifier.padding(horizontal = 6.5.dp),
-                title = "Off",
+                title = context.getString(R.string.settings_newsnotify_newssubject_disabled),
                 isEnabled = fetchNewsInBackgroundDuration > 0,
                 isChecked = isNewsSubjectEnabled == -1,
                 onClick = {
@@ -458,7 +476,7 @@ private fun MainView(
             )
             RadioButtonOption(
                 modifierInside = Modifier.padding(horizontal = 6.5.dp),
-                title = "All subject news notifications",
+                title = context.getString(R.string.settings_newsnotify_newssubject_all),
                 isEnabled = fetchNewsInBackgroundDuration > 0,
                 isChecked = isNewsSubjectEnabled == 0,
                 onClick = {
@@ -468,7 +486,7 @@ private fun MainView(
             )
             RadioButtonOption(
                 modifierInside = Modifier.padding(horizontal = 6.5.dp),
-                title = "Match your subject schedule",
+                title = context.getString(R.string.settings_newsnotify_newssubject_matchsubsch),
                 isEnabled = fetchNewsInBackgroundDuration > 0,
                 isChecked = isNewsSubjectEnabled == 1,
                 onClick = {
@@ -478,7 +496,7 @@ private fun MainView(
             )
             RadioButtonOption(
                 modifierInside = Modifier.padding(horizontal = 6.5.dp),
-                title = "Follow custom list",
+                title = context.getString(R.string.settings_newsnotify_newssubject_matchfilter),
                 isEnabled = fetchNewsInBackgroundDuration > 0,
                 isChecked = isNewsSubjectEnabled == 2,
                 onClick = {
@@ -490,12 +508,12 @@ private fun MainView(
         DividerItem(padding = PaddingValues(top = 5.dp, bottom = 15.dp))
         ContentRegion(
             textModifier = Modifier.padding(horizontal = 20.dp),
-            text = "News subject filter"
+            text = context.getString(R.string.settings_newsnotify_newsfilter_title)
         ) {
             if (isNewsSubjectEnabled != 2) {
                 SimpleCardItem(
                     padding = PaddingValues(horizontal = 20.4.dp, vertical = 7.dp),
-                    title = "News subject filter list is disabled",
+                    title = context.getString(R.string.settings_newsnotify_newsfilter_disabledwarning_title),
                     content = {
                         Column(
                             modifier = Modifier
@@ -506,7 +524,7 @@ private fun MainView(
                             verticalArrangement = Arrangement.Center,
                             horizontalAlignment = Alignment.Start
                         ) {
-                            Text("To manage your subject news filter, please check \"Follow custom list\" option first.")
+                            Text(context.getString(R.string.settings_newsnotify_newsfilter_disabledwarning_description))
                         }
                     },
                     clicked = { },
@@ -515,7 +533,7 @@ private fun MainView(
             }
             SimpleCardItem(
                 padding = PaddingValues(horizontal = 20.4.dp, vertical = 5.dp),
-                title = "Your current filter list",
+                title = context.getString(R.string.settings_newsnotify_newsfilter_list_title),
                 clicked = { },
                 opacity = opacity,
                 content = {
@@ -529,7 +547,7 @@ private fun MainView(
                         horizontalAlignment = Alignment.Start
                     ) {
                         if (subjectFilterList.size == 0) {
-                            Text("Your added subject filter will shown here.")
+                            Text(context.getString(R.string.settings_newsnotify_newsfilter_list_nofilters))
                         }
                         subjectFilterList.forEach { code ->
                             OptionItem(
@@ -545,7 +563,7 @@ private fun MainView(
                                             }
                                         },
                                         content = {
-                                            Icon(Icons.Default.Delete, "Delete")
+                                            Icon(Icons.Default.Delete, context.getString(R.string.action_delete))
                                         }
                                     )
                                 }
@@ -556,8 +574,8 @@ private fun MainView(
             )
             OptionItem(
                 modifierInside = Modifier.padding(horizontal = 20.dp, vertical = 15.dp),
-                title = "Add a subject news filter",
-                leadingIcon = { Icon(Icons.Default.Add, "Add a subject news filter") },
+                title = context.getString(R.string.settings_newsnotify_newsfilter_add),
+                leadingIcon = { Icon(Icons.Default.Add, context.getString(R.string.settings_newsnotify_newsfilter_add)) },
                 isEnabled = isNewsSubjectEnabled == 2,
                 onClick = {
                     // Add a subject news filter
@@ -566,8 +584,8 @@ private fun MainView(
             )
             OptionItem(
                 modifierInside = Modifier.padding(horizontal = 20.dp, vertical = 15.dp),
-                title = "Clear all subject news filter list",
-                leadingIcon = { Icon(Icons.Default.Delete, "Clear all subject news filter") },
+                title = context.getString(R.string.settings_newsnotify_newsfilter_deleteall),
+                leadingIcon = { Icon(Icons.Default.Delete, context.getString(R.string.settings_newsnotify_newsfilter_deleteall)) },
                 isEnabled = isNewsSubjectEnabled == 2,
                 onClick = {
                     // Clear all subject news filter list
@@ -582,6 +600,7 @@ private fun MainView(
 @Composable
 private fun MainViewPreview() {
     MainView(
+        context = LocalContext.current,
         fetchNewsInBackgroundDuration = 30,
         onFetchNewsStateChanged = { },
         isNewsGlobalEnabled = true,

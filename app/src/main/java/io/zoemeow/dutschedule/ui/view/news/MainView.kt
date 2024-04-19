@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
@@ -37,6 +38,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.google.gson.Gson
 import io.dutwrapper.dutwrapper.model.news.NewsGlobalItem
@@ -137,25 +139,39 @@ fun NewsMainView(
                         horizontalArrangement = Arrangement.Center,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        SingleChoiceSegmentedButtonRow {
+                        SingleChoiceSegmentedButtonRow(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 40.dp)
+                        ) {
                             SegmentedButton(
                                 shape = SegmentedButtonDefaults.itemShape(index = 0, count = 2),
-                                onClick = { scope.launch {
-                                    pagerState.animateScrollToPage(0)
-                                } },
+                                onClick = {
+                                    scope.launch {
+                                        pagerState.animateScrollToPage(0)
+                                    }
+                                },
                                 selected = pagerState.currentPage == 0,
                                 label = {
                                     Text(text = context.getString(R.string.news_tabname_global))
                                 }
                             )
                             SegmentedButton(
+                                modifier = Modifier.wrapContentHeight(),
                                 shape = SegmentedButtonDefaults.itemShape(index = 1, count = 2),
-                                onClick = { scope.launch {
-                                    pagerState.animateScrollToPage(1)
-                                } },
+                                onClick = {
+                                    scope.launch {
+                                        pagerState.animateScrollToPage(1)
+                                    }
+                                },
                                 selected = pagerState.currentPage == 1,
                                 label = {
-                                    Text(text = context.getString(R.string.news_tabname_subject))
+                                    Text(
+                                        text = context.getString(R.string.news_tabname_subject),
+                                        overflow = TextOverflow.Visible,
+                                        softWrap = false,
+                                        maxLines = 1
+                                    )
                                 }
                             )
                         }

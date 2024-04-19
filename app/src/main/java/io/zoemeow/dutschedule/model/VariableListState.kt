@@ -15,7 +15,7 @@ data class VariableListState<T>(
     val parameters: MutableMap<String, String> = mutableMapOf()
 ) {
     fun isExpired(): Boolean {
-        return (lastRequest.longValue + GlobalVariables.requestExpiredDuration) < System.currentTimeMillis()
+        return (lastRequest.longValue + GlobalVariables.REQUEST_EXPIRED_DURATION) < System.currentTimeMillis()
     }
 
     fun isSuccessfulRequestExpired(): Boolean {

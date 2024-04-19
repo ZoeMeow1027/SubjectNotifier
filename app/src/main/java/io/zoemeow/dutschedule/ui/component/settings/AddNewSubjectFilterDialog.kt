@@ -1,5 +1,6 @@
 package io.zoemeow.dutschedule.ui.component.settings
 
+import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -17,11 +18,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import io.zoemeow.dutschedule.R
 import io.zoemeow.dutschedule.activity.SettingsActivity
 import io.zoemeow.dutschedule.ui.component.base.DialogBase
 
 @Composable
 fun SettingsActivity.AddNewSubjectFilterDialog(
+    context: Context,
     isVisible: Boolean = false,
     onDismiss: (() -> Unit)? = null,
     onDone: ((String, String, String) -> Unit)? = null
@@ -32,7 +35,7 @@ fun SettingsActivity.AddNewSubjectFilterDialog(
 
     DialogBase(
         modifier = Modifier.fillMaxWidth().padding(25.dp),
-        title = "Add new filter",
+        title = context.getString(R.string.settings_newsnotify_newsfilter_dialogadd_title),
         isVisible = isVisible,
         canDismiss = false,
         dismissClicked = { onDismiss?.let { it() } },
@@ -43,7 +46,7 @@ fun SettingsActivity.AddNewSubjectFilterDialog(
                 modifier = Modifier.fillMaxWidth(),
             ) {
                 Text(
-                    text = "Enter your subject filter (you can view templates in sv.dut.udn.vn) and tap \"Add\" to add to filter above.\n\nExample:\n - 19 | 01 | Subject A\n - xx | 94A | Subject B\n\nNote:\n- You need to enter carefully, otherwise you won\'t received notifications exactly.",
+                    text = context.getString(R.string.settings_newsnotify_newsfilter_dialogadd_description),
                     modifier = Modifier.padding(bottom = 5.dp)
                 )
                 Column(
@@ -64,7 +67,7 @@ fun SettingsActivity.AddNewSubjectFilterDialog(
                         OutlinedTextField(
                             value = schoolYearId.value,
                             onValueChange = { if (it.length <= 2) schoolYearId.value = it },
-                            label = { Text("School year ID") },
+                            label = { Text(context.getString(R.string.settings_newsnotify_newsfilter_dialogadd_schyear)) },
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .wrapContentHeight()
@@ -74,7 +77,7 @@ fun SettingsActivity.AddNewSubjectFilterDialog(
                         OutlinedTextField(
                             value = classId.value,
                             onValueChange = { if (it.length <= 3) classId.value = it },
-                            label = { Text("Class ID") },
+                            label = { Text(context.getString(R.string.settings_newsnotify_newsfilter_dialogadd_class)) },
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .wrapContentHeight()
@@ -85,7 +88,7 @@ fun SettingsActivity.AddNewSubjectFilterDialog(
                     OutlinedTextField(
                         value = subjectName.value,
                         onValueChange = { subjectName.value = it },
-                        label = { Text("Subject name") },
+                        label = { Text(context.getString(R.string.settings_newsnotify_newsfilter_dialogadd_schname)) },
                         modifier = Modifier.fillMaxWidth()
                     )
                 }
@@ -94,12 +97,12 @@ fun SettingsActivity.AddNewSubjectFilterDialog(
         actionButtons = {
             TextButton(
                 onClick = { onDismiss?.let { it() } },
-                content = { Text("Cancel") },
+                content = { Text(context.getString(R.string.action_cancel)) },
                 modifier = Modifier.padding(start = 8.dp),
             )
             TextButton(
                 onClick = { onDone?.let { it(schoolYearId.value, classId.value,subjectName.value) } },
-                content = { Text("Save") },
+                content = { Text(context.getString(R.string.action_save)) },
                 modifier = Modifier.padding(start = 8.dp),
             )
         }

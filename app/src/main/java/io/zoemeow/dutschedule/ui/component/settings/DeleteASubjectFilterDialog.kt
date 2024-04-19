@@ -1,5 +1,6 @@
 package io.zoemeow.dutschedule.ui.component.settings
 
+import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,12 +14,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import io.zoemeow.dutschedule.R
 import io.zoemeow.dutschedule.activity.SettingsActivity
 import io.zoemeow.dutschedule.model.settings.SubjectCode
 import io.zoemeow.dutschedule.ui.component.base.DialogBase
 
 @Composable
 fun SettingsActivity.DeleteASubjectFilterDialog(
+    context: Context,
     subjectCode: SubjectCode = SubjectCode("", "", ""),
     isVisible: Boolean = false,
     onDismiss: (() -> Unit)? = null,
@@ -28,7 +31,7 @@ fun SettingsActivity.DeleteASubjectFilterDialog(
         modifier = Modifier
             .fillMaxWidth()
             .padding(25.dp),
-        title = "Delete subject filter?",
+        title = context.getString(R.string.settings_newsnotify_newsfilter_dialogdelete_title),
         isVisible = isVisible,
         canDismiss = false,
         dismissClicked = { onDismiss?.let { it() } },
@@ -39,11 +42,9 @@ fun SettingsActivity.DeleteASubjectFilterDialog(
                 modifier = Modifier.fillMaxWidth(),
             ) {
                 Text(
-                    text = String.format(
-                        "%s\n%s\n\n%s",
-                        "Are you sure you want to delete this filter?",
-                        String.format("%s [%s.Nh%s]", subjectCode.subjectName, subjectCode.studentYearId, subjectCode.classId),
-                        "This action is undone!"
+                    text = context.getString(
+                        R.string.settings_newsnotify_newsfilter_dialogdelete_description,
+                        String.format("%s [%s.Nh%s]", subjectCode.subjectName, subjectCode.studentYearId, subjectCode.classId)
                     ),
                     modifier = Modifier.padding(bottom = 5.dp)
                 )
@@ -52,7 +53,7 @@ fun SettingsActivity.DeleteASubjectFilterDialog(
         actionButtons = {
             TextButton(
                 onClick = { onDismiss?.let { it() } },
-                content = { Text("No, take me back") },
+                content = { Text(context.getString(R.string.settings_newsnotify_newsfilter_dialogdelete_no)) },
                 modifier = Modifier.padding(start = 8.dp),
             )
             ElevatedButton(
@@ -61,7 +62,7 @@ fun SettingsActivity.DeleteASubjectFilterDialog(
                     contentColor = Color.White
                 ),
                 onClick = { onDone?.let { it() } },
-                content = { Text("Yes, delete it") },
+                content = { Text(context.getString(R.string.settings_newsnotify_newsfilter_dialogdelete_yes)) },
                 modifier = Modifier.padding(start = 8.dp),
             )
         }

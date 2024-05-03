@@ -1,5 +1,6 @@
 package io.zoemeow.dutschedule.ui.view.account
 
+import android.app.Activity.RESULT_CANCELED
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -59,7 +60,7 @@ fun AccountActivity.SubjectInformation(
                 navigationIcon = {
                     IconButton(
                         onClick = {
-                            setResult(ComponentActivity.RESULT_CANCELED)
+                            setResult(RESULT_CANCELED)
                             finish()
                         },
                         content = {

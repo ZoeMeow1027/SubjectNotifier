@@ -1,5 +1,6 @@
 package io.zoemeow.dutschedule.ui.view.settings
 
+import android.app.Activity.RESULT_CANCELED
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
@@ -62,7 +63,7 @@ fun SettingsActivity.ExperimentSettings(
                 navigationIcon = {
                     IconButton(
                         onClick = {
-                            setResult(ComponentActivity.RESULT_CANCELED)
+                            setResult(RESULT_CANCELED)
                             finish()
                         },
                         content = {

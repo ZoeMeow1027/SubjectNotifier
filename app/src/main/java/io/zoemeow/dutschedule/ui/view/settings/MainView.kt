@@ -1,11 +1,11 @@
 package io.zoemeow.dutschedule.ui.view.settings
 
+import android.app.Activity.RESULT_OK
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.provider.Settings
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -71,7 +71,7 @@ fun SettingsActivity.MainView(
             showSnackBar(text = text, clearPrevious = clearPrevious, actionText = actionText, action = action)
         },
         onBack = {
-            setResult(ComponentActivity.RESULT_OK)
+            setResult(RESULT_OK)
             finish()
         }
     )
@@ -100,7 +100,7 @@ fun SettingsMainView(
         contentColor = contentColor,
         topBar = {
             TopAppBar(
-                title = { Text(context.getString(R.string.settings_name)) },
+                title = { Text(context.getString(R.string.settings_title)) },
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent),
                 navigationIcon = {
                     if (onBack != null) {

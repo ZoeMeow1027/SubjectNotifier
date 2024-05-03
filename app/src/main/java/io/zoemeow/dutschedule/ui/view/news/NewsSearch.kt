@@ -1,5 +1,6 @@
 package io.zoemeow.dutschedule.ui.view.news
 
+import android.app.Activity.RESULT_OK
 import android.content.Context
 import android.content.Intent
 import androidx.activity.ComponentActivity
@@ -124,7 +125,7 @@ fun NewsActivity.NewsSearch(
                             if (isSearchFocused.targetState) {
                                 dismissFocus()
                             } else {
-                                setResult(ComponentActivity.RESULT_OK)
+                                setResult(RESULT_OK)
                                 finish()
                             }
                         },

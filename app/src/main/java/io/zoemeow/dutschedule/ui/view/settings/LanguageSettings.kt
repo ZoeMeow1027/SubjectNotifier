@@ -1,5 +1,6 @@
 package io.zoemeow.dutschedule.ui.view.settings
 
+import android.app.Activity.RESULT_CANCELED
 import android.app.LocaleManager
 import android.content.Context
 import android.os.Build
@@ -65,13 +66,13 @@ fun SettingsActivity.LanguageSettings(
                 navigationIcon = {
                     IconButton(
                         onClick = {
-                            setResult(ComponentActivity.RESULT_CANCELED)
+                            setResult(RESULT_CANCELED)
                             finish()
                         },
                         content = {
                             Icon(
                                 Icons.AutoMirrored.Filled.ArrowBack,
-                                "",
+                                context.getString(R.string.action_back),
                                 modifier = Modifier.size(25.dp)
                             )
                         }

@@ -1,5 +1,6 @@
 package io.zoemeow.dutschedule.ui.view.news
 
+import android.app.Activity.RESULT_OK
 import android.content.Context
 import android.content.Intent
 import androidx.activity.ComponentActivity
@@ -70,7 +71,7 @@ fun NewsActivity.MainView(
         componentBackgroundAlpha = getControlBackgroundAlpha(),
         mainViewModel = getMainViewModel(),
         onBack = {
-            setResult(ComponentActivity.RESULT_OK)
+            setResult(RESULT_OK)
             finish()
         }
     )

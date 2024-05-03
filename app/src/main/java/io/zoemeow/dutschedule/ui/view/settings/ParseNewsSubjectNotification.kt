@@ -1,5 +1,6 @@
 package io.zoemeow.dutschedule.ui.view.settings
 
+import android.app.Activity.RESULT_OK
 import android.content.Context
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.layout.Arrangement
@@ -56,7 +57,7 @@ fun SettingsActivity.ParseNewsSubjectNotification(
                 navigationIcon = {
                     IconButton(
                         onClick = {
-                            setResult(ComponentActivity.RESULT_OK)
+                            setResult(RESULT_OK)
                             finish()
                         },
                         content = {

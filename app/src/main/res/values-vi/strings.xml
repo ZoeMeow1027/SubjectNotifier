@@ -4,6 +4,9 @@
     <string name="feature_not_ready">Tính năng này đang được phát triển. Hãy kiểm tra lại sau.</string>
     <string name="permission_missing_all_file_access">Bạn cần phải cho phép Quyền truy cập mọi tệp trong quyền hạn ứng dụng để sử dụng tùy chọn này.</string>
     <string name="permission_missing_alarm_and_reminders">Bạn cần phải bật quyền Chuông báo và lời nhắc trong cài đặt Android để sử dụng tính năng này.</string>
+    <!-- Time date string -->
+    <string name="time_today">Hôm nay</string>
+    <string name="time_yesterday">Hôm qua</string>
     <!-- Action string -->
     <string name="action_ok">OK</string>
     <string name="action_open">Mở</string>
@@ -37,7 +40,7 @@
     <string name="service_newsbackgroundservice_newssubject_date">Vào ngày %1$s với tiết học %2$s</string>
     <string name="service_newsbackgroundservice_newssubject_room">Phòng sẽ học bù: %1$s</string>
     <!-- Settings activity string -->
-    <string name="settings_name">Cài đặt</string>
+    <string name="settings_title">Cài đặt</string>
     <string name="settings_category_notifications">Thông báo</string>
     <string name="settings_option_newsschedule">Cài đặt cập nhật tin tức trong nền</string>
     <string name="settings_option_newsschedule_description">Cấu hình cài đặt thông báo tin tức cho bạn, bao gồm thời gian cập nhật, tin tức nào sẽ được bật, cài đặt bộ lọc tin tức và hơn thế nữa.</string>
@@ -185,4 +188,6 @@
     <string name="news_search_searchoption_type_bysubject">Lớp học phần</string>
     <string name="news_search_searchoption_history">Lịch sử tìm kiếm</string>
     <string name="news_search_searchoption_history_data">Tìm kiếm %2$s theo %1$s</string>
+    <!-- Account activity string -->
+    <string name="account_title">Tài khoản</string>
 </resources>

@@ -77,14 +77,14 @@ fun MainActivity.MainViewTabbed(
                                 },
                                 icon = {
                                     if (it.resourceIconId != null) {
-                                        Icon(painter = painterResource(id = it.resourceIconId), it.title)
+                                        Icon(painter = painterResource(id = it.resourceIconId), context.getString(it.titleResId))
                                     } else if (it.icon != null) {
-                                        Icon(imageVector = it.icon, it.title)
+                                        Icon(imageVector = it.icon, context.getString(it.titleResId))
                                     } else {
-                                        Icon(imageVector = Icons.Default.Info, it.title)
+                                        Icon(imageVector = Icons.Default.Info, context.getString(it.titleResId))
                                     }
                                 },
-                                label = { Text(it.title) }
+                                label = { Text(context.getString(it.titleResId)) }
                             )
                         }
                     )
@@ -140,12 +140,12 @@ fun MainActivity.MainViewTabbed(
                         contentColor = contentColor,
                         onClick = { item ->
                             if (listOf(1, 2).contains(item.tag)) {
-                                Intent(context, NewsActivity::class.java).also {
-                                    it.action = "activity_detail"
+                                Intent(context, NewsActivity::class.java).also { intent ->
+                                    intent.action = "activity_detail"
                                     for (map1 in item.parameters) {
-                                        it.putExtra(map1.key, map1.value)
+                                        intent.putExtra(map1.key, map1.value)
                                     }
-                                    context.startActivity(it)
+                                    context.startActivity(intent)
                                 }
                             }
                         },

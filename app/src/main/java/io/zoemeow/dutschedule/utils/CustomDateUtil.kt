@@ -1,7 +1,14 @@
 package io.zoemeow.dutschedule.utils
 
 import android.annotation.SuppressLint
+import android.content.Context
+import androidx.compose.ui.platform.LocalConfiguration
 import com.github.marlonlom.utilities.timeago.TimeAgo
+import com.github.marlonlom.utilities.timeago.TimeAgoMessages
+import io.zoemeow.dutschedule.R
+import kotlinx.datetime.Clock
+import kotlinx.datetime.Instant
+import kotlinx.datetime.toLocalDateTime
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -9,6 +16,7 @@ import java.util.Locale
 import java.util.TimeZone
 import kotlin.time.DurationUnit
 import kotlin.time.toDuration
+
 
 class CustomDateUtil {
     companion object {
@@ -52,18 +60,25 @@ class CustomDateUtil {
             return SimpleDateFormat(format, Locale.getDefault()).format(Date())
         }
 
-        fun unixToDuration(unix: Long = System.currentTimeMillis()): String {
+        fun unixToDurationWithLocale(
+            context: Context,
+            unix: Long = System.currentTimeMillis(),
+            langTag: String = Locale.getDefault().toLanguageTag()
+        ): String {
             val duration = (System.currentTimeMillis() - unix).toDuration(DurationUnit.MILLISECONDS)
 
             return when (duration.inWholeHours) {
                 in 0..23 -> {
-                    "Today"
+                    context.getString(R.string.time_today)
                 }
                 in 24..47 -> {
-                    "Yesterday"
+                    context.getString(R.string.time_yesterday)
                 }
                 else -> {
-                    TimeAgo.using(unix)
+                    val localeByLangTag = Locale.forLanguageTag(langTag)
+                    val messages: TimeAgoMessages =
+                        TimeAgoMessages.Builder().withLocale(localeByLangTag).build()
+                    TimeAgo.using(unix, messages)
                 }
             }
         }

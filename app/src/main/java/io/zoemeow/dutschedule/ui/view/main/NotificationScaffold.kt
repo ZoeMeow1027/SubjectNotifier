@@ -106,11 +106,11 @@ fun NotificationScaffold(
                     )
                 },
                 snackbarHost = { snackBarHostState?.let { SnackbarHost(hostState = it) } },
-                content = {
+                content = { paddingValues ->
                     Column(
                         modifier = Modifier
                             .fillMaxSize()
-                            .padding(it)
+                            .padding(paddingValues)
                             .padding(horizontal = 15.dp)
                     ) {
                         Column(
@@ -130,12 +130,16 @@ fun NotificationScaffold(
                                     .toSortedMap(compareByDescending { it })
                                     .forEach(action = { group ->
                                         Text(
-                                            CustomDateUtil.unixToDuration(group.key),
+                                            CustomDateUtil.unixToDurationWithLocale(
+                                                context = context,
+                                                unix = group.key
+                                            ),
                                             style = MaterialTheme.typography.titleMedium,
                                             modifier = Modifier.padding(top = 5.dp, bottom = 4.dp)
                                         )
                                         group.value.forEach { item ->
                                             NotificationItem(
+                                                context = context,
                                                 modifier = Modifier.padding(top = 2.dp, bottom = 5.dp),
                                                 isVisible = true,
                                                 opacity = opacity,

@@ -1,5 +1,6 @@
 package io.zoemeow.dutschedule.ui.view.account
 
+import android.app.Activity.RESULT_OK
 import android.content.Context
 import android.content.Intent
 import androidx.activity.ComponentActivity
@@ -30,6 +31,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import io.zoemeow.dutschedule.R
 import io.zoemeow.dutschedule.activity.AccountActivity
 import io.zoemeow.dutschedule.model.ProcessState
 import io.zoemeow.dutschedule.model.account.AccountAuth
@@ -61,7 +63,7 @@ fun AccountActivity.MainView(
             showSnackBar(text = text, clearPrevious = clearPrevious, actionText = actionText, action = action)
         },
         onBack = {
-            setResult(ComponentActivity.RESULT_OK)
+            setResult(RESULT_OK)
             finish()
         }
     )
@@ -90,7 +92,7 @@ fun AccountMainView(
         contentColor = contentColor,
         topBar = {
             TopAppBar(
-                title = { Text("Account") },
+                title = { Text(context.getString(R.string.account_title)) },
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent),
                 navigationIcon = {
                     if (onBack != null) {

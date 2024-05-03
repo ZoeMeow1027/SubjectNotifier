@@ -1,5 +1,6 @@
 package io.zoemeow.dutschedule.ui.component.main
 
+import android.content.Context
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
@@ -23,6 +24,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -32,6 +36,7 @@ import io.zoemeow.dutschedule.utils.getRandomString
 
 @Composable
 fun NotificationItem(
+    context: Context,
     modifier: Modifier = Modifier,
     item: NotificationHistory,
     showDate: Boolean = false,
@@ -66,7 +71,10 @@ fun NotificationItem(
                         ) {
                             if (showDate) {
                                 Text(
-                                    CustomDateUtil.unixToDuration(item.timestamp),
+                                    CustomDateUtil.unixToDurationWithLocale(
+                                        context = context,
+                                        unix = item.timestamp
+                                    ),
                                     style = MaterialTheme.typography.titleMedium,
                                     modifier = Modifier.padding(bottom = 5.dp)
                                 )
@@ -117,6 +125,7 @@ private fun Preview1() {
         isRead = false
     )
     NotificationItem(
+        context = LocalContext.current,
         item = notificationHistory
     )
 }
@@ -134,6 +143,7 @@ private fun Preview2() {
         isRead = false
     )
     NotificationItem(
+        context = LocalContext.current,
         item = notificationHistory
     )
 }

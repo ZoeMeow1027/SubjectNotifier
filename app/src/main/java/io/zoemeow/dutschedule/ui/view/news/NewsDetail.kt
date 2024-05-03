@@ -1,5 +1,6 @@
 package io.zoemeow.dutschedule.ui.view.news
 
+import android.app.Activity.RESULT_OK
 import android.content.Context
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.layout.Row
@@ -55,7 +56,7 @@ fun NewsActivity.NewsDetail(
                 navigationIcon = {
                     IconButton(
                         onClick = {
-                            setResult(ComponentActivity.RESULT_OK)
+                            setResult(RESULT_OK)
                             finish()
                         },
                         content = {
@@ -104,6 +105,7 @@ fun NewsActivity.NewsDetail(
             when (newsType) {
                 "news_global" -> {
                     NewsDetailScreen(
+                        context = context,
                         padding = it,
                         newsItem = Gson().fromJson(newsData, object : TypeToken<NewsGlobalItem>() {}.type),
                         newsType = NewsType.Global,
@@ -118,6 +120,7 @@ fun NewsActivity.NewsDetail(
                 }
                 "news_subject" -> {
                     NewsDetailScreen(
+                        context = context,
                         padding = it,
                         newsItem = Gson().fromJson(newsData, object : TypeToken<NewsSubjectItem>() {}.type) as NewsGlobalItem,
                         newsType = NewsType.Subject,

@@ -6,6 +6,7 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.os.StrictMode
+import android.window.SplashScreen
 import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
@@ -14,15 +15,18 @@ import androidx.browser.customtabs.CustomTabColorSchemeParams
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.graphics.Color
@@ -32,6 +36,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.SoftwareKeyboardController
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.zoemeow.dutschedule.model.settings.BackgroundImageOption
@@ -72,6 +77,11 @@ abstract class BaseActivity: ComponentActivity() {
 
         permitAllPolicy()
         setContent {
+            // Initialize MainViewModel
+            if (!isMainViewModelInitialized()) {
+                mainViewModel = viewModel()
+            }
+
             // SnackBar state
             snackBarHostState = remember { SnackbarHostState() }
             snackBarScope = rememberCoroutineScope()
@@ -79,11 +89,6 @@ abstract class BaseActivity: ComponentActivity() {
             // Initialize focus manager & software keyboard controller
             focusManager = LocalFocusManager.current
             keyboardController = LocalSoftwareKeyboardController.current
-
-            // Initialize MainViewModel
-            if (!isMainViewModelInitialized()) {
-                mainViewModel = viewModel()
-            }
 
             DutScheduleTheme(
                 darkTheme = when (mainViewModel.appSettings.value.themeMode) {

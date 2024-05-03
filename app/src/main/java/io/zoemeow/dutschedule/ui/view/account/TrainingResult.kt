@@ -1,5 +1,6 @@
 package io.zoemeow.dutschedule.ui.view.account
 
+import android.app.Activity.RESULT_OK
 import android.content.Context
 import android.content.Intent
 import androidx.activity.ComponentActivity
@@ -61,7 +62,7 @@ fun AccountActivity.TrainingResult(
                 navigationIcon = {
                     IconButton(
                         onClick = {
-                            setResult(ComponentActivity.RESULT_OK)
+                            setResult(RESULT_OK)
                             finish()
                         },
                         content = {

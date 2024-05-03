@@ -1,5 +1,6 @@
 package io.zoemeow.dutschedule.ui.view.account
 
+import android.app.Activity.RESULT_CANCELED
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
@@ -155,7 +156,7 @@ fun AccountActivity.TrainingSubjectResult(
                             if (searchEnabled.value) {
                                 dismissSearchBar()
                             } else {
-                                setResult(ComponentActivity.RESULT_CANCELED)
+                                setResult(RESULT_CANCELED)
                                 finish()
                             }
                         },

@@ -21,6 +21,8 @@ import io.zoemeow.dutschedule.repository.DutRequestRepository
 import io.zoemeow.dutschedule.repository.FileModuleRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -162,12 +164,12 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    private val runOnStartupEnabled = mutableStateOf(true)
-    private fun runOnStartup(invokeOnCompleted: (() -> Unit)? = null) {
-        if (!runOnStartupEnabled.value)
-            return
+    private val _runOnStartup = MutableStateFlow(false)
+    val runOnStartup = _runOnStartup.asStateFlow()
 
-        runOnStartupEnabled.value = false
+    private fun runOnStartup(invokeOnCompleted: (() -> Unit)? = null) {
+        if (_runOnStartup.value)
+            return
 
         appSettings.value = fileModuleRepository.getAppSettings()
         accountSession.setAccountSession(fileModuleRepository.getAccountSession())
@@ -193,6 +195,7 @@ class MainViewModel @Inject constructor(
                         forceRequest = true
                     )
                 })
+                _runOnStartup.value = true
             }
         )
     }

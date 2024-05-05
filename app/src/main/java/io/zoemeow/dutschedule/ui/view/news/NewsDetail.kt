@@ -71,7 +71,7 @@ fun NewsActivity.NewsDetail(
             )
         },
         floatingActionButton = {
-            if (newsType == "news_subject") {
+            if (newsType == NewsActivity.NEWSTYPE_NEWSSUBJECT) {
                 ExtendedFloatingActionButton(
                     content = {
                         Row {
@@ -103,7 +103,7 @@ fun NewsActivity.NewsDetail(
         },
         content = {
             when (newsType) {
-                "news_global" -> {
+                NewsActivity.NEWSTYPE_NEWSGLOBAL -> {
                     NewsDetailScreen(
                         context = context,
                         padding = it,
@@ -118,7 +118,7 @@ fun NewsActivity.NewsDetail(
                         }
                     )
                 }
-                "news_subject" -> {
+                NewsActivity.NEWSTYPE_NEWSSUBJECT -> {
                     NewsDetailScreen(
                         context = context,
                         padding = it,

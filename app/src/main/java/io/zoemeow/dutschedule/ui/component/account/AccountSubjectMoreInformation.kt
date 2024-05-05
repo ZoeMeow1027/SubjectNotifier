@@ -1,5 +1,6 @@
 package io.zoemeow.dutschedule.ui.component.account
 
+import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
@@ -18,12 +19,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import io.dutwrapper.dutwrapper.model.accounts.SubjectScheduleItem
+import io.zoemeow.dutschedule.R
 import io.zoemeow.dutschedule.model.settings.SubjectCode
 import io.zoemeow.dutschedule.ui.component.base.DialogBase
 import io.zoemeow.dutschedule.utils.CustomDateUtil
 
 @Composable
 fun AccountSubjectMoreInformation(
+    context: Context,
     item: SubjectScheduleItem? = null,
     isVisible: Boolean = false,
     onAddToFilterRequested: ((SubjectCode) -> Unit)? = null,
@@ -33,7 +36,7 @@ fun AccountSubjectMoreInformation(
         modifier = Modifier
             .fillMaxWidth()
             .padding(25.dp),
-        title = "${item?.name ?: "(unknown)"}\n${item?.lecturer ?: "(unknown)"}",
+        title = "${item?.name ?: context.getString(R.string.data_unknown)}\n${item?.lecturer ?: context.getString(R.string.data_unknown)}",
         isVisible = isVisible,
         isTitleCentered = true,
         canDismiss = true,
@@ -44,10 +47,10 @@ fun AccountSubjectMoreInformation(
             Column(
                 horizontalAlignment = Alignment.Start,
             ) {
-                CustomText("ID: ${item?.id?.toString(false) ?: "(unknown)"}")
-                CustomText("Credit: ${item?.credit ?: "(unknown)"}")
-                CustomText("Is high quality: ${item?.isHighQuality ?: "(unknown)"}")
-                CustomText("Final score formula: ${item?.pointFormula ?: "(unknown)"}")
+                CustomText("${context.getString(R.string.account_subjectinfo_data_id)}: ${item?.id?.toString(false) ?: context.getString(R.string.data_unknown)}")
+                CustomText("${context.getString(R.string.account_subjectinfo_data_credit)}: ${item?.credit ?: context.getString(R.string.data_unknown)}")
+                CustomText("${context.getString(R.string.account_subjectinfo_data_ishighquality)}: ${item?.isHighQuality ?: context.getString(R.string.data_unknown)}")
+                CustomText("${context.getString(R.string.account_subjectinfo_data_scoreformula)}: ${item?.pointFormula ?: context.getString(R.string.data_unknown)}")
                 // Subject study
                 Spacer(modifier = Modifier.size(15.dp))
                 ContentInBoxWithBorder(
@@ -118,12 +121,12 @@ fun AccountSubjectMoreInformation(
                         }
                     }
                 },
-                content = { Text("Add to news filter") },
+                content = { Text(context.getString(R.string.account_subjectinfo_addtofilter)) },
                 modifier = Modifier.padding(start = 8.dp),
             )
             TextButton(
                 onClick = { dismissClicked?.let { it() } },
-                content = { Text("OK") },
+                content = { Text(context.getString(R.string.action_ok)) },
                 modifier = Modifier.padding(start = 8.dp),
             )
         }

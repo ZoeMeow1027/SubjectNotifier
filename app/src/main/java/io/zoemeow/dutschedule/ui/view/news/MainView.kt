@@ -1,9 +1,9 @@
 package io.zoemeow.dutschedule.ui.view.news
 
+import android.app.Activity.RESULT_CANCELED
 import android.app.Activity.RESULT_OK
 import android.content.Context
 import android.content.Intent
-import androidx.activity.ComponentActivity
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -71,7 +71,7 @@ fun NewsActivity.MainView(
         componentBackgroundAlpha = getControlBackgroundAlpha(),
         mainViewModel = getMainViewModel(),
         onBack = {
-            setResult(RESULT_OK)
+            setResult(RESULT_CANCELED)
             finish()
         }
     )
@@ -123,7 +123,7 @@ fun NewsMainView(
                             searchRequested?.let { it() }
                         },
                         content = {
-                            Icon(Icons.Default.Search, "Search")
+                            Icon(Icons.Default.Search, context.getString(R.string.action_search))
                         }
                     )
                 }
@@ -209,7 +209,7 @@ fun NewsMainView(
                             } else if (pagerState.currentPage == 1 && mainViewModel.newsInstance.newsSubject.processState.value == ProcessState.Running) {
                                 CircularProgressIndicator(modifier = Modifier.size(24.dp))
                             } else {
-                                Icon(Icons.Default.Refresh, "Refresh")
+                                Icon(Icons.Default.Refresh, context.getString(R.string.action_refresh))
                             }
                         }
                     )
@@ -233,8 +233,8 @@ fun NewsMainView(
                                         context,
                                         NewsActivity::class.java
                                     ).also {
-                                        it.action = "activity_detail"
-                                        it.putExtra("type", "news_global")
+                                        it.action = NewsActivity.INTENT_NEWSDETAILACTIVITY
+                                        it.putExtra("type", NewsActivity.NEWSTYPE_NEWSGLOBAL)
                                         it.putExtra("data", Gson().toJson(newsItem))
                                     })
                             },
@@ -263,8 +263,8 @@ fun NewsMainView(
                                         context,
                                         NewsActivity::class.java
                                     ).also {
-                                        it.action = "activity_detail"
-                                        it.putExtra("type", "news_subject")
+                                        it.action = NewsActivity.INTENT_NEWSDETAILACTIVITY
+                                        it.putExtra("type", NewsActivity.NEWSTYPE_NEWSSUBJECT)
                                         it.putExtra("data", Gson().toJson(newsItem))
                                     })
                             },

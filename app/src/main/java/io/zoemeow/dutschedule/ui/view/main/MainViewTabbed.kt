@@ -30,6 +30,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import io.zoemeow.dutschedule.R
 import io.zoemeow.dutschedule.activity.MainActivity
 import io.zoemeow.dutschedule.activity.NewsActivity
 import io.zoemeow.dutschedule.model.NavBarItem
@@ -111,7 +112,7 @@ fun MainActivity.MainViewTabbed(
                         mainViewModel = getMainViewModel(),
                         searchRequested = {
                             val intent = Intent(context, NewsActivity::class.java)
-                            intent.action = "activity_search"
+                            intent.action = NewsActivity.INTENT_SEARCHACTIVITY
                             context.startActivity(intent)
                         }
                     )
@@ -141,7 +142,7 @@ fun MainActivity.MainViewTabbed(
                         onClick = { item ->
                             if (listOf(1, 2).contains(item.tag)) {
                                 Intent(context, NewsActivity::class.java).also { intent ->
-                                    intent.action = "activity_detail"
+                                    intent.action = NewsActivity.INTENT_NEWSDETAILACTIVITY
                                     for (map1 in item.parameters) {
                                         intent.putExtra(map1.key, map1.value)
                                     }
@@ -154,8 +155,8 @@ fun MainActivity.MainViewTabbed(
                             getMainViewModel().notificationHistory.remove(item)
                             getMainViewModel().saveSettings()
                             showSnackBar(
-                                text = "Deleted notifications!",
-                                actionText = "Undo",
+                                text = context.getString(R.string.notification_removed),
+                                actionText = context.getString(R.string.action_undo),
                                 action = {
                                     getMainViewModel().notificationHistory.add(itemTemp)
                                     getMainViewModel().saveSettings()
@@ -164,13 +165,13 @@ fun MainActivity.MainViewTabbed(
                         },
                         onClearAll = {
                             showSnackBar(
-                                text = "This action is undone! To confirm, click \"Confirm\" to clear all.",
-                                actionText = "Confirm",
+                                text = context.getString(R.string.notification_removeall_confirm),
+                                actionText = context.getString(R.string.action_confirm),
                                 action = {
-                                    getMainViewModel().notificationHistory.clear()
                                     getMainViewModel().saveSettings()
+                                    getMainViewModel().notificationHistory.clear()
                                     showSnackBar(
-                                        text = "Successfully cleared all notifications!",
+                                        text = context.getString(R.string.notification_removeall_removed),
                                         clearPrevious = true
                                     )
                                 },

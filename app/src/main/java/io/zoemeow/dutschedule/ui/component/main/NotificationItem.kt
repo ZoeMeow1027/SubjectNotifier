@@ -30,6 +30,7 @@ import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import io.zoemeow.dutschedule.R
 import io.zoemeow.dutschedule.model.NotificationHistory
 import io.zoemeow.dutschedule.utils.CustomDateUtil
 import io.zoemeow.dutschedule.utils.getRandomString
@@ -100,7 +101,7 @@ fun NotificationItem(
                                     modifier = Modifier.size(36.dp),
                                     onClick = { onClear?.let { it() } }
                                 ) {
-                                    Icon(Icons.Default.Clear, "")
+                                    Icon(Icons.Default.Clear, context.getString(R.string.action_delete))
                                 }
                             }
                         )

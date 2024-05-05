@@ -39,6 +39,7 @@ import io.zoemeow.dutschedule.ui.component.base.OptionItem
 import io.zoemeow.dutschedule.ui.component.base.OptionSwitchItem
 import io.zoemeow.dutschedule.ui.component.settings.ContentRegion
 import io.zoemeow.dutschedule.ui.component.settings.dialog.DialogSchoolYearSettings
+import java.util.Locale
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -118,6 +119,7 @@ fun SettingsActivity.ExperimentSettings(
                                 modifierInside = Modifier.padding(horizontal = 20.dp, vertical = 15.dp),
                                 title = context.getString(R.string.settings_experiment_option_bgopacity),
                                 description = String.format(
+                                    Locale.ROOT,
                                     "%2.0f%% %s",
                                     (getMainViewModel().appSettings.value.backgroundImageOpacity * 100),
                                     if (getMainViewModel().appSettings.value.backgroundImage == BackgroundImageOption.None) {
@@ -133,6 +135,7 @@ fun SettingsActivity.ExperimentSettings(
                                 modifierInside = Modifier.padding(horizontal = 20.dp, vertical = 15.dp),
                                 title = context.getString(R.string.settings_experiment_option_componentopacity),
                                 description = String.format(
+                                    Locale.ROOT,
                                     "%2.0f%% %s",
                                     (getMainViewModel().appSettings.value.componentOpacity * 100),
                                     if (getMainViewModel().appSettings.value.backgroundImage == BackgroundImageOption.None) {

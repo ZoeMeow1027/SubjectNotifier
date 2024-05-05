@@ -1,7 +1,7 @@
 package io.zoemeow.dutschedule.ui.view.account
 
 import android.app.Activity.RESULT_CANCELED
-import androidx.activity.ComponentActivity
+import android.content.Context
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -56,18 +56,18 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.dutwrapper.dutwrapper.model.accounts.trainingresult.SubjectResult
+import io.zoemeow.dutschedule.R
 import io.zoemeow.dutschedule.activity.AccountActivity
 import io.zoemeow.dutschedule.model.ProcessState
 import io.zoemeow.dutschedule.ui.component.base.OutlinedTextBox
 import io.zoemeow.dutschedule.utils.TableCell
 import io.zoemeow.dutschedule.utils.toNonAccent
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AccountActivity.TrainingSubjectResult(
+    context: Context,
     snackBarHostState: SnackbarHostState,
     containerColor: Color,
     contentColor: Color
@@ -104,12 +104,14 @@ fun AccountActivity.TrainingSubjectResult(
             "QT" to item.pointQT?.toString(),
             "TH" to item.pointTH?.toString(),
             "Point (T10 - T4 - By point char)" to String.format(
+                Locale.ROOT,
                 "%s - %s - %s",
                 if (item.resultT10 != null) String.format(
+                    Locale.ROOT,
                     "%.2f",
                     item.resultT10
                 ) else "unscored",
-                if (item.resultT4 != null) String.format("%.2f", item.resultT4) else "unscored",
+                if (item.resultT4 != null) String.format(Locale.ROOT, "%.2f", item.resultT4) else "unscored",
                 if (item.resultByCharacter.isNullOrEmpty()) "(unscored)" else item.resultByCharacter
             )
         )
@@ -163,7 +165,7 @@ fun AccountActivity.TrainingSubjectResult(
                         content = {
                             Icon(
                                 Icons.AutoMirrored.Filled.ArrowBack,
-                                "",
+                                context.getString(R.string.action_back),
                                 modifier = Modifier.size(25.dp)
                             )
                         }
@@ -176,7 +178,7 @@ fun AccountActivity.TrainingSubjectResult(
                                 searchEnabled.value = true
                             },
                             content = {
-                                Icon(Icons.Default.Search, "Search")
+                                Icon(Icons.Default.Search, context.getString(R.string.action_search))
                             }
                         )
                     }
@@ -191,7 +193,7 @@ fun AccountActivity.TrainingSubjectResult(
                         getMainViewModel().accountSession.fetchAccountTrainingStatus(force = true)
                     },
                     content = {
-                        Icon(Icons.Default.Refresh, "Refresh")
+                        Icon(Icons.Default.Refresh, context.getString(R.string.action_refresh))
                     }
                 )
             }

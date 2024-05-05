@@ -1,6 +1,7 @@
 package io.zoemeow.dutschedule.ui.view.account
 
 import android.app.Activity.RESULT_CANCELED
+import android.content.Context
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -33,6 +34,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import io.dutwrapper.dutwrapper.model.accounts.SubjectScheduleItem
+import io.zoemeow.dutschedule.R
 import io.zoemeow.dutschedule.activity.AccountActivity
 import io.zoemeow.dutschedule.model.ProcessState
 import io.zoemeow.dutschedule.ui.component.account.AccountSubjectMoreInformation
@@ -41,6 +43,7 @@ import io.zoemeow.dutschedule.ui.component.account.SubjectInformation
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AccountActivity.SubjectInformation(
+    context: Context,
     snackBarHostState: SnackbarHostState,
     containerColor: Color,
     contentColor: Color
@@ -55,7 +58,7 @@ fun AccountActivity.SubjectInformation(
         contentColor = contentColor,
         topBar = {
             TopAppBar(
-                title = { Text("Subject Information") },
+                title = { Text(context.getString(R.string.account_subjectinfo_title)) },
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent),
                 navigationIcon = {
                     IconButton(
@@ -66,7 +69,7 @@ fun AccountActivity.SubjectInformation(
                         content = {
                             Icon(
                                 Icons.AutoMirrored.Filled.ArrowBack,
-                                "Back to previous screen",
+                                context.getString(R.string.action_back),
                                 modifier = Modifier.size(25.dp)
                             )
                         }
@@ -81,7 +84,7 @@ fun AccountActivity.SubjectInformation(
                         getMainViewModel().accountSession.fetchSubjectSchedule(force = true)
                     },
                     content = {
-                        Icon(Icons.Default.Refresh, "Refresh")
+                        Icon(Icons.Default.Refresh, context.getString(R.string.action_refresh))
                     }
                 )
             }
@@ -132,6 +135,7 @@ fun AccountActivity.SubjectInformation(
         }
     )
     AccountSubjectMoreInformation(
+        context = context,
         item = subjectScheduleItem.value,
         isVisible = subjectDetailVisible.value,
         dismissClicked = {
@@ -140,7 +144,7 @@ fun AccountActivity.SubjectInformation(
         onAddToFilterRequested = { item ->
             if (getMainViewModel().appSettings.value.newsBackgroundFilterList.any { it.isEquals(item) }) {
                 showSnackBar(
-                    text = "This subject has already exist in your news filter list!",
+                    text = context.getString(R.string.account_subjectinfo_filter_alreadyadded),
                     clearPrevious = true
                 )
             } else {
@@ -151,7 +155,10 @@ fun AccountActivity.SubjectInformation(
                 )
                 getMainViewModel().saveSettings()
                 showSnackBar(
-                    text = "Successfully added $item to your news filter list!",
+                    text = context.getString(
+                        R.string.account_subjectinfo_filter_added,
+                        item
+                    ),
                     clearPrevious = true
                 )
             }

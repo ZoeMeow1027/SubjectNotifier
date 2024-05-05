@@ -3,7 +3,6 @@ package io.zoemeow.dutschedule.ui.view.settings
 import android.app.Activity.RESULT_OK
 import android.content.Context
 import android.content.Intent
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -156,9 +155,9 @@ fun SettingsActivity.NewsNotificationSettings(
                 }
             },
             isNewSubjectNotificationParseEnabled = getMainViewModel().appSettings.value.newsBackgroundParseNewsSubject,
-            onNewSubjectNotificationParseStateChanged = {
+            onNewSubjectNotificationParseClick = {
                 Intent(context, SettingsActivity::class.java).apply {
-                    action = "settings_newssubjectnewparse"
+                    action = SettingsActivity.INTENT_PARSENEWSSUBJECTNOTIFICATION
                 }.also { intent -> context.startActivity(intent) }
             },
             isNewsGlobalEnabled = getMainViewModel().appSettings.value.newsBackgroundGlobalEnabled,
@@ -308,7 +307,7 @@ private fun MainView(
     fetchNewsInBackgroundDuration: Int = 0,
     onFetchNewsStateChanged: ((Int) -> Unit)? = null,
     isNewSubjectNotificationParseEnabled: Boolean = false,
-    onNewSubjectNotificationParseStateChanged: (() -> Unit)? = null,
+    onNewSubjectNotificationParseClick: (() -> Unit)? = null,
     isNewsGlobalEnabled: Boolean = false,
     onNewsGlobalStateChanged: ((Boolean) -> Unit)? = null,
     isNewsSubjectEnabled: Int = -1,
@@ -361,12 +360,17 @@ private fun MainView(
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Text(
-                            "Current duration settings: ${ when (fetchNewsInBackgroundDuration) {
-                                0 -> "Disabled"
-                                1 -> "1 minute"
-                                else -> "$fetchNewsInBackgroundDuration minutes"
-                            }
-                            }",
+                            context.getString(
+                                R.string.settings_newsnotify_fetchnewsinbackground_value,
+                                when (fetchNewsInBackgroundDuration) {
+                                    0 -> context.getString(R.string.settings_newsnotify_fetchnewsinbackground_value_disabled)
+                                    1 -> context.getString(R.string.settings_newsnotify_fetchnewsinbackground_value_enabled1)
+                                    else -> context.getString(
+                                        R.string.settings_newsnotify_fetchnewsinbackground_value_enabled2,
+                                        fetchNewsInBackgroundDuration
+                                    )
+                                }
+                            ),
                             modifier = Modifier.padding(bottom = 10.dp)
                         )
                         Slider(
@@ -388,7 +392,16 @@ private fun MainView(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.Center,
                             content = {
-                                Text("${durationTemp.intValue} minute${if (durationTemp.intValue != 1) "s" else ""}")
+                                Text(
+                                    when (durationTemp.intValue) {
+                                        0 -> context.getString(R.string.settings_newsnotify_fetchnewsinbackground_modifiedvalue_disabled)
+                                        1 -> context.getString(R.string.settings_newsnotify_fetchnewsinbackground_modifiedvalue_enabled1)
+                                        else -> context.getString(
+                                            R.string.settings_newsnotify_fetchnewsinbackground_modifiedvalue_enabled2,
+                                            fetchNewsInBackgroundDuration
+                                        )
+                                    }
+                                )
                             }
                         )
                         FlowRow(
@@ -415,7 +428,16 @@ private fun MainView(
                                                 durationTemp.intValue = min
                                             }
                                         },
-                                        label = { Text(if (min == 0) "Turn off" else "$min min") }
+                                        label = {
+                                            Text(when (min) {
+                                                0 -> context.getString(R.string.settings_newsnotify_fetchnewsinbackground_option_turnoff)
+                                                1 -> context.getString(R.string.settings_newsnotify_fetchnewsinbackground_option_value1)
+                                                else -> context.getString(
+                                                    R.string.settings_newsnotify_fetchnewsinbackground_option_value2,
+                                                    min
+                                                )
+                                            })
+                                        }
                                     )
                                 }
                             }
@@ -441,7 +463,7 @@ private fun MainView(
                     true -> context.getString(R.string.settings_newsnotify_parsenewssubject_enabled)
                     false -> context.getString(R.string.settings_newsnotify_parsenewssubject_disabled)
                 },
-                onClick = { onNewSubjectNotificationParseStateChanged?.let { it() } }
+                onClick = { onNewSubjectNotificationParseClick?.let { it() } }
             )
         }
         DividerItem(padding = PaddingValues(top = 5.dp, bottom = 15.dp))

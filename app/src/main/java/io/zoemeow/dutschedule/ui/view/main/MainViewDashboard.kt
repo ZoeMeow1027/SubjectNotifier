@@ -42,6 +42,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import io.zoemeow.dutschedule.GlobalVariables
 import io.zoemeow.dutschedule.R
 import io.zoemeow.dutschedule.activity.AccountActivity
 import io.zoemeow.dutschedule.activity.MainActivity
@@ -122,7 +123,7 @@ fun MainActivity.MainViewDashboard(
                         ) {
                             Icon(
                                 painter = painterResource(id = R.drawable.ic_baseline_newspaper_24),
-                                "News",
+                                context.getString(R.string.news_title),
                                 modifier = Modifier.size(27.dp)
                             )
                         }
@@ -138,7 +139,7 @@ fun MainActivity.MainViewDashboard(
                         ) {
                             Icon(
                                 Icons.Default.Settings,
-                                "Settings",
+                                context.getString(R.string.settings_title),
                                 modifier = Modifier.size(27.dp)
                             )
                         }
@@ -178,7 +179,7 @@ fun MainActivity.MainViewDashboard(
                             ) {
                                 Icon(
                                     imageVector = Icons.Default.Notifications,
-                                    "Notifications",
+                                    context.getString(R.string.notification_panel_title),
                                     modifier = Modifier.size(27.dp),
                                 )
                             }
@@ -194,14 +195,14 @@ fun MainActivity.MainViewDashboard(
                                 verticalArrangement = Arrangement.Center,
                                 content = {
                                     Text(
-                                        "Account",
+                                        context.getString(R.string.account_title),
                                         style = MaterialTheme.typography.titleSmall
                                     )
                                     getMainViewModel().accountSession.accountSession.processState.value.let {
                                         Text(
                                             when (it) {
-                                                ProcessState.NotRunYet -> "Not logged in"
-                                                ProcessState.Running -> "Fetching..."
+                                                ProcessState.NotRunYet -> context.getString(R.string.main_account_notloggedin)
+                                                ProcessState.Running -> context.getString(R.string.main_account_fetching)
                                                 else -> getMainViewModel().accountSession.accountSession.data.value?.accountAuth?.username ?: "unknown"
                                             },
                                             style = MaterialTheme.typography.bodySmall
@@ -225,7 +226,7 @@ fun MainActivity.MainViewDashboard(
                                         )
                                         else -> Icon(
                                             Icons.Outlined.AccountCircle,
-                                            "Account",
+                                            context.getString(R.string.account_title),
                                             modifier = Modifier.size(26.dp)
                                         )
                                     }
@@ -264,7 +265,7 @@ fun MainActivity.MainViewDashboard(
                                         onCompleted = {
                                             if (it) {
                                                 val intent = Intent(context, AccountActivity::class.java)
-                                                intent.action = "subject_schedule"
+                                                intent.action = AccountActivity.INTENT_SUBJECTINFORMATION
                                                 context.startActivity(intent)
                                             }
                                         }
@@ -303,7 +304,7 @@ fun MainActivity.MainViewDashboard(
                                 latestVersionString = "",
                                 clicked = {
                                     openLink(
-                                        url = "https://github.com/ZoeMeow1027/DutSchedule/releases",
+                                        url = GlobalVariables.LINK_REPOSITORY_RELEASE,
                                         context = context,
                                         customTab = false,
                                     )
@@ -335,7 +336,7 @@ fun MainActivity.MainViewDashboard(
         onClick = { item ->
             if (listOf(1, 2).contains(item.tag)) {
                 Intent(context, NewsActivity::class.java).also {
-                    it.action = "activity_detail"
+                    it.action = NewsActivity.INTENT_NEWSDETAILACTIVITY
                     for (map1 in item.parameters) {
                         it.putExtra(map1.key, map1.value)
                     }
@@ -348,8 +349,8 @@ fun MainActivity.MainViewDashboard(
             getMainViewModel().notificationHistory.remove(item)
             getMainViewModel().saveSettings()
             showSnackBar(
-                text = "Deleted notifications!",
-                actionText = "Undo",
+                text = context.getString(R.string.notification_removed),
+                actionText = context.getString(R.string.action_undo),
                 action = {
                     getMainViewModel().notificationHistory.add(item1)
                     getMainViewModel().saveSettings()
@@ -358,13 +359,13 @@ fun MainActivity.MainViewDashboard(
         },
         onClearAll = {
             showSnackBar(
-                text = "This action is undone! To confirm, click \"Confirm\" to clear all.",
-                actionText = "Confirm",
+                text = context.getString(R.string.notification_removeall_confirm),
+                actionText = context.getString(R.string.action_confirm),
                 action = {
                     getMainViewModel().notificationHistory.clear()
                     getMainViewModel().saveSettings()
                     showSnackBar(
-                        text = "Successfully cleared all notifications!",
+                        text = context.getString(R.string.notification_removeall_removed),
                         clearPrevious = true
                     )
                 },

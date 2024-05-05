@@ -95,10 +95,10 @@ class NotificationsUtil {
             jsonData: String
         ) {
             val notificationIntent = Intent(context, NewsActivity::class.java).also {
-                it.action = "activity_detail"
+                it.action = NewsActivity.INTENT_NEWSDETAILACTIVITY
                 it.putExtra("type", when (channelId) {
-                    "notification.id.news.global" -> "news_global"
-                    "notification.id.news.subject" -> "news_subject"
+                    "notification.id.news.global" -> NewsActivity.NEWSTYPE_NEWSGLOBAL
+                    "notification.id.news.subject" -> NewsActivity.NEWSTYPE_NEWSSUBJECT
                     else -> ""
                 })
                 it.putExtra("data", jsonData)

@@ -18,9 +18,17 @@
     <string name="action_grant">Grant</string>
     <string name="action_confirm">Confirm</string>
     <string name="action_refresh">Refresh</string>
+    <string name="action_search">Search</string>
+    <string name="action_undo">Undo</string>
+    <string name="action_close">Close</string>
+    <string name="action_display">Display</string>
+    <string name="action_hide">Hide</string>
     <!-- Tooltip string -->
     <string name="tooltip_selected">Selected</string>
     <string name="tooltip_info">Information</string>
+    <!-- Main activity string -->
+    <string name="main_account_notloggedin">Not logged in</string>
+    <string name="main_account_fetching">Fetching…</string>
     <!-- Android notification string -->
     <string name="notification_announcement_title">App updates</string>
     <string name="notification_announcement_description">This will send you app recommend and important updates.</string>
@@ -129,6 +137,16 @@
     <string name="settings_newsnotify_parsenewssubject_disabled">Disabled (notify like news global)</string>
     <string name="settings_newsnotify_category_notification">Notification settings</string>
     <string name="settings_newsnotify_fetchnewsinbackground_duration">Fetch news duration</string>
+    <string name="settings_newsnotify_fetchnewsinbackground_value">Current duration value: %1$s</string>
+    <string name="settings_newsnotify_fetchnewsinbackground_value_disabled">Disabled</string>
+    <string name="settings_newsnotify_fetchnewsinbackground_value_enabled1">1 minute</string>
+    <string name="settings_newsnotify_fetchnewsinbackground_value_enabled2">%1$d minute</string>
+    <string name="settings_newsnotify_fetchnewsinbackground_modifiedvalue_disabled">Disabled</string>
+    <string name="settings_newsnotify_fetchnewsinbackground_modifiedvalue_enabled1">1 minute</string>
+    <string name="settings_newsnotify_fetchnewsinbackground_modifiedvalue_enabled2">%1$d minute</string>
+    <string name="settings_newsnotify_fetchnewsinbackground_option_turnoff">Turn off</string>
+    <string name="settings_newsnotify_fetchnewsinbackground_option_value1">1 minute</string>
+    <string name="settings_newsnotify_fetchnewsinbackground_option_value2">%1$d minutes</string>
     <string name="settings_newsnotify_newsglobal_title">Global news notification</string>
     <string name="settings_newsnotify_newsglobal_enable">Enable global news notification</string>
     <string name="settings_newsnotify_newsglobal_enabled">Successfully enabled global news notifications!</string>
@@ -166,6 +184,9 @@
     <!-- Notification UI string -->
     <string name="notification_panel_title">Notifications</string>
     <string name="notification_panel_no_notifications">No notifications</string>
+    <string name="notification_removed">Notification removed!</string>
+    <string name="notification_removeall_confirm">This action is undone! To confirm clear all, click "Confirm".</string>
+    <string name="notification_removeall_removed">Successfully cleared all notifications!</string>
     <!-- News activity string -->
     <string name="news_title">News</string>
     <string name="news_tabname_global">Global</string>
@@ -190,4 +211,38 @@
     <string name="news_search_searchoption_history_data">Search %1$s in %2$s</string>
     <!-- Account activity string -->
     <string name="account_title">Account</string>
+    <string name="account_login_title">Login</string>
+    <string name="account_login_description">Use your account in sv.dut.udn.vn to login</string>
+    <string name="account_login_username">Username (Student ID)</string>
+    <string name="account_login_password">Password</string>
+    <string name="account_login_rememberpassword">Remember this login</string>
+    <string name="account_login_actionlogin">Login</string>
+    <string name="account_login_actionloginclearprevious">Clear previous login</string>
+    <string name="account_login_actionforgot">Forgot your password?</string>
+    <string name="account_login_processing">Processing…</string>
+    <string name="account_login_loggedinbefore">You have logged in before. Click \"Login\" button to try again. If you have changed your password before, click \"Clear previous login\".</string>
+    <string name="account_login_loggingin">Logging you in…</string>
+    <string name="account_login_successful">Successfully logged in!</string>
+    <string name="account_login_failed">We can\'t log in with your account! If you entered carefully and this issue is still persists, feel free to open issue on GitHub.</string>
+    <string name="account_dashboard_banner_title">Basic account information</string>
+    <string name="account_dashboard_button_subjectinfo">Subject Information</string>
+    <string name="account_dashboard_button_subjectfee">Subject Fee</string>
+    <string name="account_dashboard_button_accountinfo">Account Information</string>
+    <string name="account_dashboard_button_accounttrainstats">Account Training Result</string>
+    <string name="account_dashboard_button_logout">Logout</string>
+    <string name="account_logout_title">Logout</string>
+    <string name="account_logout_description">Are you sure you want to logout?\n\nNote that:\n- You won\'t be received your any subject schedule anymore.\n- Your news filter settings won\'t be affected.</string>
+    <string name="account_logout_action_logout">Logout</string>
+    <string name="account_logout_loggedout">Successfully logout!</string>
+    <!-- Subject information activity string -->
+    <string name="account_subjectinfo_title">Subject Information</string>
+    <string name="account_subjectinfo_filter_added">Successfully added %1$s to your news filter list!</string>
+    <string name="account_subjectinfo_filter_alreadyadded">This subject has already exist in your news filter list!</string>
+    <string name="account_subjectinfo_addtofilter">Add to news filter</string>
+    <string name="account_subjectinfo_data_id">ID</string>
+    <string name="account_subjectinfo_data_credit">Credit(s)</string>
+    <string name="account_subjectinfo_data_ishighquality">High Quality</string>
+    <string name="account_subjectinfo_data_scoreformula">Final score formula</string>
+    <!-- -->
+    <string name="data_unknown">(unknown)</string>
 </resources>

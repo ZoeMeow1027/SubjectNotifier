@@ -18,6 +18,13 @@ import io.zoemeow.dutschedule.utils.BackgroundImageUtil
 
 @AndroidEntryPoint
 class SettingsActivity : BaseActivity() {
+    companion object {
+        const val INTENT_PARSENEWSSUBJECTNOTIFICATION = "settings_newssubjectnewparse"
+        const val INTENT_EXPERIMENTSETTINGS = "settings_experimentsettings"
+        const val INTENT_LANGUAGESETTINGS = "settings_languagesettings"
+        const val INTENT_NEWSNOTIFICATIONSETTINGS = "settings_newsnotificaitonsettings"
+    }
+
     @Composable
     override fun OnPreloadOnce() { }
 
@@ -57,7 +64,7 @@ class SettingsActivity : BaseActivity() {
         contentColor: Color
     ) {
         when (intent.action) {
-            "settings_newssubjectnewparse" -> {
+            INTENT_PARSENEWSSUBJECTNOTIFICATION -> {
                 ParseNewsSubjectNotification(
                     context = context,
                     snackBarHostState = snackBarHostState,
@@ -66,7 +73,7 @@ class SettingsActivity : BaseActivity() {
                 )
             }
 
-            "settings_experimentsettings" -> {
+            INTENT_EXPERIMENTSETTINGS -> {
                 ExperimentSettings(
                     context = context,
                     snackBarHostState = snackBarHostState,
@@ -75,7 +82,7 @@ class SettingsActivity : BaseActivity() {
                 )
             }
 
-            "settings_languagesettings" -> {
+            INTENT_LANGUAGESETTINGS -> {
                 LanguageSettings(
                     context = context,
                     snackBarHostState = snackBarHostState,
@@ -84,7 +91,7 @@ class SettingsActivity : BaseActivity() {
                 )
             }
 
-            "settings_newsnotificaitonsettings" -> {
+            INTENT_NEWSNOTIFICATIONSETTINGS -> {
                 NewsNotificationSettings(
                     context = context,
                     snackBarHostState = snackBarHostState,

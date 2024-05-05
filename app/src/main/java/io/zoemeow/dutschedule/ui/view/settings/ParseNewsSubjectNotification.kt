@@ -2,7 +2,6 @@ package io.zoemeow.dutschedule.ui.view.settings
 
 import android.app.Activity.RESULT_OK
 import android.content.Context
-import androidx.activity.ComponentActivity
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize

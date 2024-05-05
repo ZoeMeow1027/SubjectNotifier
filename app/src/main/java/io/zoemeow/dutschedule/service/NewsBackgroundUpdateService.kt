@@ -12,6 +12,7 @@ import io.dutwrapper.dutwrapper.model.enums.NewsType
 import io.dutwrapper.dutwrapper.model.news.NewsGlobalItem
 import io.dutwrapper.dutwrapper.model.news.NewsSubjectItem
 import io.zoemeow.dutschedule.R
+import io.zoemeow.dutschedule.activity.NewsActivity
 import io.zoemeow.dutschedule.activity.PermissionRequestActivity
 import io.zoemeow.dutschedule.model.NotificationHistory
 import io.zoemeow.dutschedule.model.ProcessState
@@ -563,8 +564,8 @@ class NewsBackgroundUpdateService : BaseService(
             timestamp = newsDate,
             parameters = mapOf(
                 "type" to when (type) {
-                    NewsType.Global -> "news_global"
-                    NewsType.Subject -> "news_subject"
+                    NewsType.Global -> NewsActivity.NEWSTYPE_NEWSGLOBAL
+                    NewsType.Subject -> NewsActivity.NEWSTYPE_NEWSSUBJECT
                     else -> ""
                 },
                 "data" to jsonData

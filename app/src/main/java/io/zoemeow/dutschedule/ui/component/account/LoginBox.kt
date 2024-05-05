@@ -1,5 +1,6 @@
 package io.zoemeow.dutschedule.ui.component.account
 
+import android.content.Context
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -31,6 +32,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -42,6 +44,7 @@ import io.zoemeow.dutschedule.R
 
 @Composable
 fun LoginBox(
+    context: Context,
     modifier: Modifier = Modifier,
     isVisible: Boolean = true,
     isProcessing: Boolean = false,
@@ -79,12 +82,12 @@ fun LoginBox(
                     verticalArrangement = Arrangement.Center
                 ) {
                     Text(
-                        "Login",
+                        context.getString(R.string.account_login_title),
                         style = MaterialTheme.typography.headlineMedium,
                         modifier = Modifier.padding(bottom = 5.dp)
                     )
                     Text(
-                        "Use your account in sv.dut.udn.vn to login",
+                        context.getString(R.string.account_login_description),
                         style = MaterialTheme.typography.bodyLarge
                     )
                     Spacer(modifier = Modifier.size(8.dp))
@@ -95,7 +98,7 @@ fun LoginBox(
                         enabled = isControlEnabled && !isProcessing,
                         value = username.value,
                         onValueChange = { username.value = it },
-                        label = { Text("Username") },
+                        label = { Text(context.getString(R.string.account_login_username)) },
                         keyboardOptions = KeyboardOptions(
                             keyboardType = KeyboardType.Text,
                             imeAction = ImeAction.Next
@@ -112,17 +115,20 @@ fun LoginBox(
                         enabled = isControlEnabled && !isProcessing,
                         value = password.value,
                         onValueChange = { password.value = it },
-                        label = { Text("Password") },
+                        label = { Text(context.getString(R.string.account_login_password)) },
                         suffix = {
                             IconButton(
                                 onClick = { passwordShow.value = !passwordShow.value },
                                 content = {
                                     Icon(
-                                        painter = painterResource(id = when (passwordShow.value) {
-                                            false -> R.drawable.ic_baseline_visibility_24
-                                            true -> R.drawable.ic_baseline_visibility_off_24
-                                        }),
-                                        contentDescription = ""
+                                        painter = when (passwordShow.value) {
+                                            true -> painterResource(R.drawable.ic_baseline_visibility_off_24)
+                                            false -> painterResource(id = R.drawable.ic_baseline_visibility_24)
+                                        },
+                                        contentDescription = when (passwordShow.value) {
+                                            true -> context.getString(R.string.action_hide)
+                                            false -> context.getString(R.string.action_display)
+                                        }
                                     )
                                 },
                                 modifier = Modifier.size(16.dp)
@@ -162,7 +168,7 @@ fun LoginBox(
                             onCheckedChange = { if (isControlEnabled) rememberLogin.value = it },
                         )
                         Spacer(modifier = Modifier.size(5.dp))
-                        Text("Remember this login")
+                        Text(context.getString(R.string.account_login_rememberpassword))
                     }
                     ElevatedButton(
                         enabled = when {
@@ -175,20 +181,20 @@ fun LoginBox(
                             onSubmit(username.value, password.value, rememberLogin.value)
                         },
                         content = {
-                            Text("Login")
+                            Text(context.getString(R.string.account_login_actionlogin))
                         }
                     )
                     if (isLoggedInBefore) {
                         ElevatedButton(
                             enabled = !isProcessing,
                             onClick = { onClearLogin?.let { it() } },
-                            content = { Text("Login with another account") }
+                            content = { Text(context.getString(R.string.account_login_actionloginclearprevious)) }
                         )
                     }
                     TextButton(
                         enabled = isControlEnabled && !isProcessing,
                         onClick = { onForgotPass?.let { it() } },
-                        content = { Text("Forgot your password?") }
+                        content = { Text(context.getString(R.string.account_login_actionforgot)) }
                     )
                     if (isProcessing || isLoggedInBefore) {
                         Surface(
@@ -206,9 +212,9 @@ fun LoginBox(
                                         if (isProcessing) {
                                             CircularProgressIndicator()
                                             Spacer(modifier = Modifier.size(10.dp))
-                                            Text("Processing...")
+                                            Text(context.getString(R.string.account_login_processing))
                                         } else if (isLoggedInBefore) {
-                                            Text("You have logged in before. Click \"Login\" button to proceed.")
+                                            Text(context.getString(R.string.account_login_loggedinbefore))
                                         }
                                     }
                                 )
@@ -225,6 +231,7 @@ fun LoginBox(
 @Composable
 private fun LoginBoxPreview() {
     LoginBox(
+        context = LocalContext.current,
         isProcessing = false,
         isControlEnabled = true,
         isLoggedInBefore = false,

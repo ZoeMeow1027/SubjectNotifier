@@ -1,9 +1,8 @@
 package io.zoemeow.dutschedule.ui.view.account
 
-import android.app.Activity.RESULT_OK
+import android.app.Activity.RESULT_CANCELED
 import android.content.Context
 import android.content.Intent
-import androidx.activity.ComponentActivity
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -62,7 +61,7 @@ fun AccountActivity.TrainingResult(
                 navigationIcon = {
                     IconButton(
                         onClick = {
-                            setResult(RESULT_OK)
+                            setResult(RESULT_CANCELED)
                             finish()
                         },
                         content = {
@@ -172,7 +171,7 @@ fun AccountActivity.TrainingResult(
                                                     },
                                                     clicked = {
                                                         val intent = Intent(context, AccountActivity::class.java)
-                                                        intent.action = "acc_training_result_subjectresult"
+                                                        intent.action = AccountActivity.INTENT_ACCOUNTSUBJECTRESULT
                                                         context.startActivity(intent)
                                                     }
                                                 )

@@ -18,9 +18,17 @@
     <string name="action_grant">Cho phép</string>
     <string name="action_confirm">Xác nhận</string>
     <string name="action_refresh">Làm mới</string>
+    <string name="action_search">Tìm kiếm</string>
+    <string name="action_undo">Hoàn tác</string>
+    <string name="action_close">Đóng</string>
+    <string name="action_display">Hiển thị</string>
+    <string name="action_hide">Ẩn</string>
     <!-- Tooltip string -->
     <string name="tooltip_selected">Đã chọn</string>
     <string name="tooltip_info">Thông tin</string>
+    <!-- Main activity string -->
+    <string name="main_account_notloggedin">Chưa đăng nhập</string>
+    <string name="main_account_fetching">Đang tải…</string>
     <!-- Android notification string -->
     <string name="notification_announcement_title">Thông báo ứng dụng</string>
     <string name="notification_announcement_description">Kênh này sẽ gửi thông báo cập nhật quan trọng của ứng dụng cho bạn.</string>
@@ -129,6 +137,16 @@
     <string name="settings_newsnotify_parsenewssubject_disabled">Đã vô hiệu hóa (thông báo như tin tức chung)</string>
     <string name="settings_newsnotify_category_notification">Cài đặt thông báo</string>
     <string name="settings_newsnotify_fetchnewsinbackground_duration">Tần suất làm mới tin tức</string>
+    <string name="settings_newsnotify_fetchnewsinbackground_value">Giá trị tần suất làm mới hiện tại: %1$s</string>
+    <string name="settings_newsnotify_fetchnewsinbackground_value_disabled">Đã vô hiệu hóa</string>
+    <string name="settings_newsnotify_fetchnewsinbackground_value_enabled1">1 phút</string>
+    <string name="settings_newsnotify_fetchnewsinbackground_value_enabled2">%1$d phút</string>
+    <string name="settings_newsnotify_fetchnewsinbackground_modifiedvalue_disabled">Đã vô hiệu hóa</string>
+    <string name="settings_newsnotify_fetchnewsinbackground_modifiedvalue_enabled1">1 phút</string>
+    <string name="settings_newsnotify_fetchnewsinbackground_modifiedvalue_enabled2">%1$d phút</string>
+    <string name="settings_newsnotify_fetchnewsinbackground_option_turnoff">Vô hiệu hóa</string>
+    <string name="settings_newsnotify_fetchnewsinbackground_option_value1">1 phút</string>
+    <string name="settings_newsnotify_fetchnewsinbackground_option_value2">%1$d phút</string>
     <string name="settings_newsnotify_newsglobal_title">Thông báo tin tức chung</string>
     <string name="settings_newsnotify_newsglobal_enable">Bật thông báo tin tức chung</string>
     <string name="settings_newsnotify_newsglobal_enabled">Đã kích hoạt thông báo tin tức chung!</string>
@@ -166,6 +184,9 @@
     <!-- Notification UI string -->
     <string name="notification_panel_title">Thông báo</string>
     <string name="notification_panel_no_notifications">Không có thông báo</string>
+    <string name="notification_removed">Đã xóa thông báo!</string>
+    <string name="notification_removeall_confirm">Hành động này không thể hoàn tác! Để tiếp tục xóa tất cả, nhấn "Xác nhận".</string>
+    <string name="notification_removeall_removed">Đã xóa tất cả thông báo!</string>
     <!-- News activity string -->
     <string name="news_title">Tin tức</string>
     <string name="news_tabname_global">Chung</string>
@@ -190,4 +211,38 @@
     <string name="news_search_searchoption_history_data">Tìm kiếm %2$s theo %1$s</string>
     <!-- Account activity string -->
     <string name="account_title">Tài khoản</string>
+    <string name="account_login_title">Đăng nhập</string>
+    <string name="account_login_description">Sử dụng tài khoản của bạn trên sv.dut.udn.vn để đăng nhập</string>
+    <string name="account_login_username">Tên đăng nhập (ID sinh viên)</string>
+    <string name="account_login_password">Mật khẩu</string>
+    <string name="account_login_rememberpassword">Duy trì đăng nhập này</string>
+    <string name="account_login_actionlogin">Đăng nhập</string>
+    <string name="account_login_actionloginclearprevious">Xóa đăng nhập cũ</string>
+    <string name="account_login_actionforgot">Bạn đã quên mật khẩu?</string>
+    <string name="account_login_processing">Đang trong tiến trình…</string>
+    <string name="account_login_loggedinbefore">Bạn đã đăng nhập trước đây. Nhấn vào nút \"Đăng nhập\" để thử lại. Nếu bạn đã thay đổi mật khẩu trước đây, nhấp vào \"Xóa đăng nhập cũ\".</string>
+    <string name="account_login_loggingin">Đang đăng nhâp cho bạn…</string>
+    <string name="account_login_successful">Đã đăng nhập thành công!</string>
+    <string name="account_login_failed">Chúng tôi không thể đăng nhập với tài khoản của bạn! Nếu bạn đã nhập đúng và sự cố này vẫn tồn tại, hãy mở một issue mới trên GitHub.</string>
+    <string name="account_dashboard_banner_title">Thông tin cơ bản về tài khoản</string>
+    <string name="account_dashboard_button_subjectinfo">Thông tin học phần</string>
+    <string name="account_dashboard_button_subjectfee">Học phí</string>
+    <string name="account_dashboard_button_accountinfo">Thông tin tài khoản</string>
+    <string name="account_dashboard_button_accounttrainstats">Kết quả rèn luyện</string>
+    <string name="account_dashboard_button_logout">Đăng xuất</string>
+    <string name="account_logout_title">Đăng xuất</string>
+    <string name="account_logout_description">Bạn có chắc chắn muốn đăng xuất?\n\Lưu ý rằng:\n- Bạn sẽ không thể nhận bất kì thông báo liên quan đến lịch học của bạn.\n- Bộ lọc tin tức của bạn sẽ không bị ảnh hưởng.</string>
+    <string name="account_logout_action_logout">Đăng xuất</string>
+    <string name="account_logout_loggedout">Đã đăng xuất!</string>
+    <!-- Subject information activity string -->
+    <string name="account_subjectinfo_title">Thông tin học phần</string>
+    <string name="account_subjectinfo_filter_added">Đã thêm %1$s vào danh sách bộ lọc của bạn!</string>
+    <string name="account_subjectinfo_filter_alreadyadded">Học phần này đã có trong danh sách bộ lọc của bạn!</string>
+    <string name="account_subjectinfo_addtofilter">Thêm vào bộ lọc tin tức</string>
+    <string name="account_subjectinfo_data_id">Mã học phần</string>
+    <string name="account_subjectinfo_data_credit">Số tín chỉ</string>
+    <string name="account_subjectinfo_data_ishighquality">Chất lượng cao</string>
+    <string name="account_subjectinfo_data_scoreformula">Công thức điểm</string>
+    <!-- -->
+    <string name="data_unknown">(không rõ)</string>
 </resources>

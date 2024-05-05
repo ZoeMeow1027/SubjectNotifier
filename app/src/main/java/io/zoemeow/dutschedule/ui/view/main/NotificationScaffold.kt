@@ -89,7 +89,7 @@ fun NotificationScaffold(
                                 IconButton(
                                     onClick = { onClearAll?.let { it() } },
                                     content = {
-                                        Icon(ImageVector.vectorResource(id = R.drawable.ic_baseline_clear_all_24), "")
+                                        Icon(ImageVector.vectorResource(id = R.drawable.ic_baseline_clear_all_24), context.getString(R.string.action_clear))
                                     }
                                 )
                                 Spacer(modifier = Modifier.size(3.dp))
@@ -98,7 +98,7 @@ fun NotificationScaffold(
                                 IconButton(
                                     onClick = { onDismiss() },
                                     content = {
-                                        Icon(Icons.Default.Clear, "Close")
+                                        Icon(Icons.Default.Clear, context.getString(R.string.action_close))
                                     }
                                 )
                             }

@@ -1,6 +1,6 @@
 package io.zoemeow.dutschedule.ui.view.settings
 
-import android.app.Activity.RESULT_OK
+import android.app.Activity.RESULT_CANCELED
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -36,6 +36,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import io.zoemeow.dutschedule.BuildConfig
+import io.zoemeow.dutschedule.GlobalVariables
 import io.zoemeow.dutschedule.R
 import io.zoemeow.dutschedule.activity.PermissionRequestActivity
 import io.zoemeow.dutschedule.activity.SettingsActivity
@@ -71,7 +72,7 @@ fun SettingsActivity.MainView(
             showSnackBar(text = text, clearPrevious = clearPrevious, actionText = actionText, action = action)
         },
         onBack = {
-            setResult(RESULT_OK)
+            setResult(RESULT_CANCELED)
             finish()
         }
     )
@@ -145,7 +146,7 @@ fun SettingsMainView(
                                 description = context.getString(R.string.settings_option_newsschedule_description),
                                 onClick = {
                                     Intent(context, SettingsActivity::class.java).apply {
-                                        action = "settings_newsnotificaitonsettings"
+                                        action = SettingsActivity.INTENT_NEWSNOTIFICATIONSETTINGS
                                     }.also { intent -> context.startActivity(intent) }
                                 }
                             )
@@ -261,7 +262,7 @@ fun SettingsMainView(
                                         context.startActivity(intent)
                                     } else {
                                         val intent = Intent(context, SettingsActivity::class.java)
-                                        intent.action = "settings_languagesettings"
+                                        intent.action = SettingsActivity.INTENT_LANGUAGESETTINGS
                                         context.startActivity(intent)
                                     }
                                 }
@@ -319,7 +320,7 @@ fun SettingsMainView(
                                 description = context.getString(R.string.settings_option_experiemntsettings_description),
                                 onClick = {
                                     val intent = Intent(context, SettingsActivity::class.java)
-                                    intent.action = "settings_experimentsettings"
+                                    intent.action = SettingsActivity.INTENT_EXPERIMENTSETTINGS
                                     context.startActivity(intent)
                                 }
                             )
@@ -365,7 +366,7 @@ fun SettingsMainView(
                                 description = context.getString(R.string.settings_option_changelog_description),
                                 onClick = {
                                     context.openLink(
-                                        url = "https://github.com/ZoeMeow1027/DutSchedule/blob/stable/CHANGELOG.md",
+                                        url = GlobalVariables.LINK_CHANGELOG,
                                         customTab = mainViewModel.appSettings.value.openLinkInsideApp,
                                     )
                                 }
@@ -375,15 +376,15 @@ fun SettingsMainView(
                                 leadingIcon = {
                                     Icon(
                                         imageVector = ImageVector.vectorResource(R.drawable.github_mark_24),
-                                        "",
+                                        "repository",
                                         modifier = Modifier.padding(end = 15.dp)
                                     )
                                 },
                                 title = context.getString(R.string.settings_option_github),
-                                description = "https://github.com/ZoeMeow1027/DutSchedule",
+                                description = GlobalVariables.LINK_REPOSITORY,
                                 onClick = {
                                     context.openLink(
-                                        url = "https://github.com/ZoeMeow1027/DutSchedule",
+                                        url = GlobalVariables.LINK_REPOSITORY,
                                         customTab = mainViewModel.appSettings.value.openLinkInsideApp,
                                     )
                                 }
@@ -447,7 +448,7 @@ fun SettingsMainView(
 
             BackgroundImageOption.PickFileFromMedia -> {
                 // Launch the photo picker and let the user choose only images.
-                mediaRequest.let { it() }
+                mediaRequest()
             }
         }
 

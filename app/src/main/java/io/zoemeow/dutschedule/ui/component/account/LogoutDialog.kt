@@ -1,5 +1,6 @@
 package io.zoemeow.dutschedule.ui.component.account
 
+import android.content.Context
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -9,10 +10,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import io.zoemeow.dutschedule.R
 import io.zoemeow.dutschedule.ui.component.base.DialogBase
 
 @Composable
 fun LogoutDialog(
+    context: Context,
     isVisible: Boolean = false,
     canDismiss: Boolean = false,
     logoutClicked: (() -> Unit)? = null,
@@ -21,7 +24,7 @@ fun LogoutDialog(
     DialogBase(
         modifier = Modifier.fillMaxWidth().padding(25.dp),
         isVisible = isVisible,
-        title = "Logout",
+        title = context.getString(R.string.account_logout_title),
         canDismiss = canDismiss,
         dismissClicked = {
             dismissClicked?.let { it() }
@@ -30,23 +33,18 @@ fun LogoutDialog(
             Column(
                 horizontalAlignment = Alignment.Start,
             ) {
-                Text(
-                    "Are you sure you want to logout?\n\n" +
-                            "Note that:\n" +
-                            "- You won't be received your any subject schedule anymore.\n" +
-                            "- Your news filter settings won't be affected."
-                )
+                Text(context.getString(R.string.account_logout_description))
             }
         },
         actionButtons = {
             TextButton(
                 onClick = { dismissClicked?.let { it() } },
-                content = { Text("Cancel") },
+                content = { Text(context.getString(R.string.action_cancel)) },
                 modifier = Modifier.padding(start = 8.dp),
             )
             TextButton(
                 onClick = { logoutClicked?.let { it() } },
-                content = { Text("Logout") },
+                content = { Text(context.getString(R.string.account_logout_action_logout)) },
             )
         }
     )

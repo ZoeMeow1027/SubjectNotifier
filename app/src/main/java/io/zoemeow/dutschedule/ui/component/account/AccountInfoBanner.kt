@@ -1,5 +1,6 @@
 package io.zoemeow.dutschedule.ui.component.account
 
+import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -17,10 +18,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
+import io.zoemeow.dutschedule.R
 import io.zoemeow.dutschedule.ui.component.base.OutlinedTextBox
 
 @Composable
 fun AccountInfoBanner(
+    context: Context,
     padding: PaddingValues,
     isLoading: Boolean = false,
     username: String? = null,
@@ -65,7 +68,7 @@ fun AccountInfoBanner(
                             verticalAlignment = Alignment.Top,
                             content = {
                                 Text(
-                                    text = "Basic account information",
+                                    text = context.getString(R.string.account_dashboard_banner_title),
                                     style = MaterialTheme.typography.titleLarge,
                                     modifier = Modifier.padding(bottom = 10.dp),
                                 )
@@ -73,17 +76,17 @@ fun AccountInfoBanner(
                         )
                         OutlinedTextBox(
                             title = "Username",
-                            value = username ?: "(unknown)",
+                            value = username ?: context.getString(R.string.data_unknown),
                             modifier = Modifier.fillMaxWidth().padding(bottom = 5.dp)
                         )
                         OutlinedTextBox(
                             title = "Class",
-                            value = schoolClass ?: "(unknown)",
+                            value = schoolClass ?: context.getString(R.string.data_unknown),
                             modifier = Modifier.fillMaxWidth().padding(bottom = 5.dp)
                         )
                         OutlinedTextBox(
                             title = "Training program plan",
-                            value = trainingProgramPlan ?: "(unknown)",
+                            value = trainingProgramPlan ?: context.getString(R.string.data_unknown),
                             modifier = Modifier.fillMaxWidth().padding(bottom = 5.dp)
                         )
                     }

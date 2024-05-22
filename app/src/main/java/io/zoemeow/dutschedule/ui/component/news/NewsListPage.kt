@@ -36,9 +36,6 @@ fun NewsListPage(
     Column(
         modifier = Modifier.fillMaxSize(),
         content = {
-            if (processState == ProcessState.Running) {
-                LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
-            }
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()

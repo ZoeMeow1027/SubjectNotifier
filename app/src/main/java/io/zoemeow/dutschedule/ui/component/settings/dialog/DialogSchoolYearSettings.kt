@@ -23,6 +23,7 @@ import io.zoemeow.dutschedule.activity.SettingsActivity
 import io.zoemeow.dutschedule.model.account.SchoolYearItem
 import io.zoemeow.dutschedule.ui.component.base.DialogBase
 import io.zoemeow.dutschedule.ui.component.base.OutlinedTextBox
+import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -104,6 +105,7 @@ fun DialogSchoolYearSettings(
                                 .menuAnchor(),
                             title = context.getString(R.string.settings_dialog_schyear_choice_semester),
                             value = String.format(
+                                Locale.ROOT,
                                 "%s %d%s",
                                 context.getString(R.string.settings_dialog_schyear_choice_semester),
                                 if (currentSettings.value.semester <= 2) currentSettings.value.semester else 2,
@@ -117,6 +119,7 @@ fun DialogSchoolYearSettings(
                                 1.rangeTo(3).forEach {
                                     DropdownMenuItem(
                                         text = { Text(String.format(
+                                            Locale.ROOT,
                                             "%s %d%s",
                                             context.getString(R.string.settings_dialog_schyear_choice_semester),
                                             if (it <= 2) it else 2,

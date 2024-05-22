@@ -84,6 +84,9 @@ class MainViewModel @Inject constructor(
             data = currentSchoolWeek.data.value,
             lastRequest = currentSchoolWeek.lastRequest.longValue
         )
+
+        // Reload school year in Account
+        accountSession.setSchoolYear(appSettings.value.currentSchoolYear)
     }
 
     val notificationHistory = mutableStateListOf<NotificationHistory>()
@@ -103,6 +106,9 @@ class MainViewModel @Inject constructor(
                 if (!saveSettingsOnly) {
                     fileModuleRepository.saveAccountSubjectScheduleCache(ArrayList(accountSession.getSubjectScheduleCache()))
                     fileModuleRepository.saveNotificationHistory(ArrayList(notificationHistory.toList()))
+
+                    // Reload school year in Account
+                    accountSession.setSchoolYear(appSettings.value.currentSchoolYear)
                 }
             },
             invokeOnCompleted = { onCompleted?.let { it() } }

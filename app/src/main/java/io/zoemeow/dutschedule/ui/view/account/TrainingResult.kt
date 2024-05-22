@@ -4,6 +4,7 @@ import android.app.Activity.RESULT_CANCELED
 import android.content.Context
 import android.content.Intent
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -55,23 +56,31 @@ fun AccountActivity.TrainingResult(
         containerColor = containerColor,
         contentColor = contentColor,
         topBar = {
-            TopAppBar(
-                title = { Text("Account Training Result") },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent),
-                navigationIcon = {
-                    IconButton(
-                        onClick = {
-                            setResult(RESULT_CANCELED)
-                            finish()
-                        },
-                        content = {
-                            Icon(
-                                Icons.AutoMirrored.Filled.ArrowBack,
-                                context.getString(R.string.action_back),
-                                modifier = Modifier.size(25.dp)
+            Box(
+                contentAlignment = Alignment.BottomCenter,
+                content = {
+                    TopAppBar(
+                        title = { Text("Account Training Result") },
+                        colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent),
+                        navigationIcon = {
+                            IconButton(
+                                onClick = {
+                                    setResult(RESULT_CANCELED)
+                                    finish()
+                                },
+                                content = {
+                                    Icon(
+                                        Icons.AutoMirrored.Filled.ArrowBack,
+                                        context.getString(R.string.action_back),
+                                        modifier = Modifier.size(25.dp)
+                                    )
+                                }
                             )
                         }
                     )
+                    if (getMainViewModel().accountSession.accountTrainingStatus.processState.value == ProcessState.Running) {
+                        LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
+                    }
                 }
             )
         },
@@ -93,9 +102,6 @@ fun AccountActivity.TrainingResult(
                     .fillMaxSize()
                     .padding(padding),
                 content = {
-                    if (getMainViewModel().accountSession.accountTrainingStatus.processState.value == ProcessState.Running) {
-                        LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
-                    }
                     Column(
                         modifier = Modifier
                             .fillMaxSize()

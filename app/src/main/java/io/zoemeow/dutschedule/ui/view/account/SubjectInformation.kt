@@ -4,11 +4,14 @@ import android.app.Activity.RESULT_CANCELED
 import android.content.Context
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -57,23 +60,31 @@ fun AccountActivity.SubjectInformation(
         containerColor = containerColor,
         contentColor = contentColor,
         topBar = {
-            TopAppBar(
-                title = { Text(context.getString(R.string.account_subjectinfo_title)) },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent),
-                navigationIcon = {
-                    IconButton(
-                        onClick = {
-                            setResult(RESULT_CANCELED)
-                            finish()
-                        },
-                        content = {
-                            Icon(
-                                Icons.AutoMirrored.Filled.ArrowBack,
-                                context.getString(R.string.action_back),
-                                modifier = Modifier.size(25.dp)
+            Box(
+                contentAlignment = Alignment.BottomCenter,
+                content = {
+                    TopAppBar(
+                        title = { Text(context.getString(R.string.account_subjectinfo_title)) },
+                        colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent),
+                        navigationIcon = {
+                            IconButton(
+                                onClick = {
+                                    setResult(RESULT_CANCELED)
+                                    finish()
+                                },
+                                content = {
+                                    Icon(
+                                        Icons.AutoMirrored.Filled.ArrowBack,
+                                        context.getString(R.string.action_back),
+                                        modifier = Modifier.size(25.dp)
+                                    )
+                                }
                             )
                         }
                     )
+                    if (getMainViewModel().accountSession.subjectSchedule.processState.value == ProcessState.Running) {
+                        LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
+                    }
                 }
             )
         },
@@ -95,12 +106,9 @@ fun AccountActivity.SubjectInformation(
                     .fillMaxSize()
                     .padding(padding),
                 content = {
-                    if (getMainViewModel().accountSession.subjectSchedule.processState.value == ProcessState.Running) {
-                        LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
-                    }
                     Column(
                         modifier = Modifier
-                            .fillMaxSize()
+                            .fillMaxWidth()
                             .padding(horizontal = 15.dp)
                             .padding(vertical = 3.dp),
                         horizontalAlignment = Alignment.CenterHorizontally,
@@ -108,16 +116,15 @@ fun AccountActivity.SubjectInformation(
                             Text(getMainViewModel().appSettings.value.currentSchoolYear.toString())
                         }
                     )
-                    Column(
+                    LazyColumn(
                         modifier = Modifier
                             .fillMaxSize()
                             .padding(horizontal = 15.dp)
-                            .padding(bottom = 7.dp)
-                            .verticalScroll(rememberScrollState()),
+                            .padding(bottom = 7.dp),
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.Top,
                         content = {
-                            getMainViewModel().accountSession.subjectSchedule.data.forEach { item ->
+                            items(getMainViewModel().accountSession.subjectSchedule.data) { item ->
                                 SubjectInformation(
                                     modifier = Modifier.padding(bottom = 7.dp),
                                     item = item,

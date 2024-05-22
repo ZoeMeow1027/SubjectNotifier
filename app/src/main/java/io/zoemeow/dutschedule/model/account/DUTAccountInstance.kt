@@ -3,6 +3,7 @@ package io.zoemeow.dutschedule.model.account
 import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
+import com.google.gson.Gson
 import io.dutwrapper.dutwrapper.model.accounts.AccountInformation
 import io.dutwrapper.dutwrapper.model.accounts.SubjectFeeItem
 import io.dutwrapper.dutwrapper.model.accounts.SubjectScheduleItem
@@ -295,6 +296,7 @@ class DUTAccountInstance(
                 }
             },
             onCompleted = {
+                it?.printStackTrace()
                 subjectSchedule.processState.value = when {
                     (it != null) -> ProcessState.Failed
                     else -> ProcessState.Successful
@@ -338,6 +340,7 @@ class DUTAccountInstance(
                 }
             },
             onCompleted = {
+                it?.printStackTrace()
                 subjectFee.processState.value = when {
                     (it != null) -> ProcessState.Failed
                     else -> ProcessState.Successful
@@ -374,6 +377,7 @@ class DUTAccountInstance(
                 }
             },
             onCompleted = {
+                it?.printStackTrace()
                 accountInformation.processState.value = when {
                     (it != null) -> ProcessState.Failed
                     else -> ProcessState.Successful
@@ -410,6 +414,7 @@ class DUTAccountInstance(
                 }
             },
             onCompleted = {
+                it?.printStackTrace()
                 accountTrainingStatus.processState.value = when {
                     (it != null) -> ProcessState.Failed
                     else -> ProcessState.Successful

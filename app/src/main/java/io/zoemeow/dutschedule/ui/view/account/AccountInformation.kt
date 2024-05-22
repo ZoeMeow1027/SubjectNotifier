@@ -3,6 +3,7 @@ package io.zoemeow.dutschedule.ui.view.account
 import android.app.Activity.RESULT_OK
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -47,23 +48,31 @@ fun AccountActivity.AccountInformation(
         containerColor = containerColor,
         contentColor = contentColor,
         topBar = {
-            TopAppBar(
-                title = { Text("Basic Information") },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent),
-                navigationIcon = {
-                    IconButton(
-                        onClick = {
-                            setResult(RESULT_OK)
-                            finish()
-                        },
-                        content = {
-                            Icon(
-                                Icons.AutoMirrored.Filled.ArrowBack,
-                                "",
-                                modifier = Modifier.size(25.dp)
+            Box(
+                contentAlignment = Alignment.BottomCenter,
+                content = {
+                    TopAppBar(
+                        title = { Text("Basic Information") },
+                        colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent),
+                        navigationIcon = {
+                            IconButton(
+                                onClick = {
+                                    setResult(RESULT_OK)
+                                    finish()
+                                },
+                                content = {
+                                    Icon(
+                                        Icons.AutoMirrored.Filled.ArrowBack,
+                                        "",
+                                        modifier = Modifier.size(25.dp)
+                                    )
+                                }
                             )
                         }
                     )
+                    if (getMainViewModel().accountSession.accountInformation.processState.value == ProcessState.Running) {
+                        LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
+                    }
                 }
             )
         },
@@ -85,9 +94,6 @@ fun AccountActivity.AccountInformation(
                     .fillMaxSize()
                     .padding(padding),
                 content = {
-                    if (getMainViewModel().accountSession.accountInformation.processState.value == ProcessState.Running) {
-                        LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
-                    }
                     Column(
                         modifier = Modifier
                             .fillMaxSize()

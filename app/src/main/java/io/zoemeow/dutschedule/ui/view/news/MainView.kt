@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -25,6 +26,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SegmentedButton
 import androidx.compose.material3.SegmentedButtonDefaults
@@ -98,34 +100,45 @@ fun NewsMainView(
         containerColor = containerColor,
         contentColor = contentColor,
         topBar = {
-            TopAppBar(
-                title = { Text(text = context.getString(R.string.news_title)) },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent),
-                navigationIcon = {
-                    if (onBack != null) {
-                        IconButton(
-                            onClick = {
-                                onBack()
-                            },
-                            content = {
-                                Icon(
-                                    Icons.AutoMirrored.Filled.ArrowBack,
-                                    context.getString(R.string.action_back),
-                                    modifier = Modifier.size(25.dp)
+            Box(
+                contentAlignment = Alignment.BottomCenter,
+                content = {
+                    TopAppBar(
+                        title = { Text(text = context.getString(R.string.news_title)) },
+                        colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent),
+                        navigationIcon = {
+                            if (onBack != null) {
+                                IconButton(
+                                    onClick = {
+                                        onBack()
+                                    },
+                                    content = {
+                                        Icon(
+                                            Icons.AutoMirrored.Filled.ArrowBack,
+                                            context.getString(R.string.action_back),
+                                            modifier = Modifier.size(25.dp)
+                                        )
+                                    }
                                 )
                             }
-                        )
-                    }
-                },
-                actions = {
-                    IconButton(
-                        onClick = {
-                            searchRequested?.let { it() }
                         },
-                        content = {
-                            Icon(Icons.Default.Search, context.getString(R.string.action_search))
+                        actions = {
+                            IconButton(
+                                onClick = {
+                                    searchRequested?.let { it() }
+                                },
+                                content = {
+                                    Icon(Icons.Default.Search, context.getString(R.string.action_search))
+                                }
+                            )
                         }
                     )
+                    if (mainViewModel.newsInstance.newsGlobal.processState.value == ProcessState.Running && pagerState.currentPage == 0) {
+                        LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
+                    }
+                    if (mainViewModel.newsInstance.newsSubject.processState.value == ProcessState.Running && pagerState.currentPage == 1) {
+                        LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
+                    }
                 }
             )
         },

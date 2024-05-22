@@ -6,6 +6,7 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
@@ -123,64 +124,72 @@ fun AccountActivity.TrainingSubjectResult(
         containerColor = containerColor,
         contentColor = contentColor,
         topBar = {
-            TopAppBar(
-                title = {
-                    if (!searchEnabled.value) {
-                        Text("Your subject result list")
-                    } else {
-                        OutlinedTextField(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .focusRequester(focusRequester),
-                            value = searchQuery.value,
-                            onValueChange = {
-                                if (searchEnabled.value) {
-                                    searchQuery.value = it
-                                }
-                            },
-                            keyboardOptions = KeyboardOptions(
-                                imeAction = ImeAction.Done
-                            ),
-                            keyboardActions = KeyboardActions(
-                                onDone = {
-                                    clearAllFocusAndHideKeyboard()
-                                }
-                            ),
-                            trailingIcon = {
-                            },
-                        )
-                    }
-                },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent),
-                navigationIcon = {
-                    IconButton(
-                        onClick = {
-                            if (searchEnabled.value) {
-                                dismissSearchBar()
+            Box(
+                contentAlignment = Alignment.BottomCenter,
+                content = {
+                    TopAppBar(
+                        title = {
+                            if (!searchEnabled.value) {
+                                Text("Your subject result list")
                             } else {
-                                setResult(RESULT_CANCELED)
-                                finish()
+                                OutlinedTextField(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .focusRequester(focusRequester),
+                                    value = searchQuery.value,
+                                    onValueChange = {
+                                        if (searchEnabled.value) {
+                                            searchQuery.value = it
+                                        }
+                                    },
+                                    keyboardOptions = KeyboardOptions(
+                                        imeAction = ImeAction.Done
+                                    ),
+                                    keyboardActions = KeyboardActions(
+                                        onDone = {
+                                            clearAllFocusAndHideKeyboard()
+                                        }
+                                    ),
+                                    trailingIcon = {
+                                    },
+                                )
                             }
                         },
-                        content = {
-                            Icon(
-                                Icons.AutoMirrored.Filled.ArrowBack,
-                                context.getString(R.string.action_back),
-                                modifier = Modifier.size(25.dp)
+                        colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent),
+                        navigationIcon = {
+                            IconButton(
+                                onClick = {
+                                    if (searchEnabled.value) {
+                                        dismissSearchBar()
+                                    } else {
+                                        setResult(RESULT_CANCELED)
+                                        finish()
+                                    }
+                                },
+                                content = {
+                                    Icon(
+                                        Icons.AutoMirrored.Filled.ArrowBack,
+                                        context.getString(R.string.action_back),
+                                        modifier = Modifier.size(25.dp)
+                                    )
+                                }
                             )
+                        },
+                        actions = {
+                            if (!searchEnabled.value) {
+                                IconButton(
+                                    onClick = {
+                                        searchEnabled.value = true
+                                    },
+                                    content = {
+                                        Icon(Icons.Default.Search, context.getString(R.string.action_search))
+                                    }
+                                )
+                            }
                         }
                     )
-                },
-                actions = {
-                    if (!searchEnabled.value) {
-                        IconButton(
-                            onClick = {
-                                searchEnabled.value = true
-                            },
-                            content = {
-                                Icon(Icons.Default.Search, context.getString(R.string.action_search))
-                            }
-                        )
+                    if (getMainViewModel().accountSession.accountTrainingStatus.processState.value == ProcessState.Running) {
+                        LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
                     }
                 }
             )
@@ -206,9 +215,6 @@ fun AccountActivity.TrainingSubjectResult(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Top,
                 content = {
-                    if (getMainViewModel().accountSession.accountTrainingStatus.processState.value == ProcessState.Running) {
-                        LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
-                    }
                     Column(
                         modifier = Modifier
                             .fillMaxWidth()

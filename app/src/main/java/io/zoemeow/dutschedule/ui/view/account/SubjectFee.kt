@@ -3,11 +3,14 @@ package io.zoemeow.dutschedule.ui.view.account
 import android.app.Activity.RESULT_OK
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -48,23 +51,31 @@ fun AccountActivity.SubjectFee(
         containerColor = containerColor,
         contentColor = contentColor,
         topBar = {
-            TopAppBar(
-                title = { Text("Subject fee") },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent),
-                navigationIcon = {
-                    IconButton(
-                        onClick = {
-                            setResult(RESULT_OK)
-                            finish()
-                        },
-                        content = {
-                            Icon(
-                                Icons.AutoMirrored.Filled.ArrowBack,
-                                "",
-                                modifier = Modifier.size(25.dp)
+            Box(
+                contentAlignment = Alignment.BottomCenter,
+                content = {
+                    TopAppBar(
+                        title = { Text("Subject fee") },
+                        colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent),
+                        navigationIcon = {
+                            IconButton(
+                                onClick = {
+                                    setResult(RESULT_OK)
+                                    finish()
+                                },
+                                content = {
+                                    Icon(
+                                        Icons.AutoMirrored.Filled.ArrowBack,
+                                        "",
+                                        modifier = Modifier.size(25.dp)
+                                    )
+                                }
                             )
                         }
                     )
+                    if (getMainViewModel().accountSession.subjectFee.processState.value == ProcessState.Running) {
+                        LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
+                    }
                 }
             )
         },
@@ -86,12 +97,9 @@ fun AccountActivity.SubjectFee(
                     .fillMaxSize()
                     .padding(padding),
                 content = {
-                    if (getMainViewModel().accountSession.subjectFee.processState.value == ProcessState.Running) {
-                        LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
-                    }
                     Column(
                         modifier = Modifier
-                            .fillMaxSize()
+                            .fillMaxWidth()
                             .padding(horizontal = 15.dp)
                             .padding(vertical = 3.dp),
                         horizontalAlignment = Alignment.CenterHorizontally,
@@ -99,16 +107,15 @@ fun AccountActivity.SubjectFee(
                             Text(getMainViewModel().appSettings.value.currentSchoolYear.toString())
                         }
                     )
-                    Column(
+                    LazyColumn(
                         modifier = Modifier
                             .fillMaxSize()
                             .padding(horizontal = 15.dp)
-                            .padding(bottom = 7.dp)
-                            .verticalScroll(rememberScrollState()),
+                            .padding(bottom = 7.dp),
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.Top,
                         content = {
-                            getMainViewModel().accountSession.subjectFee.data.forEach { item ->
+                            items(getMainViewModel().accountSession.subjectFee.data) { item ->
                                 AccountSubjectFeeInformation(
                                     modifier = Modifier.padding(bottom = 10.dp),
                                     item = item,

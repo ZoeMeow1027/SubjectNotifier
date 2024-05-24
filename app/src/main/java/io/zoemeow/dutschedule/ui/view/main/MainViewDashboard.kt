@@ -252,8 +252,8 @@ fun MainActivity.MainViewDashboard(
                         content = {
                             DateAndTimeSummaryItem(
                                 padding = PaddingValues(bottom = 10.dp, start = 15.dp, end = 15.dp),
-                                isLoading = getMainViewModel().currentSchoolWeek.processState.value == ProcessState.Running,
-                                currentSchoolWeek = getMainViewModel().currentSchoolWeek.data.value,
+                                isLoading = getMainViewModel().currentSchoolYearWeek.processState.value == ProcessState.Running,
+                                currentSchoolWeek = getMainViewModel().currentSchoolYearWeek.data.value,
                                 opacity = getControlBackgroundAlpha()
                             )
                             LessonTodaySummaryItem(

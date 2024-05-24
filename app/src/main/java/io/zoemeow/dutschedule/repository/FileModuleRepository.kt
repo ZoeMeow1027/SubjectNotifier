@@ -226,7 +226,7 @@ class FileModuleRepository(
         file.writeText(Gson().toJson(data))
     }
 
-    fun getSchoolYearCache(): Map<String, String?>? {
+    fun getCurrentSchoolYearCache(): Map<String, String?>? {
         val file = File(PATH_SCHOOLYEAR_CACHE)
         try {
             file.bufferedReader().apply {
@@ -244,7 +244,7 @@ class FileModuleRepository(
         }
     }
 
-    fun saveSchoolYearCache(data: DutSchoolYearItem?, lastRequest: Long) {
+    fun saveCurrentSchoolYearCache(data: DutSchoolYearItem?, lastRequest: Long) {
         val file = File(PATH_SCHOOLYEAR_CACHE)
         val dataMap = mapOf("data" to Gson().toJson(data), "lastrequest" to lastRequest)
         file.writeText(Gson().toJson(dataMap))

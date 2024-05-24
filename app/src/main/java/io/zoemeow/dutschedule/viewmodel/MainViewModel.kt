@@ -11,7 +11,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import io.dutwrapper.dutwrapper.Utils
 import io.dutwrapper.dutwrapper.model.utils.DutSchoolYearItem
 import io.zoemeow.dutschedule.model.NotificationHistory
-import io.zoemeow.dutschedule.model.ProcessVariable
+import io.zoemeow.dutschedule.model.ProcessState
+import io.zoemeow.dutschedule.model.VariableState
 import io.zoemeow.dutschedule.model.account.AccountSession
 import io.zoemeow.dutschedule.model.account.DUTAccountInstance
 import io.zoemeow.dutschedule.model.news.DUTNewsInstance
@@ -62,34 +63,53 @@ class MainViewModel @Inject constructor(
         }
     )
 
-    // TODO: Change this to VariableState
-    /**
-     * Get current school week if possible.
-     */
-    val currentSchoolWeek = ProcessVariable<DutSchoolYearItem?>(
-        onRefresh = { _, _ ->
-            try {
-                return@ProcessVariable Utils.getCurrentSchoolWeek()
-            } catch (_: Exception) {
-                return@ProcessVariable null
-            }
-        },
-        onAfterRefresh = {
-            saveCurrentSchoolWeekCache()
-        }
+    val currentSchoolYearWeek = VariableState<DutSchoolYearItem?>(
+        data = mutableStateOf(null)
     )
 
-    private fun saveCurrentSchoolWeekCache() {
-        fileModuleRepository.saveSchoolYearCache(
-            data = currentSchoolWeek.data.value,
-            lastRequest = currentSchoolWeek.lastRequest.longValue
-        )
+    private fun refreshCurrentSchoolYearWeek() {
+        launchOnScope(
+            script = {
+                if (currentSchoolYearWeek.processState.value == ProcessState.Running) {
+                    return@launchOnScope
+                }
+                currentSchoolYearWeek.processState.value = ProcessState.Running
 
-        // Reload school year in Account
-        accountSession.setSchoolYear(appSettings.value.currentSchoolYear)
+                currentSchoolYearWeek.data.value = Utils.getCurrentSchoolWeek()
+            },
+            invokeOnCompleted = {
+                when {
+                    it != null -> {
+                        currentSchoolYearWeek.processState.value = ProcessState.Failed
+                    }
+                    else -> {
+                        currentSchoolYearWeek.processState.value = ProcessState.Successful
+                        saveCurrentSchoolYearWeekCache()
+                    }
+                }
+                currentSchoolYearWeek.lastRequest.longValue = System.currentTimeMillis()
+            }
+        )
+    }
+
+    private fun saveCurrentSchoolYearWeekCache() {
+        fileModuleRepository.saveCurrentSchoolYearCache(
+            data = currentSchoolYearWeek.data.value,
+            lastRequest = currentSchoolYearWeek.lastRequest.longValue
+        )
     }
 
     val notificationHistory = mutableStateListOf<NotificationHistory>()
+
+    private fun loadCacheNotification() {
+        launchOnScope(
+            script = {
+                notificationHistory.clear()
+                notificationHistory.addAll(fileModuleRepository.getNotificationHistory())
+            }
+        )
+    }
+
 
     /**
      * Save all current settings to file in storage.
@@ -115,15 +135,6 @@ class MainViewModel @Inject constructor(
         )
     }
 
-    fun reloadNotification() {
-        launchOnScope(
-            script = {
-                notificationHistory.clear()
-                notificationHistory.addAll(fileModuleRepository.getNotificationHistory())
-            }
-        )
-    }
-
     /**
      * Load all cache if possible for offline reading.
      */
@@ -142,14 +153,14 @@ class MainViewModel @Inject constructor(
                     accountSession.setSubjectScheduleCache(it)
                 }
                 // Get school year cache
-                fileModuleRepository.getSchoolYearCache().also {
+                fileModuleRepository.getCurrentSchoolYearCache().also {
                     if (it != null) {
                         try {
-                            currentSchoolWeek.data.value = Gson().fromJson(
+                            currentSchoolYearWeek.data.value = Gson().fromJson(
                                 it["data"] ?: "",
                                 (object : TypeToken<DutSchoolYearItem?>() {}.type)
                             )
-                            currentSchoolWeek.lastRequest.longValue = (it["lastrequest"] ?: "0").toLong()
+                            currentSchoolYearWeek.lastRequest.longValue = (it["lastrequest"] ?: "0").toLong()
                         } catch (_: Exception) { }
                     }
                 }
@@ -188,8 +199,8 @@ class MainViewModel @Inject constructor(
         runOnStartup(
             invokeOnCompleted = {
                 loadCache()
-                currentSchoolWeek.refreshData(force = true)
-                reloadNotification()
+                refreshCurrentSchoolYearWeek()
+                loadCacheNotification()
                 accountSession.reLogin(force = true)
                 launchOnScope(script = {
                     newsInstance.fetchGlobalNews(

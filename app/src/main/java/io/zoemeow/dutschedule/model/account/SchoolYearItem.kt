@@ -1,6 +1,7 @@
 package io.zoemeow.dutschedule.model.account
 
 import java.io.Serializable
+import java.util.Locale
 
 data class SchoolYearItem(
     // School year (ex. 21 is for 2021-2022).
@@ -20,6 +21,7 @@ data class SchoolYearItem(
 
     override fun toString(): String {
         return String.format(
+            Locale.ROOT,
             "School year: 20%2d-20%2d - Semester: %s",
             year,
             year + 1,

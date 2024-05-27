@@ -256,7 +256,7 @@ fun SettingsActivity.NewsNotificationSettings(
                 getMainViewModel().saveSettings(saveSettingsOnly = true)
                 showSnackBar(
                     text = context.getString(
-                        R.string.settings_newsnotify_newsfilter_notify_add,
+                        R.string.settings_newsnotify_newsfilter_notify_delete,
                         tempDeleteItem.value.subjectName,
                         tempDeleteItem.value.studentYearId,
                         ".Nh",
@@ -398,7 +398,7 @@ private fun MainView(
                                         1 -> context.getString(R.string.settings_newsnotify_fetchnewsinbackground_modifiedvalue_enabled1)
                                         else -> context.getString(
                                             R.string.settings_newsnotify_fetchnewsinbackground_modifiedvalue_enabled2,
-                                            fetchNewsInBackgroundDuration
+                                            durationTemp.intValue
                                         )
                                     }
                                 )
@@ -553,68 +553,69 @@ private fun MainView(
                     clicked = { },
                     opacity = opacity
                 )
-            }
-            SimpleCardItem(
-                padding = PaddingValues(horizontal = 20.4.dp, vertical = 5.dp),
-                title = context.getString(R.string.settings_newsnotify_newsfilter_list_title),
-                clicked = { },
-                opacity = opacity,
-                content = {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .wrapContentHeight()
-                            .padding(horizontal = 15.dp)
-                            .padding(bottom = 15.dp),
-                        verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.Start
-                    ) {
-                        if (subjectFilterList.size == 0) {
-                            Text(context.getString(R.string.settings_newsnotify_newsfilter_list_nofilters))
-                        }
-                        subjectFilterList.forEach { code ->
-                            OptionItem(
-                                modifier = Modifier.padding(vertical = 3.dp),
-                                modifierInside = Modifier,
-                                title = "${code.subjectName} [${code.studentYearId}.Nh${code.classId}]",
-                                onClick = { },
-                                trailingIcon = {
-                                    IconButton(
-                                        onClick = {
-                                            if (fetchNewsInBackgroundDuration > 0) {
-                                                onSubjectFilterDelete?.let { it(code) }
+            } else {
+                SimpleCardItem(
+                    padding = PaddingValues(horizontal = 20.4.dp, vertical = 5.dp),
+                    title = context.getString(R.string.settings_newsnotify_newsfilter_list_title),
+                    clicked = { },
+                    opacity = opacity,
+                    content = {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .wrapContentHeight()
+                                .padding(horizontal = 15.dp)
+                                .padding(bottom = 15.dp),
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.Start
+                        ) {
+                            if (subjectFilterList.size == 0) {
+                                Text(context.getString(R.string.settings_newsnotify_newsfilter_list_nofilters))
+                            }
+                            subjectFilterList.forEach { code ->
+                                OptionItem(
+                                    modifier = Modifier.padding(vertical = 3.dp),
+                                    modifierInside = Modifier,
+                                    title = "${code.subjectName} [${code.studentYearId}.Nh${code.classId}]",
+                                    onClick = { },
+                                    trailingIcon = {
+                                        IconButton(
+                                            onClick = {
+                                                if (fetchNewsInBackgroundDuration > 0) {
+                                                    onSubjectFilterDelete?.let { it(code) }
+                                                }
+                                            },
+                                            content = {
+                                                Icon(Icons.Default.Delete, context.getString(R.string.action_delete))
                                             }
-                                        },
-                                        content = {
-                                            Icon(Icons.Default.Delete, context.getString(R.string.action_delete))
-                                        }
-                                    )
-                                }
-                            )
+                                        )
+                                    }
+                                )
+                            }
                         }
                     }
-                }
-            )
-            OptionItem(
-                modifierInside = Modifier.padding(horizontal = 20.dp, vertical = 15.dp),
-                title = context.getString(R.string.settings_newsnotify_newsfilter_add),
-                leadingIcon = { Icon(Icons.Default.Add, context.getString(R.string.settings_newsnotify_newsfilter_add)) },
-                isEnabled = isNewsSubjectEnabled == 2,
-                onClick = {
-                    // Add a subject news filter
-                    onSubjectFilterAdd?.let { it() }
-                }
-            )
-            OptionItem(
-                modifierInside = Modifier.padding(horizontal = 20.dp, vertical = 15.dp),
-                title = context.getString(R.string.settings_newsnotify_newsfilter_deleteall),
-                leadingIcon = { Icon(Icons.Default.Delete, context.getString(R.string.settings_newsnotify_newsfilter_deleteall)) },
-                isEnabled = isNewsSubjectEnabled == 2,
-                onClick = {
-                    // Clear all subject news filter list
-                    onSubjectFilterClear?.let { it() }
-                }
-            )
+                )
+                OptionItem(
+                    modifierInside = Modifier.padding(horizontal = 20.dp, vertical = 15.dp),
+                    title = context.getString(R.string.settings_newsnotify_newsfilter_add),
+                    leadingIcon = { Icon(Icons.Default.Add, context.getString(R.string.settings_newsnotify_newsfilter_add)) },
+                    isEnabled = isNewsSubjectEnabled == 2,
+                    onClick = {
+                        // Add a subject news filter
+                        onSubjectFilterAdd?.let { it() }
+                    }
+                )
+                OptionItem(
+                    modifierInside = Modifier.padding(horizontal = 20.dp, vertical = 15.dp),
+                    title = context.getString(R.string.settings_newsnotify_newsfilter_deleteall),
+                    leadingIcon = { Icon(Icons.Default.Delete, context.getString(R.string.settings_newsnotify_newsfilter_deleteall)) },
+                    isEnabled = isNewsSubjectEnabled == 2,
+                    onClick = {
+                        // Clear all subject news filter list
+                        onSubjectFilterClear?.let { it() }
+                    }
+                )
+            }
         }
     }
 }

@@ -229,7 +229,7 @@
     <string name="account_dashboard_button_subjectinfo">Subject Information</string>
     <string name="account_dashboard_button_subjectfee">Subject Fee</string>
     <string name="account_dashboard_button_accountinfo">Account Information</string>
-    <string name="account_dashboard_button_accounttrainstats">Account Training Result</string>
+    <string name="account_dashboard_button_accounttrainstats">Training Result</string>
     <string name="account_dashboard_button_logout">Logout</string>
     <string name="account_logout_title">Logout</string>
     <string name="account_logout_description">Are you sure you want to logout?\n\nNote that:\n- You won\'t be received your any subject schedule anymore.\n- Your news filter settings won\'t be affected.</string>
@@ -244,6 +244,17 @@
     <string name="account_subjectinfo_data_credit">Credit(s)</string>
     <string name="account_subjectinfo_data_ishighquality">High Quality</string>
     <string name="account_subjectinfo_data_scoreformula">Final score formula</string>
+    <string name="account_subjectinfo_data_schedulestudy_title">Schedule Study</string>
+    <string name="account_subjectinfo_data_schedulestudy_dayofweek">Schedule in a week: %1$s</string>
+    <string name="account_subjectinfo_data_schedulestudy_weekrange">Week(s): %1$s</string>
+    <string name="account_subjectinfo_data_scheduleexam_title">Schedule Examination</string>
+    <string name="account_subjectinfo_data_scheduleexam_group">Group: %1$s %2$s</string>
+    <string name="account_subjectinfo_data_scheduleexam_groupglobal">(global group)</string>
+    <string name="account_subjectinfo_data_scheduleexam_date">Exam date: %1$s</string>
+    <string name="account_subjectinfo_data_scheduleexam_room">Room: %1$s</string>
+    <string name="account_subjectinfo_data_scheduleexam_noexamdate">Currently no examination schedule yet for this subject.</string>
+    <!-- -->
+    <string name="account_trainingstatus_title">Training Result</string>
     <!-- -->
     <string name="data_unknown">(unknown)</string>
 </resources>

@@ -54,53 +54,57 @@ fun AccountSubjectMoreInformation(
                 // Subject study
                 Spacer(modifier = Modifier.size(15.dp))
                 ContentInBoxWithBorder(
-                    title = "Schedule Study",
+                    title = context.getString(R.string.account_subjectinfo_data_schedulestudy_title),
                     content = {
-                        var schList = ""
-                        item?.let {
-                            schList = it.subjectStudy.scheduleList.joinToString(
-                                separator = "; ",
-                                transform = { item1 ->
-                                    "${CustomDateUtil.dayOfWeekInString(item1.dayOfWeek + 1)},${item1.lesson.start}-${item1.lesson.end},${item1.room}"
-                                }
-                            )
-                        }
-                        CustomText("Day of week: $schList")
-                        var schWeek = ""
-                        item?.let {
-                            schWeek = it.subjectStudy.weekList.joinToString(
-                                separator = "; ",
-                                transform = { item1 ->
-                                    "${item1.start}-${item1.end}"
-                                }
-                            )
-                        }
-                        CustomText("Week range: $schWeek")
+                        CustomText(context.getString(
+                            R.string.account_subjectinfo_data_schedulestudy_dayofweek,
+                            item?.let {
+                                it.subjectStudy.scheduleList.joinToString(
+                                    separator = "; ",
+                                    transform = { item1 ->
+                                        "${CustomDateUtil.dayOfWeekInString(item1.dayOfWeek + 1)},${item1.lesson.start}-${item1.lesson.end},${item1.room}"
+                                    }
+                                )
+                            } ?: ""
+                        ))
+                        CustomText(context.getString(
+                            R.string.account_subjectinfo_data_schedulestudy_weekrange,
+                            item?.let {
+                                it.subjectStudy.weekList.joinToString(
+                                    separator = "; ",
+                                    transform = { item1 ->
+                                        "${item1.start}-${item1.end}"
+                                    }
+                                )
+                            } ?: ""
+                        ))
                     },
                 )
                 // Subject examination
                 Spacer(modifier = Modifier.size(15.dp))
                 ContentInBoxWithBorder(
-                    title = "Schedule Examination",
+                    title = context.getString(R.string.account_subjectinfo_data_scheduleexam_title),
                     content = {
                         if (item != null) {
-                            CustomText(
-                                "Group: ${item.subjectExam.group}" +
-                                        if (item.subjectExam.isGlobal) " (global exam)" else ""
-                            )
-                            CustomText(
-                                "Date: ${
-                                    CustomDateUtil.dateUnixToString(
-                                        item.subjectExam.date,
-                                        "dd/MM/yyyy HH:mm",
-                                        "GMT+7"
-                                    )
-                                }"
-                            )
-                            CustomText("Room: ${item.subjectExam.room}")
-
+                            CustomText(context.getString(
+                                R.string.account_subjectinfo_data_scheduleexam_group,
+                                item.subjectExam.group,
+                                if (item.subjectExam.isGlobal) context.getString(R.string.account_subjectinfo_data_scheduleexam_groupglobal) else ""
+                            ))
+                            CustomText(context.getString(
+                                R.string.account_subjectinfo_data_scheduleexam_date,
+                                CustomDateUtil.dateUnixToString(
+                                    item.subjectExam.date,
+                                    "dd/MM/yyyy HH:mm",
+                                    "GMT+7"
+                                )
+                            ))
+                            CustomText(context.getString(
+                                R.string.account_subjectinfo_data_scheduleexam_room,
+                                item.subjectExam.room
+                            ))
                         } else {
-                            CustomText("Currently no examination schedule yet for this subject.")
+                            CustomText(context.getString(R.string.account_subjectinfo_data_scheduleexam_noexamdate))
                         }
                     }
                 )

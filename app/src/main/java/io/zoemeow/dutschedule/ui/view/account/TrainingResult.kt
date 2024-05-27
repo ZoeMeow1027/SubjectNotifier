@@ -60,7 +60,7 @@ fun AccountActivity.TrainingResult(
                 contentAlignment = Alignment.BottomCenter,
                 content = {
                     TopAppBar(
-                        title = { Text("Account Training Result") },
+                        title = { Text(context.getString(R.string.account_trainingstatus_title)) },
                         colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent),
                         navigationIcon = {
                             IconButton(

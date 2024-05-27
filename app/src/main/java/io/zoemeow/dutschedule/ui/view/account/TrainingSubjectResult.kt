@@ -93,7 +93,7 @@ fun AccountActivity.TrainingSubjectResult(
 
     fun subjectResultToMap(item: SubjectResult): Map<String, String?> {
         return mapOf(
-            "Subject Year" to (item.schoolYear ?: "(unknown)"),
+            "Subject Year" to "${item.schoolYear ?: "(unknown)"}${ if (item.isExtendedSemester) "in summer" else "" }",
             "Subject Code" to (item.id ?: "(unknown)"),
             "Credit" to item.credit.toString(),
             "Point formula" to (item.pointFormula ?: "(unknown)"),
@@ -291,21 +291,21 @@ fun AccountActivity.TrainingSubjectResult(
                                         backgroundColor = MaterialTheme.colorScheme.background.copy(alpha = getControlBackgroundAlpha()),
                                         text = "Index",
                                         textAlign = TextAlign.Center,
-                                        weight = 0.2f
+                                        weight = 0.17f
                                     )
                                     TableCell(
                                         modifier = Modifier.fillMaxHeight(),
                                         backgroundColor = MaterialTheme.colorScheme.background.copy(alpha = getControlBackgroundAlpha()),
                                         text = "Subject name",
                                         textAlign = TextAlign.Center,
-                                        weight = 0.6f
+                                        weight = 0.58f
                                     )
                                     TableCell(
                                         modifier = Modifier.fillMaxHeight(),
                                         backgroundColor = MaterialTheme.colorScheme.background.copy(alpha = getControlBackgroundAlpha()),
-                                        text = "Result (T4/C)",
+                                        text = "Result T10(T4)",
                                         textAlign = TextAlign.Center,
-                                        weight = 0.2f
+                                        weight = 0.25f
                                     )
                                 }
                             )
@@ -337,7 +337,7 @@ fun AccountActivity.TrainingSubjectResult(
                                                     backgroundColor = MaterialTheme.colorScheme.background.copy(alpha = getControlBackgroundAlpha()),
                                                     text = "${subjectItem.index}",
                                                     textAlign = TextAlign.Center,
-                                                    weight = 0.2f
+                                                    weight = 0.17f
                                                 )
                                                 TableCell(
                                                     modifier = Modifier.fillMaxHeight(),
@@ -345,18 +345,18 @@ fun AccountActivity.TrainingSubjectResult(
                                                     text = subjectItem.name,
                                                     contentAlign = Alignment.CenterStart,
                                                     textAlign = TextAlign.Start,
-                                                    weight = 0.6f
+                                                    weight = 0.58f
                                                 )
                                                 TableCell(
                                                     modifier = Modifier.fillMaxHeight(),
                                                     backgroundColor = MaterialTheme.colorScheme.background.copy(alpha = getControlBackgroundAlpha()),
                                                     text = String.format(
                                                         "%s (%s)",
-                                                        if (subjectItem.resultT4 != null) "${subjectItem.resultT4}" else "---",
-                                                        if (subjectItem.resultByCharacter != null) "${subjectItem.resultByCharacter}" else "-"
+                                                        subjectItem.resultT10?.toString() ?: "---",
+                                                        subjectItem.resultT4?.toString() ?: "---"
                                                     ),
                                                     textAlign = TextAlign.Center,
-                                                    weight = 0.2f
+                                                    weight = 0.25f
                                                 )
                                             }
                                         )

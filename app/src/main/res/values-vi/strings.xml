@@ -244,6 +244,17 @@
     <string name="account_subjectinfo_data_credit">Số tín chỉ</string>
     <string name="account_subjectinfo_data_ishighquality">Chất lượng cao</string>
     <string name="account_subjectinfo_data_scoreformula">Công thức điểm</string>
+    <string name="account_subjectinfo_data_schedulestudy_title">Lịch học</string>
+    <string name="account_subjectinfo_data_schedulestudy_dayofweek">Lịch học trong tuần: %1$s</string>
+    <string name="account_subjectinfo_data_schedulestudy_weekrange">Tuần: %1$s</string>
+    <string name="account_subjectinfo_data_scheduleexam_title">Lịch thi</string>
+    <string name="account_subjectinfo_data_scheduleexam_group">Nhóm: %1$s %2$s</string>
+    <string name="account_subjectinfo_data_scheduleexam_groupglobal">(thi chung)</string>
+    <string name="account_subjectinfo_data_scheduleexam_date">Ngày thi: %1$s</string>
+    <string name="account_subjectinfo_data_scheduleexam_room">Phòng: %1$s</string>
+    <string name="account_subjectinfo_data_scheduleexam_noexamdate">Hiện tại không có lịch thi cho môn học này.</string>
+    <!-- -->
+    <string name="account_trainingstatus_title">Kết quả rèn luyện</string>
     <!-- -->
     <string name="data_unknown">(không rõ)</string>
 </resources>

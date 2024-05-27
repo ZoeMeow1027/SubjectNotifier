@@ -101,7 +101,7 @@ fun AccountActivity.SubjectFee(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(horizontal = 15.dp)
-                            .padding(vertical = 3.dp),
+                            .padding(vertical = 2.dp),
                         horizontalAlignment = Alignment.CenterHorizontally,
                         content = {
                             Text(getMainViewModel().appSettings.value.currentSchoolYear.toString())

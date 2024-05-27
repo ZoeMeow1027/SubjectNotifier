@@ -185,9 +185,10 @@ fun AccountMainView(
                                     opacity = componentBackgroundAlpha,
                                     padding = PaddingValues(10.dp),
                                     isLoading = accInfo.processState.value == ProcessState.Running,
+                                    name = accInfo.data.value?.name,
                                     username = accInfo.data.value?.studentId,
                                     schoolClass = accInfo.data.value?.schoolClass,
-                                    trainingProgramPlan = accInfo.data.value?.trainingProgramPlan
+                                    specialization = accInfo.data.value?.specialization
                                 )
                             }
                             ButtonBase(

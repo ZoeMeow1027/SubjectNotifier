@@ -27,6 +27,7 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import java.math.BigInteger
 import java.security.MessageDigest
 import java.text.Normalizer
+import java.util.Locale
 
 fun Context.openLink(
     url: String,
@@ -49,6 +50,11 @@ fun Context.openLink(
             customTabsIntent.launchUrl(this, Uri.parse(url))
         }
     }
+}
+
+fun String.capitalized(): String {
+    return this.split(" ")
+        .joinToString(separator = " ") { it.lowercase().replaceFirstChar(Char::uppercase) }
 }
 
 @Composable

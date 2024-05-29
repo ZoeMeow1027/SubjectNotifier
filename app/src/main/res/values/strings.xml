@@ -4,12 +4,10 @@
     <string name="feature_not_ready">This function is in development. Check back soon.</string>
     <string name="permission_missing_all_file_access">You need to grant All files access in application permissions to use this option.</string>
     <string name="permission_missing_alarm_and_reminders">You need to enable Alarms &amp; Reminders in Android app settings to use this feature.</string>
-    <!-- Time date string -->
-    <string name="time_today">Today</string>
-    <string name="time_yesterday">Yesterday</string>
     <!-- Action string -->
     <string name="action_ok">OK</string>
     <string name="action_open">Open</string>
+    <string name="action_copy">Copy</string>
     <string name="action_save">Save</string>
     <string name="action_cancel">Cancel</string>
     <string name="action_back">Back</string>
@@ -26,6 +24,23 @@
     <!-- Tooltip string -->
     <string name="tooltip_selected">Selected</string>
     <string name="tooltip_info">Information</string>
+    <!-- Date string -->
+    <string name="date_dow_2">Monday</string>
+    <string name="date_dow_3">Tuesday</string>
+    <string name="date_dow_4">Wednesday</string>
+    <string name="date_dow_5">Thursday</string>
+    <string name="date_dow_6">Friday</string>
+    <string name="date_dow_7">Saturday</string>
+    <string name="date_dow_8">Sunday</string>
+    <string name="date_dow_2_short">Mon</string>
+    <string name="date_dow_3_short">Tue</string>
+    <string name="date_dow_4_short">Wed</string>
+    <string name="date_dow_5_short">Thu</string>
+    <string name="date_dow_6_short">Fri</string>
+    <string name="date_dow_7_short">Sat</string>
+    <string name="date_dow_8_short">Sun</string>
+    <string name="date_duration_today">Today</string>
+    <string name="date_duration_yesterday">Yesterday</string>
     <!-- Main activity string -->
     <string name="main_account_notloggedin">Not logged in</string>
     <string name="main_account_fetching">Fetching…</string>
@@ -221,7 +236,7 @@
     <string name="account_login_actionloginclearprevious">Clear previous login</string>
     <string name="account_login_actionforgot">Forgot your password?</string>
     <string name="account_login_processing">Processing…</string>
-    <string name="account_login_loggedinbefore">You have logged in before. Click \"Login\" button to try again. If you have changed your password before, click \"Clear previous login\".</string>
+    <string name="account_login_loggedinbefore">You have logged in before. Click \"Login\" button to try again. If you have changed your password or want to login another account, click \"Clear previous login\".</string>
     <string name="account_login_loggingin">Logging you in…</string>
     <string name="account_login_successful">Successfully logged in!</string>
     <string name="account_login_failed">We can\'t log in with your account! If you entered carefully and this issue is still persists, feel free to open issue on GitHub.</string>
@@ -235,8 +250,13 @@
     <string name="account_logout_description">Are you sure you want to logout?\n\nNote that:\n- You won\'t be received your any subject schedule anymore.\n- Your news filter settings won\'t be affected.</string>
     <string name="account_logout_action_logout">Logout</string>
     <string name="account_logout_loggedout">Successfully logout!</string>
+    <!-- -->
+    <string name="account_schoolyear_main">School year: 20%1$d-20%2$d - Semester %3$d %4$s</string>
+    <string name="account_schoolyear_summer">(summer semester)</string>
     <!-- Subject information activity string -->
     <string name="account_subjectinfo_title">Subject Information</string>
+    <string name="account_subjectinfo_summary_schinfo">%1$s\n\nSchedule:\n%2$s</string>
+    <string name="account_subjectinfo_summary_schitem">- %1$s - Lesson %2$d-%3$d - Room %4$s</string>
     <string name="account_subjectinfo_filter_added">Successfully added %1$s to your news filter list!</string>
     <string name="account_subjectinfo_filter_alreadyadded">This subject has already exist in your news filter list!</string>
     <string name="account_subjectinfo_addtofilter">Add to news filter</string>
@@ -253,8 +273,35 @@
     <string name="account_subjectinfo_data_scheduleexam_date">Exam date: %1$s</string>
     <string name="account_subjectinfo_data_scheduleexam_room">Room: %1$s</string>
     <string name="account_subjectinfo_data_scheduleexam_noexamdate">Currently no examination schedule yet for this subject.</string>
+    <!-- Subject fee information activity string -->
+    <string name="account_subjectfee_title">Subject Fee</string>
+    <string name="account_subjectfee_summary_1credit">%1$d credit - %2$.0f%3$s</string>
+    <string name="account_subjectfee_summary_manycredit">%1$d credits - %2$.0f%3$s</string>
+    <string name="account_subjectfee_summary_main">Credit(s): %1$d - Total price: %2$.0f VND</string>
+    <string name="account_subjectfee_status_completed">Completed</string>
+    <string name="account_subjectfee_status_notdoneyet">Not completed yet</string>
+    <!-- Account Information activity string -->
+    <string name="account_accinfo_title">Account Information</string>
+    <string name="account_accinfo_description">To copy, click and hold a text field, select \"Select all\" and click \"Copy\".\nIf you want to edit any information below, you need do it in DUT Information System web.</string>
+    <string name="account_accinfo_item_name">Name</string>
+    <string name="account_accinfo_item_dateofbirth">Date of birth</string>
+    <string name="account_accinfo_item_placeofbirth">Place of birth</string>
+    <string name="account_accinfo_item_gender">Gender</string>
+    <string name="account_accinfo_item_nationalcardid">National card ID</string>
+    <string name="account_accinfo_item_nationalcardplaceanddate">National card issue place and date</string>
+    <string name="account_accinfo_item_citizencardid">Citizen card ID</string>
+    <string name="account_accinfo_item_citizencarddate">Citizen issue date</string>
+    <string name="account_accinfo_item_bankcardid">Bank card ID</string>
+    <string name="account_accinfo_item_personalemail">Personal email</string>
+    <string name="account_accinfo_item_phonenumber">Phone number</string>
+    <string name="account_accinfo_item_class">Class</string>
+    <string name="account_accinfo_item_specialization">Specialization</string>
+    <string name="account_accinfo_item_trainingprogramplan">Training program plan</string>
+    <string name="account_accinfo_item_schoolemail">School email</string>
+    <string name="account_accinfo_snackbar_copied">Copied to clipboard!</string>
     <!-- -->
     <string name="account_trainingstatus_title">Training Result</string>
     <!-- -->
     <string name="data_unknown">(unknown)</string>
+
 </resources>

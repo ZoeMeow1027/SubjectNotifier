@@ -9,13 +9,15 @@ import androidx.compose.ui.Modifier
 fun OutlinedTextBox(
     modifier: Modifier = Modifier,
     title: String,
-    value: String? = null
+    value: String? = null,
+    trailingIcon: @Composable (() -> Unit)? = null
 ) {
     OutlinedTextField(
         modifier = modifier,
         value = if (value.isNullOrEmpty()) "(no information)" else value,
         readOnly = true,
         onValueChange = { },
+        trailingIcon = trailingIcon,
         label = { Text(title) }
     )
 }

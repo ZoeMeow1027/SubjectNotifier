@@ -11,8 +11,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import io.dutwrapper.dutwrapper.model.accounts.SubjectScheduleItem
+import io.zoemeow.dutschedule.R
 import io.zoemeow.dutschedule.utils.CustomDateUtil
 
 @Composable
@@ -22,6 +24,7 @@ fun SubjectInformation(
     onClick: (() -> Unit)? = null,
     opacity: Float = 1f
 ) {
+    val context = LocalContext.current
     Surface(
         modifier = modifier
             .fillMaxWidth()
@@ -41,12 +44,22 @@ fun SubjectInformation(
                         style = MaterialTheme.typography.titleLarge,
                     )
                     Text(
-                        text = "${item.lecturer}\n\nSchedule:\n${item.subjectStudy.scheduleList.joinToString(
-                            separator = "\n",
-                            transform = { schItem ->
-                                "- ${CustomDateUtil.dayOfWeekInString(schItem.dayOfWeek, true)} - Lesson ${schItem.lesson.start}-${schItem.lesson.end} - Room ${schItem.room}"
-                            }
-                        )}",
+                        text = context.getString(
+                            R.string.account_subjectinfo_summary_schinfo,
+                            item.lecturer,
+                            item.subjectStudy.scheduleList.joinToString(
+                                separator = "\n",
+                                transform = { schItem ->
+                                    context.getString(
+                                        R.string.account_subjectinfo_summary_schitem,
+                                        CustomDateUtil.dayOfWeekInString(context, schItem.dayOfWeek, true),
+                                        schItem.lesson.start,
+                                        schItem.lesson.end,
+                                        schItem.room
+                                    )
+                                }
+                            )
+                        ),
                         style = MaterialTheme.typography.bodyMedium
                     )
                 }

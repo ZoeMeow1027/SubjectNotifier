@@ -17,6 +17,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import io.dutwrapper.dutwrapper.model.accounts.SubjectScheduleItem
 import io.zoemeow.dutschedule.R
@@ -62,7 +63,7 @@ fun AccountSubjectMoreInformation(
                                 it.subjectStudy.scheduleList.joinToString(
                                     separator = "; ",
                                     transform = { item1 ->
-                                        "${CustomDateUtil.dayOfWeekInString(item1.dayOfWeek + 1)},${item1.lesson.start}-${item1.lesson.end},${item1.room}"
+                                        "${CustomDateUtil.dayOfWeekInString(context, item1.dayOfWeek + 1)},${item1.lesson.start}-${item1.lesson.end},${item1.room}"
                                     }
                                 )
                             } ?: ""

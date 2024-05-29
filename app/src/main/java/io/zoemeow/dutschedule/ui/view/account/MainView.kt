@@ -132,7 +132,10 @@ fun AccountMainView(
                             customTab = mainViewModel.appSettings.value.openLinkInsideApp
                         )
                     },
-                    onClearLogin = { },
+                    onClearLogin = {
+                        // Just logout and this will clear all this session.
+                        mainViewModel.accountSession.logout()
+                    },
                     onSubmit = { username, password, rememberLogin ->
                         run {
                             CoroutineScope(Dispatchers.IO).launch {
@@ -142,33 +145,61 @@ fun AccountMainView(
                                     true, null, null
                                 ) }
                             }
-                            mainViewModel.accountSession.login(
-                                accountAuth = AccountAuth(
-                                    username = username,
-                                    password = password,
-                                    rememberLogin = rememberLogin
-                                ),
-                                onCompleted = {loggedIn ->
-                                    when (loggedIn) {
-                                        true -> {
-                                            loginDialogEnabled.value = true
-                                            loginDialogVisible.value = false
-                                            mainViewModel.accountSession.reLogin()
-                                            onShowSnackBar?.let { it(
-                                                context.getString(R.string.account_login_successful),
-                                                true, null, null
-                                            ) }
-                                        }
-                                        false -> {
-                                            loginDialogEnabled.value = true
-                                            onShowSnackBar?.let { it(
-                                                context.getString(R.string.account_login_failed),
-                                                true, null, null
-                                            ) }
+                            // If previous login has failed, second chance to login
+                            if (state == ProcessState.Failed) {
+                                mainViewModel.accountSession.login(
+                                    onCompleted = { loggedIn ->
+                                        when (loggedIn) {
+                                            true -> {
+                                                loginDialogEnabled.value = true
+                                                loginDialogVisible.value = false
+                                                mainViewModel.accountSession.reLogin()
+                                                onShowSnackBar?.let { it(
+                                                    context.getString(R.string.account_login_successful),
+                                                    true, null, null
+                                                ) }
+                                            }
+                                            false -> {
+                                                loginDialogEnabled.value = true
+                                                onShowSnackBar?.let { it(
+                                                    context.getString(R.string.account_login_failed),
+                                                    true, null, null
+                                                ) }
+                                            }
                                         }
                                     }
-                                }
-                            )
+                                )
+                            }
+                            // New login
+                            else {
+                                mainViewModel.accountSession.login(
+                                    accountAuth = AccountAuth(
+                                        username = username,
+                                        password = password,
+                                        rememberLogin = rememberLogin
+                                    ),
+                                    onCompleted = { loggedIn ->
+                                        when (loggedIn) {
+                                            true -> {
+                                                loginDialogEnabled.value = true
+                                                loginDialogVisible.value = false
+                                                mainViewModel.accountSession.reLogin()
+                                                onShowSnackBar?.let { it(
+                                                    context.getString(R.string.account_login_successful),
+                                                    true, null, null
+                                                ) }
+                                            }
+                                            false -> {
+                                                loginDialogEnabled.value = true
+                                                onShowSnackBar?.let { it(
+                                                    context.getString(R.string.account_login_failed),
+                                                    true, null, null
+                                                ) }
+                                            }
+                                        }
+                                    }
+                                )
+                            }
                         }
                     }
                 )

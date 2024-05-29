@@ -1,6 +1,7 @@
 package io.zoemeow.dutschedule.ui.view.account
 
 import android.app.Activity.RESULT_OK
+import android.content.Context
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -34,6 +35,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import io.zoemeow.dutschedule.R
 import io.zoemeow.dutschedule.activity.AccountActivity
 import io.zoemeow.dutschedule.model.ProcessState
 import io.zoemeow.dutschedule.ui.component.account.AccountSubjectFeeInformation
@@ -41,6 +43,7 @@ import io.zoemeow.dutschedule.ui.component.account.AccountSubjectFeeInformation
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AccountActivity.SubjectFee(
+    context: Context,
     snackBarHostState: SnackbarHostState,
     containerColor: Color,
     contentColor: Color
@@ -55,7 +58,7 @@ fun AccountActivity.SubjectFee(
                 contentAlignment = Alignment.BottomCenter,
                 content = {
                     TopAppBar(
-                        title = { Text("Subject fee") },
+                        title = { Text(context.getString(R.string.account_subjectfee_title)) },
                         colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent),
                         navigationIcon = {
                             IconButton(
@@ -66,7 +69,7 @@ fun AccountActivity.SubjectFee(
                                 content = {
                                     Icon(
                                         Icons.AutoMirrored.Filled.ArrowBack,
-                                        "",
+                                        context.getString(R.string.action_back),
                                         modifier = Modifier.size(25.dp)
                                     )
                                 }
@@ -86,7 +89,7 @@ fun AccountActivity.SubjectFee(
                         getMainViewModel().accountSession.fetchSubjectFee(force = true)
                     },
                     content = {
-                        Icon(Icons.Default.Refresh, "Refresh")
+                        Icon(Icons.Default.Refresh, context.getString(R.string.action_refresh))
                     }
                 )
             }
@@ -104,7 +107,7 @@ fun AccountActivity.SubjectFee(
                             .padding(vertical = 2.dp),
                         horizontalAlignment = Alignment.CenterHorizontally,
                         content = {
-                            Text(getMainViewModel().appSettings.value.currentSchoolYear.toString())
+                            Text(getMainViewModel().appSettings.value.currentSchoolYear.composeToString())
                         }
                     )
                     LazyColumn(
@@ -115,6 +118,15 @@ fun AccountActivity.SubjectFee(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.Top,
                         content = {
+                            item {
+                                if (getMainViewModel().accountSession.subjectFee.data.size > 0) {
+                                    Text(context.getString(
+                                        R.string.account_subjectfee_summary_main,
+                                        getMainViewModel().accountSession.subjectFee.data.sumOf { it.credit },
+                                        getMainViewModel().accountSession.subjectFee.data.sumOf { it.price }
+                                    ))
+                                }
+                            }
                             items(getMainViewModel().accountSession.subjectFee.data) { item ->
                                 AccountSubjectFeeInformation(
                                     modifier = Modifier.padding(bottom = 10.dp),

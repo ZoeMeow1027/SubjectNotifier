@@ -45,6 +45,7 @@ class AccountActivity: BaseActivity() {
             }
             INTENT_SUBJECTFEE -> {
                 SubjectFee(
+                    context = context,
                     snackBarHostState = snackBarHostState,
                     containerColor = containerColor,
                     contentColor = contentColor
@@ -52,6 +53,7 @@ class AccountActivity: BaseActivity() {
             }
             INTENT_ACCOUNTINFORMATION -> {
                 AccountInformation(
+                    context = context,
                     snackBarHostState = snackBarHostState,
                     containerColor = containerColor,
                     contentColor = contentColor

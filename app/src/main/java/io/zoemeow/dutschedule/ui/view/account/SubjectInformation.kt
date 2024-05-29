@@ -113,7 +113,7 @@ fun AccountActivity.SubjectInformation(
                             .padding(vertical = 2.dp),
                         horizontalAlignment = Alignment.CenterHorizontally,
                         content = {
-                            Text(getMainViewModel().appSettings.value.currentSchoolYear.toString())
+                            Text(getMainViewModel().appSettings.value.currentSchoolYear.composeToString())
                         }
                     )
                     LazyColumn(

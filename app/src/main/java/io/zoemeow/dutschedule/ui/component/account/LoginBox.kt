@@ -234,7 +234,7 @@ private fun LoginBoxPreview() {
         context = LocalContext.current,
         isProcessing = false,
         isControlEnabled = true,
-        isLoggedInBefore = false,
+        isLoggedInBefore = true,
         onSubmit = { _, _, _ -> }
     )
 }

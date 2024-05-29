@@ -4,12 +4,10 @@
     <string name="feature_not_ready">Tính năng này đang được phát triển. Hãy kiểm tra lại sau.</string>
     <string name="permission_missing_all_file_access">Bạn cần phải cho phép Quyền truy cập mọi tệp trong quyền hạn ứng dụng để sử dụng tùy chọn này.</string>
     <string name="permission_missing_alarm_and_reminders">Bạn cần phải bật quyền Chuông báo và lời nhắc trong cài đặt Android để sử dụng tính năng này.</string>
-    <!-- Time date string -->
-    <string name="time_today">Hôm nay</string>
-    <string name="time_yesterday">Hôm qua</string>
     <!-- Action string -->
     <string name="action_ok">OK</string>
     <string name="action_open">Mở</string>
+    <string name="action_copy">Sao chép</string>
     <string name="action_save">Lưu</string>
     <string name="action_cancel">Huỷ bỏ</string>
     <string name="action_back">Quay lại</string>
@@ -26,6 +24,23 @@
     <!-- Tooltip string -->
     <string name="tooltip_selected">Đã chọn</string>
     <string name="tooltip_info">Thông tin</string>
+    <!-- Date string -->
+    <string name="date_dow_2">Thứ hai</string>
+    <string name="date_dow_3">Thứ ba</string>
+    <string name="date_dow_4">Thứ tư</string>
+    <string name="date_dow_5">Thứ năm</string>
+    <string name="date_dow_6">Thứ sáu</string>
+    <string name="date_dow_7">Thứ bảy</string>
+    <string name="date_dow_8">Chủ nhật</string>
+    <string name="date_dow_2_short">T2</string>
+    <string name="date_dow_3_short">T3</string>
+    <string name="date_dow_4_short">T4</string>
+    <string name="date_dow_5_short">T5</string>
+    <string name="date_dow_6_short">T6</string>
+    <string name="date_dow_7_short">T7</string>
+    <string name="date_dow_8_short">CN</string>
+    <string name="date_duration_today">Hôm nay</string>
+    <string name="date_duration_yesterday">Hôm qua</string>
     <!-- Main activity string -->
     <string name="main_account_notloggedin">Chưa đăng nhập</string>
     <string name="main_account_fetching">Đang tải…</string>
@@ -221,7 +236,7 @@
     <string name="account_login_actionloginclearprevious">Xóa đăng nhập cũ</string>
     <string name="account_login_actionforgot">Bạn đã quên mật khẩu?</string>
     <string name="account_login_processing">Đang trong tiến trình…</string>
-    <string name="account_login_loggedinbefore">Bạn đã đăng nhập trước đây. Nhấn vào nút \"Đăng nhập\" để thử lại. Nếu bạn đã thay đổi mật khẩu trước đây, nhấp vào \"Xóa đăng nhập cũ\".</string>
+    <string name="account_login_loggedinbefore">Bạn đã đăng nhập trước đây. Nhấn vào nút \"Đăng nhập\" để thử lại. Nếu bạn đã thay đổi mật khẩu hoặc muốn đăng nhập tài khoản khác, nhấp vào \"Xóa đăng nhập cũ\".</string>
     <string name="account_login_loggingin">Đang đăng nhâp cho bạn…</string>
     <string name="account_login_successful">Đã đăng nhập thành công!</string>
     <string name="account_login_failed">Chúng tôi không thể đăng nhập với tài khoản của bạn! Nếu bạn đã nhập đúng và sự cố này vẫn tồn tại, hãy mở một issue mới trên GitHub.</string>
@@ -235,8 +250,13 @@
     <string name="account_logout_description">Bạn có chắc chắn muốn đăng xuất?\n\Lưu ý rằng:\n- Bạn sẽ không thể nhận bất kì thông báo liên quan đến lịch học của bạn.\n- Bộ lọc tin tức của bạn sẽ không bị ảnh hưởng.</string>
     <string name="account_logout_action_logout">Đăng xuất</string>
     <string name="account_logout_loggedout">Đã đăng xuất!</string>
+    <!-- -->
+    <string name="account_schoolyear_main">Năm học: 20%1$d-20%2$d - Học kỳ %3$d %4$s</string>
+    <string name="account_schoolyear_summer">(học kỳ hè)</string>
     <!-- Subject information activity string -->
     <string name="account_subjectinfo_title">Thông tin học phần</string>
+    <string name="account_subjectinfo_summary_schinfo">%1$s\n\nLịch học:\n%2$s</string>
+    <string name="account_subjectinfo_summary_schitem">- %1$s - Tiết %2$d-%3$d - Phòng %4$s</string>
     <string name="account_subjectinfo_filter_added">Đã thêm %1$s vào danh sách bộ lọc của bạn!</string>
     <string name="account_subjectinfo_filter_alreadyadded">Học phần này đã có trong danh sách bộ lọc của bạn!</string>
     <string name="account_subjectinfo_addtofilter">Thêm vào bộ lọc tin tức</string>
@@ -253,6 +273,32 @@
     <string name="account_subjectinfo_data_scheduleexam_date">Ngày thi: %1$s</string>
     <string name="account_subjectinfo_data_scheduleexam_room">Phòng: %1$s</string>
     <string name="account_subjectinfo_data_scheduleexam_noexamdate">Hiện tại không có lịch thi cho môn học này.</string>
+    <!-- Subject fee information activity string -->
+    <string name="account_subjectfee_title">Học phí</string>
+    <string name="account_subjectfee_summary_1credit">%1$d tín chỉ - %2$.0f%3$s</string>
+    <string name="account_subjectfee_summary_manycredit">%1$d tín chỉ - %2$.0f%3$s</string>
+    <string name="account_subjectfee_summary_main">Số tín chỉ: %1$d - Số tiền: %2$.0f VND</string>
+    <string name="account_subjectfee_status_completed">Đã thanh toán</string>
+    <string name="account_subjectfee_status_notdoneyet">Chưa thanh toán</string>
+    <!-- Account Information activity string -->
+    <string name="account_accinfo_title">Thông tin tài khoản</string>
+    <string name="account_accinfo_description">Để sao chép, hãy nhấn và giữ trường văn bản, chọn \"Chọn tất cả\" và nhấn \"Sao chép\".\nNếu bạn muốn thay đổi thông tin nào đó, bạn cần thay đổi nó trong trang web sinh viên của trường.</string>
+    <string name="account_accinfo_item_name">Tên</string>
+    <string name="account_accinfo_item_dateofbirth">Ngày sinh</string>
+    <string name="account_accinfo_item_placeofbirth">Nơi sinh</string>
+    <string name="account_accinfo_item_gender">Giới tính</string>
+    <string name="account_accinfo_item_nationalcardid">Số chứng minh nhân dân</string>
+    <string name="account_accinfo_item_nationalcardplaceanddate">Nơi cấp và ngày cấp của CMND</string>
+    <string name="account_accinfo_item_citizencardid">Số căn cước công dân</string>
+    <string name="account_accinfo_item_citizencarddate">Ngày cấp CCCD</string>
+    <string name="account_accinfo_item_bankcardid">Số thẻ ngân hàng</string>
+    <string name="account_accinfo_item_personalemail">Email cá nhân</string>
+    <string name="account_accinfo_item_phonenumber">Số điện thoại</string>
+    <string name="account_accinfo_item_class">Lớp</string>
+    <string name="account_accinfo_item_specialization">Chuyên ngành</string>
+    <string name="account_accinfo_item_trainingprogramplan">Chương trình đào tạo</string>
+    <string name="account_accinfo_item_schoolemail">Email trường cấp</string>
+    <string name="account_accinfo_snackbar_copied">Đã sao chép vào khay nhớ tạm!</string>
     <!-- -->
     <string name="account_trainingstatus_title">Kết quả rèn luyện</string>
     <!-- -->

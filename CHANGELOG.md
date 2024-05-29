@@ -13,7 +13,7 @@
 
 - Changes and fixes
   - Fixed [#24](https://github.com/ZoeMeow1027/DutSchedule/issues/24).
-  - Add a option to get current student year from Internet.
+  - Add a option to get current school year from Internet.
     - To access that, please go to `Settings` -> `Experiment Settings` -> `Current School Year`.
   - Some settings won't load after update. You might need to reconfig them in settings. I'm sorry about that.
   - Login screen will let you relogin if previous attempt was failed.

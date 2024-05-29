@@ -1,5 +1,7 @@
 package io.zoemeow.dutschedule.ui.view.news
 
+import android.app.Activity.RESULT_CANCELED
+import android.app.Activity.RESULT_OK
 import android.content.Context
 import android.content.Intent
 import androidx.activity.ComponentActivity
@@ -39,7 +41,9 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.gson.Gson
 import io.dutwrapper.dutwrapper.model.enums.NewsType
+import io.zoemeow.dutschedule.R
 import io.zoemeow.dutschedule.activity.NewsActivity
+import io.zoemeow.dutschedule.activity.SettingsActivity
 import io.zoemeow.dutschedule.model.ProcessState
 import io.zoemeow.dutschedule.ui.component.news.NewsSearchOptionAndHistory
 import io.zoemeow.dutschedule.ui.component.news.NewsSearchResult
@@ -86,13 +90,16 @@ fun NewsActivity.NewsSearch(
                                 }
                             },
                         placeholder = {
-                            Text("Type here to search")
+                            Text(context.getString(R.string.news_search_searchbox_placeholder))
                         },
                         trailingIcon = {
                             if (isSearchFocused.targetState) {
                                 IconButton(
                                     content = {
-                                        Icon(Icons.Default.Clear, "")
+                                        Icon(
+                                            Icons.Default.Clear,
+                                            context.getString(R.string.action_clear)
+                                        )
                                     },
                                     onClick = {
                                         newsSearchViewModel.query.value = ""
@@ -120,14 +127,14 @@ fun NewsActivity.NewsSearch(
                             if (isSearchFocused.targetState) {
                                 dismissFocus()
                             } else {
-                                setResult(ComponentActivity.RESULT_OK)
+                                setResult(RESULT_CANCELED)
                                 finish()
                             }
                         },
                         content = {
                             Icon(
                                 Icons.AutoMirrored.Filled.ArrowBack,
-                                "",
+                                context.getString(R.string.action_back),
                                 modifier = Modifier.size(25.dp)
                             )
                         }
@@ -142,7 +149,7 @@ fun NewsActivity.NewsSearch(
                         },
                         enabled = newsSearchViewModel.progress.value != ProcessState.Running,
                         content = {
-                            Icon(Icons.Default.Search, "Search/Refresh search")
+                            Icon(Icons.Default.Search, context.getString(R.string.action_search))
                         }
                     )
                 }
@@ -150,6 +157,7 @@ fun NewsActivity.NewsSearch(
         },
         content = { padding ->
             NewsSearchResult(
+                context = context,
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(padding)
@@ -168,13 +176,14 @@ fun NewsActivity.NewsSearch(
                             context,
                             NewsActivity::class.java
                         ).also {
-                            it.action = "activity_detail"
-                            it.putExtra("type", if (newsSearchViewModel.type.value == NewsType.Subject) "news_subject" else "news_global")
+                            it.action = NewsActivity.INTENT_NEWSDETAILACTIVITY
+                            it.putExtra("type", if (newsSearchViewModel.type.value == NewsType.Subject) NewsActivity.NEWSTYPE_NEWSSUBJECT else NewsActivity.NEWSTYPE_NEWSGLOBAL)
                             it.putExtra("data", Gson().toJson(item))
                         })
                 }
             )
             NewsSearchOptionAndHistory(
+                context = context,
                 modifier = Modifier
                     .padding(padding)
                     .padding(horizontal = 10.dp)

@@ -14,6 +14,14 @@ import io.zoemeow.dutschedule.ui.view.account.TrainingSubjectResult
 
 @AndroidEntryPoint
 class AccountActivity: BaseActivity() {
+    companion object {
+        const val INTENT_SUBJECTINFORMATION = "subject_information"
+        const val INTENT_SUBJECTFEE = "subject_fee"
+        const val INTENT_ACCOUNTINFORMATION = "acc_info"
+        const val INTENT_ACCOUNTTRAININGSTATUS = "acc_training_result"
+        const val INTENT_ACCOUNTSUBJECTRESULT = "acc_training_result_subjectresult"
+    }
+
     @Composable
     override fun OnPreloadOnce() {
 
@@ -27,28 +35,31 @@ class AccountActivity: BaseActivity() {
         contentColor: Color
     ) {
         when (intent.action) {
-            "subject_information" -> {
+            INTENT_SUBJECTINFORMATION -> {
                 SubjectInformation(
+                    context = context,
                     snackBarHostState = snackBarHostState,
                     containerColor = containerColor,
                     contentColor = contentColor
                 )
             }
-            "subject_fee" -> {
+            INTENT_SUBJECTFEE -> {
                 SubjectFee(
+                    context = context,
                     snackBarHostState = snackBarHostState,
                     containerColor = containerColor,
                     contentColor = contentColor
                 )
             }
-            "acc_info" -> {
+            INTENT_ACCOUNTINFORMATION -> {
                 AccountInformation(
+                    context = context,
                     snackBarHostState = snackBarHostState,
                     containerColor = containerColor,
                     contentColor = contentColor
                 )
             }
-            "acc_training_result" -> {
+            INTENT_ACCOUNTTRAININGSTATUS -> {
                 TrainingResult(
                     context = context,
                     snackBarHostState = snackBarHostState,
@@ -56,8 +67,9 @@ class AccountActivity: BaseActivity() {
                     contentColor = contentColor
                 )
             }
-            "acc_training_result_subjectresult" -> {
+            INTENT_ACCOUNTSUBJECTRESULT -> {
                 TrainingSubjectResult(
+                    context = context,
                     snackBarHostState = snackBarHostState,
                     containerColor = containerColor,
                     contentColor = contentColor

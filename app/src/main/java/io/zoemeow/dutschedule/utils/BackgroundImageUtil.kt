@@ -5,6 +5,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
+import android.os.Build
 import androidx.core.graphics.drawable.toBitmap
 import java.io.File
 
@@ -12,6 +13,10 @@ class BackgroundImageUtil {
     companion object {
         fun getCurrentWallpaperBackground(context: Context): Bitmap? {
             return try {
+                // WallpaperManager API isn't working on Android 13 because Google has deprecated. So, return null instead.
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    return null
+                }
                 val wallpaperManager = WallpaperManager.getInstance(context)
                 wallpaperManager.drawable?.toBitmap()
             } catch (_: Exception) {
@@ -38,6 +43,18 @@ class BackgroundImageUtil {
                 }
 
                 return true
+            } catch (_: Exception) {
+                return false
+            }
+        }
+
+        fun deleteImageFromAppData(context: Context): Boolean {
+            try {
+                val file = File("${context.filesDir.path}/image/background.jpg")
+                run {
+                    File("${context.filesDir.path}/image").mkdir()
+                    return file.delete()
+                }
             } catch (_: Exception) {
                 return false
             }

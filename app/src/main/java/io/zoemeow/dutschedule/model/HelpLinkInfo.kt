@@ -1,4 +1,4 @@
-package io.zoemeow.dutschedule.model.helpandexternallink
+package io.zoemeow.dutschedule.model
 
 data class HelpLinkInfo(
     val title: String,

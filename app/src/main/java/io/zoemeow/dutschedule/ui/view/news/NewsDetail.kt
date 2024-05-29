@@ -1,5 +1,7 @@
 package io.zoemeow.dutschedule.ui.view.news
 
+import android.app.Activity.RESULT_OK
+import android.content.Context
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -27,12 +29,14 @@ import com.google.gson.reflect.TypeToken
 import io.dutwrapper.dutwrapper.model.enums.NewsType
 import io.dutwrapper.dutwrapper.model.news.NewsGlobalItem
 import io.dutwrapper.dutwrapper.model.news.NewsSubjectItem
+import io.zoemeow.dutschedule.R
 import io.zoemeow.dutschedule.activity.NewsActivity
 import io.zoemeow.dutschedule.ui.component.news.NewsDetailScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NewsActivity.NewsDetail(
+    context: Context,
     snackBarHostState: SnackbarHostState,
     containerColor: Color,
     contentColor: Color
@@ -47,18 +51,18 @@ fun NewsActivity.NewsDetail(
         contentColor = contentColor,
         topBar = {
             TopAppBar(
-                title = { Text("News detail") },
+                title = { Text(context.getString(R.string.news_detail_title)) },
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent),
                 navigationIcon = {
                     IconButton(
                         onClick = {
-                            setResult(ComponentActivity.RESULT_OK)
+                            setResult(RESULT_OK)
                             finish()
                         },
                         content = {
                             Icon(
                                 Icons.AutoMirrored.Filled.ArrowBack,
-                                "",
+                                context.getString(R.string.action_back),
                                 modifier = Modifier.size(25.dp)
                             )
                         }
@@ -67,13 +71,13 @@ fun NewsActivity.NewsDetail(
             )
         },
         floatingActionButton = {
-            if (newsType == "news_subject") {
+            if (newsType == NewsActivity.NEWSTYPE_NEWSSUBJECT) {
                 ExtendedFloatingActionButton(
                     content = {
                         Row {
-                            Icon(Icons.Default.Add, "Add to news filter")
+                            Icon(Icons.Default.Add, context.getString(R.string.news_detail_addtofilter_fab))
                             Spacer(modifier = Modifier.size(3.dp))
-                            Text("Add to news filter")
+                            Text(context.getString(R.string.news_detail_addtofilter_fab))
                         }
                     },
                     onClick = {
@@ -82,10 +86,16 @@ fun NewsActivity.NewsDetail(
 //                                    getMainViewModel().appSettings.value.newsFilterList.add()
 //                                }
                             // TODO: Develop a add news filter function for news subject detail.
-                            showSnackBar("This function is in development. Check back soon.")
+                            showSnackBar(
+                                text = context.getString(R.string.feature_not_ready),
+                                clearPrevious = true
+                            )
                         } catch (ex: Exception) {
                             ex.printStackTrace()
-                            showSnackBar("We can't add this subject in this news to your filter! You can instead add manually them.")
+                            showSnackBar(
+                                text = context.getString(R.string.news_detail_addtofilter_failed),
+                                clearPrevious = true
+                            )
                         }
                     }
                 )
@@ -93,8 +103,9 @@ fun NewsActivity.NewsDetail(
         },
         content = {
             when (newsType) {
-                "news_global" -> {
+                NewsActivity.NEWSTYPE_NEWSGLOBAL -> {
                     NewsDetailScreen(
+                        context = context,
                         padding = it,
                         newsItem = Gson().fromJson(newsData, object : TypeToken<NewsGlobalItem>() {}.type),
                         newsType = NewsType.Global,
@@ -107,8 +118,9 @@ fun NewsActivity.NewsDetail(
                         }
                     )
                 }
-                "news_subject" -> {
+                NewsActivity.NEWSTYPE_NEWSSUBJECT -> {
                     NewsDetailScreen(
+                        context = context,
                         padding = it,
                         newsItem = Gson().fromJson(newsData, object : TypeToken<NewsSubjectItem>() {}.type) as NewsGlobalItem,
                         newsType = NewsType.Subject,

@@ -12,6 +12,13 @@ import io.zoemeow.dutschedule.ui.view.news.NewsSearch
 
 @AndroidEntryPoint
 class NewsActivity : BaseActivity() {
+    companion object {
+        const val INTENT_SEARCHACTIVITY = "activity_search"
+        const val INTENT_NEWSDETAILACTIVITY = "activity_detail"
+        const val NEWSTYPE_NEWSGLOBAL = "news_global"
+        const val NEWSTYPE_NEWSSUBJECT = "news_subject"
+    }
+
     @Composable
     override fun OnPreloadOnce() {
 
@@ -25,7 +32,7 @@ class NewsActivity : BaseActivity() {
         contentColor: Color
     ) {
         when (intent.action) {
-            "activity_search" -> {
+            INTENT_SEARCHACTIVITY -> {
                 NewsSearch(
                     context = context,
                     snackBarHostState = snackBarHostState,
@@ -34,8 +41,9 @@ class NewsActivity : BaseActivity() {
                 )
             }
 
-            "activity_detail" -> {
+            INTENT_NEWSDETAILACTIVITY -> {
                 NewsDetail(
+                    context = context,
                     snackBarHostState = snackBarHostState,
                     containerColor = containerColor,
                     contentColor = contentColor
@@ -50,7 +58,7 @@ class NewsActivity : BaseActivity() {
                     contentColor = contentColor,
                     searchRequested = {
                         val intent = Intent(context, NewsActivity::class.java)
-                        intent.action = "activity_search"
+                        intent.action = INTENT_SEARCHACTIVITY
                         context.startActivity(intent)
                     }
                 )

@@ -38,7 +38,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import dagger.hilt.android.AndroidEntryPoint
-import io.zoemeow.dutschedule.model.helpandexternallink.HelpLinkInfo
+import io.zoemeow.dutschedule.model.HelpLinkInfo
 import io.zoemeow.dutschedule.ui.component.helpandexternallink.HelpLinkClickable
 
 @AndroidEntryPoint

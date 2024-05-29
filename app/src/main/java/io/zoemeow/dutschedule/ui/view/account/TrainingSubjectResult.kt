@@ -1,10 +1,12 @@
 package io.zoemeow.dutschedule.ui.view.account
 
-import androidx.activity.ComponentActivity
+import android.app.Activity.RESULT_CANCELED
+import android.content.Context
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
@@ -55,18 +57,18 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.dutwrapper.dutwrapper.model.accounts.trainingresult.SubjectResult
+import io.zoemeow.dutschedule.R
 import io.zoemeow.dutschedule.activity.AccountActivity
 import io.zoemeow.dutschedule.model.ProcessState
 import io.zoemeow.dutschedule.ui.component.base.OutlinedTextBox
 import io.zoemeow.dutschedule.utils.TableCell
 import io.zoemeow.dutschedule.utils.toNonAccent
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AccountActivity.TrainingSubjectResult(
+    context: Context,
     snackBarHostState: SnackbarHostState,
     containerColor: Color,
     contentColor: Color
@@ -91,7 +93,7 @@ fun AccountActivity.TrainingSubjectResult(
 
     fun subjectResultToMap(item: SubjectResult): Map<String, String?> {
         return mapOf(
-            "Subject Year" to (item.schoolYear ?: "(unknown)"),
+            "Subject Year" to "${item.schoolYear ?: "(unknown)"}${ if (item.isExtendedSemester) "in summer" else "" }",
             "Subject Code" to (item.id ?: "(unknown)"),
             "Credit" to item.credit.toString(),
             "Point formula" to (item.pointFormula ?: "(unknown)"),
@@ -103,12 +105,14 @@ fun AccountActivity.TrainingSubjectResult(
             "QT" to item.pointQT?.toString(),
             "TH" to item.pointTH?.toString(),
             "Point (T10 - T4 - By point char)" to String.format(
+                Locale.ROOT,
                 "%s - %s - %s",
                 if (item.resultT10 != null) String.format(
+                    Locale.ROOT,
                     "%.2f",
                     item.resultT10
                 ) else "unscored",
-                if (item.resultT4 != null) String.format("%.2f", item.resultT4) else "unscored",
+                if (item.resultT4 != null) String.format(Locale.ROOT, "%.2f", item.resultT4) else "unscored",
                 if (item.resultByCharacter.isNullOrEmpty()) "(unscored)" else item.resultByCharacter
             )
         )
@@ -120,83 +124,85 @@ fun AccountActivity.TrainingSubjectResult(
         containerColor = containerColor,
         contentColor = contentColor,
         topBar = {
-            TopAppBar(
-                title = {
-                    if (!searchEnabled.value) {
-                        Text("Your subject result list")
-                    } else {
-                        OutlinedTextField(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .focusRequester(focusRequester),
-                            value = searchQuery.value,
-                            onValueChange = {
-                                if (searchEnabled.value) {
-                                    searchQuery.value = it
-                                }
-                            },
-                            keyboardOptions = KeyboardOptions(
-                                imeAction = ImeAction.Done
-                            ),
-                            keyboardActions = KeyboardActions(
-                                onDone = {
-                                    clearAllFocusAndHideKeyboard()
-                                }
-                            ),
-                            trailingIcon = {
-                            },
-                        )
-                    }
-                },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent),
-                navigationIcon = {
-                    IconButton(
-                        onClick = {
-                            if (searchEnabled.value) {
-                                dismissSearchBar()
+            Box(
+                contentAlignment = Alignment.BottomCenter,
+                content = {
+                    TopAppBar(
+                        title = {
+                            if (!searchEnabled.value) {
+                                Text("Your subject result list")
                             } else {
-                                setResult(ComponentActivity.RESULT_CANCELED)
-                                finish()
+                                OutlinedTextField(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .focusRequester(focusRequester),
+                                    value = searchQuery.value,
+                                    onValueChange = {
+                                        if (searchEnabled.value) {
+                                            searchQuery.value = it
+                                        }
+                                    },
+                                    keyboardOptions = KeyboardOptions(
+                                        imeAction = ImeAction.Done
+                                    ),
+                                    keyboardActions = KeyboardActions(
+                                        onDone = {
+                                            clearAllFocusAndHideKeyboard()
+                                        }
+                                    ),
+                                    trailingIcon = {
+                                    },
+                                )
                             }
                         },
-                        content = {
-                            Icon(
-                                Icons.AutoMirrored.Filled.ArrowBack,
-                                "",
-                                modifier = Modifier.size(25.dp)
+                        colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent),
+                        navigationIcon = {
+                            IconButton(
+                                onClick = {
+                                    if (searchEnabled.value) {
+                                        dismissSearchBar()
+                                    } else {
+                                        setResult(RESULT_CANCELED)
+                                        finish()
+                                    }
+                                },
+                                content = {
+                                    Icon(
+                                        Icons.AutoMirrored.Filled.ArrowBack,
+                                        context.getString(R.string.action_back),
+                                        modifier = Modifier.size(25.dp)
+                                    )
+                                }
                             )
+                        },
+                        actions = {
+                            if (!searchEnabled.value) {
+                                IconButton(
+                                    onClick = {
+                                        searchEnabled.value = true
+                                    },
+                                    content = {
+                                        Icon(Icons.Default.Search, context.getString(R.string.action_search))
+                                    }
+                                )
+                            }
                         }
                     )
-                },
-                actions = {
-                    if (!searchEnabled.value) {
-                        IconButton(
-                            onClick = {
-                                searchEnabled.value = true
-                            },
-                            content = {
-                                Icon(Icons.Default.Search, "Search")
-                            }
-                        )
-                    } else null
+                    if (getMainViewModel().accountSession.accountTrainingStatus.processState.value == ProcessState.Running) {
+                        LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
+                    }
                 }
             )
         },
         floatingActionButton = {
-            if (getMainViewModel().accountTrainingStatus.processState.value != ProcessState.Running) {
+            if (getMainViewModel().accountSession.accountTrainingStatus.processState.value != ProcessState.Running) {
                 FloatingActionButton(
                     onClick = {
                         clearAllFocusAndHideKeyboard()
-                        CoroutineScope(Dispatchers.IO).launch {
-                            getMainViewModel().accountLogin(
-                                after = {
-                                    if (it) { getMainViewModel().accountTrainingStatus.refreshData(force = true) }
-                                }
-                            )
-                        }
+                        getMainViewModel().accountSession.fetchAccountTrainingStatus(force = true)
                     },
                     content = {
-                        Icon(Icons.Default.Refresh, "Refresh")
+                        Icon(Icons.Default.Refresh, context.getString(R.string.action_refresh))
                     }
                 )
             }
@@ -209,9 +215,6 @@ fun AccountActivity.TrainingSubjectResult(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Top,
                 content = {
-                    if (getMainViewModel().accountTrainingStatus.processState.value == ProcessState.Running) {
-                        LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
-                    }
                     Column(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -256,7 +259,7 @@ fun AccountActivity.TrainingSubjectResult(
                                                     schYearOption.value = false
                                                 }
                                             )
-                                            (getMainViewModel().accountTrainingStatus.data.value?.subjectResultList?.map { it.schoolYear }?.toList()?.distinct()?.reversed() ?: listOf()).forEach {
+                                            (getMainViewModel().accountSession.accountTrainingStatus.data.value?.subjectResultList?.map { it.schoolYear }?.toList()?.distinct()?.reversed() ?: listOf()).forEach {
                                                 DropdownMenuItem(
                                                     modifier = Modifier.background(
                                                         color = when (schYearOptionText.value == it) {
@@ -288,21 +291,21 @@ fun AccountActivity.TrainingSubjectResult(
                                         backgroundColor = MaterialTheme.colorScheme.background.copy(alpha = getControlBackgroundAlpha()),
                                         text = "Index",
                                         textAlign = TextAlign.Center,
-                                        weight = 0.2f
+                                        weight = 0.17f
                                     )
                                     TableCell(
                                         modifier = Modifier.fillMaxHeight(),
                                         backgroundColor = MaterialTheme.colorScheme.background.copy(alpha = getControlBackgroundAlpha()),
                                         text = "Subject name",
                                         textAlign = TextAlign.Center,
-                                        weight = 0.6f
+                                        weight = 0.58f
                                     )
                                     TableCell(
                                         modifier = Modifier.fillMaxHeight(),
                                         backgroundColor = MaterialTheme.colorScheme.background.copy(alpha = getControlBackgroundAlpha()),
-                                        text = "Result (T4/C)",
+                                        text = "Result T10(T4)",
                                         textAlign = TextAlign.Center,
-                                        weight = 0.2f
+                                        weight = 0.25f
                                     )
                                 }
                             )
@@ -313,7 +316,7 @@ fun AccountActivity.TrainingSubjectResult(
                                 horizontalAlignment = Alignment.CenterHorizontally,
                                 verticalArrangement = Arrangement.Top,
                                 content = {
-                                    getMainViewModel().accountTrainingStatus.data.value?.subjectResultList?.filter {
+                                    getMainViewModel().accountSession.accountTrainingStatus.data.value?.subjectResultList?.filter {
                                             p ->
                                         (schYearOptionText.value == "All school year items" || p.schoolYear == schYearOptionText.value) &&
                                                 (searchQuery.value.isEmpty()
@@ -334,26 +337,26 @@ fun AccountActivity.TrainingSubjectResult(
                                                     backgroundColor = MaterialTheme.colorScheme.background.copy(alpha = getControlBackgroundAlpha()),
                                                     text = "${subjectItem.index}",
                                                     textAlign = TextAlign.Center,
-                                                    weight = 0.2f
+                                                    weight = 0.17f
                                                 )
                                                 TableCell(
                                                     modifier = Modifier.fillMaxHeight(),
                                                     backgroundColor = MaterialTheme.colorScheme.background.copy(alpha = getControlBackgroundAlpha()),
-                                                    text = "${subjectItem.name}",
+                                                    text = subjectItem.name,
                                                     contentAlign = Alignment.CenterStart,
                                                     textAlign = TextAlign.Start,
-                                                    weight = 0.6f
+                                                    weight = 0.58f
                                                 )
                                                 TableCell(
                                                     modifier = Modifier.fillMaxHeight(),
                                                     backgroundColor = MaterialTheme.colorScheme.background.copy(alpha = getControlBackgroundAlpha()),
                                                     text = String.format(
                                                         "%s (%s)",
-                                                        if (subjectItem.resultT4 != null) "${subjectItem.resultT4}" else "---",
-                                                        if (subjectItem.resultByCharacter != null) "${subjectItem.resultByCharacter}" else "-"
+                                                        subjectItem.resultT10?.toString() ?: "---",
+                                                        subjectItem.resultT4?.toString() ?: "---"
                                                     ),
                                                     textAlign = TextAlign.Center,
-                                                    weight = 0.2f
+                                                    weight = 0.25f
                                                 )
                                             }
                                         )
@@ -410,15 +413,7 @@ fun AccountActivity.TrainingSubjectResult(
     val hasRun = remember { mutableStateOf(false) }
     run {
         if (!hasRun.value) {
-            CoroutineScope(Dispatchers.IO).launch {
-                getMainViewModel().accountLogin(
-                    after = {
-                        if (it) {
-                            getMainViewModel().accountTrainingStatus.refreshData()
-                        }
-                    }
-                )
-            }
+            getMainViewModel().accountSession.fetchAccountTrainingStatus()
             hasRun.value = true
         }
     }

@@ -1,14 +1,20 @@
 package io.zoemeow.dutschedule.ui.component.account
 
+import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -17,15 +23,20 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import io.zoemeow.dutschedule.R
 import io.zoemeow.dutschedule.ui.component.base.OutlinedTextBox
+import io.zoemeow.dutschedule.utils.capitalized
 
 @Composable
 fun AccountInfoBanner(
+    context: Context,
     padding: PaddingValues,
     isLoading: Boolean = false,
+    name: String? = null,
     username: String? = null,
     schoolClass: String? = null,
-    trainingProgramPlan: String? = null,
+    specialization: String? = null,
     opacity: Float = 1.0f
 ) {
     Surface(
@@ -39,7 +50,7 @@ fun AccountInfoBanner(
                     .fillMaxWidth()
                     .wrapContentHeight()
                     .padding(10.dp),
-                horizontalAlignment = Alignment.Start,
+                horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Top,
                 content = {
                     if (isLoading) {
@@ -65,26 +76,31 @@ fun AccountInfoBanner(
                             verticalAlignment = Alignment.Top,
                             content = {
                                 Text(
-                                    text = "Basic account information",
+                                    text = context.getString(R.string.account_dashboard_banner_title),
                                     style = MaterialTheme.typography.titleLarge,
                                     modifier = Modifier.padding(bottom = 10.dp),
                                 )
                             }
                         )
-                        OutlinedTextBox(
-                            title = "Username",
-                            value = username ?: "(unknown)",
-                            modifier = Modifier.fillMaxWidth().padding(bottom = 5.dp)
+                        Icon(
+                            Icons.Outlined.AccountCircle,
+                            "Account Icon",
+                            modifier = Modifier.size(64.dp)
                         )
-                        OutlinedTextBox(
-                            title = "Class",
-                            value = schoolClass ?: "(unknown)",
-                            modifier = Modifier.fillMaxWidth().padding(bottom = 5.dp)
+                        Text(
+                            name?.capitalized() ?: "(unknown name)",
+                            fontSize = 20.sp,
+                            modifier = Modifier.padding(top = 7.dp)
                         )
-                        OutlinedTextBox(
-                            title = "Training program plan",
-                            value = trainingProgramPlan ?: "(unknown)",
-                            modifier = Modifier.fillMaxWidth().padding(bottom = 5.dp)
+                        Text(
+                            "${username ?: "(unknown student ID)"} - ${schoolClass ?: "(unknown class)"}",
+                            fontSize = 17.sp,
+                            modifier = Modifier.padding(top = 5.dp)
+                        )
+                        Text(
+                            specialization ?: "(unknown specialization)",
+                            fontSize = 17.sp,
+                            modifier = Modifier.padding(top = 5.dp)
                         )
                     }
                 }

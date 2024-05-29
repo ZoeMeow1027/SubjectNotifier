@@ -21,13 +21,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import io.dutwrapper.dutwrapper.model.news.NewsGlobalItem
 import io.zoemeow.dutschedule.model.ProcessState
-import io.zoemeow.dutschedule.model.news.NewsGroupByDate
 import io.zoemeow.dutschedule.utils.CustomDateUtil
 import io.zoemeow.dutschedule.utils.endOfListReached
 
 @Composable
 fun NewsListPage(
-    newsList: List<NewsGroupByDate<NewsGlobalItem>> = listOf(),
+    newsList: List<NewsGlobalItem> = listOf(),
     processState: ProcessState = ProcessState.NotRunYet,
     endOfListReached: (() -> Unit)? = null,
     itemClicked: ((NewsGlobalItem) -> Unit)? = null,
@@ -37,16 +36,13 @@ fun NewsListPage(
     Column(
         modifier = Modifier.fillMaxSize(),
         content = {
-            if (processState == ProcessState.Running) {
-                LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
-            }
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(start = 20.dp, end = 20.dp)
                     .endOfListReached(
                         lazyListState = lazyListState,
-                        endOfListReached = { endOfListReached?.let { it() } }
+                        onReached = { endOfListReached?.let { it() } }
                     ),
                 horizontalAlignment = if (newsList.isNotEmpty()) Alignment.Start else Alignment.CenterHorizontally,
                 verticalArrangement = if (newsList.isNotEmpty()) Arrangement.Top else Arrangement.Center,
@@ -54,20 +50,20 @@ fun NewsListPage(
                 content = {
                     when {
                         (newsList.isNotEmpty()) -> {
-                            newsList.forEach { newsGroup ->
+                            newsList.groupBy { p -> p.date }.forEach { newsGroup ->
                                 item {
                                     Row(
                                         modifier = Modifier.fillMaxWidth(),
                                         horizontalArrangement = Arrangement.Center,
                                         content = {
                                             Text(
-                                                text = CustomDateUtil.dateUnixToString(newsGroup.date, "dd/MM/yyyy"),
+                                                text = CustomDateUtil.dateUnixToString(newsGroup.key, "dd/MM/yyyy"),
                                                 modifier = Modifier.padding(bottom = 5.dp)
                                             )
                                         }
                                     )
                                 }
-                                items (newsGroup.itemList) { newsItem ->
+                                items (newsGroup.value) { newsItem ->
                                     NewsListItem(
                                         title = newsItem.title ?: "",
                                         description = newsItem.contentString ?: "",

@@ -1,9 +1,10 @@
 package io.zoemeow.dutschedule.ui.view.account
 
+import android.app.Activity.RESULT_CANCELED
 import android.content.Context
 import android.content.Intent
-import androidx.activity.ComponentActivity
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -20,12 +21,12 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -33,16 +34,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
+import io.zoemeow.dutschedule.R
 import io.zoemeow.dutschedule.activity.AccountActivity
 import io.zoemeow.dutschedule.model.ProcessState
 import io.zoemeow.dutschedule.ui.component.base.ButtonBase
 import io.zoemeow.dutschedule.ui.component.base.OutlinedTextBox
 import io.zoemeow.dutschedule.ui.component.base.SimpleCardItem
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -52,51 +50,48 @@ fun AccountActivity.TrainingResult(
     containerColor: Color,
     contentColor: Color
 ) {
-    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
-
     Scaffold(
-        modifier = Modifier
-            .fillMaxSize()
-            .nestedScroll(scrollBehavior.nestedScrollConnection),
+        modifier = Modifier.fillMaxSize(),
         snackbarHost = { SnackbarHost(hostState = snackBarHostState) },
         containerColor = containerColor,
         contentColor = contentColor,
         topBar = {
-            LargeTopAppBar(
-                title = { Text("Account Training Result") },
-                colors = TopAppBarDefaults.largeTopAppBarColors(containerColor = Color.Transparent, scrolledContainerColor = Color.Transparent),
-                navigationIcon = {
-                    IconButton(
-                        onClick = {
-                            setResult(ComponentActivity.RESULT_OK)
-                            finish()
-                        },
-                        content = {
-                            Icon(
-                                Icons.AutoMirrored.Filled.ArrowBack,
-                                "",
-                                modifier = Modifier.size(25.dp)
-                            )
-                        }
-                    )
-                },
-                scrollBehavior = scrollBehavior
-            )
-        },
-        floatingActionButton = {
-            if (getMainViewModel().accountTrainingStatus.processState.value != ProcessState.Running) {
-                FloatingActionButton(
-                    onClick = {
-                        CoroutineScope(Dispatchers.IO).launch {
-                            getMainViewModel().accountLogin(
-                                after = {
-                                    if (it) { getMainViewModel().accountTrainingStatus.refreshData(force = true) }
+            Box(
+                contentAlignment = Alignment.BottomCenter,
+                content = {
+                    TopAppBar(
+                        title = { Text(context.getString(R.string.account_trainingstatus_title)) },
+                        colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent),
+                        navigationIcon = {
+                            IconButton(
+                                onClick = {
+                                    setResult(RESULT_CANCELED)
+                                    finish()
+                                },
+                                content = {
+                                    Icon(
+                                        Icons.AutoMirrored.Filled.ArrowBack,
+                                        context.getString(R.string.action_back),
+                                        modifier = Modifier.size(25.dp)
+                                    )
                                 }
                             )
                         }
+                    )
+                    if (getMainViewModel().accountSession.accountTrainingStatus.processState.value == ProcessState.Running) {
+                        LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
+                    }
+                }
+            )
+        },
+        floatingActionButton = {
+            if (getMainViewModel().accountSession.accountTrainingStatus.processState.value != ProcessState.Running) {
+                FloatingActionButton(
+                    onClick = {
+                        getMainViewModel().accountSession.fetchAccountTrainingStatus(force = true)
                     },
                     content = {
-                        Icon(Icons.Default.Refresh, "Refresh")
+                        Icon(Icons.Default.Refresh, context.getString(R.string.action_refresh))
                     }
                 )
             }
@@ -107,9 +102,6 @@ fun AccountActivity.TrainingResult(
                     .fillMaxSize()
                     .padding(padding),
                 content = {
-                    if (getMainViewModel().accountTrainingStatus.processState.value == ProcessState.Running) {
-                        LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
-                    }
                     Column(
                         modifier = Modifier
                             .fillMaxSize()
@@ -117,7 +109,7 @@ fun AccountActivity.TrainingResult(
                         verticalArrangement = Arrangement.Top,
                         horizontalAlignment = Alignment.Start,
                         content = {
-                            getMainViewModel().accountTrainingStatus.data.value?.let {
+                            getMainViewModel().accountSession.accountTrainingStatus.data.value?.let {
                                 fun graduateStatus(): String {
                                     val owned = ArrayList<String>()
                                     val missing = ArrayList<String>()
@@ -185,7 +177,7 @@ fun AccountActivity.TrainingResult(
                                                     },
                                                     clicked = {
                                                         val intent = Intent(context, AccountActivity::class.java)
-                                                        intent.action = "acc_training_result_subjectresult"
+                                                        intent.action = AccountActivity.INTENT_ACCOUNTSUBJECTRESULT
                                                         context.startActivity(intent)
                                                     }
                                                 )
@@ -215,14 +207,14 @@ fun AccountActivity.TrainingResult(
                                                         .padding(bottom = 5.dp)
                                                 )
                                                 OutlinedTextBox(
-                                                    title = "Khen thuong",
+                                                    title = "Commend and rewards",
                                                     value = it.graduateStatus?.info1 ?: "(unknown)",
                                                     modifier = Modifier
                                                         .fillMaxWidth()
                                                         .padding(bottom = 5.dp)
                                                 )
                                                 OutlinedTextBox(
-                                                    title = "Ky luat",
+                                                    title = "Discipline",
                                                     value = it.graduateStatus?.info2 ?: "(unknown)",
                                                     modifier = Modifier
                                                         .fillMaxWidth()
@@ -259,15 +251,7 @@ fun AccountActivity.TrainingResult(
     val hasRun = remember { mutableStateOf(false) }
     run {
         if (!hasRun.value) {
-            CoroutineScope(Dispatchers.IO).launch {
-                getMainViewModel().accountLogin(
-                    after = {
-                        if (it) {
-                            getMainViewModel().accountTrainingStatus.refreshData()
-                        }
-                    }
-                )
-            }
+            getMainViewModel().accountSession.fetchAccountTrainingStatus()
             hasRun.value = true
         }
     }

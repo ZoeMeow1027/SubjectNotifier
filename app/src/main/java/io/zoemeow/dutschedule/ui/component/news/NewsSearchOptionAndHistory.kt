@@ -1,5 +1,6 @@
 package io.zoemeow.dutschedule.ui.component.news
 
+import android.content.Context
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.animation.fadeIn
@@ -42,6 +43,7 @@ import io.zoemeow.dutschedule.model.news.NewsSearchHistory
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NewsSearchOptionAndHistory(
+    context: Context,
     modifier: Modifier = Modifier,
     isVisible: MutableTransitionState<Boolean>,
     searchHistory: List<NewsSearchHistory>,
@@ -67,7 +69,7 @@ fun NewsSearchOptionAndHistory(
                         modifier = modifier.fillMaxSize(),
                         content = {
                             Text(
-                                "Search method",
+                                context.getString(R.string.news_search_searchoption_method),
                                 style = MaterialTheme.typography.titleMedium,
                                 modifier = Modifier.padding(bottom = 5.dp)
                             )
@@ -84,8 +86,8 @@ fun NewsSearchOptionAndHistory(
                                             label = {
                                                 Text(
                                                     when (item) {
-                                                        NewsSearchType.ByTitle -> "By title"
-                                                        NewsSearchType.ByContent -> "By content"
+                                                        NewsSearchType.ByTitle -> context.getString(R.string.news_search_searchoption_method_bytitle)
+                                                        NewsSearchType.ByContent -> context.getString(R.string.news_search_searchoption_method_bycontent)
                                                     }
                                                 )
                                             }
@@ -94,7 +96,7 @@ fun NewsSearchOptionAndHistory(
                                 }
                             )
                             Text(
-                                "News type",
+                                context.getString(R.string.news_search_searchoption_type),
                                 style = MaterialTheme.typography.titleMedium,
                                 modifier = Modifier.padding(bottom = 5.dp)
                             )
@@ -115,8 +117,8 @@ fun NewsSearchOptionAndHistory(
                                             label = {
                                                 Text(
                                                     when (item) {
-                                                        NewsType.Subject -> "News subject"
-                                                        NewsType.Global -> "News global"
+                                                        NewsType.Subject -> context.getString(R.string.news_search_searchoption_type_bysubject)
+                                                        NewsType.Global -> context.getString(R.string.news_search_searchoption_type_byglobal)
                                                     }
                                                 )
                                             }
@@ -134,7 +136,7 @@ fun NewsSearchOptionAndHistory(
                                         verticalAlignment = Alignment.CenterVertically,
                                         content = {
                                             Text(
-                                                "Search history",
+                                                context.getString(R.string.news_search_searchoption_history),
                                                 style = MaterialTheme.typography.titleMedium
                                             )
                                             Spacer(modifier = Modifier.weight(1f))
@@ -156,20 +158,17 @@ fun NewsSearchOptionAndHistory(
                                                     headlineContent = {
                                                         Column {
                                                             Text(queryItem.query)
-                                                            Text(
-                                                                "Search ${
-                                                                    when (queryItem.newsMethod) {
-                                                                        NewsSearchType.ByTitle -> "by title"
-                                                                        NewsSearchType.ByContent -> "by content"
-                                                                    }
-                                                                } in ${
-                                                                    when (queryItem.newsType) {
-                                                                        NewsType.Subject -> "News subject"
-                                                                        NewsType.Global -> "News global"
-                                                                    }
-                                                                }",
-                                                                style = MaterialTheme.typography.bodyMedium,
-                                                            )
+                                                            Text(context.getString(
+                                                                R.string.news_search_searchoption_history_data,
+                                                                when (queryItem.newsMethod) {
+                                                                    NewsSearchType.ByTitle -> context.getString(R.string.news_search_searchoption_method_bytitle)
+                                                                    NewsSearchType.ByContent -> context.getString(R.string.news_search_searchoption_method_bycontent)
+                                                                },
+                                                                when (queryItem.newsType) {
+                                                                    NewsType.Subject -> context.getString(R.string.news_search_searchoption_type_bysubject)
+                                                                    NewsType.Global -> context.getString(R.string.news_search_searchoption_type_byglobal)
+                                                                }
+                                                            ))
                                                         }
                                                     },
                                                     leadingContent = {

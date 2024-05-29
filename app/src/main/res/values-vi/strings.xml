@@ -1,6 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">DutSchedule</string>
+    <string name="feature_not_ready">Tính năng này đang được phát triển. Hãy kiểm tra lại sau.</string>
+    <string name="permission_missing_all_file_access">Bạn cần phải cho phép Quyền truy cập mọi tệp trong quyền hạn ứng dụng để sử dụng tùy chọn này.</string>
+    <string name="permission_missing_alarm_and_reminders">Bạn cần phải bật quyền Chuông báo và lời nhắc trong cài đặt Android để sử dụng tính năng này.</string>
+    <!-- Action string -->
+    <string name="action_ok">OK</string>
+    <string name="action_open">Mở</string>
+    <string name="action_copy">Sao chép</string>
+    <string name="action_save">Lưu</string>
+    <string name="action_cancel">Huỷ bỏ</string>
+    <string name="action_back">Quay lại</string>
+    <string name="action_delete">Xóa</string>
+    <string name="action_clear">Xóa</string>
+    <string name="action_grant">Cho phép</string>
+    <string name="action_confirm">Xác nhận</string>
+    <string name="action_refresh">Làm mới</string>
+    <string name="action_search">Tìm kiếm</string>
+    <string name="action_undo">Hoàn tác</string>
+    <string name="action_close">Đóng</string>
+    <string name="action_display">Hiển thị</string>
+    <string name="action_hide">Ẩn</string>
+    <!-- Tooltip string -->
+    <string name="tooltip_selected">Đã chọn</string>
+    <string name="tooltip_info">Thông tin</string>
+    <!-- Date string -->
+    <string name="date_dow_2">Thứ hai</string>
+    <string name="date_dow_3">Thứ ba</string>
+    <string name="date_dow_4">Thứ tư</string>
+    <string name="date_dow_5">Thứ năm</string>
+    <string name="date_dow_6">Thứ sáu</string>
+    <string name="date_dow_7">Thứ bảy</string>
+    <string name="date_dow_8">Chủ nhật</string>
+    <string name="date_dow_2_short">T2</string>
+    <string name="date_dow_3_short">T3</string>
+    <string name="date_dow_4_short">T4</string>
+    <string name="date_dow_5_short">T5</string>
+    <string name="date_dow_6_short">T6</string>
+    <string name="date_dow_7_short">T7</string>
+    <string name="date_dow_8_short">CN</string>
+    <string name="date_duration_today">Hôm nay</string>
+    <string name="date_duration_yesterday">Hôm qua</string>
+    <!-- Main activity string -->
+    <string name="main_account_notloggedin">Chưa đăng nhập</string>
+    <string name="main_account_fetching">Đang tải…</string>
+    <!-- Android notification string -->
     <string name="notification_announcement_title">Thông báo ứng dụng</string>
     <string name="notification_announcement_description">Kênh này sẽ gửi thông báo cập nhật quan trọng của ứng dụng cho bạn.</string>
     <string name="notification_newsglobal_title">Tin tức chung</string>
@@ -9,11 +53,254 @@
     <string name="notification_newssubject_description">Kênh này sẽ gửi thông báo mới trong \"Thông báo lớp học phần\" trên sv.dut.udn.vn.</string>
     <string name="notification_newsbackgroundupdateservice_title">Dịch vụ cập nhật tin tức trong nền</string>
     <string name="notification_newsbackgroundupdateservice_description">Kênh này sẽ đảm bảo dịch vụ này có thể chạy trong nền. Bạn có thể tắt thông báo này nếu bạn không muốn hiển thị chúng.</string>
+    <!-- Service string -->
     <string name="service_newsbackgroundservice_newsglobal_title">Thông báo chung</string>
-    <string name="service_newsbackgroundservice_newssubject_title_announcement">Thông báo mới của %s về %s</string>
-    <string name="service_newsbackgroundservice_newssubject_title_noannouncement" formatted="false">Thông báo %s của %s về %s</string>
+    <string name="service_newsbackgroundservice_newssubject_title_announcement">Thông báo mới của %1$s về %2$s</string>
+    <string name="service_newsbackgroundservice_newssubject_title_noannouncement">Thông báo %1$s của %2$s về %3$s</string>
     <string name="service_newsbackgroundservice_newssubject_title_noannouncement_leaving">nghỉ học</string>
     <string name="service_newsbackgroundservice_newssubject_title_noannouncement_makeup">học bù</string>
-    <string name="service_newsbackgroundservice_newssubject_date" formatted="false">Vào ngày %s với tiết học %s</string>
-    <string name="service_newsbackgroundservice_newssubject_room">Phòng sẽ học bù: %s</string>
+    <string name="service_newsbackgroundservice_newssubject_lessonunknown">(không rõ)</string>
+    <string name="service_newsbackgroundservice_newssubject_date">Vào ngày %1$s với tiết học %2$s</string>
+    <string name="service_newsbackgroundservice_newssubject_room">Phòng sẽ học bù: %1$s</string>
+    <!-- Settings activity string -->
+    <string name="settings_title">Cài đặt</string>
+    <string name="settings_category_notifications">Thông báo</string>
+    <string name="settings_option_newsschedule">Cài đặt cập nhật tin tức trong nền</string>
+    <string name="settings_option_newsschedule_description">Cấu hình cài đặt thông báo tin tức cho bạn, bao gồm thời gian cập nhật, tin tức nào sẽ được bật, cài đặt bộ lọc tin tức và hơn thế nữa.</string>
+    <string name="settings_option_notificationoutside">Cài đặt thông báo ngoài ứng dụng</string>
+    <string name="settings_option_notificationoutside_description">Nhấn vào đây để quản lí thông báo ứng dụng trong cài đặt Android.</string>
+    <string name="settings_category_appearance">Hiển thị</string>
+    <string name="settings_option_apptheme">Chủ đề ứng dụng</string>
+    <string name="settings_option_apptheme_choice_followdevice">Theo chủ đề hệ thống</string>
+    <string name="settings_option_apptheme_choice_dark">Chủ đề tối</string>
+    <string name="settings_option_apptheme_choice_light">Chủ đề sáng</string>
+    <string name="settings_option_apptheme_choice_dynamiccolorenabled">(dynamic color đang bật)</string>
+    <string name="settings_option_blackbackground">Nền đen</string>
+    <string name="settings_option_blackbackground_description">Đặt màu nền của ứng dụng là màu đen. Chỉ hoạt động trong chế độ tối và bạn không bật hình nền ứng dụng.</string>
+    <string name="settings_option_wallpaperbackground">Hình nền ứng dụng</string>
+    <string name="settings_option_wallpaperbackground_choice_none">Đã vô hiệu hoá</string>
+    <string name="settings_option_wallpaperbackground_choice_currentwallpaper">Hình nền hiện tại của bạn</string>
+    <string name="settings_option_wallpaperbackground_choice_pickedimage">Ảnh bạn đã chọn</string>
+    <string name="settings_category_miscellaneous">Cài đặt linh tinh</string>
+    <string name="settings_option_applanguage">Ngôn ngữ ứng dụng</string>
+    <string name="settings_option_apppermission">Cấp quyền cho ứng dụng</string>
+    <string name="settings_option_apppermission_description">Nhấn vào đây để cho phép và quản lý quyền hạn ứng dụng bạn đã cấp phép.</string>
+    <string name="settings_option_openlinkinsideapp">Mở liên kết trong ứng dụng</string>
+    <string name="settings_option_openlinkinsideapp_description">Mở liên kết đã nhấp mà không rời khỏi ứng dụng. Vô hiệu hoá để mở trong trình duyệt mặc định của bạn.</string>
+    <string name="settings_option_experiemntsettings">Cài đặt thử nghiệm</string>
+    <string name="settings_option_experiemntsettings_description">Các cài đặt thử nghiệm của chúng tôi trước khi đưa vào chính thức. Sử dụng nó một cách thận trọng.</string>
+    <string name="settings_category_about">Về ứng dụng</string>
+    <string name="settings_option_version">Phiên bản</string>
+    <string name="settings_option_version_description">Hiện tại: %1$s (%2$d)\nNhấp vào đây để kiểm tra cập nhật.</string>
+    <string name="settings_option_changelog">Nhật ký thay đổi</string>
+    <string name="settings_option_changelog_description">Nhấn để xem ghi chú phát hành của ứng dụng</string>
+    <string name="settings_option_github">GitHub (nhấp để mở liên kết)</string>
+    <!-- Settings Dialog UI string -->
+    <string name="settings_dialog_apptheme_title">Chủ đề ứng dụng</string>
+    <string name="settings_dialog_apptheme_choice_followdevice">Theo chủ đề hệ thống</string>
+    <string name="settings_dialog_apptheme_choice_dark">Chủ đề tối</string>
+    <string name="settings_dialog_apptheme_choice_light">Chủ đề sáng</string>
+    <string name="settings_dialog_apptheme_choice_dynamiccolor">Dynamic color</string>
+    <string name="settings_dialog_apptheme_note">Hệ điều hành của bạn cần tối thiểu:\n- Android 9 để theo chủ đề hệ thống;\n- Android 12 để bật dynamic color.</string>
+    <string name="settings_dialog_wallpaperbackground_title">Hình nền ứng dụng</string>
+    <string name="settings_dialog_wallpaperbackground_choice_none">Đã vô hiệu hóa</string>
+    <string name="settings_dialog_wallpaperbackground_choice_currentwallpaper">Hình nền hiện tại của bạn</string>
+    <string name="settings_dialog_wallpaperbackground_choice_currentwallpaper_disa14">Tùy chọn này không có sẵn trên Android 14</string>
+    <string name="settings_dialog_wallpaperbackground_choice_currentwallpaper_dismisperext">Bạn cần phải cho phép Quyền truy cập mọi tệp</string>
+    <string name="settings_dialog_wallpaperbackground_choice_pickaimage">Chọn một hình ảnh từ phương tiện</string>
+    <!-- Settings Language activity string-->
+    <string name="settings_applanguage_title">Ngôn ngữ ứng dụng</string>
+    <!-- Settings Parse news subject activity string -->
+    <string name="settings_parsenewssubject_title">Xử lý tin tức lớp học phần trong thông báo</string>
+    <string name="settings_parsenewssubject_preview_titleenabled">Thông báo {học bù} của {giáo viên} về {danh sách lớp học}</string>
+    <string name="settings_parsenewssubject_preview_titledisabled">{Giáo viên} thông báo đến lớp {danh sách lớp học}</string>
+    <string name="settings_parsenewssubject_preview_descenabled">Vào ngày {ngày} với tiết học {tiết học}\nPhòng sẽ học bù: {phòng}</string>
+    <string name="settings_parsenewssubject_preview_descdisabled">{Giáo viên} nhắn: Lớp {học bù} ngày: {ngày},Tiết:{tiết học}, phòng {phòng}</string>
+    <string name="settings_parsenewssubject_choice_enable">Sử dụng tính năng này</string>
+    <string name="settings_parsenewssubject_info">Sử dụng trình xử lý mới cho tin tức lớp học phần nếu có thể. Tắt nó đi hoặc tin tức không được hỗ trợ sẽ không bị ảnh hưởng.</string>
+    <!-- Settings Experiment activity string -->
+    <string name="settings_experiment_title">Cài đặt thử nghiệm</string>
+    <string name="settings_experiment_category_globalvar">Cài đặt biến công khai</string>
+    <string name="settings_experiment_option_currentschyear">Năm học hiện tại</string>
+    <string name="settings_experiment_option_currentschyear_description">Năm: 20%1$d-20%2$d, học kỳ: %3$s%4$s</string>
+    <string name="settings_experiment_option_currentschyear_insummer">học kỳ hè</string>
+    <string name="settings_experiment_category_appearance">Hiển thị</string>
+    <string name="settings_experiment_option_required_enableimage">Bạn cần bật hình nền ứng dụng để tùy chọn có tác dụng</string>
+    <string name="settings_experiment_option_bgopacity">Độ mờ hình nền</string>
+    <string name="settings_experiment_option_componentopacity">Độ mờ thành phần điều khiển</string>
+    <string name="settings_experiment_option_dashboardview">Chế độ xem bảng tổng quát trên màn hình chính</string>
+    <string name="settings_experiment_option_dashboardview_choice_enabled">Đã bật</string>
+    <string name="settings_experiment_option_dashboardview_choice_disabled">Đã vô hiệu hóa (chế độ xem điều hướng thẻ)</string>
+    <string name="settings_experiment_option_dashboardview_warning">Điều này sẽ %1$s chế độ xem bảng tổng quát của bạn. Ứng dụng sẽ khởi động lại. Nhấn vào \"Xác nhận\" để tiếp tục.</string>
+    <string name="settings_experiment_option_dashboardview_warning_disable">vô hiệu hóa</string>
+    <string name="settings_experiment_option_dashboardview_warning_enable">kích hoạt</string>
+    <string name="settings_experiment_category_troubleshooting">Xử lý sự cố</string>
+    <string name="settings_experiment_option_debuglog">Bản ghi gỡ lỗi (chưa hoạt động)</string>
+    <string name="settings_experiment_option_debuglog_description">Xem bản ghi gỡ lỗi ứng dụng để tìm nguyên nhân và xử lý sự cố.</string>
+    <!-- Settings school year dialog string -->
+    <string name="settings_dialog_schyear_title">Cài đặt biến năm học</string>
+    <string name="settings_dialog_schyear_description">Chỉnh sửa giá trị để điều chỉnh biến năm học (Cẩn thận khi thay đổi tại đây. Điều này sẽ áp dụng tất cả tính năng trong ứng dụng)</string>
+    <string name="settings_dialog_schyear_choice_schyear">Năm học</string>
+    <string name="settings_dialog_schyear_choice_semester">Học kỳ</string>
+    <string name="settings_dialog_schyear_choice_insummer">học kỳ hè</string>
+    <string name="settings_dialog_schyear_action_fetch">Tải từ Internet</string>
+    <!-- Settings news notification activity string -->
+    <string name="settings_newsnotify_title">Cài đặt thông báo tin tức</string>
+    <string name="settings_newsnotify_fetchnewsinbackground">Làm mới tin tức trong nền</string>
+    <string name="settings_newsnotify_fetchnewsinbackground_disabled">Đã vô hiệu hóa làm mới tin tức trong nền!</string>
+    <string name="settings_newsnotify_fetchnewsinbackground_enabled">Tin tức sẽ được làm mới mỗi %1$d phút!</string>
+    <string name="settings_newsnotify_parsenewssubject_enabled">Đã bật (xử lý thông báo cho tin tức lớp học phần)</string>
+    <string name="settings_newsnotify_parsenewssubject_disabled">Đã vô hiệu hóa (thông báo như tin tức chung)</string>
+    <string name="settings_newsnotify_category_notification">Cài đặt thông báo</string>
+    <string name="settings_newsnotify_fetchnewsinbackground_duration">Tần suất làm mới tin tức</string>
+    <string name="settings_newsnotify_fetchnewsinbackground_value">Giá trị tần suất làm mới hiện tại: %1$s</string>
+    <string name="settings_newsnotify_fetchnewsinbackground_value_disabled">Đã vô hiệu hóa</string>
+    <string name="settings_newsnotify_fetchnewsinbackground_value_enabled1">1 phút</string>
+    <string name="settings_newsnotify_fetchnewsinbackground_value_enabled2">%1$d phút</string>
+    <string name="settings_newsnotify_fetchnewsinbackground_modifiedvalue_disabled">Đã vô hiệu hóa</string>
+    <string name="settings_newsnotify_fetchnewsinbackground_modifiedvalue_enabled1">1 phút</string>
+    <string name="settings_newsnotify_fetchnewsinbackground_modifiedvalue_enabled2">%1$d phút</string>
+    <string name="settings_newsnotify_fetchnewsinbackground_option_turnoff">Vô hiệu hóa</string>
+    <string name="settings_newsnotify_fetchnewsinbackground_option_value1">1 phút</string>
+    <string name="settings_newsnotify_fetchnewsinbackground_option_value2">%1$d phút</string>
+    <string name="settings_newsnotify_newsglobal_title">Thông báo tin tức chung</string>
+    <string name="settings_newsnotify_newsglobal_enable">Bật thông báo tin tức chung</string>
+    <string name="settings_newsnotify_newsglobal_enabled">Đã kích hoạt thông báo tin tức chung!</string>
+    <string name="settings_newsnotify_newsglobal_disabled">Đã vô hiệu hóa thông báo tin tức chung!</string>
+    <string name="settings_newsnotify_newssubject_title">Thông báo tin tức lớp học phần</string>
+    <string name="settings_newsnotify_newssubject_disabled">Vô hiệu hóa</string>
+    <string name="settings_newsnotify_newssubject_all">Tất cả tin tức</string>
+    <string name="settings_newsnotify_newssubject_matchsubsch">Theo lịch học của bạn</string>
+    <string name="settings_newsnotify_newssubject_matchfilter">Theo bộ lọc ở dưới</string>
+    <string name="settings_newsnotify_newssubject_notify_disabled">Xong! Bạn đã vô hiệu hóa thông báo lớp học phần.</string>
+    <string name="settings_newsnotify_newssubject_notify_all">Xong! Bạn sẽ được thông báo tất cả lớp học phần.</string>
+    <string name="settings_newsnotify_newssubject_notify_matchsubsch">Xong! Bạn sẽ được thông báo tin tức theo lịch học của bạn.</string>
+    <string name="settings_newsnotify_newssubject_notify_matchfilter">Xong! Bạn sẽ được thông báo tin tức theo bộ lọc của bạn.</string>
+    <string name="settings_newsnotify_newsfilter_title">Bộ lọc tin tức lớp học phần</string>
+    <string name="settings_newsnotify_newsfilter_disabledwarning_title">Danh sách tùy chỉnh bộ lọc đã bị tắt</string>
+    <string name="settings_newsnotify_newsfilter_disabledwarning_description">Để quản lý bộ lọc tùy chỉnh của bạn, hãy chọn tùy chọn "Theo bộ lọc ở dưới" trước.</string>
+    <string name="settings_newsnotify_newsfilter_list_title">Danh sách bộ lọc tùy chỉnh của bạn</string>
+    <string name="settings_newsnotify_newsfilter_list_nofilters">Bộ lọc tùy chỉnh bạn đã thêm sẽ xuất hiện tại đây.</string>
+    <string name="settings_newsnotify_newsfilter_add">Thêm một bộ lọc tin tưc</string>
+    <string name="settings_newsnotify_newsfilter_deleteall">Xóa tất cả bộ lọc tin tức</string>
+    <string name="settings_newsnotify_newsfilter_notify_add">Đã thêm %1$s [%2$s%3$s%4$s]!</string>
+    <string name="settings_newsnotify_newsfilter_notify_delete">Đã xóa %1$s [%2$s%3$s%4$s]!</string>
+    <string name="settings_newsnotify_newsfilter_notify_deleteall">Đã xóa tất cả bộ lọc tin tức!</string>
+    <string name="settings_newsnotify_newsfilter_dialogadd_title">Thêm một bộ lọc</string>
+    <string name="settings_newsnotify_newsfilter_dialogadd_description">Điền thông tin bộ lọc tin tức của bạn (bạn có thể xem mẫu ở sv.dut.udn.vn) và nhấn \"Thêm\" để thêm vào danh sách.\n\nVí dụ:\n- 19 | 01 | Subject A\n- xx | 94A | Subject B\n\nLưu ý:\n- Bạn cần nhập cẩn thận, nếu không bạn sẽ không nhận được thông báo chính xác.</string>
+    <string name="settings_newsnotify_newsfilter_dialogadd_schyear">ID năm học</string>
+    <string name="settings_newsnotify_newsfilter_dialogadd_class">ID lớp</string>
+    <string name="settings_newsnotify_newsfilter_dialogadd_schname">Tên môn học</string>
+    <string name="settings_newsnotify_newsfilter_dialogdelete_title">Xóa bộ lọc tin tức?</string>
+    <string name="settings_newsnotify_newsfilter_dialogdelete_description">Bạn có chắc chắn muốn xóa bộ lọc này?\n%1$s\n\nHành động này không thể hoàn tác.</string>
+    <string name="settings_newsnotify_newsfilter_dialogdelete_no">Không, ra khỏi đây</string>
+    <string name="settings_newsnotify_newsfilter_dialogdelete_yes">Đúng, xóa nó</string>
+    <string name="settings_newsnotify_newsfilter_dialogdeleteall_title">Xóa tất cả bộ lọc tin tức?</string>
+    <string name="settings_newsnotify_newsfilter_dialogdeleteall_description">Bạn có chắc chắn muốn xóa tất cả bộ lọc tin tức không?\n\nHành động này không thể hoàn tác.</string>
+    <!-- Notification UI string -->
+    <string name="notification_panel_title">Thông báo</string>
+    <string name="notification_panel_no_notifications">Không có thông báo</string>
+    <string name="notification_removed">Đã xóa thông báo!</string>
+    <string name="notification_removeall_confirm">Hành động này không thể hoàn tác! Để tiếp tục xóa tất cả, nhấn "Xác nhận".</string>
+    <string name="notification_removeall_removed">Đã xóa tất cả thông báo!</string>
+    <!-- News activity string -->
+    <string name="news_title">Tin tức</string>
+    <string name="news_tabname_global">Chung</string>
+    <string name="news_tabname_subject">Lớp học phần</string>
+    <!-- News detail activity string -->
+    <string name="news_detail_title">Chi tiết tin tức</string>
+    <string name="news_detail_addtofilter_fab">Thêm vào bộ lọc</string>
+    <string name="news_detail_addtofilter_failed">Chúng tôi không thể thêm lớp học phần này vào bộ lọc tin tức của bạn! Hãy thử lại hoặc thêm bộ lọc này thủ công trong Cài đặt.</string>
+    <!-- News search activity string -->
+    <string name="news_search_searchbox_placeholder">Nhấn vào đây để tìm kiếm</string>
+    <string name="news_search_getstarted">Nhấn thanh tìm kiếm ở trên cùng để bắt đầu.</string>
+    <string name="news_search_fetching">Đang tải tin tức. Vui lòng chờ…</string>
+    <string name="news_search_failed">Đã có lỗi xảy ra khi chúng tôi tải tin tức từ máy chủ. Đảm bảo rằng bạn có kết nối internet và thử lại.</string>
+    <string name="news_search_noavailablenews">Không có tin tức trùng khớp với từ khoá của bạn. Hãy thử lại với từ khoá mới.</string>
+    <string name="news_search_searchoption_method">Tìm kiếm theo</string>
+    <string name="news_search_searchoption_method_bytitle">Tiêu đề</string>
+    <string name="news_search_searchoption_method_bycontent">Nội dung</string>
+    <string name="news_search_searchoption_type">Kiểu tin tức</string>
+    <string name="news_search_searchoption_type_byglobal">Chung</string>
+    <string name="news_search_searchoption_type_bysubject">Lớp học phần</string>
+    <string name="news_search_searchoption_history">Lịch sử tìm kiếm</string>
+    <string name="news_search_searchoption_history_data">Tìm kiếm %2$s theo %1$s</string>
+    <!-- Account activity string -->
+    <string name="account_title">Tài khoản</string>
+    <string name="account_login_title">Đăng nhập</string>
+    <string name="account_login_description">Sử dụng tài khoản của bạn trên sv.dut.udn.vn để đăng nhập</string>
+    <string name="account_login_username">Tên đăng nhập (ID sinh viên)</string>
+    <string name="account_login_password">Mật khẩu</string>
+    <string name="account_login_rememberpassword">Duy trì đăng nhập này</string>
+    <string name="account_login_actionlogin">Đăng nhập</string>
+    <string name="account_login_actionloginclearprevious">Xóa đăng nhập cũ</string>
+    <string name="account_login_actionforgot">Bạn đã quên mật khẩu?</string>
+    <string name="account_login_processing">Đang trong tiến trình…</string>
+    <string name="account_login_loggedinbefore">Bạn đã đăng nhập trước đây. Nhấn vào nút \"Đăng nhập\" để thử lại. Nếu bạn đã thay đổi mật khẩu hoặc muốn đăng nhập tài khoản khác, nhấp vào \"Xóa đăng nhập cũ\".</string>
+    <string name="account_login_loggingin">Đang đăng nhâp cho bạn…</string>
+    <string name="account_login_successful">Đã đăng nhập thành công!</string>
+    <string name="account_login_failed">Chúng tôi không thể đăng nhập với tài khoản của bạn! Nếu bạn đã nhập đúng và sự cố này vẫn tồn tại, hãy mở một issue mới trên GitHub.</string>
+    <string name="account_dashboard_banner_title">Thông tin cơ bản về tài khoản</string>
+    <string name="account_dashboard_button_subjectinfo">Thông tin học phần</string>
+    <string name="account_dashboard_button_subjectfee">Học phí</string>
+    <string name="account_dashboard_button_accountinfo">Thông tin tài khoản</string>
+    <string name="account_dashboard_button_accounttrainstats">Kết quả rèn luyện</string>
+    <string name="account_dashboard_button_logout">Đăng xuất</string>
+    <string name="account_logout_title">Đăng xuất</string>
+    <string name="account_logout_description">Bạn có chắc chắn muốn đăng xuất?\n\Lưu ý rằng:\n- Bạn sẽ không thể nhận bất kì thông báo liên quan đến lịch học của bạn.\n- Bộ lọc tin tức của bạn sẽ không bị ảnh hưởng.</string>
+    <string name="account_logout_action_logout">Đăng xuất</string>
+    <string name="account_logout_loggedout">Đã đăng xuất!</string>
+    <!-- -->
+    <string name="account_schoolyear_main">Năm học: 20%1$d-20%2$d - Học kỳ %3$d %4$s</string>
+    <string name="account_schoolyear_summer">(học kỳ hè)</string>
+    <!-- Subject information activity string -->
+    <string name="account_subjectinfo_title">Thông tin học phần</string>
+    <string name="account_subjectinfo_summary_schinfo">%1$s\n\nLịch học:\n%2$s</string>
+    <string name="account_subjectinfo_summary_schitem">- %1$s - Tiết %2$d-%3$d - Phòng %4$s</string>
+    <string name="account_subjectinfo_filter_added">Đã thêm %1$s vào danh sách bộ lọc của bạn!</string>
+    <string name="account_subjectinfo_filter_alreadyadded">Học phần này đã có trong danh sách bộ lọc của bạn!</string>
+    <string name="account_subjectinfo_addtofilter">Thêm vào bộ lọc tin tức</string>
+    <string name="account_subjectinfo_data_id">Mã học phần</string>
+    <string name="account_subjectinfo_data_credit">Số tín chỉ</string>
+    <string name="account_subjectinfo_data_ishighquality">Chất lượng cao</string>
+    <string name="account_subjectinfo_data_scoreformula">Công thức điểm</string>
+    <string name="account_subjectinfo_data_schedulestudy_title">Lịch học</string>
+    <string name="account_subjectinfo_data_schedulestudy_dayofweek">Lịch học trong tuần: %1$s</string>
+    <string name="account_subjectinfo_data_schedulestudy_weekrange">Tuần: %1$s</string>
+    <string name="account_subjectinfo_data_scheduleexam_title">Lịch thi</string>
+    <string name="account_subjectinfo_data_scheduleexam_group">Nhóm: %1$s %2$s</string>
+    <string name="account_subjectinfo_data_scheduleexam_groupglobal">(thi chung)</string>
+    <string name="account_subjectinfo_data_scheduleexam_date">Ngày thi: %1$s</string>
+    <string name="account_subjectinfo_data_scheduleexam_room">Phòng: %1$s</string>
+    <string name="account_subjectinfo_data_scheduleexam_noexamdate">Hiện tại không có lịch thi cho môn học này.</string>
+    <!-- Subject fee information activity string -->
+    <string name="account_subjectfee_title">Học phí</string>
+    <string name="account_subjectfee_summary_1credit">%1$d tín chỉ - %2$.0f%3$s</string>
+    <string name="account_subjectfee_summary_manycredit">%1$d tín chỉ - %2$.0f%3$s</string>
+    <string name="account_subjectfee_summary_main">Số tín chỉ: %1$d - Số tiền: %2$.0f VND</string>
+    <string name="account_subjectfee_status_completed">Đã thanh toán</string>
+    <string name="account_subjectfee_status_notdoneyet">Chưa thanh toán</string>
+    <!-- Account Information activity string -->
+    <string name="account_accinfo_title">Thông tin tài khoản</string>
+    <string name="account_accinfo_description">Để sao chép, hãy nhấn và giữ trường văn bản, chọn \"Chọn tất cả\" và nhấn \"Sao chép\".\nNếu bạn muốn thay đổi thông tin nào đó, bạn cần thay đổi nó trong trang web sinh viên của trường.</string>
+    <string name="account_accinfo_item_name">Tên</string>
+    <string name="account_accinfo_item_dateofbirth">Ngày sinh</string>
+    <string name="account_accinfo_item_placeofbirth">Nơi sinh</string>
+    <string name="account_accinfo_item_gender">Giới tính</string>
+    <string name="account_accinfo_item_nationalcardid">Số chứng minh nhân dân</string>
+    <string name="account_accinfo_item_nationalcardplaceanddate">Nơi cấp và ngày cấp của CMND</string>
+    <string name="account_accinfo_item_citizencardid">Số căn cước công dân</string>
+    <string name="account_accinfo_item_citizencarddate">Ngày cấp CCCD</string>
+    <string name="account_accinfo_item_bankcardid">Số thẻ ngân hàng</string>
+    <string name="account_accinfo_item_personalemail">Email cá nhân</string>
+    <string name="account_accinfo_item_phonenumber">Số điện thoại</string>
+    <string name="account_accinfo_item_class">Lớp</string>
+    <string name="account_accinfo_item_specialization">Chuyên ngành</string>
+    <string name="account_accinfo_item_trainingprogramplan">Chương trình đào tạo</string>
+    <string name="account_accinfo_item_schoolemail">Email trường cấp</string>
+    <string name="account_accinfo_snackbar_copied">Đã sao chép vào khay nhớ tạm!</string>
+    <!-- -->
+    <string name="account_trainingstatus_title">Kết quả rèn luyện</string>
+    <!-- -->
+    <string name="data_unknown">(không rõ)</string>
 </resources>

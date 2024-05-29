@@ -1,11 +1,11 @@
 package io.zoemeow.dutschedule.ui.view.settings
 
+import android.app.Activity.RESULT_CANCELED
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.provider.Settings
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -16,14 +16,15 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -31,9 +32,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import io.zoemeow.dutschedule.BuildConfig
+import io.zoemeow.dutschedule.GlobalVariables
+import io.zoemeow.dutschedule.R
 import io.zoemeow.dutschedule.activity.PermissionRequestActivity
 import io.zoemeow.dutschedule.activity.SettingsActivity
 import io.zoemeow.dutschedule.model.settings.BackgroundImageOption
@@ -44,10 +48,10 @@ import io.zoemeow.dutschedule.ui.component.base.OptionSwitchItem
 import io.zoemeow.dutschedule.ui.component.settings.ContentRegion
 import io.zoemeow.dutschedule.ui.component.settings.dialog.DialogAppBackgroundSettings
 import io.zoemeow.dutschedule.ui.component.settings.dialog.DialogAppThemeSettings
-import io.zoemeow.dutschedule.ui.component.settings.dialog.DialogFetchNewsInBackgroundSettings
+import io.zoemeow.dutschedule.utils.openLink
+import io.zoemeow.dutschedule.viewmodel.MainViewModel
 import java.util.Locale
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsActivity.MainView(
     context: Context,
@@ -56,39 +60,65 @@ fun SettingsActivity.MainView(
     contentColor: Color,
     mediaRequest: () -> Unit
 ) {
+    SettingsMainView(
+        context = context,
+        snackBarHostState = snackBarHostState,
+        containerColor = containerColor,
+        contentColor = contentColor,
+        componentBackgroundAlpha = getControlBackgroundAlpha(),
+        mainViewModel = getMainViewModel(),
+        mediaRequest = mediaRequest,
+        onShowSnackBar = { text, clearPrevious, actionText, action ->
+            showSnackBar(text = text, clearPrevious = clearPrevious, actionText = actionText, action = action)
+        },
+        onBack = {
+            setResult(RESULT_CANCELED)
+            finish()
+        }
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun SettingsMainView(
+    context: Context,
+    snackBarHostState: SnackbarHostState? = null,
+    containerColor: Color,
+    contentColor: Color,
+    componentBackgroundAlpha: Float = 1f,
+    mainViewModel: MainViewModel,
+    mediaRequest: () -> Unit,
+    onShowSnackBar: ((String, Boolean, String?, (() -> Unit)?) -> Unit)? = null,
+    onBack: (() -> Unit)? = null
+) {
     val dialogAppTheme: MutableState<Boolean> = remember { mutableStateOf(false) }
     val dialogBackground: MutableState<Boolean> = remember { mutableStateOf(false) }
-    val dialogFetchNews: MutableState<Boolean> = remember { mutableStateOf(false) }
-
-    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
 
     Scaffold(
-        modifier = Modifier
-            .fillMaxSize()
-            .nestedScroll(scrollBehavior.nestedScrollConnection),
-        snackbarHost = { SnackbarHost(hostState = snackBarHostState) },
+        modifier = Modifier.fillMaxSize(),
+        snackbarHost = { snackBarHostState?.let { SnackbarHost(hostState = it) } },
         containerColor = containerColor,
         contentColor = contentColor,
         topBar = {
-            LargeTopAppBar(
-                title = { Text("Settings") },
-                colors = TopAppBarDefaults.largeTopAppBarColors(containerColor = Color.Transparent, scrolledContainerColor = Color.Transparent),
+            TopAppBar(
+                title = { Text(context.getString(R.string.settings_title)) },
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent),
                 navigationIcon = {
-                    IconButton(
-                        onClick = {
-                            setResult(ComponentActivity.RESULT_OK)
-                            finish()
-                        },
-                        content = {
-                            Icon(
-                                Icons.AutoMirrored.Filled.ArrowBack,
-                                "",
-                                modifier = Modifier.size(25.dp)
-                            )
-                        }
-                    )
-                },
-                scrollBehavior = scrollBehavior
+                    if (onBack != null) {
+                        IconButton(
+                            onClick = {
+                                onBack()
+                            },
+                            content = {
+                                Icon(
+                                    Icons.AutoMirrored.Filled.ArrowBack,
+                                    context.getString(R.string.action_back),
+                                    modifier = Modifier.size(25.dp)
+                                )
+                            }
+                        )
+                    }
+                }
             )
         },
         content = {
@@ -99,54 +129,42 @@ fun SettingsActivity.MainView(
                 content = {
                     ContentRegion(
                         modifier = Modifier
-                            .padding(horizontal = 20.dp)
                             .padding(top = 10.dp),
-                        text = "Notifications",
+                        textModifier = Modifier.padding(horizontal = 20.dp),
+                        text = context.getString(R.string.settings_category_notifications),
                         content = {
                             OptionItem(
-                                title = "Fetch news in background",
-                                description = when {
-                                    (getMainViewModel().appSettings.value.newsBackgroundDuration > 0) ->
-                                        String.format(
-                                            "Enabled, every %d minute%s",
-                                            getMainViewModel().appSettings.value.newsBackgroundDuration,
-                                            if (getMainViewModel().appSettings.value.newsBackgroundDuration != 1) "s" else ""
-                                        )
-                                    else -> "Disabled"
+                                modifierInside = Modifier.padding(horizontal = 20.dp, vertical = 15.dp),
+                                leadingIcon = {
+                                    Icon(
+                                        imageVector = ImageVector.vectorResource(R.drawable.ic_outline_calendar_clock_24),
+                                        context.getString(R.string.settings_option_newsschedule),
+                                        modifier = Modifier.padding(end = 15.dp)
+                                    )
                                 },
+                                title = context.getString(R.string.settings_option_newsschedule),
+                                description = context.getString(R.string.settings_option_newsschedule_description),
                                 onClick = {
-                                    if (PermissionRequestActivity.checkPermissionScheduleExactAlarm(context).isGranted) {
-                                        dialogFetchNews.value = true
-                                    } else {
-                                        showSnackBar(
-                                            text = "You need to enable Alarms & Reminders in Android app settings to use this feature.",
-                                            clearPrevious = true,
-                                            actionText = "Open",
-                                            action = {
-                                                Intent(context, PermissionRequestActivity::class.java).also {
-                                                    context.startActivity(it)
-                                                }
-                                            }
-                                        )
-                                    }
-                                }
-                            )
-                            OptionItem(
-                                title = "News filter settings",
-                                description = "Make your filter to only receive your preferred subject news.",
-                                onClick = {
-                                    val intent = Intent(context, SettingsActivity::class.java)
-                                    intent.action = "settings_newsfilter"
-                                    context.startActivity(intent)
+                                    Intent(context, SettingsActivity::class.java).apply {
+                                        action = SettingsActivity.INTENT_NEWSNOTIFICATIONSETTINGS
+                                    }.also { intent -> context.startActivity(intent) }
                                 }
                             )
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                                 OptionItem(
-                                    title = "System notification settings",
-                                    description = "Click here to manage app notifications in Android app settings.",
+                                    modifierInside = Modifier.padding(horizontal = 20.dp, vertical = 15.dp),
+                                    leadingIcon = {
+                                        Icon(
+                                            Icons.Default.Notifications,
+                                            context.getString(R.string.settings_option_notificationoutside),
+                                            modifier = Modifier.padding(end = 15.dp)
+                                        )
+                                    },
+                                    title = context.getString(R.string.settings_option_notificationoutside),
+                                    description = context.getString(R.string.settings_option_notificationoutside_description),
                                     onClick = {
                                         context.startActivity(Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS).also { intent ->
-                                            intent.putExtra(Settings.EXTRA_APP_PACKAGE, packageName)
+                                            intent.putExtra(Settings.EXTRA_APP_PACKAGE, context.packageName)
                                         })
                                     }
                                 )
@@ -156,41 +174,65 @@ fun SettingsActivity.MainView(
                     DividerItem(padding = PaddingValues(top = 5.dp, bottom = 15.dp))
                     ContentRegion(
                         modifier = Modifier
-                            .padding(horizontal = 20.dp)
                             .padding(top = 10.dp),
-                        text = "Appearance",
+                        textModifier = Modifier.padding(horizontal = 20.dp),
+                        text = context.getString(R.string.settings_category_appearance),
                         content = {
                             OptionItem(
-                                title = "App theme",
+                                modifierInside = Modifier.padding(horizontal = 20.dp, vertical = 15.dp),
+                                leadingIcon = {
+                                    Icon(
+                                        imageVector = ImageVector.vectorResource(R.drawable.ic_baseline_dark_mode_24),
+                                        context.getString(R.string.settings_option_apptheme),
+                                        modifier = Modifier.padding(end = 15.dp)
+                                    )
+                                },
+                                title = context.getString(R.string.settings_option_apptheme),
                                 description = String.format(
-                                    "%s%s",
-                                    when (getMainViewModel().appSettings.value.themeMode) {
-                                        ThemeMode.FollowDeviceTheme -> "Follow device theme"
-                                        ThemeMode.DarkMode -> "Dark mode"
-                                        ThemeMode.LightMode -> "Light mode"
+                                    "%s %s",
+                                    when (mainViewModel.appSettings.value.themeMode) {
+                                        ThemeMode.FollowDeviceTheme -> context.getString(R.string.settings_option_apptheme_choice_followdevice)
+                                        ThemeMode.DarkMode -> context.getString(R.string.settings_option_apptheme_choice_dark)
+                                        ThemeMode.LightMode -> context.getString(R.string.settings_option_apptheme_choice_light)
                                     },
-                                    if (getMainViewModel().appSettings.value.dynamicColor) " (dynamic color enabled)" else ""
+                                    if (mainViewModel.appSettings.value.dynamicColor) context.getString(R.string.settings_option_apptheme_choice_dynamiccolorenabled) else ""
                                 ),
                                 onClick = { dialogAppTheme.value = true }
                             )
                             OptionSwitchItem(
-                                title = "Black background",
-                                description = "Make app background to black color. Only in dark mode and turned off background image.",
-                                isChecked = getMainViewModel().appSettings.value.blackBackground,
+                                modifierInside = Modifier.padding(horizontal = 20.dp, vertical = 15.dp),
+                                leadingIcon = {
+                                    Icon(
+                                        imageVector = ImageVector.vectorResource(R.drawable.ic_baseline_contrast_24),
+                                        context.getString(R.string.settings_option_blackbackground),
+                                        modifier = Modifier.padding(end = 15.dp)
+                                    )
+                                },
+                                title = context.getString(R.string.settings_option_blackbackground),
+                                description = context.getString(R.string.settings_option_blackbackground_description),
+                                isChecked = mainViewModel.appSettings.value.blackBackground,
                                 onValueChanged = { value ->
-                                    getMainViewModel().appSettings.value =
-                                        getMainViewModel().appSettings.value.clone(
+                                    mainViewModel.appSettings.value =
+                                        mainViewModel.appSettings.value.clone(
                                             blackBackground = value
                                         )
-                                    saveSettings()
+                                    mainViewModel.saveSettings()
                                 }
                             )
                             OptionItem(
-                                title = "Background image",
-                                description = when (getMainViewModel().appSettings.value.backgroundImage) {
-                                    BackgroundImageOption.None -> "None"
-                                    BackgroundImageOption.YourCurrentWallpaper -> "Your current wallpaper"
-                                    BackgroundImageOption.PickFileFromMedia -> "Your picked image"
+                                modifierInside = Modifier.padding(horizontal = 20.dp, vertical = 15.dp),
+                                leadingIcon = {
+                                    Icon(
+                                        imageVector = ImageVector.vectorResource(R.drawable.ic_baseline_image_24),
+                                        context.getString(R.string.settings_option_wallpaperbackground),
+                                        modifier = Modifier.padding(end = 15.dp)
+                                    )
+                                },
+                                title = context.getString(R.string.settings_option_wallpaperbackground),
+                                description = when (mainViewModel.appSettings.value.backgroundImage) {
+                                    BackgroundImageOption.None -> context.getString(R.string.settings_option_wallpaperbackground_choice_none)
+                                    BackgroundImageOption.YourCurrentWallpaper -> context.getString(R.string.settings_option_wallpaperbackground_choice_currentwallpaper)
+                                    BackgroundImageOption.PickFileFromMedia -> context.getString(R.string.settings_option_wallpaperbackground_choice_pickedimage)
                                 },
                                 onClick = { dialogBackground.value = true }
                             )
@@ -198,13 +240,20 @@ fun SettingsActivity.MainView(
                     )
                     DividerItem(padding = PaddingValues(top = 5.dp, bottom = 15.dp))
                     ContentRegion(
-                        modifier = Modifier
-                            .padding(horizontal = 20.dp)
-                            .padding(top = 10.dp),
-                        text = "Miscellaneous settings",
+                        modifier = Modifier.padding(top = 10.dp),
+                        textModifier = Modifier.padding(horizontal = 20.dp),
+                        text = context.getString(R.string.settings_category_miscellaneous),
                         content = {
                             OptionItem(
-                                title = "App language",
+                                modifierInside = Modifier.padding(horizontal = 20.dp, vertical = 15.dp),
+                                leadingIcon = {
+                                    Icon(
+                                        imageVector = ImageVector.vectorResource(R.drawable.google_fonts_globe_24),
+                                        context.getString(R.string.settings_option_applanguage),
+                                        modifier = Modifier.padding(end = 15.dp)
+                                    )
+                                },
+                                title = context.getString(R.string.settings_option_applanguage),
                                 description = Locale.getDefault().displayName,
                                 onClick = {
                                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -213,14 +262,22 @@ fun SettingsActivity.MainView(
                                         context.startActivity(intent)
                                     } else {
                                         val intent = Intent(context, SettingsActivity::class.java)
-                                        intent.action = "settings_languagesettings"
+                                        intent.action = SettingsActivity.INTENT_LANGUAGESETTINGS
                                         context.startActivity(intent)
                                     }
                                 }
                             )
                             OptionItem(
-                                title = "Application permissions",
-                                description = "Click here for allow and manage app permissions you granted.",
+                                modifierInside = Modifier.padding(horizontal = 20.dp, vertical = 15.dp),
+                                leadingIcon = {
+                                    Icon(
+                                        imageVector = ImageVector.vectorResource(R.drawable.blank_24),
+                                        "",
+                                        modifier = Modifier.padding(end = 15.dp)
+                                    )
+                                },
+                                title = context.getString(R.string.settings_option_apppermission),
+                                description = context.getString(R.string.settings_option_apppermission_description),
                                 onClick = {
                                     context.startActivity(
                                         Intent(
@@ -231,23 +288,39 @@ fun SettingsActivity.MainView(
                                 }
                             )
                             OptionSwitchItem(
-                                title = "Open link inside app",
-                                description = "Open clicked link without leaving this app. Turn off to open link in default browser.",
-                                isChecked = getMainViewModel().appSettings.value.openLinkInsideApp,
+                                modifierInside = Modifier.padding(horizontal = 20.dp, vertical = 15.dp),
+                                leadingIcon = {
+                                    Icon(
+                                        imageVector = ImageVector.vectorResource(R.drawable.ic_baseline_web_24),
+                                        context.getString(R.string.settings_option_openlinkinsideapp),
+                                        modifier = Modifier.padding(end = 15.dp)
+                                    )
+                                },
+                                title = context.getString(R.string.settings_option_openlinkinsideapp),
+                                description = context.getString(R.string.settings_option_openlinkinsideapp_description),
+                                isChecked = mainViewModel.appSettings.value.openLinkInsideApp,
                                 onValueChanged = { value ->
-                                    getMainViewModel().appSettings.value =
-                                        getMainViewModel().appSettings.value.clone(
+                                    mainViewModel.appSettings.value =
+                                        mainViewModel.appSettings.value.clone(
                                             openLinkInsideApp = value
                                         )
-                                    saveSettings()
+                                    mainViewModel.saveSettings()
                                 }
                             )
                             OptionItem(
-                                title = "Experiment settings",
-                                description = "Our current experiment settings before public.",
+                                modifierInside = Modifier.padding(horizontal = 20.dp, vertical = 15.dp),
+                                leadingIcon = {
+                                    Icon(
+                                        imageVector = ImageVector.vectorResource(R.drawable.google_fonts_science_24),
+                                        context.getString(R.string.settings_option_experiemntsettings),
+                                        modifier = Modifier.padding(end = 15.dp)
+                                    )
+                                },
+                                title = context.getString(R.string.settings_option_experiemntsettings),
+                                description = context.getString(R.string.settings_option_experiemntsettings_description),
                                 onClick = {
                                     val intent = Intent(context, SettingsActivity::class.java)
-                                    intent.action = "settings_experimentsettings"
+                                    intent.action = SettingsActivity.INTENT_EXPERIMENTSETTINGS
                                     context.startActivity(intent)
                                 }
                             )
@@ -256,37 +329,63 @@ fun SettingsActivity.MainView(
                     DividerItem(padding = PaddingValues(top = 5.dp, bottom = 15.dp))
                     ContentRegion(
                         modifier = Modifier
-                            .padding(horizontal = 20.dp)
                             .padding(top = 10.dp),
-                        text = "About",
+                        textModifier = Modifier.padding(horizontal = 20.dp),
+                        text = context.getString(R.string.settings_category_about),
                         content = {
                             OptionItem(
-                                title = "Version",
-                                description = "Current version: ${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})\nClick here to check for update",
+                                modifierInside = Modifier.padding(horizontal = 20.dp, vertical = 15.dp),
+                                leadingIcon = {
+                                    Icon(
+                                        imageVector = ImageVector.vectorResource(R.drawable.ic_baseline_info_24),
+                                        "",
+                                        modifier = Modifier.padding(end = 15.dp)
+                                    )
+                                },
+                                title = context.getString(R.string.settings_category_about),
+                                description = context.getString(
+                                    R.string.settings_option_version_description,
+                                    BuildConfig.VERSION_NAME,
+                                    BuildConfig.VERSION_CODE
+                                ),
                                 onClick = {
-                                    showSnackBar("This option is in development. Check back soon.", true)
+                                    onShowSnackBar?.let { it(context.getString(R.string.feature_not_ready), true, null, null) }
                                     /* TODO: Implement here: Check for updates */
                                 }
                             )
                             OptionItem(
-                                title = "Changelogs",
-                                description = "Tap to view app changelog",
+                                modifierInside = Modifier.padding(horizontal = 20.dp, vertical = 15.dp),
+                                leadingIcon = {
+                                    Icon(
+                                        imageVector = ImageVector.vectorResource(R.drawable.google_fonts_device_reset_24),
+                                        "",
+                                        modifier = Modifier.padding(end = 15.dp)
+                                    )
+                                },
+                                title = context.getString(R.string.settings_option_changelog),
+                                description = context.getString(R.string.settings_option_changelog_description),
                                 onClick = {
-                                    openLink(
-                                        url = "https://github.com/ZoeMeow1027/DutSchedule/blob/stable/CHANGELOG.md",
-                                        context = context,
-                                        customTab = getMainViewModel().appSettings.value.openLinkInsideApp,
+                                    context.openLink(
+                                        url = GlobalVariables.LINK_CHANGELOG,
+                                        customTab = mainViewModel.appSettings.value.openLinkInsideApp,
                                     )
                                 }
                             )
                             OptionItem(
-                                title = "GitHub (click to open link)",
-                                description = "https://github.com/ZoeMeow1027/DutSchedule",
+                                modifierInside = Modifier.padding(horizontal = 20.dp, vertical = 15.dp),
+                                leadingIcon = {
+                                    Icon(
+                                        imageVector = ImageVector.vectorResource(R.drawable.github_mark_24),
+                                        "repository",
+                                        modifier = Modifier.padding(end = 15.dp)
+                                    )
+                                },
+                                title = context.getString(R.string.settings_option_github),
+                                description = GlobalVariables.LINK_REPOSITORY,
                                 onClick = {
-                                    openLink(
-                                        url = "https://github.com/ZoeMeow1027/DutSchedule",
-                                        context = context,
-                                        customTab = getMainViewModel().appSettings.value.openLinkInsideApp,
+                                    context.openLink(
+                                        url = GlobalVariables.LINK_REPOSITORY,
+                                        customTab = mainViewModel.appSettings.value.openLinkInsideApp,
                                     )
                                 }
                             )
@@ -297,79 +396,70 @@ fun SettingsActivity.MainView(
         }
     )
     DialogAppThemeSettings(
+        context = context,
         isVisible = dialogAppTheme.value,
-        themeModeValue = getMainViewModel().appSettings.value.themeMode,
-        dynamicColorEnabled = getMainViewModel().appSettings.value.dynamicColor,
+        themeModeValue = mainViewModel.appSettings.value.themeMode,
+        dynamicColorEnabled = mainViewModel.appSettings.value.dynamicColor,
         onDismiss = { dialogAppTheme.value = false },
         onValueChanged = { themeMode, dynamicColor ->
-            getMainViewModel().appSettings.value = getMainViewModel().appSettings.value.clone(
+            mainViewModel.appSettings.value = mainViewModel.appSettings.value.clone(
                 themeMode = themeMode,
                 dynamicColor = dynamicColor
             )
-            saveSettings()
+            mainViewModel.saveSettings()
         }
     )
     DialogAppBackgroundSettings(
         context = context,
-        value = getMainViewModel().appSettings.value.backgroundImage,
+        value = mainViewModel.appSettings.value.backgroundImage,
         isVisible = dialogBackground.value,
-        onDismiss = { dialogBackground.value = false },
-        onValueChanged = { value ->
-            when (value) {
-                BackgroundImageOption.None -> {
-                    getMainViewModel().appSettings.value =
-                        getMainViewModel().appSettings.value.clone(
+        onDismiss = { dialogBackground.value = false }
+    ) { value ->
+        when (value) {
+            BackgroundImageOption.None -> {
+                mainViewModel.appSettings.value =
+                    mainViewModel.appSettings.value.clone(
+                        backgroundImage = value
+                    )
+            }
+
+            BackgroundImageOption.YourCurrentWallpaper -> {
+                val compPer =
+                    PermissionRequestActivity.checkPermissionManageExternalStorage().isGranted
+                if (compPer) {
+                    mainViewModel.appSettings.value =
+                        mainViewModel.appSettings.value.clone(
                             backgroundImage = value
                         )
-                }
-                BackgroundImageOption.YourCurrentWallpaper -> {
-                    val compPer = PermissionRequestActivity.checkPermissionManageExternalStorage().isGranted
-                    if (compPer) {
-                        getMainViewModel().appSettings.value =
-                            getMainViewModel().appSettings.value.clone(
-                                backgroundImage = value
-                            )
-                    } else {
-                        showSnackBar(
-                            text = "You need to grant All files access in application permission to use this feature. You can use \"Choose a image from media\" without this permission.",
-                            clearPrevious = true,
-                            actionText = "Grant",
-                            action = {
-                                Intent(context, PermissionRequestActivity::class.java).also {
-                                    context.startActivity(it)
-                                }
+                } else {
+                    onShowSnackBar?.let {
+                        it(
+                            context.getString(R.string.permission_missing_all_file_access),
+                            true,
+                            context.getString(R.string.action_grant)
+                        ) {
+                            Intent(context, PermissionRequestActivity::class.java).also {
+                                context.startActivity(it)
                             }
-                        )
+                        }
                     }
-                }
-                BackgroundImageOption.PickFileFromMedia -> {
-                    // Launch the photo picker and let the user choose only images.
-                    mediaRequest.let { it() }
                 }
             }
 
-            dialogBackground.value = false
-            saveSettings()
+            BackgroundImageOption.PickFileFromMedia -> {
+                // Launch the photo picker and let the user choose only images.
+                mediaRequest()
+            }
         }
-    )
-    DialogFetchNewsInBackgroundSettings(
-        isVisible = dialogFetchNews.value,
-        value = getMainViewModel().appSettings.value.newsBackgroundDuration,
-        onDismiss = { dialogFetchNews.value = false },
-        onValueChanged = { value ->
-            dialogFetchNews.value = false
-            getMainViewModel().appSettings.value = getMainViewModel().appSettings.value.clone(
-                fetchNewsBackgroundDuration = value
-            )
-            getMainViewModel().saveSettings()
-        }
-    )
+
+        dialogBackground.value = false
+        mainViewModel.saveSettings()
+    }
     BackHandler(
-        enabled = dialogAppTheme.value || dialogBackground.value || dialogFetchNews.value,
+        enabled = dialogAppTheme.value || dialogBackground.value,
         onBack = {
             dialogAppTheme.value = false
             dialogBackground.value = false
-            dialogFetchNews.value = false
         }
     )
 }

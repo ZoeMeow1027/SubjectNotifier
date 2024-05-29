@@ -1,5 +1,6 @@
 package io.zoemeow.dutschedule.ui.component.news
 
+import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -30,6 +31,7 @@ import io.zoemeow.dutschedule.utils.CustomDateUtil
 
 @Composable
 fun NewsDetailScreen(
+    context: Context,
     newsItem: NewsGlobalItem,
     newsType: NewsType,
     padding: PaddingValues = PaddingValues(0.dp),
@@ -38,6 +40,7 @@ fun NewsDetailScreen(
     when (newsType) {
         NewsType.Global -> {
             NewsDetailBody_NewsGlobal(
+                context = context,
                 padding = padding,
                 newsItem = newsItem,
                 linkClicked = linkClicked
@@ -45,6 +48,7 @@ fun NewsDetailScreen(
         }
         NewsType.Subject -> {
             NewsDetailBody_NewsSubject(
+                context = context,
                 padding = padding,
                 newsItem = newsItem as NewsSubjectItem,
                 linkClicked = linkClicked
@@ -55,6 +59,7 @@ fun NewsDetailScreen(
 
 @Composable
 private fun NewsDetailBody_NewsGlobal(
+    context: Context,
     padding: PaddingValues,
     newsItem: NewsGlobalItem,
     linkClicked: ((String) -> Unit)? = null
@@ -81,7 +86,10 @@ private fun NewsDetailBody_NewsGlobal(
                         "dd/MM/yyyy",
                         "UTC"
                     )
-                } (${CustomDateUtil.unixToDuration(newsItem.date)})",
+                } (${CustomDateUtil.unixToDurationWithLocale(
+                    context = context,
+                    unix = newsItem.date
+                )})",
                 style = MaterialTheme.typography.titleLarge,
                 modifier = Modifier.padding(vertical = 7.dp)
             )
@@ -154,6 +162,7 @@ private fun NewsDetailBody_NewsGlobal(
 
 @Composable
 private fun NewsDetailBody_NewsSubject(
+    context: Context,
     padding: PaddingValues,
     newsItem: NewsSubjectItem,
     linkClicked: ((String) -> Unit)? = null
@@ -184,7 +193,10 @@ private fun NewsDetailBody_NewsSubject(
                         "dd/MM/yyyy",
                         "UTC"
                     )
-                } (${CustomDateUtil.unixToDuration(newsItem.date)})",
+                } (${CustomDateUtil.unixToDurationWithLocale(
+                    context = context,
+                    unix = newsItem.date
+                )})",
                 style = MaterialTheme.typography.titleLarge,
                 modifier = Modifier.padding(vertical = 7.dp)
             )

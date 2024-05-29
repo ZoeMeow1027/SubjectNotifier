@@ -12,14 +12,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import io.zoemeow.dutschedule.R
 import io.zoemeow.dutschedule.activity.PermissionRequestActivity
-import io.zoemeow.dutschedule.activity.SettingsActivity
 import io.zoemeow.dutschedule.model.settings.BackgroundImageOption
 import io.zoemeow.dutschedule.ui.component.base.DialogBase
 import io.zoemeow.dutschedule.ui.component.base.DialogRadioButton
 
 @Composable
-fun SettingsActivity.DialogAppBackgroundSettings(
+fun DialogAppBackgroundSettings(
     context: Context,
     isVisible: Boolean = false,
     value: BackgroundImageOption,
@@ -30,7 +30,7 @@ fun SettingsActivity.DialogAppBackgroundSettings(
         modifier = Modifier
             .fillMaxWidth()
             .padding(25.dp),
-        title = "App background",
+        title = context.getString(R.string.settings_dialog_wallpaperbackground_title),
         isVisible = isVisible,
         canDismiss = true,
         isTitleCentered = true,
@@ -44,7 +44,7 @@ fun SettingsActivity.DialogAppBackgroundSettings(
                 modifier = Modifier.fillMaxWidth(),
                 content = {
                     DialogRadioButton(
-                        title = "None",
+                        title = context.getString(R.string.settings_dialog_wallpaperbackground_choice_none),
                         selected = value == BackgroundImageOption.None,
                         onClick = {
                             onDismiss()
@@ -53,15 +53,16 @@ fun SettingsActivity.DialogAppBackgroundSettings(
                     )
                     DialogRadioButton(
                         title = String.format(
-                            "Your current wallpaper%s",
+                            "%s%s",
+                            context.getString(R.string.settings_dialog_wallpaperbackground_choice_currentwallpaper),
                             when {
-                                // TODO: This isn't unavailable for Android 14
+                                // This isn't unavailable for Android 14
                                 (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) -> {
-                                    "\n(This option is unavailable on Android 14)"
+                                    "\n(${context.getString(R.string.settings_dialog_wallpaperbackground_choice_currentwallpaper_disa14)})"
                                 }
                                 // Permission is not granted.
                                 (!PermissionRequestActivity.checkPermissionManageExternalStorage().isGranted) -> {
-                                    "\n(You need to grant access all file permission)"
+                                    "\n(${context.getString(R.string.settings_dialog_wallpaperbackground_choice_currentwallpaper_dismisperext)})"
                                 }
                                 // Else, no exception
                                 else -> { "" }
@@ -78,7 +79,7 @@ fun SettingsActivity.DialogAppBackgroundSettings(
                         }
                     )
                     DialogRadioButton(
-                        title = "Choose a image from media",
+                        title = context.getString(R.string.settings_dialog_wallpaperbackground_choice_pickaimage),
                         selected = value == BackgroundImageOption.PickFileFromMedia,
                         onClick = {
                             onDismiss()
@@ -91,7 +92,7 @@ fun SettingsActivity.DialogAppBackgroundSettings(
         actionButtons = {
             TextButton(
                 onClick = onDismiss,
-                content = { Text("Cancel") },
+                content = { Text(context.getString(R.string.action_cancel)) },
                 modifier = Modifier.padding(start = 8.dp),
             )
         }

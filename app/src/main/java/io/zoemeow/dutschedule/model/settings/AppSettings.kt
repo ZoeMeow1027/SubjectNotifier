@@ -5,6 +5,9 @@ import io.zoemeow.dutschedule.model.account.SchoolYearItem
 import java.io.Serializable
 
 data class AppSettings(
+    @SerializedName("appsettings.layout.mainview.dashboardview")
+    val mainScreenDashboardView: Boolean = false,
+
     @SerializedName("appsettings.appearance.thememode")
     val themeMode: ThemeMode = ThemeMode.FollowDeviceTheme,
 
@@ -32,6 +35,21 @@ data class AppSettings(
     @SerializedName("appsettings.newsbackground.duration")
     val newsBackgroundDuration: Int = 0,
 
+    @SerializedName("appsettings.newsbackground.newsglobal.enabled")
+    val newsBackgroundGlobalEnabled: Boolean = true,
+
+    /**
+     * Is subject news notify you?
+     *
+     * -1: Off;
+     * 0: All;
+     * 1: Your subject schedule list;
+     * 2: Custom list (follow "newsBackgroundFilterList")
+     * @since v2.0-draft17
+     */
+    @SerializedName("appsettings.newsbackground.newssubject.enabled")
+    val newsBackgroundSubjectEnabled: Int = 0,
+
     @SerializedName("appsettings.newsbackground.parsenewssubject")
     val newsBackgroundParseNewsSubject: Boolean = false,
 
@@ -39,6 +57,7 @@ data class AppSettings(
     val currentSchoolYear: SchoolYearItem = SchoolYearItem(),
 ): Serializable {
     fun clone(
+        mainScreenDashboardView: Boolean? = null,
         themeMode: ThemeMode? = null,
         dynamicColor: Boolean? = null,
         blackBackground: Boolean? = null,
@@ -47,10 +66,13 @@ data class AppSettings(
         newsFilterList: ArrayList<SubjectCode>? = null,
         backgroundImageOpacity: Float? = null,
         fetchNewsBackgroundDuration: Int? = null,
+        newsBackgroundGlobalEnabled: Boolean? = null,
+        newsBackgroundSubjectEnabled: Int? = null,
         newsBackgroundParseNewsSubject: Boolean? = null,
         currentSchoolYear: SchoolYearItem? = null
     ): AppSettings {
         return AppSettings(
+            mainScreenDashboardView = mainScreenDashboardView ?: this.mainScreenDashboardView,
             themeMode = themeMode ?: this.themeMode,
             dynamicColor = dynamicColor ?: this.dynamicColor,
             blackBackground = blackBackground ?: this.blackBackground,
@@ -63,6 +85,8 @@ data class AppSettings(
                 0 -> 0
                 else -> if (fetchNewsBackgroundDuration >= 5) fetchNewsBackgroundDuration else 5
             },
+            newsBackgroundGlobalEnabled = newsBackgroundGlobalEnabled ?: this.newsBackgroundGlobalEnabled,
+            newsBackgroundSubjectEnabled = newsBackgroundSubjectEnabled ?: this.newsBackgroundSubjectEnabled,
             newsBackgroundParseNewsSubject = newsBackgroundParseNewsSubject ?: this.newsBackgroundParseNewsSubject,
             currentSchoolYear = currentSchoolYear ?: this.currentSchoolYear
         )

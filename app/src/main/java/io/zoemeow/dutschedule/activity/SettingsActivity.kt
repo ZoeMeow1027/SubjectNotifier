@@ -12,12 +12,19 @@ import io.zoemeow.dutschedule.model.settings.BackgroundImageOption
 import io.zoemeow.dutschedule.ui.view.settings.ExperimentSettings
 import io.zoemeow.dutschedule.ui.view.settings.LanguageSettings
 import io.zoemeow.dutschedule.ui.view.settings.MainView
-import io.zoemeow.dutschedule.ui.view.settings.NewsFilterSettings
+import io.zoemeow.dutschedule.ui.view.settings.NewsNotificationSettings
 import io.zoemeow.dutschedule.ui.view.settings.ParseNewsSubjectNotification
 import io.zoemeow.dutschedule.utils.BackgroundImageUtil
 
 @AndroidEntryPoint
 class SettingsActivity : BaseActivity() {
+    companion object {
+        const val INTENT_PARSENEWSSUBJECTNOTIFICATION = "settings_newssubjectnewparse"
+        const val INTENT_EXPERIMENTSETTINGS = "settings_experimentsettings"
+        const val INTENT_LANGUAGESETTINGS = "settings_languagesettings"
+        const val INTENT_NEWSNOTIFICATIONSETTINGS = "settings_newsnotificaitonsettings"
+    }
+
     @Composable
     override fun OnPreloadOnce() { }
 
@@ -27,12 +34,23 @@ class SettingsActivity : BaseActivity() {
             // Callback is invoked after the user selects a media item or closes the photo picker.
             if (uri != null) {
                 Log.d("PhotoPicker", "Selected URI: $uri")
-                BackgroundImageUtil.saveImageToAppData(this, uri)
                 getMainViewModel().appSettings.value = getMainViewModel().appSettings.value.clone(
-                    backgroundImage = BackgroundImageOption.PickFileFromMedia
+                    backgroundImage = BackgroundImageOption.None
                 )
-                getMainViewModel().saveSettings()
-                Log.d("PhotoPicker", "Copied!")
+                getMainViewModel().saveSettings(
+                    onCompleted = {
+                        BackgroundImageUtil.saveImageToAppData(this, uri)
+                        Log.d("PhotoPicker", "Copied!")
+                        getMainViewModel().appSettings.value = getMainViewModel().appSettings.value.clone(
+                            backgroundImage = BackgroundImageOption.PickFileFromMedia
+                        )
+                        getMainViewModel().saveSettings(
+                            onCompleted = {
+                                Log.d("PhotoPicker", "Copied!")
+                            }
+                        )
+                    }
+                )
             } else {
                 Log.d("PhotoPicker", "No media selected")
             }
@@ -46,23 +64,16 @@ class SettingsActivity : BaseActivity() {
         contentColor: Color
     ) {
         when (intent.action) {
-            "settings_newsfilter" -> {
-                NewsFilterSettings(
-                    snackBarHostState = snackBarHostState,
-                    containerColor = containerColor,
-                    contentColor = contentColor
-                )
-            }
-
-            "settings_newssubjectnewparse" -> {
+            INTENT_PARSENEWSSUBJECTNOTIFICATION -> {
                 ParseNewsSubjectNotification(
+                    context = context,
                     snackBarHostState = snackBarHostState,
                     containerColor = containerColor,
                     contentColor = contentColor
                 )
             }
 
-            "settings_experimentsettings" -> {
+            INTENT_EXPERIMENTSETTINGS -> {
                 ExperimentSettings(
                     context = context,
                     snackBarHostState = snackBarHostState,
@@ -71,8 +82,17 @@ class SettingsActivity : BaseActivity() {
                 )
             }
 
-            "settings_languagesettings" -> {
+            INTENT_LANGUAGESETTINGS -> {
                 LanguageSettings(
+                    context = context,
+                    snackBarHostState = snackBarHostState,
+                    containerColor = containerColor,
+                    contentColor = contentColor
+                )
+            }
+
+            INTENT_NEWSNOTIFICATIONSETTINGS -> {
+                NewsNotificationSettings(
                     context = context,
                     snackBarHostState = snackBarHostState,
                     containerColor = containerColor,

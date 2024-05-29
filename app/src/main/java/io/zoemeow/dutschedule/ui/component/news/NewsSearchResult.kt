@@ -1,5 +1,6 @@
 package io.zoemeow.dutschedule.ui.component.news
 
+import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -17,11 +18,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import io.dutwrapper.dutwrapper.model.news.NewsGlobalItem
+import io.zoemeow.dutschedule.R
 import io.zoemeow.dutschedule.model.ProcessState
 import io.zoemeow.dutschedule.utils.endOfListReached
 
 @Composable
 fun NewsSearchResult(
+    context: Context,
     modifier: Modifier = Modifier,
     newsList: List<NewsGlobalItem>,
     lazyListState: LazyListState,
@@ -43,19 +46,25 @@ fun NewsSearchResult(
                 when (processState) {
                     ProcessState.Running -> {
                         Text(
-                            "Fetching news. Please wait...",
+                            context.getString(R.string.news_search_fetching),
                             textAlign = TextAlign.Center
                         )
                     }
                     ProcessState.NotRunYet -> {
                         Text(
-                            "Tap search on top to get started.",
+                            context.getString(R.string.news_search_getstarted),
+                            textAlign = TextAlign.Center
+                        )
+                    }
+                    ProcessState.Failed -> {
+                        Text(
+                            context.getString(R.string.news_search_failed),
                             textAlign = TextAlign.Center
                         )
                     }
                     else -> {
                         Text(
-                            "No available news matches your search. Try again with new query.",
+                            context.getString(R.string.news_search_noavailablenews),
                             textAlign = TextAlign.Center
                         )
                     }
@@ -66,7 +75,7 @@ fun NewsSearchResult(
                 modifier = Modifier
                     .endOfListReached(
                         lazyListState = lazyListState,
-                        endOfListReached = {
+                        onReached = {
                             onEndOfList?.let { it() }
                         }
                     ),

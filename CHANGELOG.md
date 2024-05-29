@@ -6,6 +6,25 @@
 ## Known issues:
 - `Your current wallpaper` option in app background settings will be disabled on Android 14. You can check why in `Issue` tab in repository.
 
+## 2.0-draft17 (1404)
+- What's new
+  - News notification settings: Change your preferences about news notifications.
+  - Changed UI for Subject Fee (not final yet).
+
+- Changes and fixes
+  - Fixed [#24](https://github.com/ZoeMeow1027/DutSchedule/issues/24).
+  - Add a option to get current student year from Internet.
+    - To access that, please go to `Settings` -> `Experiment Settings` -> `Current School Year`.
+  - Some settings won't load after update. You might need to reconfig them in settings. I'm sorry about that.
+  - Login screen will let you relogin if previous attempt was failed.
+    - You can clear previous login to attempt with another account.
+  - Now you can turn off notifications about news global and news subject.
+    - In news subject notifications, you can choose about "All", "Match your filter" and "Off".
+    - News filter settings will now only shown when enabled (this mean it will hidden at default).
+  - Update Vietnamese strings for most screens, but not done yet.
+  - Optimized codes and updated dependencies to latest.
+    - Updated dependencies to latest to fix issues about Account feature.
+
 ## 2.0-draft16 (1063)
 - AccountActivity:
   - Add option to refresh login when previous is failed.

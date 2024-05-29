@@ -3,30 +3,16 @@
 A unofficial Android app to provide better UI from [sv.dut.udn.vn](http://sv.dut.udn.vn).
 
 # Version
-
 - Release version: [![https://github.com/ZoeMeow1027/DutSchedule](https://img.shields.io/github/v/release/ZoeMeow1027/DutSchedule)](https://github.com/ZoeMeow1027/DutSchedule/releases)
 - Pre-release version: [![https://github.com/ZoeMeow1027/DutSchedule/tree/draft](https://img.shields.io/github/v/tag/ZoeMeow1027/DutSchedule?label=pre-release%20tag)](https://github.com/ZoeMeow1027/DutSchedule/tree/draft)
 - Badge provided by [https://shields.io/](https://shields.io/).
+- If you want to view changelog, [click here](#where-can-i-found-app-changelog).
 
 # Features & Screenshots?
-
 - These screenshot will get you to app summary. Just navigate to [screenshot](SCREENSHOT.md) and open images to view details.
 
 # Downloads
-
 - Navigate to release (at right of this README) or click [here](https://github.com/ZoeMeow1027/DutSchedule/releases) to download app.
-
-# Build app yourself
-
-- Required Gradle: 8.5
-  - Older version of Gradle will be failed while building.
-- If you open project with Android Studio, make sure your IDE support Gradle [Gradle](https://gradle.org/releases/) above, which can be fixed by upgrading your IDE. After that, just build and run app normally as you do with another Android project.
-- If you want to build app without IDE, just type command as you build another gradle project (note that you need to [Gradle](https://gradle.org/releases/) installed first):
-
-```
-Build: gradlew build
-For Powershell: ./gradlew build
-```
 
 # FAQ
 
@@ -34,7 +20,7 @@ For Powershell: ./gradlew build
 
 If you want to:
 - View major changes: [Click here](CHANGELOG.md).
-- View entire source code changes, [click here](https://github.com/ZoeMeow1027/DutSchedule/commits).
+- View entire source code changes: [Click here](https://github.com/ZoeMeow1027/DutSchedule/commits).
   - You will need to change branch if you want to view changelog for stable/draft version.
 
 ### Why some news in application is different from sv.dut.udn.vn?
@@ -47,17 +33,35 @@ If you want to:
 
 ### I'm got issue with this app. Which place can I reproduce issue for you?
 
-- You can report issue via [Issue tab](https://github.com/ZoeMeow1027/DutSchedule/issues) on this repository.
-
-# Known issues
-
 If you found a issue, you can report this via [issue tab](https://github.com/ZoeMeow1027/DutSchedule/issues) on this repository.
 - Global news and subject news were shown not correctly.
   - You just need to refresh news and this will clear old and get latest one automatically.
 - Can't get current wallpaper as my app background wallpaper.
   - On Android 14, Google is restricted for getting current wallpaper on Android 14 or later. This issue will be delayed very loong until a posible fix. You can [see why here](https://github.com/ZoeMeow1027/DutSchedule/issues/19).
 
-# Credits, changelog and license?
-- [Changelog](CHANGELOG.md)
-- [Credit](CREDIT.md)
-- License: [MIT](LICENSE)
+# Developing
+- Required Gradle: 8.7
+  - Older version of Gradle may be failed while building.
+- Build with Android Studio:
+  - Make sure your IDE support [Gradle](https://gradle.org/releases/) above, which can be fixed by upgrading your IDE.
+  - After that, just build and run app normally as you do with another Android project.
+- Build with command line (without IDE):
+  - Ensure you have installed [Gradle](https://gradle.org/releases/) and Java JDK 17 first.
+  - Type command as you build another gradle project.
+```
+Build: gradlew build
+In Powershell: ./gradlew build
+```
+
+# Credits and license?
+- License: [**MIT**](LICENSE)
+- DISCLAIMER:
+  - This project - DutSchedule - is not affiliated with Da Nang University of Technology.
+  - DUT, Da Nang University of Technology, web materials and web contents are trademarks and copyrights of Da Nang University of Technology school.
+  - GitHub, GitHub mark and its icon are trademarks and copyrights of GitHub, Inc.
+  - Google, Android and its icon are trademarks and copyrights of Google LLC.
+- Used third-party dependencies:
+  - [Google Accompanist](https://github.com/google/accompanist): Licensed under the [Apache License 2.0](https://github.com/google/accompanist/blob/main/LICENSE).
+  - [Google Gson](https://github.com/google/gson): Licensed under the [Apache License 2.0](https://github.com/google/gson/blob/main/LICENSE).
+  - [Jsoup](https://github.com/jhy/jsoup): Licensed under the [MIT license](https://github.com/jhy/jsoup/blob/master/LICENSE).
+  - [timeago](https://github.com/marlonlom/timeago): Licensed under the [Apache License 2.0](https://github.com/marlonlom/timeago/blob/master/LICENSE).

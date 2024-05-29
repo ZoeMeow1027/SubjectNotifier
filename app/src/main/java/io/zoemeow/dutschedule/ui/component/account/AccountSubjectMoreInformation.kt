@@ -1,5 +1,6 @@
 package io.zoemeow.dutschedule.ui.component.account
 
+import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
@@ -16,14 +17,17 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import io.dutwrapper.dutwrapper.model.accounts.SubjectScheduleItem
+import io.zoemeow.dutschedule.R
 import io.zoemeow.dutschedule.model.settings.SubjectCode
 import io.zoemeow.dutschedule.ui.component.base.DialogBase
 import io.zoemeow.dutschedule.utils.CustomDateUtil
 
 @Composable
 fun AccountSubjectMoreInformation(
+    context: Context,
     item: SubjectScheduleItem? = null,
     isVisible: Boolean = false,
     onAddToFilterRequested: ((SubjectCode) -> Unit)? = null,
@@ -33,7 +37,7 @@ fun AccountSubjectMoreInformation(
         modifier = Modifier
             .fillMaxWidth()
             .padding(25.dp),
-        title = "${item?.name ?: "(unknown)"}\n${item?.lecturer ?: "(unknown)"}",
+        title = "${item?.name ?: context.getString(R.string.data_unknown)}\n${item?.lecturer ?: context.getString(R.string.data_unknown)}",
         isVisible = isVisible,
         isTitleCentered = true,
         canDismiss = true,
@@ -44,60 +48,64 @@ fun AccountSubjectMoreInformation(
             Column(
                 horizontalAlignment = Alignment.Start,
             ) {
-                CustomText("ID: ${item?.id?.toString(false) ?: "(unknown)"}")
-                CustomText("Credit: ${item?.credit ?: "(unknown)"}")
-                CustomText("Is high quality: ${item?.isHighQuality ?: "(unknown)"}")
-                CustomText("Final score formula: ${item?.pointFormula ?: "(unknown)"}")
+                CustomText("${context.getString(R.string.account_subjectinfo_data_id)}: ${item?.id?.toString(false) ?: context.getString(R.string.data_unknown)}")
+                CustomText("${context.getString(R.string.account_subjectinfo_data_credit)}: ${item?.credit ?: context.getString(R.string.data_unknown)}")
+                CustomText("${context.getString(R.string.account_subjectinfo_data_ishighquality)}: ${item?.isHighQuality ?: context.getString(R.string.data_unknown)}")
+                CustomText("${context.getString(R.string.account_subjectinfo_data_scoreformula)}: ${item?.pointFormula ?: context.getString(R.string.data_unknown)}")
                 // Subject study
                 Spacer(modifier = Modifier.size(15.dp))
                 ContentInBoxWithBorder(
-                    title = "Schedule Study",
+                    title = context.getString(R.string.account_subjectinfo_data_schedulestudy_title),
                     content = {
-                        var schList = ""
-                        item?.let {
-                            schList = it.subjectStudy.scheduleList.joinToString(
-                                separator = "; ",
-                                transform = { item1 ->
-                                    "${CustomDateUtil.dayOfWeekInString(item1.dayOfWeek + 1)},${item1.lesson.start}-${item1.lesson.end},${item1.room}"
-                                }
-                            )
-                        }
-                        CustomText("Day of week: $schList")
-                        var schWeek = ""
-                        item?.let {
-                            schWeek = it.subjectStudy.weekList.joinToString(
-                                separator = "; ",
-                                transform = { item1 ->
-                                    "${item1.start}-${item1.end}"
-                                }
-                            )
-                        }
-                        CustomText("Week range: $schWeek")
+                        CustomText(context.getString(
+                            R.string.account_subjectinfo_data_schedulestudy_dayofweek,
+                            item?.let {
+                                it.subjectStudy.scheduleList.joinToString(
+                                    separator = "; ",
+                                    transform = { item1 ->
+                                        "${CustomDateUtil.dayOfWeekInString(context, item1.dayOfWeek + 1)},${item1.lesson.start}-${item1.lesson.end},${item1.room}"
+                                    }
+                                )
+                            } ?: ""
+                        ))
+                        CustomText(context.getString(
+                            R.string.account_subjectinfo_data_schedulestudy_weekrange,
+                            item?.let {
+                                it.subjectStudy.weekList.joinToString(
+                                    separator = "; ",
+                                    transform = { item1 ->
+                                        "${item1.start}-${item1.end}"
+                                    }
+                                )
+                            } ?: ""
+                        ))
                     },
                 )
                 // Subject examination
                 Spacer(modifier = Modifier.size(15.dp))
                 ContentInBoxWithBorder(
-                    title = "Schedule Examination",
+                    title = context.getString(R.string.account_subjectinfo_data_scheduleexam_title),
                     content = {
                         if (item != null) {
-                            CustomText(
-                                "Group: ${item.subjectExam.group}" +
-                                        if (item.subjectExam.isGlobal) " (global exam)" else ""
-                            )
-                            CustomText(
-                                "Date: ${
-                                    CustomDateUtil.dateUnixToString(
-                                        item.subjectExam.date,
-                                        "dd/MM/yyyy HH:mm",
-                                        "GMT+7"
-                                    )
-                                }"
-                            )
-                            CustomText("Room: ${item.subjectExam.room}")
-
+                            CustomText(context.getString(
+                                R.string.account_subjectinfo_data_scheduleexam_group,
+                                item.subjectExam.group,
+                                if (item.subjectExam.isGlobal) context.getString(R.string.account_subjectinfo_data_scheduleexam_groupglobal) else ""
+                            ))
+                            CustomText(context.getString(
+                                R.string.account_subjectinfo_data_scheduleexam_date,
+                                CustomDateUtil.dateUnixToString(
+                                    item.subjectExam.date,
+                                    "dd/MM/yyyy HH:mm",
+                                    "GMT+7"
+                                )
+                            ))
+                            CustomText(context.getString(
+                                R.string.account_subjectinfo_data_scheduleexam_room,
+                                item.subjectExam.room
+                            ))
                         } else {
-                            CustomText("Currently no examination schedule yet for this subject.")
+                            CustomText(context.getString(R.string.account_subjectinfo_data_scheduleexam_noexamdate))
                         }
                     }
                 )
@@ -118,12 +126,12 @@ fun AccountSubjectMoreInformation(
                         }
                     }
                 },
-                content = { Text("Add to news filter") },
+                content = { Text(context.getString(R.string.account_subjectinfo_addtofilter)) },
                 modifier = Modifier.padding(start = 8.dp),
             )
             TextButton(
                 onClick = { dismissClicked?.let { it() } },
-                content = { Text("OK") },
+                content = { Text(context.getString(R.string.action_ok)) },
                 modifier = Modifier.padding(start = 8.dp),
             )
         }

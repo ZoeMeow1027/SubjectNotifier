@@ -1,5 +1,6 @@
 package io.zoemeow.dutschedule.ui.view.settings
 
+import android.app.Activity.RESULT_CANCELED
 import android.app.LocaleManager
 import android.content.Context
 import android.os.Build
@@ -24,20 +25,19 @@ import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -54,35 +54,30 @@ fun SettingsActivity.LanguageSettings(
     containerColor: Color,
     contentColor: Color
 ) {
-    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
-
     Scaffold(
-        modifier = Modifier
-            .fillMaxSize()
-            .nestedScroll(scrollBehavior.nestedScrollConnection),
+        modifier = Modifier.fillMaxSize(),
         snackbarHost = { SnackbarHost(hostState = snackBarHostState) },
         containerColor = containerColor,
         contentColor = contentColor,
         topBar = {
-            LargeTopAppBar(
-                title = { Text("App Language") },
-                colors = TopAppBarDefaults.largeTopAppBarColors(containerColor = Color.Transparent, scrolledContainerColor = Color.Transparent),
+            TopAppBar(
+                title = { Text(context.getString(R.string.settings_applanguage_title)) },
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent),
                 navigationIcon = {
                     IconButton(
                         onClick = {
-                            setResult(ComponentActivity.RESULT_CANCELED)
+                            setResult(RESULT_CANCELED)
                             finish()
                         },
                         content = {
                             Icon(
                                 Icons.AutoMirrored.Filled.ArrowBack,
-                                "",
+                                context.getString(R.string.action_back),
                                 modifier = Modifier.size(25.dp)
                             )
                         }
                     )
                 },
-                scrollBehavior = scrollBehavior,
                 actions = {
                     IconButton(
                         onClick = {
@@ -126,6 +121,7 @@ fun SettingsActivity.LanguageSettings(
                         Locale.Builder().setLanguageTag(tag).build().apply {
                             LanguageItem(
                                 title = this.displayName,
+                                context = context,
                                 selected = (currentTag.lowercase() == tag.lowercase()),
                                 clicked = {
                                     Log.d("AppLanguage", String.format("Requested changes to %s", this.displayName))
@@ -149,6 +145,7 @@ fun SettingsActivity.LanguageSettings(
 @Composable
 private fun LanguageItem(
     title: String,
+    context: Context,
     selected: Boolean = false,
     clicked: (() -> Unit)? = null
 ) {
@@ -169,7 +166,7 @@ private fun LanguageItem(
                         fontSize = 19.sp
                     )
                     if (selected) {
-                        Icon(Icons.Default.Check, "Selected")
+                        Icon(Icons.Default.Check, context.getString(R.string.tooltip_selected))
                     }
                 }
             )

@@ -17,7 +17,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import io.zoemeow.dutschedule.R
-import io.zoemeow.dutschedule.activity.SettingsActivity
 import io.zoemeow.dutschedule.model.settings.ThemeMode
 import io.zoemeow.dutschedule.ui.component.base.DialogBase
 import io.zoemeow.dutschedule.ui.component.base.DialogCheckboxButton
@@ -49,7 +48,7 @@ fun DialogAppThemeSettings(
                 content = {
                     DialogRadioButton(
                         title = context.getString(R.string.settings_dialog_apptheme_choice_followdevice),
-                        selected = themeModeValue == ThemeMode.FollowDeviceTheme,
+                        isSelected = themeModeValue == ThemeMode.FollowDeviceTheme,
                         onClick = {
                             onValueChanged(
                                 ThemeMode.FollowDeviceTheme,
@@ -59,7 +58,7 @@ fun DialogAppThemeSettings(
                     )
                     DialogRadioButton(
                         title = context.getString(R.string.settings_dialog_apptheme_choice_light),
-                        selected = themeModeValue == ThemeMode.LightMode,
+                        isSelected = themeModeValue == ThemeMode.LightMode,
                         onClick = {
                             onValueChanged(
                                 ThemeMode.LightMode,
@@ -69,7 +68,7 @@ fun DialogAppThemeSettings(
                     )
                     DialogRadioButton(
                         title = context.getString(R.string.settings_dialog_apptheme_choice_dark),
-                        selected = themeModeValue == ThemeMode.DarkMode,
+                        isSelected = themeModeValue == ThemeMode.DarkMode,
                         onClick = {
                             onValueChanged(
                                 ThemeMode.DarkMode,

@@ -13,7 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import io.zoemeow.dutschedule.R
-import io.zoemeow.dutschedule.activity.PermissionRequestActivity
+import io.zoemeow.dutschedule.activity.PermissionsActivity
 import io.zoemeow.dutschedule.model.settings.BackgroundImageOption
 import io.zoemeow.dutschedule.ui.component.base.DialogBase
 import io.zoemeow.dutschedule.ui.component.base.DialogRadioButton
@@ -45,7 +45,7 @@ fun DialogAppBackgroundSettings(
                 content = {
                     DialogRadioButton(
                         title = context.getString(R.string.settings_dialog_wallpaperbackground_choice_none),
-                        selected = value == BackgroundImageOption.None,
+                        isSelected = value == BackgroundImageOption.None,
                         onClick = {
                             onDismiss()
                             onValueChanged(BackgroundImageOption.None)
@@ -61,17 +61,17 @@ fun DialogAppBackgroundSettings(
                                     "\n(${context.getString(R.string.settings_dialog_wallpaperbackground_choice_currentwallpaper_disa14)})"
                                 }
                                 // Permission is not granted.
-                                (!PermissionRequestActivity.checkPermissionManageExternalStorage().isGranted) -> {
+                                (!PermissionsActivity.checkPermissionManageExternalStorage().isGranted) -> {
                                     "\n(${context.getString(R.string.settings_dialog_wallpaperbackground_choice_currentwallpaper_dismisperext)})"
                                 }
                                 // Else, no exception
                                 else -> { "" }
                             }
                         ),
-                        selected = value == BackgroundImageOption.YourCurrentWallpaper,
+                        isSelected = value == BackgroundImageOption.YourCurrentWallpaper,
                         onClick = {
                             val compSdk = Build.VERSION.SDK_INT < Build.VERSION_CODES.UPSIDE_DOWN_CAKE
-                            val compPer = PermissionRequestActivity.checkPermissionManageExternalStorage().isGranted
+                            val compPer = PermissionsActivity.checkPermissionManageExternalStorage().isGranted
                             if (compSdk && compPer) {
                                 onDismiss()
                                 onValueChanged(BackgroundImageOption.YourCurrentWallpaper)
@@ -80,7 +80,7 @@ fun DialogAppBackgroundSettings(
                     )
                     DialogRadioButton(
                         title = context.getString(R.string.settings_dialog_wallpaperbackground_choice_pickaimage),
-                        selected = value == BackgroundImageOption.PickFileFromMedia,
+                        isSelected = value == BackgroundImageOption.PickFileFromMedia,
                         onClick = {
                             onDismiss()
                             onValueChanged(BackgroundImageOption.PickFileFromMedia)

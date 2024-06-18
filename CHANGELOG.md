@@ -3,15 +3,31 @@
 - This will save changelog for application. Feel free to report issues, fork or contribute this project :))
 - You can also view file changed at [https://github.com/ZoeMeow1027/DutSchedule/commits](https://github.com/ZoeMeow1027/DutSchedule/commits).
 
-## Known issues:
-- `Your current wallpaper` option in app background settings will be disabled on Android 14. You can check why in `Issue` tab in repository.
+## Known issues
+- `Your current wallpaper` option in app background settings will be disabled on Android 14 and later. You can check why in `Issue` tab in repository.
+
+## 2.0-draft18 (1448)
+### Changes and fixes
+  - Update dependencies to latest
+    - Gradle to 8.8
+    - AGP to 8.5.0
+    - This will resolve login issue when server rebooted
+  - When you're failed when logging in but done it before, this will show a option for you to re-login instead
+  - SchoolYearChooser will choose between two arrows instead of ComboBox
+  - Improve Vietnamese strings
+  - Account
+    - Account Information: Show a tooltip about editing contents
+    - Account Subject Fee: Show total price and credits about this school year / semester
+    - Account Training Status: Redesign UI
+  - Main Screen (tab mode)
+    - Remove SnackbarState in Notifications (fixes duplicate SnackbarState)
 
 ## 2.0-draft17 (1404)
-- What's new
+### What's new
   - News notification settings: Change your preferences about news notifications.
   - Changed UI for Subject Fee (not final yet).
 
-- Changes and fixes
+### Changes and fixes
   - Fixed [#24](https://github.com/ZoeMeow1027/DutSchedule/issues/24).
   - Add a option to get current school year from Internet.
     - To access that, please go to `Settings` -> `Experiment Settings` -> `Current School Year`.

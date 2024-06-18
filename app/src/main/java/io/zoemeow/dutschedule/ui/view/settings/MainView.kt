@@ -38,7 +38,7 @@ import androidx.compose.ui.unit.dp
 import io.zoemeow.dutschedule.BuildConfig
 import io.zoemeow.dutschedule.GlobalVariables
 import io.zoemeow.dutschedule.R
-import io.zoemeow.dutschedule.activity.PermissionRequestActivity
+import io.zoemeow.dutschedule.activity.PermissionsActivity
 import io.zoemeow.dutschedule.activity.SettingsActivity
 import io.zoemeow.dutschedule.model.settings.BackgroundImageOption
 import io.zoemeow.dutschedule.model.settings.ThemeMode
@@ -282,7 +282,7 @@ fun SettingsMainView(
                                     context.startActivity(
                                         Intent(
                                             context,
-                                            PermissionRequestActivity::class.java
+                                            PermissionsActivity::class.java
                                         )
                                     )
                                 }
@@ -425,7 +425,7 @@ fun SettingsMainView(
 
             BackgroundImageOption.YourCurrentWallpaper -> {
                 val compPer =
-                    PermissionRequestActivity.checkPermissionManageExternalStorage().isGranted
+                    PermissionsActivity.checkPermissionManageExternalStorage().isGranted
                 if (compPer) {
                     mainViewModel.appSettings.value =
                         mainViewModel.appSettings.value.clone(
@@ -438,7 +438,7 @@ fun SettingsMainView(
                             true,
                             context.getString(R.string.action_grant)
                         ) {
-                            Intent(context, PermissionRequestActivity::class.java).also {
+                            Intent(context, PermissionsActivity::class.java).also {
                                 context.startActivity(it)
                             }
                         }

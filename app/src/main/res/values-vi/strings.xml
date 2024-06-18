@@ -3,7 +3,6 @@
     <string name="app_name">DutSchedule</string>
     <string name="feature_not_ready">Tính năng này đang được phát triển. Hãy kiểm tra lại sau.</string>
     <string name="permission_missing_all_file_access">Bạn cần phải cho phép Quyền truy cập mọi tệp trong quyền hạn ứng dụng để sử dụng tùy chọn này.</string>
-    <string name="permission_missing_alarm_and_reminders">Bạn cần phải bật quyền Chuông báo và lời nhắc trong cài đặt Android để sử dụng tính năng này.</string>
     <!-- Action string -->
     <string name="action_ok">OK</string>
     <string name="action_open">Mở</string>
@@ -147,6 +146,7 @@
     <!-- Settings news notification activity string -->
     <string name="settings_newsnotify_title">Cài đặt thông báo tin tức</string>
     <string name="settings_newsnotify_fetchnewsinbackground">Làm mới tin tức trong nền</string>
+    <string name="settings_newsnotify_snackbar_missingpermissions">Bạn cần phải bật quyền \"Thông báo\" và \"Chuông báo và lời nhắc\" trong cài đặt Android để sử dụng tính năng này.</string>
     <string name="settings_newsnotify_fetchnewsinbackground_disabled">Đã vô hiệu hóa làm mới tin tức trong nền!</string>
     <string name="settings_newsnotify_fetchnewsinbackground_enabled">Tin tức sẽ được làm mới mỗi %1$d phút!</string>
     <string name="settings_newsnotify_parsenewssubject_enabled">Đã bật (xử lý thông báo cho tin tức lớp học phần)</string>
@@ -209,6 +209,15 @@
     <string name="news_tabname_subject">Lớp học phần</string>
     <!-- News detail activity string -->
     <string name="news_detail_title">Chi tiết tin tức</string>
+    <string name="news_detail_newssubject_subjecttitle">Tin tức lớp học phần từ %1$s</string>
+    <string name="news_detail_newssubject_subjectaffected">Áp dụng với lớp học phần: %1$s</string>
+    <string name="news_detail_newssubject_subjectstatus">Trạng thái: %1$s</string>
+    <string name="news_detail_newssubject_subjectstatus_makeup">Học bù</string>
+    <string name="news_detail_newssubject_subjectstatus_leaving">Nghỉ học</string>
+    <string name="news_detail_newssubject_subjectstatus_unknown">(không rõ)</string>
+    <string name="news_detail_newssubject_subjectlesson">Tiết học bị ảnh hưởng: %1$s</string>
+    <string name="news_detail_newssubject_subjectdate">Ngày: %1$s</string>
+    <string name="news_detail_newssubject_subjectroom">Phòng sẽ học bù: %1$s</string>
     <string name="news_detail_addtofilter_fab">Thêm vào bộ lọc</string>
     <string name="news_detail_addtofilter_failed">Chúng tôi không thể thêm lớp học phần này vào bộ lọc tin tức của bạn! Hãy thử lại hoặc thêm bộ lọc này thủ công trong Cài đặt.</string>
     <!-- News search activity string -->
@@ -241,6 +250,8 @@
     <string name="account_login_successful">Đã đăng nhập thành công!</string>
     <string name="account_login_failed">Chúng tôi không thể đăng nhập với tài khoản của bạn! Nếu bạn đã nhập đúng và sự cố này vẫn tồn tại, hãy mở một issue mới trên GitHub.</string>
     <string name="account_dashboard_banner_title">Thông tin cơ bản về tài khoản</string>
+    <string name="account_dashboard_banner_loginfailed">Chúng tôi không thể đăng nhập cho bạn. Một vài thông tin không được cập nhật cho đến khi bạn đăng nhập lại. Nếu bạn muốn sử dụng mật khẩu hoặc tài khoản khác, vui lòng đăng xuất.</string>
+    <string name="account_dashboard_banner_relogin">Đăng nhập lại</string>
     <string name="account_dashboard_button_subjectinfo">Thông tin học phần</string>
     <string name="account_dashboard_button_subjectfee">Học phí</string>
     <string name="account_dashboard_button_accountinfo">Thông tin tài khoản</string>
@@ -255,6 +266,7 @@
     <string name="account_schoolyear_summer">(học kỳ hè)</string>
     <!-- Subject information activity string -->
     <string name="account_subjectinfo_title">Thông tin học phần</string>
+    <string name="account_subjectinfo_summary_nosubjects">Không có học phần nào trong năm học này.\nCó thể bạn không có bất kỳ học phần nào đã đăng ký hoặc đã chọn sai năm học?</string>
     <string name="account_subjectinfo_summary_schinfo">%1$s\n\nLịch học:\n%2$s</string>
     <string name="account_subjectinfo_summary_schitem">- %1$s - Tiết %2$d-%3$d - Phòng %4$s</string>
     <string name="account_subjectinfo_filter_added">Đã thêm %1$s vào danh sách bộ lọc của bạn!</string>
@@ -275,6 +287,7 @@
     <string name="account_subjectinfo_data_scheduleexam_noexamdate">Hiện tại không có lịch thi cho môn học này.</string>
     <!-- Subject fee information activity string -->
     <string name="account_subjectfee_title">Học phí</string>
+    <string name="account_subjectfee_summary_nosubjects">Không có học phần nào trong năm học này.\nCó thể bạn không có bất kỳ học phần nào đã đăng ký hoặc đã chọn sai năm học?</string>
     <string name="account_subjectfee_summary_1credit">%1$d tín chỉ - %2$.0f%3$s</string>
     <string name="account_subjectfee_summary_manycredit">%1$d tín chỉ - %2$.0f%3$s</string>
     <string name="account_subjectfee_summary_main">Số tín chỉ: %1$d - Số tiền: %2$.0f VND</string>
@@ -282,7 +295,9 @@
     <string name="account_subjectfee_status_notdoneyet">Chưa thanh toán</string>
     <!-- Account Information activity string -->
     <string name="account_accinfo_title">Thông tin tài khoản</string>
-    <string name="account_accinfo_description">Để sao chép, hãy nhấn và giữ trường văn bản, chọn \"Chọn tất cả\" và nhấn \"Sao chép\".\nNếu bạn muốn thay đổi thông tin nào đó, bạn cần thay đổi nó trong trang web sinh viên của trường.</string>
+    <string name="account_accinfo_noinfo">Không có thông tin nào được trả từ máy chủ!\nKiểm tra thông tin đăng nhập và kết nối internet của bạn, và thử lại.</string>
+    <string name="account_accinfo_editinfo">Về việc thay đổi thông tin</string>
+    <string name="account_accinfo_description">Nếu bạn muốn thay đổi thông tin nào đó, bạn cần thay đổi nó trong trang web của trường.</string>
     <string name="account_accinfo_item_name">Tên</string>
     <string name="account_accinfo_item_dateofbirth">Ngày sinh</string>
     <string name="account_accinfo_item_placeofbirth">Nơi sinh</string>
@@ -299,8 +314,40 @@
     <string name="account_accinfo_item_trainingprogramplan">Chương trình đào tạo</string>
     <string name="account_accinfo_item_schoolemail">Email trường cấp</string>
     <string name="account_accinfo_snackbar_copied">Đã sao chép vào khay nhớ tạm!</string>
-    <!-- -->
+    <string name="account_accinfo_snackbar_nocopy">Không có gì để sao chép!</string>
+    <!-- Account training status activity string -->
     <string name="account_trainingstatus_title">Kết quả rèn luyện</string>
+    <string name="account_trainingstatus_trainbox_title">Kết quả rèn luyện của bạn</string>
+    <string name="account_trainingstatus_trainbox_schyear">Đã cập nhật đến %1$s</string>
+    <string name="account_trainingstatus_trainbox_schbutton">Xem kết quả học tập của bạn</string>
+    <string name="account_trainingstatus_graduatebox_title">Quá trình tốt nghiệp</string>
+    <string name="account_trainingstatus_graduatebox_certandgraduateresult">Kết quả chứng chỉ &amp; công nhận tốt nghiệp</string>
+    <string name="account_trainingstatus_graduatebox_notelegibletograduate">Bạn chưa đủ điều kiện để xét duyệt tốt nghiệp! Vui lòng kiểm tra các thông tin bên dưới để tìm hiểu nguyên nhân.</string>
+    <string name="account_trainingstatus_graduatebox_elegibletograduate">Bạn đã đủ điều kiện để xét duyệt tốt nghiệp! Vui lòng liên hệ phòng công tác sinh viên để tìm hiểu thêm.</string>
+    <string name="account_trainingstatus_graduatebox_certandgraduateresult_havepe">Đã có chứng chỉ Giáo dục thể chất</string>
+    <string name="account_trainingstatus_graduatebox_certandgraduateresult_havende">Đã có chứng chỉ Giáo dục quốc phòng</string>
+    <string name="account_trainingstatus_graduatebox_certandgraduateresult_haveit">Đã có chứng chỉ Tin học</string>
+    <string name="account_trainingstatus_graduatebox_certandgraduateresult_haveenglish">Đã có chứng chỉ Ngoại ngữ</string>
+    <string name="account_trainingstatus_graduatebox_certandgraduateresult_rewards">Khen thưởng</string>
+    <string name="account_trainingstatus_graduatebox_certandgraduateresult_discipline">Kỷ luật</string>
+    <string name="account_trainingstatus_graduatebox_certandgraduateresult_graduationthesisapproval">Thông tin về xét đồ án tốt nghiệp</string>
+    <string name="account_trainingstatus_graduatebox_certandgraduateresult_graduationprocessapproval">Thông tin về xét công nhận tốt nghiệp</string>
+    <string name="account_trainingstatus_graduatebox_certandgraduateresult_copied">Đã sao chép vào khay nhớ tạm!</string>
+    <string name="account_trainingstatus_graduatebox_certandgraduateresult_nocopy">Không có gì để sao chép!</string>
+    <!-- Account training status activity - Subject result string -->
+    <string name="account_trainingstatus_subjectresult_title">Kết quả học phần của bạn</string>
+    <string name="account_trainingstatus_subjectresult_filteredquery">Đã lọc học phần với truy vấn: %1$s</string>
+    <string name="account_trainingstatus_subjectresult_filteredschyear">Đã lọc học phần với năm học: %1$s</string>
+    <string name="account_trainingstatus_subjectresult_searchfilterbutton">Tìm kiếm &amp; lọc</string>
+    <string name="account_trainingstatus_subjectresult_searchquery">Truy vấn tìm kiếm</string>
+    <string name="account_trainingstatus_subjectresult_schoolyear">Năm học</string>
+    <string name="account_trainingstatus_subjectresult_schoolyear_insummer">trong học kỳ hè</string>
+    <string name="account_trainingstatus_subjectresult_subjectcode">Mã học phần</string>
+    <string name="account_trainingstatus_subjectresult_credit">Số tín chỉ</string>
+    <string name="account_trainingstatus_subjectresult_pointformula">Công thức điểm</string>
+    <string name="account_trainingstatus_subjectresult_finalscore">Điểm (T10 - T4 - Bằng chữ)</string>
     <!-- -->
     <string name="data_unknown">(không rõ)</string>
+    <string name="data_noscore">(không có điểm)</string>
+    <string name="data_nodata">(Không có dữ liệu)</string>
 </resources>

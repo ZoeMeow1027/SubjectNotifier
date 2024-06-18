@@ -94,35 +94,47 @@ class DutRequestRepository {
     fun login(
         accountSession: AccountSession,
         forceLogin: Boolean = false,
-        onSessionChanged: ((String?, Long?) -> Unit)? = null
+        onSessionChanged: ((String?, Long?, String?, String?) -> Unit)? = null
     ): Boolean {
         return when {
-            (accountSession.sessionId != null && System.currentTimeMillis() - accountSession.sessionLastRequest >= (1000 * 60 * 5) && Account.isLoggedIn(accountSession.sessionId) && !forceLogin) -> true
+            run {
+                if (accountSession.sessionId == null) return@run false
+                if (System.currentTimeMillis() > accountSession.sessionLastRequest + (1000 * 60 * 5)) return@run false
+                if (!Account.isLoggedIn(accountSession.toAccountSessionSuper())) return@run false
+                if (forceLogin) return@run false
+                return@run true
+            } -> true
             (accountSession.accountAuth.isValidLogin()) -> {
-                val sessionId = generateNewSessionId()
-                val timestamp = System.currentTimeMillis()
+                try {
+                    val session = Account.getSession()
 
-                Account.login(
-                    sessionId,
-                    accountSession.accountAuth.username,
-                    accountSession.accountAuth.password
-                )
+                    Account.login(
+                        session,
+                        Account.AuthInfo(
+                            accountSession.accountAuth.username,
+                            accountSession.accountAuth.password
+                        )
+                    )
 
-                // Return here, after send data on result
-                when (Account.isLoggedIn(sessionId)) {
-                    true -> {
-                        onSessionChanged?.let {
-                            it(sessionId, if (sessionId == null) 0 else timestamp)
-                        }
-                        true
+                    // Return here, after send data on result
+                    // If successful
+                    if (Account.isLoggedIn(session)) {
+                        onSessionChanged?.let { it(
+                            session.sessionId,
+                            System.currentTimeMillis(),
+                            session.viewState,
+                            session.viewStateGenerator
+                        ) }
+                        return true
                     }
-
-                    false -> {
-                        onSessionChanged?.let {
-                            it(null, 0)
-                        }
-                        false
+                    // If failed
+                    else {
+                        onSessionChanged?.let { it(null, 0, null, null) }
+                        return false
                     }
+                } catch (_: Exception) {
+                    onSessionChanged?.let { it(null, 0, null, null) }
+                    return false
                 }
             }
             else -> false
@@ -141,7 +153,7 @@ class DutRequestRepository {
         return try {
             CoroutineScope(Dispatchers.IO).launch {
                 kotlin.runCatching {
-                    Account.logout(accountSession.sessionId)
+                    Account.logout(accountSession.toAccountSessionSuper())
                 }
             }
             true
@@ -156,9 +168,9 @@ class DutRequestRepository {
         schoolYearItem: SchoolYearItem
     ): ArrayList<SubjectScheduleItem>? {
         return try {
-            if (Account.isLoggedIn(accountSession.sessionId)) {
-                Account.getSubjectSchedule(
-                    accountSession.sessionId,
+            if (Account.isLoggedIn(accountSession.toAccountSessionSuper())) {
+                Account.fetchSubjectSchedule(
+                    accountSession.toAccountSessionSuper(),
                     schoolYearItem.year,
                     schoolYearItem.semester
                 )
@@ -174,9 +186,9 @@ class DutRequestRepository {
         schoolYearItem: SchoolYearItem
     ): ArrayList<SubjectFeeItem>? {
         return try {
-            if (Account.isLoggedIn(accountSession.sessionId)) {
-                Account.getSubjectFee(
-                    accountSession.sessionId,
+            if (Account.isLoggedIn(accountSession.toAccountSessionSuper())) {
+                Account.fetchSubjectFee(
+                    accountSession.toAccountSessionSuper(),
                     schoolYearItem.year,
                     schoolYearItem.semester
                 )
@@ -191,8 +203,8 @@ class DutRequestRepository {
         accountSession: AccountSession
     ): AccountInformation? {
         return try {
-            if (Account.isLoggedIn(accountSession.sessionId)) {
-                Account.getAccountInformation(accountSession.sessionId)
+            if (Account.isLoggedIn(accountSession.toAccountSessionSuper())) {
+                Account.fetchAccountInformation(accountSession.toAccountSessionSuper())
             }
             else null
         } catch (ex: Exception) {
@@ -205,24 +217,10 @@ class DutRequestRepository {
         accountSession: AccountSession
     ): AccountTrainingStatus? {
         return try {
-            if (Account.isLoggedIn(accountSession.sessionId)) {
-                Account.getAccountTrainingStatus(accountSession.sessionId)
+            if (Account.isLoggedIn(accountSession.toAccountSessionSuper())) {
+                Account.fetchAccountTrainingStatus(accountSession.toAccountSessionSuper())
             }
             else null
-        } catch (ex: Exception) {
-            ex.printStackTrace()
-            null
-        }
-    }
-
-    /**
-     * Get new Session ID from sv.dut.udn.vn.
-     *
-     * @return A string will return if successfully fetched data. Otherwise will null.
-     */
-    private fun generateNewSessionId(): String? {
-        return try {
-            Account.getSessionId().sessionId
         } catch (ex: Exception) {
             ex.printStackTrace()
             null

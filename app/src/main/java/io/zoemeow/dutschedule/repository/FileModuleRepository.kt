@@ -16,15 +16,13 @@ import java.io.File
 class FileModuleRepository(
     context: Context
 ) {
-    // context.cacheDir
-
     private val PATH_CACHE_NEWSGLOBAL = "${context.filesDir.path}/news.global.cache.json"
     private val PATH_CACHE_NEWSSUBJECT = "${context.filesDir.path}/news.subject.cache.json"
     private val PATH_APPSETTINGS = "${context.filesDir.path}/settings.json"
     private val PATH_ACCOUNT = "${context.filesDir.path}/account.json"
     private val PATH_ACCOUNT_SUBJECTSCHEDULE_CACHE = "${context.filesDir.path}/account.subjectschedule.cache.json"
     private val PATH_NOTIFICATION_HISTORY = "${context.filesDir.path}/notification.cache.json"
-    private val PATH_HISTORY_NEWSSEARCH = "${context.filesDir.path}/history_news_search.json"
+    private val PATH_HISTORY_NEWSSEARCH = "${context.filesDir.path}/news.search.history.json"
     private val PATH_SCHOOLYEAR_CACHE = "${context.filesDir.path}/schoolyear.cache.json"
 
     fun saveAppSettings(

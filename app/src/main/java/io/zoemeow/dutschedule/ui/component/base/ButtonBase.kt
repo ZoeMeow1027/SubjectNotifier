@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.dp
 fun ButtonBase(
     modifier: Modifier = Modifier,
     modifierInside: Modifier = Modifier,
+    isEnabled: Boolean = true,
     clicked: (() -> Unit)? = null,
     content: @Composable RowScope.() -> Unit,
     isOutlinedButton: Boolean = false,
@@ -49,7 +50,10 @@ fun ButtonBase(
                 ),
                 shape = RoundedCornerShape(5.dp)
             )
-            .clickable { clicked?.let { it() } },
+            .run {
+                if (isEnabled) return@run this.clickable { clicked?.let { it() } }
+                else return@run this
+            },
         color = when (isOutlinedButton) {
             true -> MaterialTheme.colorScheme.background.copy(alpha = opacity)
             false -> MaterialTheme.colorScheme.inversePrimary.copy(alpha = opacity)

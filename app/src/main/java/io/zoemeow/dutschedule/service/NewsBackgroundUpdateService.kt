@@ -13,7 +13,7 @@ import io.dutwrapper.dutwrapper.model.news.NewsGlobalItem
 import io.dutwrapper.dutwrapper.model.news.NewsSubjectItem
 import io.zoemeow.dutschedule.R
 import io.zoemeow.dutschedule.activity.NewsActivity
-import io.zoemeow.dutschedule.activity.PermissionRequestActivity
+import io.zoemeow.dutschedule.activity.PermissionsActivity
 import io.zoemeow.dutschedule.model.NotificationHistory
 import io.zoemeow.dutschedule.model.ProcessState
 import io.zoemeow.dutschedule.model.news.DUTNewsInstance
@@ -228,7 +228,7 @@ class NewsBackgroundUpdateService : BaseService(
 
             // Check if any news need to be notify here using newsFiltered!
             // If no notification permission, aborting...
-            if (!PermissionRequestActivity.checkPermissionNotification(this).isGranted) {
+            if (!PermissionsActivity.checkPermissionNotification(this).isGranted) {
                 return
             }
 
@@ -345,7 +345,7 @@ class NewsBackgroundUpdateService : BaseService(
 
             // Check if any news need to be notify here using newsFiltered!
             // If no notification permission, aborting...
-            if (!PermissionRequestActivity.checkPermissionNotification(this).isGranted) {
+            if (!PermissionsActivity.checkPermissionNotification(this).isGranted) {
                 return
             }
 

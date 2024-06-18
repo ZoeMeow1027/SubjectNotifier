@@ -40,7 +40,7 @@ If you found a issue, you can report this via [issue tab](https://github.com/Zoe
   - On Android 14, Google is restricted for getting current wallpaper on Android 14 or later. This issue will be delayed very loong until a posible fix. You can [see why here](https://github.com/ZoeMeow1027/DutSchedule/issues/19).
 
 # Developing
-- Required Gradle: 8.7
+- Required Gradle: 8.8
   - Older version of Gradle may be failed while building.
 - Build with Android Studio:
   - Make sure your IDE support [Gradle](https://gradle.org/releases/) above, which can be fixed by upgrading your IDE.
@@ -60,6 +60,7 @@ In Powershell: ./gradlew build
   - DUT, Da Nang University of Technology, web materials and web contents are trademarks and copyrights of Da Nang University of Technology school.
   - GitHub, GitHub mark and its icon are trademarks and copyrights of GitHub, Inc.
   - Google, Android and its icon are trademarks and copyrights of Google LLC.
+  - Icons used by project is from Google Fonts.
 - Used third-party dependencies:
   - [Google Accompanist](https://github.com/google/accompanist): Licensed under the [Apache License 2.0](https://github.com/google/accompanist/blob/main/LICENSE).
   - [Google Gson](https://github.com/google/gson): Licensed under the [Apache License 2.0](https://github.com/google/gson/blob/main/LICENSE).

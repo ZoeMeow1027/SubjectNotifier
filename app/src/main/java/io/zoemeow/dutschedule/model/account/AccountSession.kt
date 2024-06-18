@@ -1,6 +1,7 @@
 package io.zoemeow.dutschedule.model.account
 
 import com.google.gson.annotations.SerializedName
+import io.dutwrapper.dutwrapper.Account
 import java.io.Serializable
 
 data class AccountSession(
@@ -12,16 +13,34 @@ data class AccountSession(
 
     @SerializedName("account.session.lastrequest")
     val sessionLastRequest: Long = 0,
+
+    @SerializedName("account.session.viewstate")
+    val viewState: String? = null,
+
+    @SerializedName("account.session.viewstategenerator")
+    val viewStateGenerator: String? = null
 ): Serializable {
     fun clone(
         accountAuth: AccountAuth? = null,
         sessionId: String? = null,
-        sessionLastRequest: Long? = null
+        sessionLastRequest: Long? = null,
+        viewState: String? = null,
+        viewStateGenerator: String? = null
     ): AccountSession {
         return AccountSession(
             accountAuth = accountAuth ?: this.accountAuth.clone(),
             sessionId = sessionId ?: this.sessionId,
-            sessionLastRequest = sessionLastRequest ?: this.sessionLastRequest
+            sessionLastRequest = sessionLastRequest ?: this.sessionLastRequest,
+            viewState = viewState ?: this.viewState,
+            viewStateGenerator = viewStateGenerator ?: this.viewStateGenerator
+        )
+    }
+
+    fun toAccountSessionSuper(): Account.Session {
+        return Account.Session(
+            sessionId,
+            viewState,
+            viewStateGenerator
         )
     }
 

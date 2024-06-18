@@ -37,6 +37,7 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.core.view.WindowCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.zoemeow.dutschedule.model.settings.BackgroundImageOption
@@ -65,6 +66,8 @@ abstract class BaseActivity: ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         // A surface container using the 'background' color from the theme
         super.onCreate(savedInstanceState)
+
+        WindowCompat.setDecorFitsSystemWindows(window, true)
 
         enableEdgeToEdge(
             // This app is only ever in dark mode, so hard code detectDarkMode to true.

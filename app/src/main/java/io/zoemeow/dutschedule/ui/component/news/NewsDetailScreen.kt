@@ -27,6 +27,7 @@ import io.dutwrapper.dutwrapper.model.enums.LessonStatus
 import io.dutwrapper.dutwrapper.model.enums.NewsType
 import io.dutwrapper.dutwrapper.model.news.NewsGlobalItem
 import io.dutwrapper.dutwrapper.model.news.NewsSubjectItem
+import io.zoemeow.dutschedule.R
 import io.zoemeow.dutschedule.utils.CustomDateUtil
 
 @Composable
@@ -180,8 +181,8 @@ private fun NewsDetailBody_NewsSubject(
             modifier = Modifier.padding(10.dp)
         ) {
             Text(
-                text = String.format(
-                    "Subject news from %s",
+                text = context.getString(
+                    R.string.news_detail_newssubject_subjecttitle,
                     newsItem.lecturerName
                 ),
                 style = MaterialTheme.typography.headlineMedium
@@ -226,8 +227,8 @@ private fun NewsDetailBody_NewsSubject(
                 affectedClassrooms += "]"
             }
             Text(
-                text = String.format(
-                    "Applied to: %s",
+                text = context.getString(
+                    R.string.news_detail_newssubject_subjectaffected,
                     affectedClassrooms
                 ),
                 style = MaterialTheme.typography.bodyLarge,
@@ -245,29 +246,28 @@ private fun NewsDetailBody_NewsSubject(
                 ).contains(newsItem.lessonStatus)
             ) {
                 Text(
-                    text =
-                    String.format(
-                        "Status: %s",
+                    text = context.getString(
+                        R.string.news_detail_newssubject_subjectstatus,
                         when (newsItem.lessonStatus) {
-                            LessonStatus.Leaving -> "Leaving"
-                            LessonStatus.MakeUp -> "Make up"
-                            else -> "(unknown)"
+                            LessonStatus.Leaving -> context.getString(R.string.news_detail_newssubject_subjectstatus_leaving)
+                            LessonStatus.MakeUp -> context.getString(R.string.news_detail_newssubject_subjectstatus_makeup)
+                            else -> context.getString(R.string.news_detail_newssubject_subjectstatus_unknown)
                         }
                     ),
-                    style = MaterialTheme.typography.bodyLarge,
+                    style = MaterialTheme.typography.bodyLarge
                 )
                 Spacer(modifier = Modifier.size(5.dp))
                 Text(
-                    text = String.format(
-                        "Lesson(s) affected: %s",
+                    text = context.getString(
+                        R.string.news_detail_newssubject_subjectlesson,
                         newsItem.affectedLesson
                     ),
                     style = MaterialTheme.typography.bodyLarge,
                 )
                 Spacer(modifier = Modifier.size(5.dp))
                 Text(
-                    text = String.format(
-                        "Date: %s",
+                    text = context.getString(
+                        R.string.news_detail_newssubject_subjectdate,
                         CustomDateUtil.dateUnixToString(newsItem.affectedDate, "dd/MM/yyyy", "UTC")
                     ),
                     style = MaterialTheme.typography.bodyLarge,
@@ -275,9 +275,8 @@ private fun NewsDetailBody_NewsSubject(
                 if (newsItem.lessonStatus == LessonStatus.MakeUp) {
                     Spacer(modifier = Modifier.size(5.dp))
                     Text(
-                        text =
-                        String.format(
-                            "Room affected: %s",
+                        text = context.getString(
+                            R.string.news_detail_newssubject_subjectroom,
                             newsItem.affectedRoom
                         ),
                         style = MaterialTheme.typography.bodyLarge,

@@ -42,7 +42,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import io.zoemeow.dutschedule.ui.component.permissionrequest.PermissionInformation
 
-class PermissionRequestActivity : BaseActivity() {
+class PermissionsActivity : BaseActivity() {
     private val permissionStatusList = mutableStateListOf<PermissionCheckResult>()
 
     @Composable

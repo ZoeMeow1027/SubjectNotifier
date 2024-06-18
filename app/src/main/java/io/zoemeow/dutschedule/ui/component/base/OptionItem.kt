@@ -30,7 +30,7 @@ fun OptionItem(
     description: String? = null,
     leadingIcon: (@Composable () -> Unit)? = null,
     trailingIcon: (@Composable () -> Unit)? = null,
-    onClick: () -> Unit,
+    onClick: (() -> Unit)? = null,
     isEnabled: Boolean = true,
     isVisible: Boolean = true
 ) {
@@ -43,7 +43,10 @@ fun OptionItem(
                 modifier = modifier
                     .fillMaxWidth()
                     .wrapContentHeight()
-                    .clickable { if (isEnabled) onClick() },
+                    .run {
+                        if (onClick != null && isEnabled) return@run this.clickable { onClick() }
+                        this@run
+                    },
                 color = Color.Transparent,
                 content = {
                     Row(

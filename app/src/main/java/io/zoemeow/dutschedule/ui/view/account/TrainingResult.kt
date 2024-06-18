@@ -13,15 +13,18 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -34,11 +37,23 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.ClipboardManager
+import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import io.zoemeow.dutschedule.R
 import io.zoemeow.dutschedule.activity.AccountActivity
 import io.zoemeow.dutschedule.model.ProcessState
 import io.zoemeow.dutschedule.ui.component.base.ButtonBase
+import io.zoemeow.dutschedule.ui.component.base.CheckboxOption
 import io.zoemeow.dutschedule.ui.component.base.OutlinedTextBox
 import io.zoemeow.dutschedule.ui.component.base.SimpleCardItem
 
@@ -50,6 +65,7 @@ fun AccountActivity.TrainingResult(
     containerColor: Color,
     contentColor: Color
 ) {
+    val clipboardManager: ClipboardManager = LocalClipboardManager.current
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         snackbarHost = { SnackbarHost(hostState = snackBarHostState) },
@@ -84,17 +100,23 @@ fun AccountActivity.TrainingResult(
                 }
             )
         },
-        floatingActionButton = {
-            if (getMainViewModel().accountSession.accountTrainingStatus.processState.value != ProcessState.Running) {
-                FloatingActionButton(
-                    onClick = {
-                        getMainViewModel().accountSession.fetchAccountTrainingStatus(force = true)
-                    },
-                    content = {
-                        Icon(Icons.Default.Refresh, context.getString(R.string.action_refresh))
+        bottomBar = {
+            BottomAppBar(
+                containerColor = Color.Transparent,
+                floatingActionButton = {
+                    if (getMainViewModel().accountSession.accountTrainingStatus.processState.value != ProcessState.Running) {
+                        FloatingActionButton(
+                            onClick = {
+                                getMainViewModel().accountSession.fetchAccountTrainingStatus(force = true)
+                            },
+                            content = {
+                                Icon(Icons.Default.Refresh, context.getString(R.string.action_refresh))
+                            }
+                        )
                     }
-                )
-            }
+                },
+                actions = {},
+            )
         },
         content = { padding ->
             Column(
@@ -107,42 +129,11 @@ fun AccountActivity.TrainingResult(
                             .fillMaxSize()
                             .verticalScroll(rememberScrollState()),
                         verticalArrangement = Arrangement.Top,
-                        horizontalAlignment = Alignment.Start,
+                        horizontalAlignment = Alignment.CenterHorizontally,
                         content = {
                             getMainViewModel().accountSession.accountTrainingStatus.data.value?.let {
-                                fun graduateStatus(): String {
-                                    val owned = ArrayList<String>()
-                                    val missing = ArrayList<String>()
-                                    if (it.graduateStatus?.hasSigGDTC == true) {
-                                        owned.add("GDTC certificate")
-                                    } else {
-                                        missing.add("GDTC certificate")
-                                    }
-                                    if (it.graduateStatus?.hasSigGDQP == true) {
-                                        owned.add("GDQP certificate")
-                                    } else {
-                                        missing.add("GDQP certificate")
-                                    }
-                                    if (it.graduateStatus?.hasSigEnglish == true) {
-                                        owned.add("English certificate")
-                                    } else {
-                                        missing.add("English certificate")
-                                    }
-                                    if (it.graduateStatus?.hasSigIT == true) {
-                                        owned.add("IT certificate")
-                                    } else {
-                                        missing.add("IT certificate")
-                                    }
-                                    val hasQualifiedGraduate = it.graduateStatus?.hasQualifiedGraduate == true
-
-                                    val result = "- Owned certificate(s): ${owned.joinToString(", ")}\n- Missing certificate(s): ${missing.joinToString(", ")}\n- Has qualified graduate: ${if (hasQualifiedGraduate) "Yes" else "No (check information below)"}"
-                                    owned.clear()
-                                    missing.clear()
-                                    return result
-                                }
-
                                 SimpleCardItem(
-                                    title = "Your training result",
+                                    title = context.getString(R.string.account_trainingstatus_trainbox_title),
                                     isTitleCentered = true,
                                     padding = PaddingValues(start = 10.dp, end = 10.dp, bottom = 7.dp),
                                     opacity = getControlBackgroundAlpha(),
@@ -153,27 +144,56 @@ fun AccountActivity.TrainingResult(
                                                 .padding(horizontal = 10.dp)
                                                 .padding(bottom = 10.dp),
                                             content = {
-                                                OutlinedTextBox(
-                                                    title = "Score (point / 4)",
-                                                    value = "${it.trainingSummary?.avgTrainingScore4 ?: "(unknown)"}",
-                                                    modifier = Modifier
-                                                        .fillMaxWidth()
-                                                        .padding(bottom = 5.dp)
-                                                )
-                                                OutlinedTextBox(
-                                                    title = "School year updated",
-                                                    value = it.trainingSummary?.schoolYearCurrent ?: "(unknown)",
-                                                    modifier = Modifier
-                                                        .fillMaxWidth()
-                                                        .padding(bottom = 5.dp)
+                                                Box(
+                                                    modifier = Modifier.fillMaxWidth(),
+                                                    contentAlignment = Alignment.Center,
+                                                    content = {
+                                                        val data1 = buildAnnotatedString {
+                                                            val avg4Leading = it.trainingSummary?.avgTrainingScore4.toString() ?: context.getString(R.string.data_unknown)
+                                                            val avg4Trailing = "/4"
+                                                            val schYear = context.getString(
+                                                                R.string.account_trainingstatus_trainbox_schyear,
+                                                                it.trainingSummary?.schoolYearCurrent ?: context.getString(R.string.data_unknown)
+                                                            )
+                                                            append(avg4Leading)
+                                                            addStyle(
+                                                                style = SpanStyle(
+                                                                    fontSize = 44.sp,
+                                                                    fontWeight = FontWeight.Bold
+                                                                ),
+                                                                start = 0,
+                                                                end = avg4Leading.length
+                                                            )
+                                                            append(avg4Trailing)
+                                                            addStyle(
+                                                                style = SpanStyle(fontSize = 30.sp),
+                                                                start = avg4Leading.length,
+                                                                end = avg4Leading.length + avg4Trailing.length
+                                                            )
+                                                            // Just end line here
+                                                            append("\n")
+                                                            append(schYear)
+                                                            addStyle(
+                                                                style = MaterialTheme.typography.bodyLarge.toSpanStyle(),
+                                                                start = avg4Leading.length + avg4Trailing.length + 1,
+                                                                end = avg4Leading.length + avg4Trailing.length + 1 + schYear.length
+                                                            )
+                                                        }
+                                                        ClickableText(
+                                                            text = data1,
+                                                            style = TextStyle(textAlign = TextAlign.Center),
+                                                            onClick = { _ -> }
+                                                        )
+                                                    }
                                                 )
                                                 ButtonBase(
                                                     modifier = Modifier
                                                         .fillMaxWidth()
+                                                        .padding(top = 5.dp)
                                                         .padding(vertical = 5.dp),
                                                     horizontalArrangement = Arrangement.Center,
                                                     content = {
-                                                        Text("View your training details")
+                                                        Text(context.getString(R.string.account_trainingstatus_trainbox_schbutton))
                                                     },
                                                     clicked = {
                                                         val intent = Intent(context, AccountActivity::class.java)
@@ -188,7 +208,7 @@ fun AccountActivity.TrainingResult(
                                 )
                                 Spacer(modifier = Modifier.size(5.dp))
                                 SimpleCardItem(
-                                    title = "Graduate status",
+                                    title = context.getString(R.string.account_trainingstatus_graduatebox_title),
                                     isTitleCentered = true,
                                     padding = PaddingValues(horizontal = 10.dp),
                                     opacity = getControlBackgroundAlpha(),
@@ -199,37 +219,121 @@ fun AccountActivity.TrainingResult(
                                                 .padding(horizontal = 10.dp)
                                                 .padding(bottom = 10.dp),
                                             content = {
+                                                Text(
+                                                    if (it.graduateStatus?.hasQualifiedGraduate != true) {
+                                                        context.getString(R.string.account_trainingstatus_graduatebox_notelegibletograduate)
+                                                    } else {
+                                                        context.getString(R.string.account_trainingstatus_graduatebox_elegibletograduate)
+                                                    },
+                                                    modifier = Modifier.padding(bottom = 5.dp)
+                                                )
+                                                SimpleCardItem(
+                                                    title = context.getString(R.string.account_trainingstatus_graduatebox_certandgraduateresult),
+                                                    padding = PaddingValues(vertical = 10.dp),
+                                                    isTitleCentered = true,
+                                                    titleStyle = MaterialTheme.typography.titleMedium,
+                                                    clicked = { },
+                                                    content = {
+                                                        CheckboxOption(
+                                                            title = context.getString(R.string.account_trainingstatus_graduatebox_certandgraduateresult_havepe),
+                                                            isChecked = it.graduateStatus?.hasSigGDTC == true
+                                                        )
+                                                        CheckboxOption(
+                                                            title = context.getString(R.string.account_trainingstatus_graduatebox_certandgraduateresult_havende),
+                                                            isChecked = it.graduateStatus?.hasSigGDQP == true
+                                                        )
+                                                        CheckboxOption(
+                                                            title = context.getString(R.string.account_trainingstatus_graduatebox_certandgraduateresult_haveenglish),
+                                                            isChecked = it.graduateStatus?.hasSigEnglish == true
+                                                        )
+                                                        CheckboxOption(
+                                                            title = context.getString(R.string.account_trainingstatus_graduatebox_certandgraduateresult_haveit),
+                                                            isChecked = it.graduateStatus?.hasSigIT == true
+                                                        )
+                                                    }
+                                                )
+                                                fun copyToClipboard(s: String? = null) {
+                                                    if (!s.isNullOrEmpty()) {
+                                                        clipboardManager.setText(AnnotatedString(s))
+                                                        showSnackBar(
+                                                            context.getString(R.string.account_trainingstatus_graduatebox_certandgraduateresult_copied),
+                                                            clearPrevious = true
+                                                        )
+                                                    } else {
+                                                        showSnackBar(
+                                                            context.getString(R.string.account_trainingstatus_graduatebox_certandgraduateresult_nocopy),
+                                                            clearPrevious = true
+                                                        )
+                                                    }
+                                                }
                                                 OutlinedTextBox(
-                                                    title = "Certificate & graduate result",
-                                                    value = graduateStatus(),
+                                                    title = context.getString(R.string.account_trainingstatus_graduatebox_certandgraduateresult_rewards),
+                                                    value = it.graduateStatus?.rewardsInfo,
+                                                    placeHolderIfNull = context.getString(R.string.data_nodata),
+                                                    trailingIcon = {
+                                                        IconButton(
+                                                            onClick = {
+                                                                copyToClipboard(it.graduateStatus?.rewardsInfo)
+                                                            },
+                                                            content = {
+                                                                Icon(ImageVector.vectorResource(R.drawable.ic_baseline_content_copy_24), context.getString(R.string.action_copy))
+                                                            }
+                                                        )
+                                                    },
                                                     modifier = Modifier
                                                         .fillMaxWidth()
                                                         .padding(bottom = 5.dp)
                                                 )
                                                 OutlinedTextBox(
-                                                    title = "Commend and rewards",
-                                                    value = it.graduateStatus?.info1 ?: "(unknown)",
+                                                    title = context.getString(R.string.account_trainingstatus_graduatebox_certandgraduateresult_discipline),
+                                                    value = it.graduateStatus?.discipline,
+                                                    placeHolderIfNull = context.getString(R.string.data_nodata),
+                                                    trailingIcon = {
+                                                        IconButton(
+                                                            onClick = {
+                                                                copyToClipboard(it.graduateStatus?.discipline)
+                                                            },
+                                                            content = {
+                                                                Icon(ImageVector.vectorResource(R.drawable.ic_baseline_content_copy_24), context.getString(R.string.action_copy))
+                                                            }
+                                                        )
+                                                    },
                                                     modifier = Modifier
                                                         .fillMaxWidth()
                                                         .padding(bottom = 5.dp)
                                                 )
                                                 OutlinedTextBox(
-                                                    title = "Discipline",
-                                                    value = it.graduateStatus?.info2 ?: "(unknown)",
+                                                    title = context.getString(R.string.account_trainingstatus_graduatebox_certandgraduateresult_graduationthesisapproval),
+                                                    value = it.graduateStatus?.eligibleGraduationThesisStatus,
+                                                    placeHolderIfNull = context.getString(R.string.data_nodata),
+                                                    trailingIcon = {
+                                                        IconButton(
+                                                            onClick = {
+                                                                copyToClipboard(it.graduateStatus?.eligibleGraduationThesisStatus)
+                                                            },
+                                                            content = {
+                                                                Icon(ImageVector.vectorResource(R.drawable.ic_baseline_content_copy_24), context.getString(R.string.action_copy))
+                                                            }
+                                                        )
+                                                    },
                                                     modifier = Modifier
                                                         .fillMaxWidth()
                                                         .padding(bottom = 5.dp)
                                                 )
                                                 OutlinedTextBox(
-                                                    title = "Information about graduation thesis approval",
-                                                    value = it.graduateStatus?.info3 ?: "(unknown)",
-                                                    modifier = Modifier
-                                                        .fillMaxWidth()
-                                                        .padding(bottom = 5.dp)
-                                                )
-                                                OutlinedTextBox(
-                                                    title = "Information about graduate process approval",
-                                                    value = it.graduateStatus?.approveGraduateProcessInfo ?: "(unknown)",
+                                                    title = context.getString(R.string.account_trainingstatus_graduatebox_certandgraduateresult_graduationprocessapproval),
+                                                    value = it.graduateStatus?.eligibleGraduationStatus,
+                                                    placeHolderIfNull = context.getString(R.string.data_nodata),
+                                                    trailingIcon = {
+                                                        IconButton(
+                                                            onClick = {
+                                                                copyToClipboard(it.graduateStatus?.eligibleGraduationStatus)
+                                                            },
+                                                            content = {
+                                                                Icon(ImageVector.vectorResource(R.drawable.ic_baseline_content_copy_24), context.getString(R.string.action_copy))
+                                                            }
+                                                        )
+                                                    },
                                                     modifier = Modifier
                                                         .fillMaxWidth()
                                                         .padding(bottom = 5.dp)

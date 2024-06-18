@@ -16,14 +16,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 
 @Composable
 fun SimpleCardItem(
     title: String,
+    titleStyle: TextStyle = MaterialTheme.typography.titleLarge,
     isTitleCentered: Boolean = false,
     content: @Composable (() -> Unit)? = null,
-    clicked: () -> Unit,
+    clicked: (() -> Unit)? = null,
     padding: PaddingValues = PaddingValues(10.dp),
     opacity: Float = 1.0f
 ) {
@@ -35,8 +38,10 @@ fun SimpleCardItem(
             .wrapContentHeight()
             .padding(padding)
             .clip(RoundedCornerShape(7.dp))
-            .clickable { clicked() }
             .background(MaterialTheme.colorScheme.secondaryContainer.copy(alpha = opacity))
+            .apply {
+                if (clicked != null) this.clickable { clicked() }
+            }
     ) {
         Row(
             modifier = Modifier.fillMaxWidth().padding(bottom = 5.dp),
@@ -44,7 +49,8 @@ fun SimpleCardItem(
             content = {
                 Text(
                     text = title,
-                    style = MaterialTheme.typography.titleLarge,
+                    style = titleStyle,
+                    textAlign = if (isTitleCentered) TextAlign.Center else TextAlign.Left,
                     modifier = Modifier.padding(horizontal = 15.dp, vertical = 10.dp),
                 )
             }

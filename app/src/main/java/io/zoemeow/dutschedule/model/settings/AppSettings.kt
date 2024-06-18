@@ -21,10 +21,10 @@ data class AppSettings(
     val backgroundImage: BackgroundImageOption = BackgroundImageOption.None,
 
     @SerializedName("appsettings.appearance.backgroundimage.backgroundopacity")
-    val backgroundImageOpacity: Float = 0.7f,
+    val backgroundImageOpacity: Float = 0.65f,
 
     @SerializedName("appsettings.appearance.backgroundimage.componentopacity")
-    val componentOpacity: Float = 0.7f,
+    val componentOpacity: Float = 0.65f,
 
     @SerializedName("appsettings.miscellaneous.openlinkinsideapp")
     val openLinkInsideApp: Boolean = true,

@@ -25,7 +25,10 @@ fun DialogCheckboxButton(
     Surface(
         modifier = modifier
             .fillMaxWidth()
-            .clickable { onValueChanged(!isChecked) },
+            .run {
+                if (isEnabled) return@run this.clickable { onValueChanged(!isChecked) }
+                else this
+            },
         color = Color.Transparent,
         content = {
             Row(

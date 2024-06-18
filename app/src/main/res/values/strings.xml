@@ -3,7 +3,6 @@
     <string name="app_name">DutSchedule</string>
     <string name="feature_not_ready">This function is in development. Check back soon.</string>
     <string name="permission_missing_all_file_access">You need to grant All files access in application permissions to use this option.</string>
-    <string name="permission_missing_alarm_and_reminders">You need to enable Alarms &amp; Reminders in Android app settings to use this feature.</string>
     <!-- Action string -->
     <string name="action_ok">OK</string>
     <string name="action_open">Open</string>
@@ -147,6 +146,7 @@
     <!-- Settings news notification activity string -->
     <string name="settings_newsnotify_title">News Notification Settings</string>
     <string name="settings_newsnotify_fetchnewsinbackground">Refresh news in background</string>
+    <string name="settings_newsnotify_snackbar_missingpermissions">You need to enable \"Notifications\" &amp; \"Alarms &amp; Reminders\" in Android app settings to use this feature.</string>
     <string name="settings_newsnotify_fetchnewsinbackground_disabled">Successfully disabled fetch news in background!</string>
     <string name="settings_newsnotify_fetchnewsinbackground_enabled">News will refresh every %1$d minute(s)!</string>
     <string name="settings_newsnotify_parsenewssubject_enabled">Enabled (special notification for news subject)</string>
@@ -209,6 +209,15 @@
     <string name="news_tabname_subject">Subject</string>
     <!-- News detail activity string -->
     <string name="news_detail_title">News Detail</string>
+    <string name="news_detail_newssubject_subjecttitle">Subject news from %1$s</string>
+    <string name="news_detail_newssubject_subjectaffected">Applied to subject(s): %1$s</string>
+    <string name="news_detail_newssubject_subjectstatus">Status: %1$s</string>
+    <string name="news_detail_newssubject_subjectstatus_makeup">Make up</string>
+    <string name="news_detail_newssubject_subjectstatus_leaving">Leaving</string>
+    <string name="news_detail_newssubject_subjectstatus_unknown">(unknown)</string>
+    <string name="news_detail_newssubject_subjectlesson">Lesson(s) affected: %1$s</string>
+    <string name="news_detail_newssubject_subjectdate">Date: %1$s</string>
+    <string name="news_detail_newssubject_subjectroom">Room will make up: %1$s</string>
     <string name="news_detail_addtofilter_fab">Add to filter</string>
     <string name="news_detail_addtofilter_failed">We can\'t add this subject in this news to your filter! Try again or manually add them in Settings.</string>
     <!-- News search activity string -->
@@ -241,6 +250,8 @@
     <string name="account_login_successful">Successfully logged in!</string>
     <string name="account_login_failed">We can\'t log in with your account! If you entered carefully and this issue is still persists, feel free to open issue on GitHub.</string>
     <string name="account_dashboard_banner_title">Basic account information</string>
+    <string name="account_dashboard_banner_loginfailed">We can\'t login your account to sv.dut.udn.vn. Some information won\'t be updated until you re-login your account. If you want to use another password or account, please logout.</string>
+    <string name="account_dashboard_banner_relogin">Re-login</string>
     <string name="account_dashboard_button_subjectinfo">Subject Information</string>
     <string name="account_dashboard_button_subjectfee">Subject Fee</string>
     <string name="account_dashboard_button_accountinfo">Account Information</string>
@@ -255,6 +266,7 @@
     <string name="account_schoolyear_summer">(summer semester)</string>
     <!-- Subject information activity string -->
     <string name="account_subjectinfo_title">Subject Information</string>
+    <string name="account_subjectinfo_summary_nosubjects">No available subjects in this school year.\nMay be you don\'t have any registered subjects or selected wrong school year?</string>
     <string name="account_subjectinfo_summary_schinfo">%1$s\n\nSchedule:\n%2$s</string>
     <string name="account_subjectinfo_summary_schitem">- %1$s - Lesson %2$d-%3$d - Room %4$s</string>
     <string name="account_subjectinfo_filter_added">Successfully added %1$s to your news filter list!</string>
@@ -275,6 +287,7 @@
     <string name="account_subjectinfo_data_scheduleexam_noexamdate">Currently no examination schedule yet for this subject.</string>
     <!-- Subject fee information activity string -->
     <string name="account_subjectfee_title">Subject Fee</string>
+    <string name="account_subjectfee_summary_nosubjects">No available subjects in this school year.\nMay be you don\'t have any registered subjects or selected wrong school year?</string>
     <string name="account_subjectfee_summary_1credit">%1$d credit - %2$.0f%3$s</string>
     <string name="account_subjectfee_summary_manycredit">%1$d credits - %2$.0f%3$s</string>
     <string name="account_subjectfee_summary_main">Credit(s): %1$d - Total price: %2$.0f VND</string>
@@ -282,7 +295,9 @@
     <string name="account_subjectfee_status_notdoneyet">Not completed yet</string>
     <!-- Account Information activity string -->
     <string name="account_accinfo_title">Account Information</string>
-    <string name="account_accinfo_description">To copy, click and hold a text field, select \"Select all\" and click \"Copy\".\nIf you want to edit any information below, you need do it in DUT Information System web.</string>
+    <string name="account_accinfo_noinfo">No any information returned from server!\nCheck your login and internet connection, and try again.</string>
+    <string name="account_accinfo_editinfo">About editing information</string>
+    <string name="account_accinfo_description">If you want to edit any information below, you need do it in DUT Information System web.</string>
     <string name="account_accinfo_item_name">Name</string>
     <string name="account_accinfo_item_dateofbirth">Date of birth</string>
     <string name="account_accinfo_item_placeofbirth">Place of birth</string>
@@ -299,9 +314,40 @@
     <string name="account_accinfo_item_trainingprogramplan">Training program plan</string>
     <string name="account_accinfo_item_schoolemail">School email</string>
     <string name="account_accinfo_snackbar_copied">Copied to clipboard!</string>
-    <!-- -->
+    <string name="account_accinfo_snackbar_nocopy">Nothing to copy!</string>
+    <!-- Account training status activity string -->
     <string name="account_trainingstatus_title">Training Result</string>
+    <string name="account_trainingstatus_trainbox_title">Your training status</string>
+    <string name="account_trainingstatus_trainbox_schyear">Updated to %1$s</string>
+    <string name="account_trainingstatus_trainbox_schbutton">View your subject result</string>
+    <string name="account_trainingstatus_graduatebox_title">Graduation status</string>
+    <string name="account_trainingstatus_graduatebox_certandgraduateresult">Certificate &amp; graduate result</string>
+    <string name="account_trainingstatus_graduatebox_notelegibletograduate">You are not eligible for graduation! Please check the information below to find out the cause.</string>
+    <string name="account_trainingstatus_graduatebox_elegibletograduate">You are qualified for graduation! Please contact the student affairs office to learn more.</string>
+    <string name="account_trainingstatus_graduatebox_certandgraduateresult_havepe">Have Physical Education certificate</string>
+    <string name="account_trainingstatus_graduatebox_certandgraduateresult_havende">Have National Defense Education certificate</string>
+    <string name="account_trainingstatus_graduatebox_certandgraduateresult_haveit">Have IT certificate</string>
+    <string name="account_trainingstatus_graduatebox_certandgraduateresult_haveenglish">Have English certificate</string>
+    <string name="account_trainingstatus_graduatebox_certandgraduateresult_rewards">Commend and rewards</string>
+    <string name="account_trainingstatus_graduatebox_certandgraduateresult_discipline">Discipline</string>
+    <string name="account_trainingstatus_graduatebox_certandgraduateresult_graduationthesisapproval">Information about graduation thesis approval</string>
+    <string name="account_trainingstatus_graduatebox_certandgraduateresult_graduationprocessapproval">Information about graduate process approval</string>
+    <string name="account_trainingstatus_graduatebox_certandgraduateresult_copied">Copied to clipboard!</string>
+    <string name="account_trainingstatus_graduatebox_certandgraduateresult_nocopy">Nothing to copy!</string>
+    <!-- Account training status activity - Subject result string -->
+    <string name="account_trainingstatus_subjectresult_title">Your subject result list</string>
+    <string name="account_trainingstatus_subjectresult_filteredquery">Filtered with query: %1$s</string>
+    <string name="account_trainingstatus_subjectresult_filteredschyear">Filtered with school year: %1$s</string>
+    <string name="account_trainingstatus_subjectresult_searchfilterbutton">Search &amp; filter</string>
+    <string name="account_trainingstatus_subjectresult_searchquery">Search query</string>
+    <string name="account_trainingstatus_subjectresult_schoolyear">School year</string>
+    <string name="account_trainingstatus_subjectresult_schoolyear_insummer">in summer</string>
+    <string name="account_trainingstatus_subjectresult_subjectcode">Subject code</string>
+    <string name="account_trainingstatus_subjectresult_credit">Credit(s)</string>
+    <string name="account_trainingstatus_subjectresult_pointformula">Point formula</string>
+    <string name="account_trainingstatus_subjectresult_finalscore">Point (T10 - T4 - By point char)</string>
     <!-- -->
     <string name="data_unknown">(unknown)</string>
-
+    <string name="data_noscore">(no score)</string>
+    <string name="data_nodata">(No data)</string>
 </resources>

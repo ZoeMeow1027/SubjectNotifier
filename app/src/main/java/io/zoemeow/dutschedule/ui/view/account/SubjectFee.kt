@@ -34,6 +34,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import io.zoemeow.dutschedule.R
 import io.zoemeow.dutschedule.activity.AccountActivity
@@ -110,33 +111,49 @@ fun AccountActivity.SubjectFee(
                             Text(getMainViewModel().appSettings.value.currentSchoolYear.composeToString())
                         }
                     )
-                    LazyColumn(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(horizontal = 15.dp)
-                            .padding(bottom = 7.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Top,
-                        content = {
-                            item {
-                                if (getMainViewModel().accountSession.subjectFee.data.size > 0) {
-                                    Text(context.getString(
-                                        R.string.account_subjectfee_summary_main,
-                                        getMainViewModel().accountSession.subjectFee.data.sumOf { it.credit },
-                                        getMainViewModel().accountSession.subjectFee.data.sumOf { it.price }
-                                    ))
-                                }
-                            }
-                            items(getMainViewModel().accountSession.subjectFee.data) { item ->
-                                AccountSubjectFeeInformation(
-                                    modifier = Modifier.padding(bottom = 10.dp),
-                                    item = item,
-                                    opacity = getControlBackgroundAlpha(),
-                                    onClick = { }
+                    if (getMainViewModel().accountSession.subjectFee.data.size == 0 && getMainViewModel().accountSession.subjectFee.processState.value != ProcessState.Running) {
+                        Column(
+                            modifier = Modifier.fillMaxSize()
+                                .padding(horizontal = 15.dp)
+                                .padding(vertical = 2.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.Center,
+                            content = {
+                                Text(
+                                    context.getString(R.string.account_subjectfee_summary_nosubjects),
+                                    textAlign = TextAlign.Center
                                 )
                             }
-                        }
-                    )
+                        )
+                    } else {
+                        LazyColumn(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(horizontal = 15.dp)
+                                .padding(bottom = 7.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.Top,
+                            content = {
+                                item {
+                                    if (getMainViewModel().accountSession.subjectFee.data.size > 0) {
+                                        Text(context.getString(
+                                            R.string.account_subjectfee_summary_main,
+                                            getMainViewModel().accountSession.subjectFee.data.sumOf { it.credit },
+                                            getMainViewModel().accountSession.subjectFee.data.sumOf { it.price }
+                                        ))
+                                    }
+                                }
+                                items(getMainViewModel().accountSession.subjectFee.data) { item ->
+                                    AccountSubjectFeeInformation(
+                                        modifier = Modifier.padding(bottom = 10.dp),
+                                        item = item,
+                                        opacity = getControlBackgroundAlpha(),
+                                        onClick = { }
+                                    )
+                                }
+                            }
+                        )
+                    }
                 }
             )
         }

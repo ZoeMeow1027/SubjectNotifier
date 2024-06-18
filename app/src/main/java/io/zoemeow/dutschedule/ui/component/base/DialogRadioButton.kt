@@ -18,14 +18,17 @@ import androidx.compose.ui.unit.dp
 fun DialogRadioButton(
     modifier: Modifier = Modifier,
     title: String,
-    selected: Boolean,
-    enabled: Boolean = true,
+    isSelected: Boolean,
+    isEnabled: Boolean = true,
     onClick: (() -> Unit)? = null
 ) {
     Surface(
         modifier = modifier
             .fillMaxWidth()
-            .clickable { onClick?.let { it() } },
+            .run {
+                if (onClick != null && isEnabled) return@run this.clickable { onClick() }
+                else this
+            },
         color = Color.Transparent,
         content = {
             Row(
@@ -35,8 +38,8 @@ fun DialogRadioButton(
                 verticalAlignment = Alignment.CenterVertically,
                 content = {
                     RadioButton(
-                        selected = selected,
-                        enabled = enabled,
+                        selected = isSelected,
+                        enabled = isEnabled,
                         onClick = { onClick?.let { it() } }
                     )
                     Row(

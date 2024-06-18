@@ -35,6 +35,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import io.dutwrapper.dutwrapper.model.accounts.SubjectScheduleItem
 import io.zoemeow.dutschedule.R
@@ -116,27 +117,43 @@ fun AccountActivity.SubjectInformation(
                             Text(getMainViewModel().appSettings.value.currentSchoolYear.composeToString())
                         }
                     )
-                    LazyColumn(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(horizontal = 15.dp)
-                            .padding(bottom = 7.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Top,
-                        content = {
-                            items(getMainViewModel().accountSession.subjectSchedule.data) { item ->
-                                SubjectInformation(
-                                    modifier = Modifier.padding(bottom = 7.dp),
-                                    item = item,
-                                    opacity = getControlBackgroundAlpha(),
-                                    onClick = {
-                                        subjectScheduleItem.value = item
-                                        subjectDetailVisible.value = true
-                                    }
+                    if (getMainViewModel().accountSession.subjectSchedule.data.size == 0 && getMainViewModel().accountSession.subjectSchedule.processState.value != ProcessState.Running) {
+                        Column(
+                            modifier = Modifier.fillMaxSize()
+                                .padding(horizontal = 15.dp)
+                                .padding(vertical = 2.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.Center,
+                            content = {
+                                Text(
+                                    context.getString(R.string.account_subjectinfo_summary_nosubjects),
+                                    textAlign = TextAlign.Center
                                 )
                             }
-                        }
-                    )
+                        )
+                    } else {
+                        LazyColumn(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(horizontal = 15.dp)
+                                .padding(bottom = 7.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.Top,
+                            content = {
+                                items(getMainViewModel().accountSession.subjectSchedule.data) { item ->
+                                    SubjectInformation(
+                                        modifier = Modifier.padding(bottom = 7.dp),
+                                        item = item,
+                                        opacity = getControlBackgroundAlpha(),
+                                        onClick = {
+                                            subjectScheduleItem.value = item
+                                            subjectDetailVisible.value = true
+                                        }
+                                    )
+                                }
+                            }
+                        )
+                    }
                 }
             )
         }

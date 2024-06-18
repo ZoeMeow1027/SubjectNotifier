@@ -11,7 +11,7 @@ fun CheckboxOption(
     modifierInside: Modifier = Modifier,
     title: String,
     description: String? = null,
-    onClick: () -> Unit,
+    onClick: (() -> Unit)? = null,
     isChecked: Boolean = false,
     isEnabled: Boolean = true,
     isVisible: Boolean = true
@@ -24,13 +24,11 @@ fun CheckboxOption(
         leadingIcon = {
             Checkbox(
                 checked = isChecked,
-                onCheckedChange = { onClick() },
+                onCheckedChange = { onClick?.let { it() } },
                 enabled = isEnabled,
             )
         },
-        onClick = {
-            if (isEnabled) onClick()
-        },
+        onClick = onClick,
         isEnabled = isEnabled,
         isVisible = isVisible
     )
@@ -42,7 +40,6 @@ private fun CheckboxOptionPreview() {
     CheckboxOption(
         title = "This title",
         description = "This description",
-        onClick = { },
         isChecked = true
     )
 }
@@ -52,7 +49,6 @@ private fun CheckboxOptionPreview() {
 private fun CheckboxWithoutDescriptionPreview() {
     CheckboxOption(
         title = "This title",
-        onClick = { },
         isChecked = true
     )
 }

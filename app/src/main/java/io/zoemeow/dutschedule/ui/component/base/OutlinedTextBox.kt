@@ -10,11 +10,14 @@ fun OutlinedTextBox(
     modifier: Modifier = Modifier,
     title: String,
     value: String? = null,
+    placeHolderIfNull: String? = null,
     trailingIcon: @Composable (() -> Unit)? = null
 ) {
     OutlinedTextField(
         modifier = modifier,
-        value = if (value.isNullOrEmpty()) "(no information)" else value,
+        value = if (value.isNullOrEmpty()) {
+            placeHolderIfNull ?: ""
+        } else value,
         readOnly = true,
         onValueChange = { },
         trailingIcon = trailingIcon,

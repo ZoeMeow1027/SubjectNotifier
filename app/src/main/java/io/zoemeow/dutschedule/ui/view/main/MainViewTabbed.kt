@@ -135,7 +135,7 @@ fun MainActivity.MainViewTabbed(
                     NotificationScaffold(
                         context = context,
                         itemList = getMainViewModel().notificationHistory.toList(),
-                        snackBarHostState = snackBarHostState,
+                        snackBarHostState = null,
                         isVisible = true,
                         containerColor = containerColor,
                         contentColor = contentColor,

@@ -49,7 +49,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.zoemeow.dutschedule.R
-import io.zoemeow.dutschedule.activity.PermissionRequestActivity
+import io.zoemeow.dutschedule.activity.PermissionsActivity
 import io.zoemeow.dutschedule.activity.SettingsActivity
 import io.zoemeow.dutschedule.model.settings.SubjectCode
 import io.zoemeow.dutschedule.ui.component.base.CheckboxOption
@@ -116,7 +116,7 @@ fun SettingsActivity.NewsNotificationSettings(
             fetchNewsInBackgroundDuration = getMainViewModel().appSettings.value.newsBackgroundDuration,
             onFetchNewsStateChanged = { duration ->
                 if (duration > 0) {
-                    if (PermissionRequestActivity.checkPermissionScheduleExactAlarm(context).isGranted) {
+                    if (PermissionsActivity.checkPermissionScheduleExactAlarm(context).isGranted && PermissionsActivity.checkPermissionNotification(context).isGranted) {
                         // Fetch news in background onClick
                         val dataTemp = getMainViewModel().appSettings.value.clone(
                             fetchNewsBackgroundDuration = duration
@@ -132,11 +132,11 @@ fun SettingsActivity.NewsNotificationSettings(
                         )
                     } else {
                         showSnackBar(
-                            text = context.getString(R.string.permission_missing_alarm_and_reminders),
+                            text = context.getString(R.string.settings_newsnotify_snackbar_missingpermissions),
                             clearPrevious = true,
                             actionText = context.getString(R.string.action_grant),
                             action = {
-                                Intent(context, PermissionRequestActivity::class.java).also { intent ->
+                                Intent(context, PermissionsActivity::class.java).also { intent ->
                                     context.startActivity(intent)
                                 }
                             }
@@ -347,7 +347,6 @@ private fun MainView(
             SimpleCardItem(
                 padding = PaddingValues(horizontal = 20.4.dp, vertical = 5.dp),
                 title = context.getString(R.string.settings_newsnotify_fetchnewsinbackground_duration),
-                clicked = { },
                 opacity = opacity,
                 content = {
                     Column(
@@ -550,14 +549,12 @@ private fun MainView(
                             Text(context.getString(R.string.settings_newsnotify_newsfilter_disabledwarning_description))
                         }
                     },
-                    clicked = { },
                     opacity = opacity
                 )
             } else {
                 SimpleCardItem(
                     padding = PaddingValues(horizontal = 20.4.dp, vertical = 5.dp),
                     title = context.getString(R.string.settings_newsnotify_newsfilter_list_title),
-                    clicked = { },
                     opacity = opacity,
                     content = {
                         Column(

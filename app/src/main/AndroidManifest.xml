@@ -75,9 +75,9 @@
             android:label="DutSchedule - Account"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.DutSchedule"
-            android:windowSoftInputMode="adjustResize" />
+            android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name=".activity.PermissionRequestActivity"
+            android:name=".activity.PermissionsActivity"
             android:exported="false"
             android:label="DutSchedule - Permission Request"
             android:screenOrientation="portrait"

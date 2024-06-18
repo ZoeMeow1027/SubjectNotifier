@@ -3,7 +3,6 @@ package io.zoemeow.dutschedule.model.account
 import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
-import com.google.gson.Gson
 import io.dutwrapper.dutwrapper.model.accounts.AccountInformation
 import io.dutwrapper.dutwrapper.model.accounts.SubjectFeeItem
 import io.dutwrapper.dutwrapper.model.accounts.SubjectScheduleItem
@@ -30,8 +29,17 @@ class DUTAccountInstance(
     private val dutRequestRepository: DutRequestRepository,
     private val onEventSent: ((Int) -> Unit)? = null
 ) {
+    /**
+     * Variable state which contains login information and account session.
+     * @param processState Process state:
+     * NotRunYet: No account information and failed;
+     * Running: Process is running;
+     * Failed: Can't login but have account in accountAuth;
+     * Successful: Have account and logged in.
+     */
+    @Suppress("KDocUnresolvedReference")
     val accountSession: VariableState<AccountSession> = VariableState(data = mutableStateOf(null))
-    val schoolYear: MutableState<SchoolYearItem?> = mutableStateOf(null)
+    private val schoolYear: MutableState<SchoolYearItem?> = mutableStateOf(null)
     val subjectSchedule: VariableListState<SubjectScheduleItem> = VariableListState()
     val subjectFee: VariableListState<SubjectFeeItem> = VariableListState()
     val accountInformation: VariableState<AccountInformation> = VariableState(data = mutableStateOf(null))
@@ -105,51 +113,31 @@ class DUTAccountInstance(
         launchOnScope(
             script = {
                 // If accountAuth isn't null, just login with new account
+                // Note that will override old login (or delete login when login failed)
                 if (accountAuth != null) {
                     Log.d("login", "new account")
-                    accountAuth.let { d1 ->
-                        accountSession.data.value?.accountAuth.let { d2 ->
-                            if (d1.username == d2?.username && d1.password == d2?.password) {
-                                dutRequestRepository.login(
-                                    accountSession = accountSession.data.value!!,
-                                    forceLogin = false,
-                                    onSessionChanged = { sId, dateUnix ->
-                                        if (dateUnix == null || dateUnix == 0L || sId == null) {
-                                            // TODO: Account session isn't valid!
-                                            accountSession.data.value = null
-                                            throw Exception()
-                                        } else {
-                                            accountSession.data.value = accountSession.data.value!!.clone(
-                                                accountAuth = accountSession.data.value!!.accountAuth,
-                                                sessionId = sId,
-                                                sessionLastRequest = dateUnix
-                                            )
-                                        }
-                                    }
-                                )
+                    val dataTemp = AccountSession(
+                        accountAuth = accountAuth.clone()
+                    )
+                    dutRequestRepository.login(
+                        accountSession = dataTemp,
+                        forceLogin = true,
+                        onSessionChanged = { sId, dateUnix, viewState, viewStateGenerator ->
+                            if (dateUnix == null || dateUnix == 0L || sId == null) {
+                                // TODO: Account session isn't valid!
+                                accountSession.data.value = null
+                                throw Exception()
                             } else {
-                                accountSession.data.value = AccountSession(
-                                    accountAuth = accountAuth.clone()
-                                )
-                                dutRequestRepository.login(
-                                    accountSession = accountSession.data.value!!,
-                                    forceLogin = true,
-                                    onSessionChanged = { sId, dateUnix ->
-                                        if (dateUnix == null || dateUnix == 0L || sId == null) {
-                                            // TODO: Account session isn't valid!
-                                            throw Exception()
-                                        } else {
-                                            accountSession.data.value = accountSession.data.value!!.clone(
-                                                accountAuth = accountSession.data.value!!.accountAuth,
-                                                sessionId = sId,
-                                                sessionLastRequest = dateUnix
-                                            )
-                                        }
-                                    }
+                                accountSession.data.value = dataTemp.clone(
+                                    accountAuth = accountAuth,
+                                    sessionId = sId,
+                                    sessionLastRequest = dateUnix,
+                                    viewState = viewState,
+                                    viewStateGenerator = viewStateGenerator
                                 )
                             }
                         }
-                    }
+                    )
                 }
                 // If accountSession is exist, let's re-login.
                 else if (accountSession.data.value != null) {
@@ -159,18 +147,31 @@ class DUTAccountInstance(
                     if (!accountSession.data.value!!.isValidLogin()) {
                         throw Exception()
                     }
+                    // Logout any session id remaining
+                    dutRequestRepository.logout(
+                        accountSession.data.value!!
+                    )
+                    // Clear old session
+                    accountSession.data.value = accountSession.data.value!!.clone(
+                        sessionId = null,
+                        sessionLastRequest = 0L
+                    )
+                    // Re-login with current accountAuth.
+                    // This will generate session id automatically.
                     dutRequestRepository.login(
                         accountSession = accountSession.data.value!!,
                         forceLogin = force,
-                        onSessionChanged = { sId, dateUnix ->
-                            if (dateUnix == null || dateUnix == 0L || sId == null) {
+                        onSessionChanged = { sId, dateUnix, viewState, viewStateGenerator ->
+                            if (dateUnix == null || dateUnix == 0L || sId == null || viewState == null || viewStateGenerator == null) {
                                 // TODO: Account session isn't valid!
                                 throw Exception()
                             } else {
                                 accountSession.data.value = accountSession.data.value!!.clone(
                                     accountAuth = accountSession.data.value!!.accountAuth,
                                     sessionId = sId,
-                                    sessionLastRequest = dateUnix
+                                    sessionLastRequest = dateUnix,
+                                    viewState = viewState,
+                                    viewStateGenerator = viewStateGenerator
                                 )
                             }
                         }
@@ -237,13 +238,15 @@ class DUTAccountInstance(
 
         launchOnScope(
             script = {
-                // TODO: Fully logout from server
+                // Fully logout from server
                 var temp = AccountSession()
                 accountSession.processState.value = ProcessState.Successful
                 accountSession.data.value?.let {
                     temp = it.clone()
                 }
                 accountSession.resetValue()
+
+                // Clear all information
                 subjectSchedule.resetValue()
                 subjectFee.resetValue()
                 accountInformation.resetValue()
@@ -256,6 +259,7 @@ class DUTAccountInstance(
                 }
             },
             onCompleted = { throwable ->
+                // Reset to NotRunYet (not logged in before)
                 accountSession.processState.value = ProcessState.NotRunYet
                 onEventSent?.let { it(1) }
                 onCompleted?.let { it(throwable != null) }
@@ -264,6 +268,10 @@ class DUTAccountInstance(
     }
 
     fun fetchSubjectSchedule(force: Boolean = false) {
+        if (accountSession.processState.value != ProcessState.Successful) {
+            // TODO: Log when failed
+            return
+        }
         if (!subjectSchedule.isSuccessfulRequestExpired() && !force) {
             return
         }
@@ -308,6 +316,10 @@ class DUTAccountInstance(
     }
 
     fun fetchSubjectFee(force: Boolean = false) {
+        if (accountSession.processState.value != ProcessState.Successful) {
+            // TODO: Log when failed
+            return
+        }
         if (!subjectFee.isSuccessfulRequestExpired() && !force) {
             return
         }
@@ -352,6 +364,10 @@ class DUTAccountInstance(
     }
 
     fun fetchAccountInformation(force: Boolean = false) {
+        if (accountSession.processState.value != ProcessState.Successful) {
+            // TODO: Log when failed
+            return
+        }
         if (!accountInformation.isSuccessfulRequestExpired() && !force) {
             return
         }
@@ -389,6 +405,10 @@ class DUTAccountInstance(
     }
 
     fun fetchAccountTrainingStatus(force: Boolean = false) {
+        if (accountSession.processState.value != ProcessState.Successful) {
+            // TODO: Log when failed
+            return
+        }
         if (!accountTrainingStatus.isSuccessfulRequestExpired() && !force) {
             return
         }

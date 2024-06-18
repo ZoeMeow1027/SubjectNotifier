@@ -172,9 +172,9 @@ fun LoginBox(
                     }
                     ElevatedButton(
                         enabled = when {
-                            (isControlEnabled || isLoggedInBefore) && !isProcessing -> {
-                                username.value.length >= 6 && password.value.length >= 6
-                            }
+                            isProcessing -> false
+                            isLoggedInBefore -> true
+                            isControlEnabled && (username.value.length >= 6 && password.value.length >= 6) -> true
                             else -> false
                         },
                         onClick = {
@@ -209,14 +209,18 @@ fun LoginBox(
                                     horizontalArrangement = Arrangement.Center,
                                     verticalAlignment = Alignment.CenterVertically,
                                     content = {
-                                        if (isProcessing) {
-                                            CircularProgressIndicator()
-                                            Spacer(modifier = Modifier.size(10.dp))
-                                            Text(context.getString(R.string.account_login_processing))
-                                        } else if (isLoggedInBefore) {
-                                            Text(context.getString(R.string.account_login_loggedinbefore))
+                                        when {
+                                            isProcessing -> {
+                                                CircularProgressIndicator()
+                                                Spacer(modifier = Modifier.size(10.dp))
+                                                Text(context.getString(R.string.account_login_processing))
+                                            }
+                                            isLoggedInBefore -> {
+                                                Text(context.getString(R.string.account_login_loggedinbefore))
+                                            }
+                                            else -> {}
                                         }
-                                    }
+                                        }
                                 )
                             }
                         )

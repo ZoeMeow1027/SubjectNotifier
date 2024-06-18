@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Clear
@@ -21,6 +22,7 @@ import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.Icon
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -36,6 +38,7 @@ import io.zoemeow.dutschedule.R
 import io.zoemeow.dutschedule.activity.SettingsActivity
 import io.zoemeow.dutschedule.model.ProcessState
 import io.zoemeow.dutschedule.model.account.SchoolYearItem
+import io.zoemeow.dutschedule.ui.component.base.DataAdjuster
 import io.zoemeow.dutschedule.ui.component.base.DialogBase
 import io.zoemeow.dutschedule.ui.component.base.OutlinedTextBox
 import kotlinx.coroutines.CoroutineScope
@@ -82,11 +85,11 @@ fun DialogSchoolYearSettings(
                     }
                 )
                 currentSettings.value = schYear
-                Log.d("SchoolYearCurrent", "Successful! Data from internet: $schYear")
                 fetchProcess.value = ProcessState.Successful
+                Log.d("SchoolYearCurrent", "Successful! Data from internet: $schYear")
             } catch (_: Exception) {
-                Log.d("SchoolYearCurrent", "Failed while getting from internet!")
                 fetchProcess.value = ProcessState.Failed
+                Log.d("SchoolYearCurrent", "Failed while getting from internet!")
             }
         }
     }
@@ -112,90 +115,73 @@ fun DialogSchoolYearSettings(
                     context.getString(R.string.settings_dialog_schyear_description),
                     modifier = Modifier.padding(bottom = 10.dp)
                 )
-                ExposedDropdownMenuBox(
-                    expanded = dropDownSchoolYear.value,
-                    onExpandedChange = { dropDownSchoolYear.value = !dropDownSchoolYear.value },
-                    content = {
-                        OutlinedTextBox(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .menuAnchor(),
-                            title = context.getString(R.string.settings_dialog_schyear_choice_schyear),
-                            value = String.format(
-                                Locale.ROOT,
-                                "20%d-20%d",
+                Surface(
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(10.dp)
+                ) {
+                    Column(
+                        modifier = Modifier.padding(10.dp)
+                    ) {
+                        Text(context.getString(R.string.settings_dialog_schyear_choice_schyear))
+                        DataAdjuster(
+                            modifier = Modifier.fillMaxWidth(),
+                            text = String.format(
+                                locale = Locale.ROOT,
+                                "20%02d-20%02d",
                                 currentSettings.value.year,
                                 currentSettings.value.year+1
-                            )
-                        )
-                        DropdownMenu(
-                            expanded = dropDownSchoolYear.value,
-                            onDismissRequest = { dropDownSchoolYear.value = false },
-                            content = {
-                                27.downTo(10).forEach {
-                                    DropdownMenuItem(
-                                        text = { Text(String.format(
-                                            Locale.ROOT,
-                                            "20%2d-20%2d",
-                                            it,
-                                            it+1
-                                        )) },
-                                        onClick = {
-                                            currentSettings.value = currentSettings.value.clone(
-                                                year = it
-                                            )
-                                            dropDownSchoolYear.value = false
-                                        }
-                                    )
-                                }
+                            ),
+                            leadingEnabled = currentSettings.value.year > 9,
+                            trailingEnabled = currentSettings.value.year < 28,
+                            onLeadingClicked = {
+                                currentSettings.value = currentSettings.value.clone(
+                                    year = currentSettings.value.year - 1
+                                )
+                            },
+                            onTrailingClicked = {
+                                currentSettings.value = currentSettings.value.clone(
+                                    year = currentSettings.value.year + 1
+                                )
                             }
                         )
                     }
-                )
-                ExposedDropdownMenuBox(
-                    expanded = dropDownSemester.value,
-                    onExpandedChange = { dropDownSemester.value = !dropDownSemester.value },
-                    content = {
-                        OutlinedTextBox(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .menuAnchor(),
-                            title = context.getString(R.string.settings_dialog_schyear_choice_semester),
-                            value = String.format(
+                }
+                Surface(
+                    modifier = Modifier.fillMaxWidth().padding(top = 10.dp, bottom = 7.dp),
+                    shape = RoundedCornerShape(10.dp)
+                ) {
+                    Column(
+                        modifier = Modifier.padding(10.dp)
+                    ) {
+                        Text(context.getString(R.string.settings_dialog_schyear_choice_semester))
+                        DataAdjuster(
+                            modifier = Modifier.fillMaxWidth(),
+                            text = String.format(
                                 Locale.ROOT,
                                 "%s %d%s",
                                 context.getString(R.string.settings_dialog_schyear_choice_semester),
                                 if (currentSettings.value.semester <= 2) currentSettings.value.semester else 2,
                                 if (currentSettings.value.semester > 2) " (${context.getString(R.string.settings_dialog_schyear_choice_insummer)})" else ""
-                            )
-                        )
-                        DropdownMenu(
-                            expanded = dropDownSemester.value,
-                            onDismissRequest = { dropDownSemester.value = false },
-                            content = {
-                                1.rangeTo(3).forEach {
-                                    DropdownMenuItem(
-                                        text = { Text(String.format(
-                                            Locale.ROOT,
-                                            "%s %d%s",
-                                            context.getString(R.string.settings_dialog_schyear_choice_semester),
-                                            if (it <= 2) it else 2,
-                                            if (it > 2) " (${context.getString(R.string.settings_dialog_schyear_choice_insummer)})" else ""
-                                        )) },
-                                        onClick = {
-                                            currentSettings.value = currentSettings.value.clone(
-                                                semester = it
-                                            )
-                                            dropDownSemester.value = false
-                                        }
-                                    )
-                                }
+                            ),
+                            leadingEnabled = currentSettings.value.semester > 1,
+                            trailingEnabled = currentSettings.value.semester < 3,
+                            onLeadingClicked = {
+                                currentSettings.value = currentSettings.value.clone(
+                                    semester = currentSettings.value.semester - 1
+                                )
+                            },
+                            onTrailingClicked = {
+                                currentSettings.value = currentSettings.value.clone(
+                                    semester = currentSettings.value.semester + 1
+                                )
                             }
                         )
                     }
-                )
+                }
                 Row(
-                    modifier = Modifier.fillMaxWidth().padding(top = 7.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 7.dp),
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically,
                     content = {
@@ -220,7 +206,11 @@ fun DialogSchoolYearSettings(
                                                     ProcessState.Failed -> Icons.Default.Close
                                                     else -> Icons.Default.Refresh
                                                 },
-                                                contentDescription = ""
+                                                contentDescription = when (fetchProcess.value) {
+                                                    ProcessState.Successful -> "Successful"
+                                                    ProcessState.Failed -> "Failed"
+                                                    else -> context.getString(R.string.action_refresh)
+                                                }
                                             )
                                         }
                                     )

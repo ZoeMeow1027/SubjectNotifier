@@ -21,6 +21,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
@@ -74,9 +75,9 @@ fun NewsActivity.NewsDetail(
             if (newsType == NewsActivity.NEWSTYPE_NEWSSUBJECT) {
                 ExtendedFloatingActionButton(
                     content = {
-                        Row {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
                             Icon(Icons.Default.Add, context.getString(R.string.news_detail_addtofilter_fab))
-                            Spacer(modifier = Modifier.size(3.dp))
+                            Spacer(modifier = Modifier.size(5.dp))
                             Text(context.getString(R.string.news_detail_addtofilter_fab))
                         }
                     },

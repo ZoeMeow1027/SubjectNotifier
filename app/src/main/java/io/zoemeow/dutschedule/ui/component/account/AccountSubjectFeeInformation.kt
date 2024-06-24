@@ -22,6 +22,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import io.dutwrapper.dutwrapper.model.accounts.SubjectFeeItem
+import io.zoemeow.dutschedule.GlobalVariables
 import io.zoemeow.dutschedule.R
 import io.zoemeow.dutschedule.ui.component.base.Tag
 
@@ -37,7 +38,7 @@ fun AccountSubjectFeeInformation(
     Surface(
         modifier = modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(10.dp))
+            .clip(RoundedCornerShape(GlobalVariables.ROUNDED_CORNER_SHAPE_SIZE))
             .clickable {
                 onClick?.let { it() }
             },
@@ -56,7 +57,7 @@ fun AccountSubjectFeeInformation(
                                 text = item.name,
                                 style = MaterialTheme.typography.titleLarge,
                             )
-                            Spacer(modifier = Modifier.size(7.dp))
+                            Spacer(modifier = Modifier.size(5.dp))
                             if (item.debt) {
                                 Tag(
                                     text = context.getString(R.string.account_subjectfee_status_notdoneyet),

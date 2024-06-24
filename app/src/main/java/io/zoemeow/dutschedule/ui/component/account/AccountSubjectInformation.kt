@@ -14,6 +14,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import io.dutwrapper.dutwrapper.model.accounts.SubjectScheduleItem
+import io.zoemeow.dutschedule.GlobalVariables
 import io.zoemeow.dutschedule.R
 import io.zoemeow.dutschedule.utils.CustomDateUtil
 
@@ -28,7 +29,7 @@ fun SubjectInformation(
     Surface(
         modifier = modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(10.dp))
+            .clip(RoundedCornerShape(GlobalVariables.ROUNDED_CORNER_SHAPE_SIZE))
             .clickable {
                 onClick?.let { it() }
             },

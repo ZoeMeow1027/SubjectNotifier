@@ -85,7 +85,7 @@ fun SettingsMainView(
     snackBarHostState: SnackbarHostState? = null,
     containerColor: Color,
     contentColor: Color,
-    componentBackgroundAlpha: Float = 1f,
+    @Suppress("UNUSED_PARAMETER") componentBackgroundAlpha: Float = 1f,
     mainViewModel: MainViewModel,
     mediaRequest: () -> Unit,
     onShowSnackBar: ((String, Boolean, String?, (() -> Unit)?) -> Unit)? = null,

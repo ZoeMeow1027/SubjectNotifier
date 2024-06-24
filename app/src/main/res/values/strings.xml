@@ -100,7 +100,7 @@
     <string name="settings_dialog_apptheme_choice_dark">Dark mode</string>
     <string name="settings_dialog_apptheme_choice_light">Light mode</string>
     <string name="settings_dialog_apptheme_choice_dynamiccolor">Dynamic color</string>
-    <string name="settings_dialog_apptheme_note">Your OS needs at least:\n- - Android 9 to follow device theme;\n- Android 12 to enable dynamic color.</string>
+    <string name="settings_dialog_apptheme_note">Your OS needs at least:\n- Android 9 to follow device theme;\n- Android 12 to enable dynamic color.</string>
     <string name="settings_dialog_wallpaperbackground_title">App background wallpaper</string>
     <string name="settings_dialog_wallpaperbackground_choice_none">Disabled</string>
     <string name="settings_dialog_wallpaperbackground_choice_currentwallpaper">Your current wallpaper</string>
@@ -122,7 +122,7 @@
     <string name="settings_experiment_category_globalvar">Global variable settings</string>
     <string name="settings_experiment_option_currentschyear">Current school year</string>
     <string name="settings_experiment_option_currentschyear_description">Year: 20%1$d-20%2$d, semester: %3$s%4$s</string>
-    <string name="settings_experiment_option_currentschyear_insummer">in summer</string>
+    <string name="settings_experiment_option_currentschyear_insummer"> (in summer)</string>
     <string name="settings_experiment_category_appearance">Appearance</string>
     <string name="settings_experiment_option_required_enableimage">You need enable background image to take effect</string>
     <string name="settings_experiment_option_bgopacity">Background opacity</string>
@@ -338,7 +338,9 @@
     <string name="account_trainingstatus_subjectresult_title">Your subject result list</string>
     <string name="account_trainingstatus_subjectresult_filteredquery">Filtered with query: %1$s</string>
     <string name="account_trainingstatus_subjectresult_filteredschyear">Filtered with school year: %1$s</string>
+    <string name="account_trainingstatus_subjectresult_allschoolyears">All school years</string>
     <string name="account_trainingstatus_subjectresult_searchfilterbutton">Search &amp; filter</string>
+    <string name="account_trainingstatus_subjectresult_restudiedsubject">Restudied subject</string>
     <string name="account_trainingstatus_subjectresult_searchquery">Search query</string>
     <string name="account_trainingstatus_subjectresult_schoolyear">School year</string>
     <string name="account_trainingstatus_subjectresult_schoolyear_insummer">in summer</string>

@@ -24,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import io.zoemeow.dutschedule.GlobalVariables
 import io.zoemeow.dutschedule.R
 import io.zoemeow.dutschedule.utils.capitalized
 
@@ -43,7 +44,7 @@ fun AccountInfoBanner(
     Surface(
         modifier = Modifier
             .padding(padding)
-            .clip(RoundedCornerShape(7.dp)),
+            .clip(RoundedCornerShape(GlobalVariables.ROUNDED_CORNER_SHAPE_SIZE)),
         color = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = opacity),
         content = {
             Column(
@@ -86,7 +87,7 @@ fun AccountInfoBanner(
                         if (isFailed) {
                             Surface(
                                 modifier = Modifier.padding(top = 5.dp, bottom = 10.dp),
-                                shape = RoundedCornerShape(7.dp),
+                                shape = RoundedCornerShape(GlobalVariables.ROUNDED_CORNER_SHAPE_SIZE),
                                 color = MaterialTheme.colorScheme.surface.copy(alpha = when {
                                     opacity + 0.15f >= 1f -> 1f
                                     else -> opacity + 0.1f

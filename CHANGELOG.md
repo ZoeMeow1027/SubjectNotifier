@@ -6,40 +6,46 @@
 ## Known issues
 - `Your current wallpaper` option in app background settings will be disabled on Android 14 and later. You can check why in `Issue` tab in repository.
 
+## 2.0-draft19 (1467)
+- [Rework] Account Training Subject Result screen.
+- [Improve] Update dependencies to latest.
+  - This will resolve crash app when sv.dut.udn.vn is not reachable.
+- [Fixed] Account Training Result score isn't readable when in dark mode.
+- [Removed] ~~NewsGlobalGroupByDate~~, ~~NewsSubjectGroupByDate~~.
+
 ## 2.0-draft18 (1448)
-### Changes and fixes
-  - Update dependencies to latest
-    - Gradle to 8.8
-    - AGP to 8.5.0
-    - This will resolve login issue when server rebooted
-  - When you're failed when logging in but done it before, this will show a option for you to re-login instead
-  - SchoolYearChooser will choose between two arrows instead of ComboBox
-  - Improve Vietnamese strings
-  - Account
-    - Account Information: Show a tooltip about editing contents
-    - Account Subject Fee: Show total price and credits about this school year / semester
-    - Account Training Status: Redesign UI
-  - Main Screen (tab mode)
-    - Remove SnackbarState in Notifications (fixes duplicate SnackbarState)
+- [Improve] Update dependencies to latest
+  - Gradle to 8.8
+  - AGP to 8.5.0
+  - This will resolve login issue when server rebooted
+- [Improve] When you're failed when logging in but done it before, this will show a option for you to re-login instead.
+- [Improve] Improve Vietnamese strings
+- [Changes] SchoolYearChooser will choose between two arrows instead of ComboBox
+- [Changes] Account
+  - Account Information: Show a tooltip about editing contents
+  - Account Subject Fee: Show total price and credits about this school year / semester
+  - Account Training Status: Redesign UI
+- [Changes] Main Screen (tab mode)
+  - Remove SnackbarState in Notifications (fixes duplicate SnackbarState)
 
 ## 2.0-draft17 (1404)
 ### What's new
-  - News notification settings: Change your preferences about news notifications.
-  - Changed UI for Subject Fee (not final yet).
+- [New] News notification settings: Change your preferences about news notifications.
+- [Rework] Subject Fee (not final yet).
 
 ### Changes and fixes
-  - Fixed [#24](https://github.com/ZoeMeow1027/DutSchedule/issues/24).
-  - Add a option to get current school year from Internet.
-    - To access that, please go to `Settings` -> `Experiment Settings` -> `Current School Year`.
-  - Some settings won't load after update. You might need to reconfig them in settings. I'm sorry about that.
-  - Login screen will let you relogin if previous attempt was failed.
-    - You can clear previous login to attempt with another account.
-  - Now you can turn off notifications about news global and news subject.
-    - In news subject notifications, you can choose about "All", "Match your filter" and "Off".
-    - News filter settings will now only shown when enabled (this mean it will hidden at default).
-  - Update Vietnamese strings for most screens, but not done yet.
-  - Optimized codes and updated dependencies to latest.
-    - Updated dependencies to latest to fix issues about Account feature.
+- [New] Add a option to get current school year from Internet.
+  - To access that, please go to `Settings` -> `Experiment Settings` -> `Current School Year`.
+- [Improve] Login screen will let you relogin if previous attempt was failed.
+  - You can clear previous login to attempt with another account.
+- [Improve] Now you can turn off notifications about news global and news subject.
+  - In news subject notifications, you can choose about "All", "Match your filter" and "Off".
+  - News filter settings will now only shown when enabled (this mean it will hidden at default).
+- [Improve] Update Vietnamese strings for most screens, but not done yet.
+- [Improve] Optimized codes and updated dependencies to latest.
+  - Updated dependencies to latest to fix issues about Account feature.
+- [Fixed] [#24](https://github.com/ZoeMeow1027/DutSchedule/issues/24).
+- [Known Issue] Some settings won't load after update. You might need to reconfig them in settings. I'm sorry about that.
 
 ## 2.0-draft16 (1063)
 - AccountActivity:

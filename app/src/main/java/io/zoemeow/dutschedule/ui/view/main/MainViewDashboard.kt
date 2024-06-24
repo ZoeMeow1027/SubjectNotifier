@@ -77,24 +77,7 @@ fun MainActivity.MainViewDashboard(
     externalLinkClicked: (() -> Unit)? = null
 ) {
     val isNotificationOpened = remember { mutableStateOf(false) }
-
-    fun getNews(byWeek: Boolean = false): Int {
-        var data = 0
-        val today = LocalDateTime(
-            Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date,
-            LocalTime(0, 0, 0)
-        ).toInstant(TimeZone.UTC)
-        val before7Days = today.minus(7.days)
-
-        // https://stackoverflow.com/questions/77368433/how-to-get-current-date-with-reset-time-0000-with-kotlinx-localdatetime
-        if (!byWeek) {
-            data = getMainViewModel().newsInstance.newsGlobal.data.filter { it.date == today.toEpochMilliseconds() }.size
-        } else {
-            data = getMainViewModel().newsInstance.newsGlobal.data.filter { it.date <= today.toEpochMilliseconds() && it.date >= before7Days.toEpochMilliseconds() }.size
-        }
-        return data
-    }
-
+    
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         snackbarHost = { SnackbarHost(hostState = snackBarHostState) },
@@ -289,8 +272,25 @@ fun MainActivity.MainViewDashboard(
 //                )
                             SchoolNewsSummaryItem(
                                 padding = PaddingValues(bottom = 10.dp, start = 15.dp, end = 15.dp),
-                                newsToday = getNews(false),
-                                newsThisWeek = getNews(true),
+                                newsToday = run {
+                                    val today = LocalDateTime(
+                                        Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date,
+                                        LocalTime(0, 0, 0)
+                                    ).toInstant(TimeZone.UTC)
+
+                                    // https://stackoverflow.com/questions/77368433/how-to-get-current-date-with-reset-time-0000-with-kotlinx-localdatetime
+                                    return@run getMainViewModel().newsInstance.newsGlobal.data.filter { it.date == today.toEpochMilliseconds() }.size
+                                },
+                                newsThisWeek = run {
+                                    val today = LocalDateTime(
+                                        Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date,
+                                        LocalTime(0, 0, 0)
+                                    ).toInstant(TimeZone.UTC)
+                                    val before7Days = today.minus(7.days)
+
+                                    // https://stackoverflow.com/questions/77368433/how-to-get-current-date-with-reset-time-0000-with-kotlinx-localdatetime
+                                    return@run getMainViewModel().newsInstance.newsGlobal.data.filter { it.date <= today.toEpochMilliseconds() && it.date >= before7Days.toEpochMilliseconds() }.size
+                                },
                                 clicked = {
                                     context.startActivity(Intent(context, NewsActivity::class.java))
                                 },

@@ -84,8 +84,9 @@ class PermissionsActivity : BaseActivity() {
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
+    // TODO: Using of context.
     private fun MainView(
-        context: Context,
+        @Suppress("UNUSED_PARAMETER") context: Context,
         snackBarHostState: SnackbarHostState,
         containerColor: Color,
         contentColor: Color,

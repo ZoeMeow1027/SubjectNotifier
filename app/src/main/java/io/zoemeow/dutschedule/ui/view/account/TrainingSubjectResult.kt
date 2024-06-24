@@ -7,18 +7,14 @@ import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -69,8 +65,8 @@ import io.dutwrapper.dutwrapper.model.accounts.trainingresult.SubjectResult
 import io.zoemeow.dutschedule.R
 import io.zoemeow.dutschedule.activity.AccountActivity
 import io.zoemeow.dutschedule.model.ProcessState
+import io.zoemeow.dutschedule.ui.component.account.SubjectResult
 import io.zoemeow.dutschedule.ui.component.base.OutlinedTextBox
-import io.zoemeow.dutschedule.utils.TableCell
 import io.zoemeow.dutschedule.utils.toNonAccent
 import java.util.Locale
 
@@ -84,10 +80,14 @@ fun AccountActivity.TrainingSubjectResult(
 ) {
     val focusRequester = remember { FocusRequester() }
 
+    // Search area (true to display them)
     val searchEnabled = remember { mutableStateOf(false) }
+    // Search query to begin filter
     val searchQuery = remember { mutableStateOf("") }
-    val schYearOption = remember { mutableStateOf(false) }
-    val schYearOptionText = remember { mutableStateOf("All school year items") }
+    // School year show option to choose
+    val schYearShowOption = remember { mutableStateOf(false) }
+    // School year option to begin filter
+    val schYearOptionText = remember { mutableStateOf("") }
 
     val modalBottomSheetEnabled = remember { mutableStateOf(false) }
     val sheetState = rememberModalBottomSheetState(
@@ -209,7 +209,7 @@ fun AccountActivity.TrainingSubjectResult(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(it)
-                            .padding(horizontal = 5.dp)
+                            .padding(horizontal = 10.dp)
                             .padding(bottom = 5.dp),
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.Top
@@ -217,7 +217,7 @@ fun AccountActivity.TrainingSubjectResult(
                         stickyHeader {
                             if (!searchEnabled.value) {
                                 Column {
-                                    if (schYearOptionText.value != "All school year items") {
+                                    if (schYearOptionText.value.isNotEmpty()) {
                                         Text(
                                             context.getString(
                                                 R.string.account_trainingstatus_subjectresult_filteredschyear,
@@ -246,81 +246,25 @@ fun AccountActivity.TrainingSubjectResult(
                                 }
                             }
                         }
-                        stickyHeader {
-                            // Header
-                            Row(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(horizontal = 5.dp)
-                                    .height(IntrinsicSize.Min),
-                                content = {
-                                    TableCell(
-                                        modifier = Modifier.fillMaxHeight(),
-                                        backgroundColor = MaterialTheme.colorScheme.background.copy(alpha = getControlBackgroundAlpha()),
-                                        text = "Index",
-                                        textAlign = TextAlign.Center,
-                                        weight = 0.17f
-                                    )
-                                    TableCell(
-                                        modifier = Modifier.fillMaxHeight(),
-                                        backgroundColor = MaterialTheme.colorScheme.background.copy(alpha = getControlBackgroundAlpha()),
-                                        text = "Subject name",
-                                        textAlign = TextAlign.Center,
-                                        weight = 0.58f
-                                    )
-                                    TableCell(
-                                        modifier = Modifier.fillMaxHeight(),
-                                        backgroundColor = MaterialTheme.colorScheme.background.copy(alpha = getControlBackgroundAlpha()),
-                                        text = "Result T10(T4)",
-                                        textAlign = TextAlign.Center,
-                                        weight = 0.25f
-                                    )
-                                }
-                            )
-                        }
-                        items(getMainViewModel().accountSession.accountTrainingStatus.data.value?.subjectResultList?.filter {
-                                p ->
-                            (schYearOptionText.value == "All school year items" || p.schoolYear == schYearOptionText.value) &&
-                                    (searchQuery.value.isEmpty()
-                                            || p.name.toNonAccent().lowercase().contains(searchQuery.value.toNonAccent().lowercase()))
-                        }?.reversed() ?: listOf()) { subjectItem ->
-                            Row(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(horizontal = 5.dp)
-                                    .height(IntrinsicSize.Min)
-                                    .clickable {
-                                        selectedSubject.value = subjectItem
-                                        modalBottomSheetEnabled.value = true
-                                    },
-                                content = {
-                                    TableCell(
-                                        modifier = Modifier.fillMaxHeight(),
-                                        backgroundColor = MaterialTheme.colorScheme.background.copy(alpha = getControlBackgroundAlpha()),
-                                        text = "${subjectItem.index}",
-                                        textAlign = TextAlign.Center,
-                                        weight = 0.17f
-                                    )
-                                    TableCell(
-                                        modifier = Modifier.fillMaxHeight(),
-                                        backgroundColor = MaterialTheme.colorScheme.background.copy(alpha = getControlBackgroundAlpha()),
-                                        text = subjectItem.name,
-                                        contentAlign = Alignment.CenterStart,
-                                        textAlign = TextAlign.Start,
-                                        weight = 0.58f
-                                    )
-                                    TableCell(
-                                        modifier = Modifier.fillMaxHeight(),
-                                        backgroundColor = MaterialTheme.colorScheme.background.copy(alpha = getControlBackgroundAlpha()),
-                                        text = String.format(
-                                            "%s (%s)",
-                                            subjectItem.resultT10?.toString() ?: "---",
-                                            subjectItem.resultT4?.toString() ?: "---"
-                                        ),
-                                        textAlign = TextAlign.Center,
-                                        weight = 0.25f
-                                    )
-                                }
+                        items(getMainViewModel().accountSession.accountTrainingStatus.data.value?.subjectResultList?.filter { p -> run {
+                            // Filter with school year
+                            if (schYearOptionText.value.isEmpty()) return@run true
+                            if (p.schoolYear == schYearOptionText.value) return@run true
+                            return@run false
+                        } }?.filter { p -> run {
+                            // Filter with search query
+                            if (searchQuery.value.isEmpty()) return@run true
+                            if (p.name.toNonAccent().lowercase().contains(searchQuery.value.toNonAccent().lowercase())) return@run true
+                            return@run false
+                        } }?.reversed() ?: listOf()) { subjectItem ->
+                            SubjectResult(
+                                modifier = Modifier.padding(vertical = 3.dp),
+                                subjectResult = subjectItem,
+                                onClick = {
+                                    selectedSubject.value = subjectItem
+                                    modalBottomSheetEnabled.value = true
+                                },
+                                opacity = getControlBackgroundAlpha()
                             )
                         }
                     }
@@ -332,7 +276,7 @@ fun AccountActivity.TrainingSubjectResult(
                         visible = searchEnabled.value,
                         enter = slideInVertically(
                             initialOffsetY = {
-                                it / 2
+                                it
                             },
                         ),
                         exit = slideOutVertically(
@@ -346,8 +290,8 @@ fun AccountActivity.TrainingSubjectResult(
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .padding(horizontal = 10.dp),
-                                expanded = schYearOption.value,
-                                onExpandedChange = { schYearOption.value = !schYearOption.value },
+                                expanded = schYearShowOption.value,
+                                onExpandedChange = { schYearShowOption.value = !schYearShowOption.value },
                                 content = {
                                     OutlinedTextField(
                                         modifier = Modifier
@@ -355,25 +299,25 @@ fun AccountActivity.TrainingSubjectResult(
                                             .menuAnchor(),
                                         label = { Text(context.getString(R.string.account_trainingstatus_subjectresult_schoolyear)) },
                                         readOnly = true,
-                                        value = schYearOptionText.value,
+                                        value = schYearOptionText.value.ifEmpty { context.getString(R.string.account_trainingstatus_subjectresult_allschoolyears) },
                                         onValueChange = { }
                                     )
                                     DropdownMenu(
                                         modifier = Modifier.fillMaxWidth(),
-                                        expanded = schYearOption.value,
-                                        onDismissRequest = { schYearOption.value = false},
+                                        expanded = schYearShowOption.value,
+                                        onDismissRequest = { schYearShowOption.value = false},
                                         content = {
                                             DropdownMenuItem(
                                                 modifier = Modifier.background(
-                                                    color = when (schYearOptionText.value == "All school year items") {
+                                                    color = when (schYearOptionText.value == "") {
                                                         true -> MaterialTheme.colorScheme.secondaryContainer
                                                         false -> MaterialTheme.colorScheme.surface
                                                     }
                                                 ),
-                                                text = { Text("All school year items") },
+                                                text = { Text(context.getString(R.string.account_trainingstatus_subjectresult_allschoolyears)) },
                                                 onClick = {
-                                                    schYearOptionText.value = "All school year items"
-                                                    schYearOption.value = false
+                                                    schYearOptionText.value = ""
+                                                    schYearShowOption.value = false
                                                 }
                                             )
                                             (getMainViewModel().accountSession.accountTrainingStatus.data.value?.subjectResultList?.map { it.schoolYear }?.toList()?.distinct()?.reversed() ?: listOf()).forEach {
@@ -387,7 +331,7 @@ fun AccountActivity.TrainingSubjectResult(
                                                     text = { Text(it) },
                                                     onClick = {
                                                         schYearOptionText.value = it
-                                                        schYearOption.value = false
+                                                        schYearShowOption.value = false
                                                     }
                                                 )
                                             }

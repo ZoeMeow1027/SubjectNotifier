@@ -25,6 +25,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -149,7 +150,7 @@ fun AccountActivity.TrainingResult(
                                                     contentAlignment = Alignment.Center,
                                                     content = {
                                                         val data1 = buildAnnotatedString {
-                                                            val avg4Leading = it.trainingSummary?.avgTrainingScore4.toString() ?: context.getString(R.string.data_unknown)
+                                                            val avg4Leading = it.trainingSummary.avgTrainingScore4.toString()
                                                             val avg4Trailing = "/4"
                                                             val schYear = context.getString(
                                                                 R.string.account_trainingstatus_trainbox_schyear,
@@ -181,7 +182,10 @@ fun AccountActivity.TrainingResult(
                                                         }
                                                         ClickableText(
                                                             text = data1,
-                                                            style = TextStyle(textAlign = TextAlign.Center),
+                                                            style = TextStyle(
+                                                                textAlign = TextAlign.Center,
+                                                                color = OutlinedTextFieldDefaults.colors().focusedTextColor
+                                                            ),
                                                             onClick = { _ -> }
                                                         )
                                                     }

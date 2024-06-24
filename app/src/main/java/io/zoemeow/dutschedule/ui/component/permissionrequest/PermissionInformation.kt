@@ -55,7 +55,7 @@ fun PermissionInformation(
                                 fontSize = 20.sp,
                                 fontWeight = FontWeight.W600,
                             )
-                            Spacer(modifier = Modifier.size(7.dp))
+                            Spacer(modifier = Modifier.size(3.dp))
                             Text(
                                 description,
                                 style = MaterialTheme.typography.bodyMedium

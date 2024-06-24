@@ -122,7 +122,7 @@
     <string name="settings_experiment_category_globalvar">Cài đặt biến công khai</string>
     <string name="settings_experiment_option_currentschyear">Năm học hiện tại</string>
     <string name="settings_experiment_option_currentschyear_description">Năm: 20%1$d-20%2$d, học kỳ: %3$s%4$s</string>
-    <string name="settings_experiment_option_currentschyear_insummer">học kỳ hè</string>
+    <string name="settings_experiment_option_currentschyear_insummer"> (học kỳ hè)</string>
     <string name="settings_experiment_category_appearance">Hiển thị</string>
     <string name="settings_experiment_option_required_enableimage">Bạn cần bật hình nền ứng dụng để tùy chọn có tác dụng</string>
     <string name="settings_experiment_option_bgopacity">Độ mờ hình nền</string>
@@ -338,7 +338,9 @@
     <string name="account_trainingstatus_subjectresult_title">Kết quả học phần của bạn</string>
     <string name="account_trainingstatus_subjectresult_filteredquery">Đã lọc học phần với truy vấn: %1$s</string>
     <string name="account_trainingstatus_subjectresult_filteredschyear">Đã lọc học phần với năm học: %1$s</string>
+    <string name="account_trainingstatus_subjectresult_allschoolyears">Tất cả năm học</string>
     <string name="account_trainingstatus_subjectresult_searchfilterbutton">Tìm kiếm &amp; lọc</string>
+    <string name="account_trainingstatus_subjectresult_restudiedsubject">Môn học đã học lại</string>
     <string name="account_trainingstatus_subjectresult_searchquery">Truy vấn tìm kiếm</string>
     <string name="account_trainingstatus_subjectresult_schoolyear">Năm học</string>
     <string name="account_trainingstatus_subjectresult_schoolyear_insummer">trong học kỳ hè</string>

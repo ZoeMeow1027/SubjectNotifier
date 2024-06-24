@@ -40,6 +40,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import io.zoemeow.dutschedule.GlobalVariables
 import io.zoemeow.dutschedule.R
 
 @Composable
@@ -200,7 +201,7 @@ fun LoginBox(
                         Surface(
                             modifier = Modifier.padding(top = 10.dp),
                             color = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = opacity),
-                            shape = RoundedCornerShape(5.dp),
+                            shape = RoundedCornerShape(GlobalVariables.ROUNDED_CORNER_SHAPE_SIZE),
                             content = {
                                 Row(
                                     modifier = Modifier

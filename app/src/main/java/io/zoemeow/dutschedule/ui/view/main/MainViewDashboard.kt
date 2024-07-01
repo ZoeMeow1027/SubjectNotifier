@@ -92,7 +92,7 @@ fun MainActivity.MainViewDashboard(
         bottomBar = {
             BottomAppBar(
                 containerColor = BottomAppBarDefaults.containerColor.copy(
-                    alpha = getControlBackgroundAlpha()
+                    alpha = getBackgroundAlpha()
                 ),
                 actions = {
                     BadgedBox(
@@ -237,7 +237,7 @@ fun MainActivity.MainViewDashboard(
                                 padding = PaddingValues(bottom = 10.dp, start = 15.dp, end = 15.dp),
                                 isLoading = getMainViewModel().currentSchoolYearWeek.processState.value == ProcessState.Running,
                                 currentSchoolWeek = getMainViewModel().currentSchoolYearWeek.data.value,
-                                opacity = getControlBackgroundAlpha()
+                                opacity = getBackgroundAlpha()
                             )
                             LessonTodaySummaryItem(
                                 padding = PaddingValues(bottom = 10.dp, start = 15.dp, end = 15.dp),
@@ -260,7 +260,7 @@ fun MainActivity.MainViewDashboard(
                                                 schItem.lesson.end >= CustomClock.getCurrent().toDUTLesson2().lesson
                                             }
                                 }.toList(),
-                                opacity = getControlBackgroundAlpha()
+                                opacity = getBackgroundAlpha()
                             )
                             //                AffectedLessonsSummaryItem(
 //                    padding = PaddingValues(bottom = 10.dp, start = 15.dp, end = 15.dp),
@@ -295,7 +295,7 @@ fun MainActivity.MainViewDashboard(
                                     context.startActivity(Intent(context, NewsActivity::class.java))
                                 },
                                 isLoading = getMainViewModel().newsInstance.newsGlobal.processState.value == ProcessState.Running,
-                                opacity = getControlBackgroundAlpha()
+                                opacity = getBackgroundAlpha()
                             )
                             UpdateAvailableSummaryItem(
                                 padding = PaddingValues(bottom = 10.dp, start = 15.dp, end = 15.dp),
@@ -309,7 +309,7 @@ fun MainActivity.MainViewDashboard(
                                         customTab = false,
                                     )
                                 },
-                                opacity = getControlBackgroundAlpha()
+                                opacity = getBackgroundAlpha()
                             )
                         },
                     )
@@ -372,7 +372,7 @@ fun MainActivity.MainViewDashboard(
                 clearPrevious = true
             )
         },
-        opacity = getControlBackgroundAlpha()
+        opacity = getBackgroundAlpha()
     )
 
     BackHandler(isNotificationOpened.value) {

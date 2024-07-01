@@ -57,7 +57,7 @@ fun AccountActivity.MainView(
         snackBarHostState = snackBarHostState,
         containerColor = containerColor,
         contentColor = contentColor,
-        componentBackgroundAlpha = getControlBackgroundAlpha(),
+        componentBackgroundAlpha = getBackgroundAlpha(),
         mainViewModel = getMainViewModel(),
         onShowSnackBar = { text, clearPrevious, actionText, action ->
             showSnackBar(text = text, clearPrevious = clearPrevious, actionText = actionText, action = action)

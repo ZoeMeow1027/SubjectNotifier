@@ -36,7 +36,7 @@ import io.zoemeow.dutschedule.activity.NewsActivity
 import io.zoemeow.dutschedule.model.NavBarItem
 import io.zoemeow.dutschedule.ui.view.account.AccountMainView
 import io.zoemeow.dutschedule.ui.view.news.NewsMainView
-import io.zoemeow.dutschedule.ui.view.settings.SettingsMainView
+import io.zoemeow.dutschedule.ui.view.settings.Activity_Settings
 
 @Composable
 fun MainActivity.MainViewTabbed(
@@ -108,7 +108,7 @@ fun MainActivity.MainViewTabbed(
                         context = context,
                         containerColor = containerColor,
                         contentColor = contentColor,
-                        componentBackgroundAlpha = getControlBackgroundAlpha(),
+                        componentBackgroundAlpha = getBackgroundAlpha(),
                         mainViewModel = getMainViewModel(),
                         searchRequested = {
                             val intent = Intent(context, NewsActivity::class.java)
@@ -123,7 +123,7 @@ fun MainActivity.MainViewTabbed(
                         context = context,
                         containerColor = containerColor,
                         contentColor = contentColor,
-                        componentBackgroundAlpha = getControlBackgroundAlpha(),
+                        componentBackgroundAlpha = getBackgroundAlpha(),
                         mainViewModel = getMainViewModel(),
                         onShowSnackBar = { text, clearPrevious, actionText, action ->
                             showSnackBar(text = text, clearPrevious = clearPrevious, actionText = actionText, action = action)
@@ -178,16 +178,16 @@ fun MainActivity.MainViewTabbed(
                                 clearPrevious = true
                             )
                         },
-                        opacity = getControlBackgroundAlpha()
+                        opacity = getBackgroundAlpha()
                     )
                 }
 
                 composable(NavBarItem.settings.route) {
-                    SettingsMainView(
+                    Activity_Settings(
                         context = context,
                         containerColor = containerColor,
                         contentColor = contentColor,
-                        componentBackgroundAlpha = getControlBackgroundAlpha(),
+                        componentBackgroundAlpha = getBackgroundAlpha(),
                         mainViewModel = getMainViewModel(),
                         mediaRequest = {
                             pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))

@@ -2,7 +2,6 @@ package io.zoemeow.dutschedule.ui.view.account
 
 import android.app.Activity.RESULT_OK
 import android.content.Context
-import androidx.activity.ComponentActivity
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,8 +11,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Refresh
@@ -147,7 +144,7 @@ fun AccountActivity.SubjectFee(
                                     AccountSubjectFeeInformation(
                                         modifier = Modifier.padding(bottom = 10.dp),
                                         item = item,
-                                        opacity = getControlBackgroundAlpha(),
+                                        opacity = getBackgroundAlpha(),
                                         onClick = { }
                                     )
                                 }

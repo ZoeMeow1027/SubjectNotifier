@@ -1,10 +1,8 @@
 package io.zoemeow.dutschedule.ui.view.news
 
 import android.app.Activity.RESULT_CANCELED
-import android.app.Activity.RESULT_OK
 import android.content.Context
 import android.content.Intent
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.foundation.layout.fillMaxSize
@@ -43,7 +41,6 @@ import com.google.gson.Gson
 import io.dutwrapper.dutwrapper.model.enums.NewsType
 import io.zoemeow.dutschedule.R
 import io.zoemeow.dutschedule.activity.NewsActivity
-import io.zoemeow.dutschedule.activity.SettingsActivity
 import io.zoemeow.dutschedule.model.ProcessState
 import io.zoemeow.dutschedule.ui.component.news.NewsSearchOptionAndHistory
 import io.zoemeow.dutschedule.ui.component.news.NewsSearchResult
@@ -164,7 +161,7 @@ fun NewsActivity.NewsSearch(
                     .padding(horizontal = 10.dp),
                 newsList = newsSearchViewModel.newsList,
                 lazyListState = lazyListState,
-                opacity = getControlBackgroundAlpha(),
+                opacity = getBackgroundAlpha(),
                 processState = newsSearchViewModel.progress.value,
                 onEndOfList = {
                     newsSearchViewModel.invokeSearch()

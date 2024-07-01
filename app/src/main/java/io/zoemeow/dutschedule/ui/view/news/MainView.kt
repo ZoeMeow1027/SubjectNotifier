@@ -1,7 +1,6 @@
 package io.zoemeow.dutschedule.ui.view.news
 
 import android.app.Activity.RESULT_CANCELED
-import android.app.Activity.RESULT_OK
 import android.content.Context
 import android.content.Intent
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -70,7 +69,7 @@ fun NewsActivity.MainView(
         containerColor = containerColor,
         contentColor = contentColor,
         searchRequested = searchRequested,
-        componentBackgroundAlpha = getControlBackgroundAlpha(),
+        componentBackgroundAlpha = getBackgroundAlpha(),
         mainViewModel = getMainViewModel(),
         onBack = {
             setResult(RESULT_CANCELED)

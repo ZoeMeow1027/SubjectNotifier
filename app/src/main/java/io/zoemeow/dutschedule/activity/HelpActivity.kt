@@ -123,7 +123,7 @@ class HelpActivity : BaseActivity() {
                                 .padding(bottom = 7.dp)
                                 .clickable { clearAllFocusAndHideKeyboard() },
                             color = MaterialTheme.colorScheme.secondaryContainer.copy(
-                                alpha = getControlBackgroundAlpha()
+                                alpha = getBackgroundAlpha()
                             ),
                             shape = RoundedCornerShape(7.dp),
                             content = {
@@ -190,7 +190,7 @@ class HelpActivity : BaseActivity() {
                                     HelpLinkClickable(
                                         item = item,
                                         modifier = Modifier.fillMaxWidth().padding(bottom = 7.dp),
-                                        opacity = getControlBackgroundAlpha(),
+                                        opacity = getBackgroundAlpha(),
                                         linkClicked = {
                                             clearAllFocusAndHideKeyboard()
                                             try {

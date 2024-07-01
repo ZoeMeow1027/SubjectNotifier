@@ -137,7 +137,7 @@ fun AccountActivity.TrainingResult(
                                     title = context.getString(R.string.account_trainingstatus_trainbox_title),
                                     isTitleCentered = true,
                                     padding = PaddingValues(start = 10.dp, end = 10.dp, bottom = 7.dp),
-                                    opacity = getControlBackgroundAlpha(),
+                                    opacity = getBackgroundAlpha(),
                                     content = {
                                         Column(
                                             modifier = Modifier
@@ -215,7 +215,7 @@ fun AccountActivity.TrainingResult(
                                     title = context.getString(R.string.account_trainingstatus_graduatebox_title),
                                     isTitleCentered = true,
                                     padding = PaddingValues(horizontal = 10.dp),
-                                    opacity = getControlBackgroundAlpha(),
+                                    opacity = getBackgroundAlpha(),
                                     content = {
                                         Column(
                                             modifier = Modifier

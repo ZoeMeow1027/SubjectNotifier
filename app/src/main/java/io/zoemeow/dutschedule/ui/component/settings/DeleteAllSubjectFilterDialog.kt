@@ -19,7 +19,7 @@ import io.zoemeow.dutschedule.activity.SettingsActivity
 import io.zoemeow.dutschedule.ui.component.base.DialogBase
 
 @Composable
-fun SettingsActivity.DeleteAllSubjectFilterDialog(
+fun Dialog_Settings_NewsNotificationSettings_ClearAll(
     context: Context,
     isVisible: Boolean = false,
     onDismiss: (() -> Unit)? = null,

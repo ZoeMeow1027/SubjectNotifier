@@ -20,7 +20,7 @@ import io.zoemeow.dutschedule.model.settings.SubjectCode
 import io.zoemeow.dutschedule.ui.component.base.DialogBase
 
 @Composable
-fun SettingsActivity.DeleteASubjectFilterDialog(
+fun Dialog_Settings_NewsNotificationSettings_Delete(
     context: Context,
     subjectCode: SubjectCode = SubjectCode("", "", ""),
     isVisible: Boolean = false,

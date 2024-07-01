@@ -1,4 +1,4 @@
-package io.zoemeow.dutschedule.ui.component.settings.dialog
+package io.zoemeow.dutschedule.ui.component.settings
 
 import android.content.Context
 import android.os.Build

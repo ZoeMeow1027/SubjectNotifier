@@ -126,7 +126,7 @@ class PermissionsActivity : BaseActivity() {
             bottomBar = {
                 BottomAppBar(
                     containerColor = BottomAppBarDefaults.containerColor.copy(
-                        alpha = getControlBackgroundAlpha()
+                        alpha = getBackgroundAlpha()
                     ),
                     floatingActionButton = {
                         ExtendedFloatingActionButton(
@@ -164,7 +164,7 @@ class PermissionsActivity : BaseActivity() {
                                         isRequired = false,
                                         isGranted = item.isGranted,
                                         padding = PaddingValues(bottom = 10.dp),
-                                        opacity = getControlBackgroundAlpha(),
+                                        opacity = getBackgroundAlpha(),
                                         clicked = {
                                             permissionRequest?.let {
                                                 if (item.isGranted) {

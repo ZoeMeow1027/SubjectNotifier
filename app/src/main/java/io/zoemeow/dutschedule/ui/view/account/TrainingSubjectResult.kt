@@ -264,7 +264,7 @@ fun AccountActivity.TrainingSubjectResult(
                                     selectedSubject.value = subjectItem
                                     modalBottomSheetEnabled.value = true
                                 },
-                                opacity = getControlBackgroundAlpha()
+                                opacity = getBackgroundAlpha()
                             )
                         }
                     }

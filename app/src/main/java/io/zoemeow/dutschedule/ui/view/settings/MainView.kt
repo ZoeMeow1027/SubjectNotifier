@@ -1,6 +1,5 @@
 package io.zoemeow.dutschedule.ui.view.settings
 
-import android.app.Activity.RESULT_CANCELED
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -20,11 +19,11 @@ import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -33,6 +32,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import io.zoemeow.dutschedule.BuildConfig
@@ -46,41 +46,15 @@ import io.zoemeow.dutschedule.ui.component.base.DividerItem
 import io.zoemeow.dutschedule.ui.component.base.OptionItem
 import io.zoemeow.dutschedule.ui.component.base.OptionSwitchItem
 import io.zoemeow.dutschedule.ui.component.settings.ContentRegion
-import io.zoemeow.dutschedule.ui.component.settings.dialog.DialogAppBackgroundSettings
-import io.zoemeow.dutschedule.ui.component.settings.dialog.DialogAppThemeSettings
+import io.zoemeow.dutschedule.ui.component.settings.DialogAppBackgroundSettings
+import io.zoemeow.dutschedule.ui.component.settings.DialogAppThemeSettings
 import io.zoemeow.dutschedule.utils.openLink
 import io.zoemeow.dutschedule.viewmodel.MainViewModel
 import java.util.Locale
 
-@Composable
-fun SettingsActivity.MainView(
-    context: Context,
-    snackBarHostState: SnackbarHostState,
-    containerColor: Color,
-    contentColor: Color,
-    mediaRequest: () -> Unit
-) {
-    SettingsMainView(
-        context = context,
-        snackBarHostState = snackBarHostState,
-        containerColor = containerColor,
-        contentColor = contentColor,
-        componentBackgroundAlpha = getControlBackgroundAlpha(),
-        mainViewModel = getMainViewModel(),
-        mediaRequest = mediaRequest,
-        onShowSnackBar = { text, clearPrevious, actionText, action ->
-            showSnackBar(text = text, clearPrevious = clearPrevious, actionText = actionText, action = action)
-        },
-        onBack = {
-            setResult(RESULT_CANCELED)
-            finish()
-        }
-    )
-}
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SettingsMainView(
+fun Activity_Settings(
     context: Context,
     snackBarHostState: SnackbarHostState? = null,
     containerColor: Color,
@@ -91,18 +65,24 @@ fun SettingsMainView(
     onShowSnackBar: ((String, Boolean, String?, (() -> Unit)?) -> Unit)? = null,
     onBack: (() -> Unit)? = null
 ) {
+    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
+
     val dialogAppTheme: MutableState<Boolean> = remember { mutableStateOf(false) }
     val dialogBackground: MutableState<Boolean> = remember { mutableStateOf(false) }
 
     Scaffold(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxSize()
+            .nestedScroll(scrollBehavior.nestedScrollConnection),
         snackbarHost = { snackBarHostState?.let { SnackbarHost(hostState = it) } },
         containerColor = containerColor,
         contentColor = contentColor,
         topBar = {
-            TopAppBar(
+            LargeTopAppBar(
                 title = { Text(context.getString(R.string.settings_title)) },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent),
+                colors = TopAppBarDefaults.largeTopAppBarColors(
+                    containerColor = Color.Transparent,
+                    scrolledContainerColor = Color.Transparent
+                ),
                 navigationIcon = {
                     if (onBack != null) {
                         IconButton(
@@ -118,7 +98,8 @@ fun SettingsMainView(
                             }
                         )
                     }
-                }
+                },
+                scrollBehavior = scrollBehavior
             )
         },
         content = {

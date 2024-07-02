@@ -39,8 +39,9 @@ fun SimpleCardItem(
             .padding(padding)
             .clip(RoundedCornerShape(7.dp))
             .background(MaterialTheme.colorScheme.secondaryContainer.copy(alpha = opacity))
-            .apply {
-                if (clicked != null) this.clickable { clicked() }
+            .run {
+                if (clicked != null) return@run this.clickable { clicked() }
+                else return@run this
             }
     ) {
         Row(

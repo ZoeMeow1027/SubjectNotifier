@@ -1,6 +1,5 @@
 package io.zoemeow.dutschedule.ui.view.account
 
-import android.app.Activity.RESULT_OK
 import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -34,23 +33,25 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import io.zoemeow.dutschedule.R
-import io.zoemeow.dutschedule.activity.AccountActivity
+import io.zoemeow.dutschedule.model.AppearanceState
 import io.zoemeow.dutschedule.model.ProcessState
 import io.zoemeow.dutschedule.ui.component.account.AccountSubjectFeeInformation
+import io.zoemeow.dutschedule.viewmodel.MainViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AccountActivity.SubjectFee(
+fun Activity_Account_SubjectFee(
     context: Context,
     snackBarHostState: SnackbarHostState,
-    containerColor: Color,
-    contentColor: Color
+    appearanceState: AppearanceState,
+    mainViewModel: MainViewModel,
+    onBack: () -> Unit
 ) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         snackbarHost = { SnackbarHost(hostState = snackBarHostState) },
-        containerColor = containerColor,
-        contentColor = contentColor,
+        containerColor = appearanceState.containerColor,
+        contentColor = appearanceState.contentColor,
         topBar = {
             Box(
                 contentAlignment = Alignment.BottomCenter,
@@ -61,8 +62,7 @@ fun AccountActivity.SubjectFee(
                         navigationIcon = {
                             IconButton(
                                 onClick = {
-                                    setResult(RESULT_OK)
-                                    finish()
+                                    onBack()
                                 },
                                 content = {
                                     Icon(
@@ -74,17 +74,17 @@ fun AccountActivity.SubjectFee(
                             )
                         }
                     )
-                    if (getMainViewModel().accountSession.subjectFee.processState.value == ProcessState.Running) {
+                    if (mainViewModel.accountSession.subjectFee.processState.value == ProcessState.Running) {
                         LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
                     }
                 }
             )
         },
         floatingActionButton = {
-            if (getMainViewModel().accountSession.subjectFee.processState.value != ProcessState.Running) {
+            if (mainViewModel.accountSession.subjectFee.processState.value != ProcessState.Running) {
                 FloatingActionButton(
                     onClick = {
-                        getMainViewModel().accountSession.fetchSubjectFee(force = true)
+                        mainViewModel.accountSession.fetchSubjectFee(force = true)
                     },
                     content = {
                         Icon(Icons.Default.Refresh, context.getString(R.string.action_refresh))
@@ -105,10 +105,10 @@ fun AccountActivity.SubjectFee(
                             .padding(vertical = 2.dp),
                         horizontalAlignment = Alignment.CenterHorizontally,
                         content = {
-                            Text(getMainViewModel().appSettings.value.currentSchoolYear.composeToString())
+                            Text(mainViewModel.appSettings.value.currentSchoolYear.composeToString())
                         }
                     )
-                    if (getMainViewModel().accountSession.subjectFee.data.size == 0 && getMainViewModel().accountSession.subjectFee.processState.value != ProcessState.Running) {
+                    if (mainViewModel.accountSession.subjectFee.data.size == 0 && mainViewModel.accountSession.subjectFee.processState.value != ProcessState.Running) {
                         Column(
                             modifier = Modifier.fillMaxSize()
                                 .padding(horizontal = 15.dp)
@@ -132,19 +132,19 @@ fun AccountActivity.SubjectFee(
                             verticalArrangement = Arrangement.Top,
                             content = {
                                 item {
-                                    if (getMainViewModel().accountSession.subjectFee.data.size > 0) {
+                                    if (mainViewModel.accountSession.subjectFee.data.size > 0) {
                                         Text(context.getString(
                                             R.string.account_subjectfee_summary_main,
-                                            getMainViewModel().accountSession.subjectFee.data.sumOf { it.credit },
-                                            getMainViewModel().accountSession.subjectFee.data.sumOf { it.price }
+                                            mainViewModel.accountSession.subjectFee.data.sumOf { it.credit },
+                                            mainViewModel.accountSession.subjectFee.data.sumOf { it.price }
                                         ))
                                     }
                                 }
-                                items(getMainViewModel().accountSession.subjectFee.data) { item ->
+                                items(mainViewModel.accountSession.subjectFee.data) { item ->
                                     AccountSubjectFeeInformation(
                                         modifier = Modifier.padding(bottom = 10.dp),
                                         item = item,
-                                        opacity = getBackgroundAlpha(),
+                                        opacity = appearanceState.componentOpacity,
                                         onClick = { }
                                     )
                                 }
@@ -159,7 +159,7 @@ fun AccountActivity.SubjectFee(
     val hasRun = remember { mutableStateOf(false) }
     run {
         if (!hasRun.value) {
-            getMainViewModel().accountSession.fetchSubjectFee()
+            mainViewModel.accountSession.fetchSubjectFee()
             hasRun.value = true
         }
     }

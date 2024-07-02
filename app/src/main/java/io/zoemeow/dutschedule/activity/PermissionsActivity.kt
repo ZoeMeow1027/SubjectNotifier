@@ -40,6 +40,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
+import io.zoemeow.dutschedule.R
+import io.zoemeow.dutschedule.model.AppearanceState
 import io.zoemeow.dutschedule.ui.component.permissionrequest.PermissionInformation
 
 class PermissionsActivity : BaseActivity() {
@@ -59,16 +61,14 @@ class PermissionsActivity : BaseActivity() {
     override fun OnMainView(
         context: Context,
         snackBarHostState: SnackbarHostState,
-        containerColor: Color,
-        contentColor: Color
+        appearanceState: AppearanceState
     ) {
         MainView(
             context = context,
             snackBarHostState = snackBarHostState,
-            containerColor = containerColor,
-            contentColor = contentColor,
-            navIconClicked = {
-                setResult(RESULT_OK)
+            appearanceState = appearanceState,
+            onBack = {
+                setResult(RESULT_CANCELED)
                 finish()
             },
             fabClicked = {
@@ -84,15 +84,13 @@ class PermissionsActivity : BaseActivity() {
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
-    // TODO: Using of context.
     private fun MainView(
-        @Suppress("UNUSED_PARAMETER") context: Context,
+        context: Context,
         snackBarHostState: SnackbarHostState,
-        containerColor: Color,
-        contentColor: Color,
-        navIconClicked: (() -> Unit)? = null,
+        appearanceState: AppearanceState,
         fabClicked: (() -> Unit)? = null,
-        permissionRequest: ((String) -> Unit)? = null
+        permissionRequest: ((String) -> Unit)? = null,
+        onBack: (() -> Unit)? = null
     ) {
         val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
 
@@ -100,8 +98,8 @@ class PermissionsActivity : BaseActivity() {
             modifier = Modifier.fillMaxSize()
                 .nestedScroll(scrollBehavior.nestedScrollConnection),
             snackbarHost = { SnackbarHost(hostState = snackBarHostState) },
-            containerColor = containerColor,
-            contentColor = contentColor,
+            containerColor = appearanceState.containerColor,
+            contentColor = appearanceState.contentColor,
             topBar = {
                 LargeTopAppBar(
                     title = { Text(text = "Permissions request") },
@@ -109,12 +107,12 @@ class PermissionsActivity : BaseActivity() {
                     navigationIcon = {
                         IconButton(
                             onClick = {
-                                navIconClicked?.let { it() }
+                                onBack?.let { it() }
                             },
                             content = {
                                 Icon(
                                     Icons.AutoMirrored.Filled.ArrowBack,
-                                    "",
+                                    context.getString(R.string.action_back),
                                     modifier = Modifier.size(25.dp)
                                 )
                             }
@@ -126,7 +124,7 @@ class PermissionsActivity : BaseActivity() {
             bottomBar = {
                 BottomAppBar(
                     containerColor = BottomAppBarDefaults.containerColor.copy(
-                        alpha = getBackgroundAlpha()
+                        alpha = appearanceState.backgroundOpacity
                     ),
                     floatingActionButton = {
                         ExtendedFloatingActionButton(
@@ -164,7 +162,7 @@ class PermissionsActivity : BaseActivity() {
                                         isRequired = false,
                                         isGranted = item.isGranted,
                                         padding = PaddingValues(bottom = 10.dp),
-                                        opacity = getBackgroundAlpha(),
+                                        opacity = appearanceState.componentOpacity,
                                         clicked = {
                                             permissionRequest?.let {
                                                 if (item.isGranted) {

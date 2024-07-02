@@ -30,13 +30,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
 import io.zoemeow.dutschedule.R
-import io.zoemeow.dutschedule.activity.BaseActivity
+import io.zoemeow.dutschedule.model.AppearanceState
 import io.zoemeow.dutschedule.model.settings.BackgroundImageOption
 import io.zoemeow.dutschedule.ui.component.base.DividerItem
 import io.zoemeow.dutschedule.ui.component.base.OptionItem
 import io.zoemeow.dutschedule.ui.component.base.OptionSwitchItem
 import io.zoemeow.dutschedule.ui.component.settings.ContentRegion
 import io.zoemeow.dutschedule.ui.component.settings.DialogSchoolYearSettings
+import io.zoemeow.dutschedule.viewmodel.MainViewModel
 import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -44,9 +45,9 @@ import java.util.Locale
 fun Activity_Settings_ExperimentSettings(
     context: Context,
     snackBarHostState: SnackbarHostState,
-    containerColor: Color,
-    contentColor: Color,
-    activity: BaseActivity,
+    appearanceState: AppearanceState,
+    mainViewModel: MainViewModel,
+    onMessageReceived: (String, Boolean, String?, (() -> Unit)?) -> Unit, // (msg, forceDismissBefore, actionText, action)
     onBack: () -> Unit
 ) {
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
@@ -56,8 +57,8 @@ fun Activity_Settings_ExperimentSettings(
         modifier = Modifier.fillMaxSize()
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         snackbarHost = { SnackbarHost(hostState = snackBarHostState) },
-        containerColor = containerColor,
-        contentColor = contentColor,
+        containerColor = appearanceState.containerColor,
+        contentColor = appearanceState.contentColor,
         topBar = {
             LargeTopAppBar(
                 title = { Text(context.getString(R.string.settings_experiment_title)) },
@@ -98,14 +99,14 @@ fun Activity_Settings_ExperimentSettings(
                                 title = context.getString(R.string.settings_experiment_option_currentschyear),
                                 description = context.getString(
                                     R.string.settings_experiment_option_currentschyear_description,
-                                    activity.getMainViewModel().appSettings.value.currentSchoolYear.year,
-                                    activity.getMainViewModel().appSettings.value.currentSchoolYear.year + 1,
-                                    when (activity.getMainViewModel().appSettings.value.currentSchoolYear.semester) {
+                                    mainViewModel.appSettings.value.currentSchoolYear.year,
+                                    mainViewModel.appSettings.value.currentSchoolYear.year + 1,
+                                    when (mainViewModel.appSettings.value.currentSchoolYear.semester) {
                                         1 -> "1"
                                         2 -> "2"
                                         else -> "2"
                                     },
-                                    if (activity.getMainViewModel().appSettings.value.currentSchoolYear.semester > 2) " ${context.getString(R.string.settings_experiment_option_currentschyear_insummer)}" else ""
+                                    if (mainViewModel.appSettings.value.currentSchoolYear.semester > 2) " ${context.getString(R.string.settings_experiment_option_currentschyear_insummer)}" else ""
                                 ),
                                 onClick = {
                                     dialogSchoolYear.value = true
@@ -125,13 +126,13 @@ fun Activity_Settings_ExperimentSettings(
                                 description = String.format(
                                     Locale.ROOT,
                                     "%2.0f%% %s",
-                                    (activity.getMainViewModel().appSettings.value.backgroundImageOpacity * 100),
-                                    if (activity.getMainViewModel().appSettings.value.backgroundImage == BackgroundImageOption.None) {
+                                    (mainViewModel.appSettings.value.backgroundImageOpacity * 100),
+                                    if (mainViewModel.appSettings.value.backgroundImage == BackgroundImageOption.None) {
                                         "(${context.getString(R.string.settings_experiment_option_required_enableimage)})"
                                     } else ""
                                 ),
                                 onClick = {
-                                    activity.showSnackBar(context.getString(R.string.feature_not_ready), true)
+                                    onMessageReceived(context.getString(R.string.feature_not_ready), true, null, null)
                                     /* TODO: Implement here: Background opacity */
                                 }
                             )
@@ -141,13 +142,13 @@ fun Activity_Settings_ExperimentSettings(
                                 description = String.format(
                                     Locale.ROOT,
                                     "%2.0f%% %s",
-                                    (activity.getMainViewModel().appSettings.value.componentOpacity * 100),
-                                    if (activity.getMainViewModel().appSettings.value.backgroundImage == BackgroundImageOption.None) {
+                                    (mainViewModel.appSettings.value.componentOpacity * 100),
+                                    if (mainViewModel.appSettings.value.backgroundImage == BackgroundImageOption.None) {
                                         "(${context.getString(R.string.settings_experiment_option_required_enableimage)})"
                                     } else ""
                                 ),
                                 onClick = {
-                                    activity.showSnackBar(context.getString(R.string.feature_not_ready), true)
+                                    onMessageReceived(context.getString(R.string.feature_not_ready), true, null, null)
                                     /* TODO: Implement here: Component opacity */
                                 }
                             )
@@ -157,38 +158,42 @@ fun Activity_Settings_ExperimentSettings(
                                 title = context.getString(R.string.settings_experiment_option_dashboardview),
                                 isVisible = true,
                                 isEnabled = true,
-                                isChecked = activity.getMainViewModel().appSettings.value.mainScreenDashboardView,
-                                description = when (activity.getMainViewModel().appSettings.value.mainScreenDashboardView) {
+                                isChecked = mainViewModel.appSettings.value.mainScreenDashboardView,
+                                description = when (mainViewModel.appSettings.value.mainScreenDashboardView) {
                                     true -> context.getString(R.string.settings_experiment_option_dashboardview_choice_enabled)
                                     false -> context.getString(R.string.settings_experiment_option_dashboardview_choice_disabled)
                                 },
                                 onValueChanged = {
-                                    activity.showSnackBar(
-                                        text = context.getString(
+                                    onMessageReceived(
+                                        context.getString(
                                             R.string.settings_experiment_option_dashboardview_warning,
-                                            when (activity.getMainViewModel().appSettings.value.mainScreenDashboardView) {
+                                            when (mainViewModel.appSettings.value.mainScreenDashboardView) {
                                                 true -> context.getString(R.string.settings_experiment_option_dashboardview_warning_disable)
                                                 false -> context.getString(R.string.settings_experiment_option_dashboardview_warning_enable)
                                             }
                                         ),
-                                        clearPrevious = true,
-                                        actionText = context.getString(R.string.action_confirm),
-                                        action = {
-                                            activity.getMainViewModel().appSettings.value = activity.getMainViewModel().appSettings.value.clone(
-                                                mainScreenDashboardView = !activity.getMainViewModel().appSettings.value.mainScreenDashboardView
+                                        true,
+                                        context.getString(R.string.action_confirm)
+                                    ) {
+                                        mainViewModel.appSettings.value =
+                                            mainViewModel.appSettings.value.clone(
+                                                mainScreenDashboardView = !mainViewModel.appSettings.value.mainScreenDashboardView
                                             )
-                                            activity.getMainViewModel().saveSettings(
-                                                onCompleted = {
-                                                    val packageManager: PackageManager = context.packageManager
-                                                    val intent: Intent = packageManager.getLaunchIntentForPackage(context.packageName)!!
-                                                    val componentName: ComponentName = intent.component!!
-                                                    val restartIntent: Intent = Intent.makeRestartActivityTask(componentName)
-                                                    context.startActivity(restartIntent)
-                                                    Runtime.getRuntime().exit(0)
-                                                }
-                                            )
-                                        }
-                                    )
+                                        mainViewModel.saveSettings(
+                                            onCompleted = {
+                                                val packageManager: PackageManager =
+                                                    context.packageManager
+                                                val intent: Intent =
+                                                    packageManager.getLaunchIntentForPackage(context.packageName)!!
+                                                val componentName: ComponentName =
+                                                    intent.component!!
+                                                val restartIntent: Intent =
+                                                    Intent.makeRestartActivityTask(componentName)
+                                                context.startActivity(restartIntent)
+                                                Runtime.getRuntime().exit(0)
+                                            }
+                                        )
+                                    }
                                 }
                             )
                         }
@@ -204,7 +209,7 @@ fun Activity_Settings_ExperimentSettings(
                                 title = context.getString(R.string.settings_experiment_option_debuglog),
                                 description = context.getString(R.string.settings_experiment_option_debuglog_description),
                                 onClick = {
-                                    activity.showSnackBar(context.getString(R.string.feature_not_ready), true)
+                                    onMessageReceived(context.getString(R.string.feature_not_ready), true, null, null)
                                     /* TODO: Implement here: Debug log */
                                 }
                             )
@@ -218,12 +223,12 @@ fun Activity_Settings_ExperimentSettings(
         context = context,
         isVisible = dialogSchoolYear.value,
         dismissRequested = { dialogSchoolYear.value = false },
-        currentSchoolYearItem = activity.getMainViewModel().appSettings.value.currentSchoolYear,
+        currentSchoolYearItem = mainViewModel.appSettings.value.currentSchoolYear,
         onSubmit = {
-            activity.getMainViewModel().appSettings.value = activity.getMainViewModel().appSettings.value.clone(
+            mainViewModel.appSettings.value = mainViewModel.appSettings.value.clone(
                 currentSchoolYear = it
             )
-            activity.getMainViewModel().saveSettings()
+            mainViewModel.saveSettings()
             dialogSchoolYear.value = false
         }
     )

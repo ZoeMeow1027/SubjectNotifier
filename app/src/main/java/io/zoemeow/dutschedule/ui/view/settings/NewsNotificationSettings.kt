@@ -47,6 +47,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.zoemeow.dutschedule.R
+import io.zoemeow.dutschedule.model.AppearanceState
 import io.zoemeow.dutschedule.model.settings.SubjectCode
 import io.zoemeow.dutschedule.ui.component.base.CheckboxOption
 import io.zoemeow.dutschedule.ui.component.base.DividerItem
@@ -64,8 +65,7 @@ import io.zoemeow.dutschedule.ui.component.settings.Dialog_Settings_NewsNotifica
 fun Activity_Settings_NewsNotificationSettings(
     context: Context,
     snackBarHostState: SnackbarHostState?,
-    containerColor: Color,
-    contentColor: Color,
+    appearanceState: AppearanceState,
     onBack: () -> Unit,
     fetchNewsInBackgroundDuration: Int = 0,
     onFetchNewsStateChanged: ((Int) -> Unit)? = null,
@@ -78,8 +78,7 @@ fun Activity_Settings_NewsNotificationSettings(
     subjectFilterList: ArrayList<SubjectCode> = arrayListOf(),
     onSubjectFilterAdd: ((SubjectCode) -> Unit)? = null,
     onSubjectFilterDelete: ((SubjectCode) -> Unit)? = null,
-    onSubjectFilterClear: (() -> Unit)? = null,
-    opacity: Float = 1f
+    onSubjectFilterClear: (() -> Unit)? = null
 ) {
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
     val durationTemp = remember {
@@ -99,8 +98,8 @@ fun Activity_Settings_NewsNotificationSettings(
                 SnackbarHost(hostState = it)
             }
         },
-        containerColor = containerColor,
-        contentColor = contentColor,
+        containerColor = appearanceState.containerColor,
+        contentColor = appearanceState.contentColor,
         topBar = {
             LargeTopAppBar(
                 title = { Text(context.getString(R.string.settings_newsnotify_title)) },
@@ -151,7 +150,7 @@ fun Activity_Settings_NewsNotificationSettings(
                 SimpleCardItem(
                     padding = PaddingValues(horizontal = 20.4.dp, vertical = 5.dp),
                     title = context.getString(R.string.settings_newsnotify_fetchnewsinbackground_duration),
-                    opacity = opacity,
+                    opacity = appearanceState.componentOpacity,
                     content = {
                         Column(
                             modifier = Modifier
@@ -353,13 +352,13 @@ fun Activity_Settings_NewsNotificationSettings(
                                 Text(context.getString(R.string.settings_newsnotify_newsfilter_disabledwarning_description))
                             }
                         },
-                        opacity = opacity
+                        opacity = appearanceState.backgroundOpacity
                     )
                 } else {
                     SimpleCardItem(
                         padding = PaddingValues(horizontal = 20.4.dp, vertical = 5.dp),
                         title = context.getString(R.string.settings_newsnotify_newsfilter_list_title),
-                        opacity = opacity,
+                        opacity = appearanceState.backgroundOpacity,
                         content = {
                             Column(
                                 modifier = Modifier
@@ -397,6 +396,7 @@ fun Activity_Settings_NewsNotificationSettings(
                             }
                         }
                     )
+                    @Suppress("KotlinConstantConditions")
                     OptionItem(
                         modifierInside = Modifier.padding(horizontal = 20.dp, vertical = 15.dp),
                         title = context.getString(R.string.settings_newsnotify_newsfilter_add),
@@ -407,6 +407,7 @@ fun Activity_Settings_NewsNotificationSettings(
                             dialogAddNew.value = true
                         }
                     )
+                    @Suppress("KotlinConstantConditions")
                     OptionItem(
                         modifierInside = Modifier.padding(horizontal = 20.dp, vertical = 15.dp),
                         title = context.getString(R.string.settings_newsnotify_newsfilter_deleteall),

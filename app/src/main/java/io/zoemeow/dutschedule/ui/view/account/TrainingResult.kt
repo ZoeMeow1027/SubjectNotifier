@@ -1,6 +1,5 @@
 package io.zoemeow.dutschedule.ui.view.account
 
-import android.app.Activity.RESULT_CANCELED
 import android.content.Context
 import android.content.Intent
 import androidx.compose.foundation.layout.Arrangement
@@ -52,26 +51,30 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.zoemeow.dutschedule.R
 import io.zoemeow.dutschedule.activity.AccountActivity
+import io.zoemeow.dutschedule.model.AppearanceState
 import io.zoemeow.dutschedule.model.ProcessState
 import io.zoemeow.dutschedule.ui.component.base.ButtonBase
 import io.zoemeow.dutschedule.ui.component.base.CheckboxOption
 import io.zoemeow.dutschedule.ui.component.base.OutlinedTextBox
 import io.zoemeow.dutschedule.ui.component.base.SimpleCardItem
+import io.zoemeow.dutschedule.viewmodel.MainViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AccountActivity.TrainingResult(
+fun Activity_Account_TrainingResult(
     context: Context,
     snackBarHostState: SnackbarHostState,
-    containerColor: Color,
-    contentColor: Color
+    appearanceState: AppearanceState,
+    mainViewModel: MainViewModel,
+    onMessageReceived: (String, Boolean, String?, (() -> Unit)?) -> Unit, // (msg, forceDismissBefore, actionText, action)
+    onBack: () -> Unit
 ) {
     val clipboardManager: ClipboardManager = LocalClipboardManager.current
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         snackbarHost = { SnackbarHost(hostState = snackBarHostState) },
-        containerColor = containerColor,
-        contentColor = contentColor,
+        containerColor = appearanceState.containerColor,
+        contentColor = appearanceState.contentColor,
         topBar = {
             Box(
                 contentAlignment = Alignment.BottomCenter,
@@ -82,8 +85,7 @@ fun AccountActivity.TrainingResult(
                         navigationIcon = {
                             IconButton(
                                 onClick = {
-                                    setResult(RESULT_CANCELED)
-                                    finish()
+                                    onBack()
                                 },
                                 content = {
                                     Icon(
@@ -95,7 +97,7 @@ fun AccountActivity.TrainingResult(
                             )
                         }
                     )
-                    if (getMainViewModel().accountSession.accountTrainingStatus.processState.value == ProcessState.Running) {
+                    if (mainViewModel.accountSession.accountTrainingStatus.processState.value == ProcessState.Running) {
                         LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
                     }
                 }
@@ -105,10 +107,10 @@ fun AccountActivity.TrainingResult(
             BottomAppBar(
                 containerColor = Color.Transparent,
                 floatingActionButton = {
-                    if (getMainViewModel().accountSession.accountTrainingStatus.processState.value != ProcessState.Running) {
+                    if (mainViewModel.accountSession.accountTrainingStatus.processState.value != ProcessState.Running) {
                         FloatingActionButton(
                             onClick = {
-                                getMainViewModel().accountSession.fetchAccountTrainingStatus(force = true)
+                                mainViewModel.accountSession.fetchAccountTrainingStatus(force = true)
                             },
                             content = {
                                 Icon(Icons.Default.Refresh, context.getString(R.string.action_refresh))
@@ -132,12 +134,12 @@ fun AccountActivity.TrainingResult(
                         verticalArrangement = Arrangement.Top,
                         horizontalAlignment = Alignment.CenterHorizontally,
                         content = {
-                            getMainViewModel().accountSession.accountTrainingStatus.data.value?.let {
+                            mainViewModel.accountSession.accountTrainingStatus.data.value?.let {
                                 SimpleCardItem(
                                     title = context.getString(R.string.account_trainingstatus_trainbox_title),
                                     isTitleCentered = true,
                                     padding = PaddingValues(start = 10.dp, end = 10.dp, bottom = 7.dp),
-                                    opacity = getBackgroundAlpha(),
+                                    opacity = appearanceState.componentOpacity,
                                     content = {
                                         Column(
                                             modifier = Modifier
@@ -215,7 +217,7 @@ fun AccountActivity.TrainingResult(
                                     title = context.getString(R.string.account_trainingstatus_graduatebox_title),
                                     isTitleCentered = true,
                                     padding = PaddingValues(horizontal = 10.dp),
-                                    opacity = getBackgroundAlpha(),
+                                    opacity = appearanceState.componentOpacity,
                                     content = {
                                         Column(
                                             modifier = Modifier
@@ -259,15 +261,9 @@ fun AccountActivity.TrainingResult(
                                                 fun copyToClipboard(s: String? = null) {
                                                     if (!s.isNullOrEmpty()) {
                                                         clipboardManager.setText(AnnotatedString(s))
-                                                        showSnackBar(
-                                                            context.getString(R.string.account_trainingstatus_graduatebox_certandgraduateresult_copied),
-                                                            clearPrevious = true
-                                                        )
+                                                        onMessageReceived(context.getString(R.string.account_trainingstatus_graduatebox_certandgraduateresult_copied), true, null, null)
                                                     } else {
-                                                        showSnackBar(
-                                                            context.getString(R.string.account_trainingstatus_graduatebox_certandgraduateresult_nocopy),
-                                                            clearPrevious = true
-                                                        )
+                                                        onMessageReceived(context.getString(R.string.account_trainingstatus_graduatebox_certandgraduateresult_nocopy), true, null, null)
                                                     }
                                                 }
                                                 OutlinedTextBox(
@@ -359,7 +355,7 @@ fun AccountActivity.TrainingResult(
     val hasRun = remember { mutableStateOf(false) }
     run {
         if (!hasRun.value) {
-            getMainViewModel().accountSession.fetchAccountTrainingStatus()
+            mainViewModel.accountSession.fetchAccountTrainingStatus()
             hasRun.value = true
         }
     }

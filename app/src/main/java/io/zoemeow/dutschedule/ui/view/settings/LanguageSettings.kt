@@ -42,6 +42,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.os.LocaleListCompat
 import io.zoemeow.dutschedule.R
+import io.zoemeow.dutschedule.model.AppearanceState
 import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -49,8 +50,7 @@ import java.util.Locale
 fun Activity_Settings_AppLanguageSettings(
     context: Context,
     snackBarHostState: SnackbarHostState,
-    containerColor: Color,
-    contentColor: Color,
+    appearanceState: AppearanceState,
     onBack: () -> Unit
 ) {
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
@@ -59,8 +59,8 @@ fun Activity_Settings_AppLanguageSettings(
         modifier = Modifier.fillMaxSize()
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         snackbarHost = { SnackbarHost(hostState = snackBarHostState) },
-        containerColor = containerColor,
-        contentColor = contentColor,
+        containerColor = appearanceState.containerColor,
+        contentColor = appearanceState.contentColor,
         topBar = {
             LargeTopAppBar(
                 title = { Text(context.getString(R.string.settings_applanguage_title)) },

@@ -1,6 +1,5 @@
 package io.zoemeow.dutschedule.ui.view.account
 
-import android.app.Activity.RESULT_CANCELED
 import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -36,18 +35,21 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import io.dutwrapper.dutwrapper.model.accounts.SubjectScheduleItem
 import io.zoemeow.dutschedule.R
-import io.zoemeow.dutschedule.activity.AccountActivity
+import io.zoemeow.dutschedule.model.AppearanceState
 import io.zoemeow.dutschedule.model.ProcessState
 import io.zoemeow.dutschedule.ui.component.account.AccountSubjectMoreInformation
 import io.zoemeow.dutschedule.ui.component.account.SubjectInformation
+import io.zoemeow.dutschedule.viewmodel.MainViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AccountActivity.SubjectInformation(
+fun Activity_Account_SubjectInformation(
     context: Context,
     snackBarHostState: SnackbarHostState,
-    containerColor: Color,
-    contentColor: Color
+    appearanceState: AppearanceState,
+    mainViewModel: MainViewModel,
+    onMessageReceived: (String, Boolean, String?, (() -> Unit)?) -> Unit, // (msg, forceDismissBefore, actionText, action)
+    onBack: () -> Unit
 ) {
     val subjectScheduleItem: MutableState<SubjectScheduleItem?> = remember { mutableStateOf(null) }
     val subjectDetailVisible = remember { mutableStateOf(false) }
@@ -55,8 +57,8 @@ fun AccountActivity.SubjectInformation(
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         snackbarHost = { SnackbarHost(hostState = snackBarHostState) },
-        containerColor = containerColor,
-        contentColor = contentColor,
+        containerColor = appearanceState.containerColor,
+        contentColor = appearanceState.contentColor,
         topBar = {
             Box(
                 contentAlignment = Alignment.BottomCenter,
@@ -67,8 +69,7 @@ fun AccountActivity.SubjectInformation(
                         navigationIcon = {
                             IconButton(
                                 onClick = {
-                                    setResult(RESULT_CANCELED)
-                                    finish()
+                                    onBack()
                                 },
                                 content = {
                                     Icon(
@@ -80,17 +81,17 @@ fun AccountActivity.SubjectInformation(
                             )
                         }
                     )
-                    if (getMainViewModel().accountSession.subjectSchedule.processState.value == ProcessState.Running) {
+                    if (mainViewModel.accountSession.subjectSchedule.processState.value == ProcessState.Running) {
                         LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
                     }
                 }
             )
         },
         floatingActionButton = {
-            if (getMainViewModel().accountSession.subjectSchedule.processState.value != ProcessState.Running) {
+            if (mainViewModel.accountSession.subjectSchedule.processState.value != ProcessState.Running) {
                 FloatingActionButton(
                     onClick = {
-                        getMainViewModel().accountSession.fetchSubjectSchedule(force = true)
+                        mainViewModel.accountSession.fetchSubjectSchedule(force = true)
                     },
                     content = {
                         Icon(Icons.Default.Refresh, context.getString(R.string.action_refresh))
@@ -111,10 +112,10 @@ fun AccountActivity.SubjectInformation(
                             .padding(vertical = 2.dp),
                         horizontalAlignment = Alignment.CenterHorizontally,
                         content = {
-                            Text(getMainViewModel().appSettings.value.currentSchoolYear.composeToString())
+                            Text(mainViewModel.appSettings.value.currentSchoolYear.composeToString())
                         }
                     )
-                    if (getMainViewModel().accountSession.subjectSchedule.data.size == 0 && getMainViewModel().accountSession.subjectSchedule.processState.value != ProcessState.Running) {
+                    if (mainViewModel.accountSession.subjectSchedule.data.size == 0 && mainViewModel.accountSession.subjectSchedule.processState.value != ProcessState.Running) {
                         Column(
                             modifier = Modifier.fillMaxSize()
                                 .padding(horizontal = 15.dp)
@@ -137,11 +138,11 @@ fun AccountActivity.SubjectInformation(
                             horizontalAlignment = Alignment.CenterHorizontally,
                             verticalArrangement = Arrangement.Top,
                             content = {
-                                items(getMainViewModel().accountSession.subjectSchedule.data) { item ->
+                                items(mainViewModel.accountSession.subjectSchedule.data) { item ->
                                     SubjectInformation(
                                         modifier = Modifier.padding(bottom = 7.dp),
                                         item = item,
-                                        opacity = getBackgroundAlpha(),
+                                        opacity = appearanceState.componentOpacity,
                                         onClick = {
                                             subjectScheduleItem.value = item
                                             subjectDetailVisible.value = true
@@ -163,25 +164,19 @@ fun AccountActivity.SubjectInformation(
             subjectDetailVisible.value = false
         },
         onAddToFilterRequested = { item ->
-            if (getMainViewModel().appSettings.value.newsBackgroundFilterList.any { it.isEquals(item) }) {
-                showSnackBar(
-                    text = context.getString(R.string.account_subjectinfo_filter_alreadyadded),
-                    clearPrevious = true
-                )
+            if (mainViewModel.appSettings.value.newsBackgroundFilterList.any { it.isEquals(item) }) {
+                onMessageReceived(context.getString(R.string.account_subjectinfo_filter_alreadyadded), true, null, null)
             } else {
-                getMainViewModel().appSettings.value = getMainViewModel().appSettings.value.clone(
-                    newsFilterList = getMainViewModel().appSettings.value.newsBackgroundFilterList.also {
+                mainViewModel.appSettings.value = mainViewModel.appSettings.value.clone(
+                    newsFilterList = mainViewModel.appSettings.value.newsBackgroundFilterList.also {
                         it.add(item)
                     }
                 )
-                getMainViewModel().saveSettings()
-                showSnackBar(
-                    text = context.getString(
+                mainViewModel.saveSettings()
+                onMessageReceived(context.getString(
                         R.string.account_subjectinfo_filter_added,
                         item
-                    ),
-                    clearPrevious = true
-                )
+                    ), true, null, null)
             }
         }
     )
@@ -189,7 +184,7 @@ fun AccountActivity.SubjectInformation(
     val hasRun = remember { mutableStateOf(false) }
     run {
         if (!hasRun.value) {
-            getMainViewModel().accountSession.fetchSubjectSchedule()
+            mainViewModel.accountSession.fetchSubjectSchedule()
             hasRun.value = true
         }
     }

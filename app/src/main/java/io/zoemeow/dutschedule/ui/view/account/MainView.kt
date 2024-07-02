@@ -1,6 +1,5 @@
 package io.zoemeow.dutschedule.ui.view.account
 
-import android.app.Activity.RESULT_CANCELED
 import android.content.Context
 import android.content.Intent
 import androidx.activity.compose.BackHandler
@@ -33,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import io.zoemeow.dutschedule.GlobalVariables
 import io.zoemeow.dutschedule.R
 import io.zoemeow.dutschedule.activity.AccountActivity
+import io.zoemeow.dutschedule.model.AppearanceState
 import io.zoemeow.dutschedule.model.ProcessState
 import io.zoemeow.dutschedule.model.account.AccountAuth
 import io.zoemeow.dutschedule.ui.component.account.AccountInfoBanner
@@ -45,40 +45,14 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-@Composable
-fun AccountActivity.MainView(
-    context: Context,
-    snackBarHostState: SnackbarHostState,
-    containerColor: Color,
-    contentColor: Color
-) {
-    AccountMainView(
-        context = context,
-        snackBarHostState = snackBarHostState,
-        containerColor = containerColor,
-        contentColor = contentColor,
-        componentBackgroundAlpha = getBackgroundAlpha(),
-        mainViewModel = getMainViewModel(),
-        onShowSnackBar = { text, clearPrevious, actionText, action ->
-            showSnackBar(text = text, clearPrevious = clearPrevious, actionText = actionText, action = action)
-        },
-        onBack = {
-            setResult(RESULT_CANCELED)
-            finish()
-        }
-    )
-}
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AccountMainView(
+fun Activity_Account(
     context: Context,
     snackBarHostState: SnackbarHostState? = null,
-    containerColor: Color,
-    contentColor: Color,
-    componentBackgroundAlpha: Float = 1f,
+    appearanceState: AppearanceState,
     mainViewModel: MainViewModel,
-    onShowSnackBar: ((String, Boolean, String?, (() -> Unit)?) -> Unit)? = null,
+    onMessageReceived: ((String, Boolean, String?, (() -> Unit)?) -> Unit)? = null,
     onBack: (() -> Unit)? = null
 ) {
     val loginDialogVisible = remember { mutableStateOf(false) }
@@ -88,8 +62,8 @@ fun AccountMainView(
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         snackbarHost = { snackBarHostState?.let { SnackbarHost(hostState = it) } },
-        containerColor = containerColor,
-        contentColor = contentColor,
+        containerColor = appearanceState.containerColor,
+        contentColor = appearanceState.contentColor,
         topBar = {
             TopAppBar(
                 title = { Text(context.getString(R.string.account_title)) },
@@ -126,7 +100,7 @@ fun AccountMainView(
                             mainViewModel.accountSession.accountInformation.let { accInfo ->
                                 AccountInfoBanner(
                                     context = context,
-                                    opacity = componentBackgroundAlpha,
+                                    opacity = appearanceState.componentOpacity,
                                     padding = PaddingValues(10.dp),
                                     isLoading = mainViewModel.accountSession.accountSession.processState.value == ProcessState.Running || accInfo.processState.value == ProcessState.Running,
                                     isFailed = mainViewModel.accountSession.accountSession.processState.value == ProcessState.Failed,
@@ -147,7 +121,7 @@ fun AccountMainView(
                                 isEnabled = mainViewModel.accountSession.accountSession.processState.value != ProcessState.Running,
                                 content = { Text(context.getString(R.string.account_dashboard_button_subjectinfo)) },
                                 horizontalArrangement = Arrangement.Start,
-                                opacity = componentBackgroundAlpha,
+                                opacity = appearanceState.componentOpacity,
                                 clicked = {
                                     val intent = Intent(context, AccountActivity::class.java)
                                     intent.action = AccountActivity.INTENT_SUBJECTINFORMATION
@@ -162,7 +136,7 @@ fun AccountMainView(
                                 isEnabled = mainViewModel.accountSession.accountSession.processState.value != ProcessState.Running,
                                 content = { Text(context.getString(R.string.account_dashboard_button_subjectfee)) },
                                 horizontalArrangement = Arrangement.Start,
-                                opacity = componentBackgroundAlpha,
+                                opacity = appearanceState.componentOpacity,
                                 clicked = {
                                     val intent = Intent(context, AccountActivity::class.java)
                                     intent.action = AccountActivity.INTENT_SUBJECTFEE
@@ -177,7 +151,7 @@ fun AccountMainView(
                                 isEnabled = mainViewModel.accountSession.accountSession.processState.value != ProcessState.Running,
                                 content = { Text(context.getString(R.string.account_dashboard_button_accountinfo)) },
                                 horizontalArrangement = Arrangement.Start,
-                                opacity = componentBackgroundAlpha,
+                                opacity = appearanceState.componentOpacity,
                                 clicked = {
                                     val intent = Intent(context, AccountActivity::class.java)
                                     intent.action = AccountActivity.INTENT_ACCOUNTINFORMATION
@@ -192,7 +166,7 @@ fun AccountMainView(
                                 isEnabled = mainViewModel.accountSession.accountSession.processState.value != ProcessState.Running,
                                 content = { Text(context.getString(R.string.account_dashboard_button_accounttrainstats)) },
                                 horizontalArrangement = Arrangement.Start,
-                                opacity = componentBackgroundAlpha,
+                                opacity = appearanceState.componentOpacity,
                                 clicked = {
                                     val intent = Intent(context, AccountActivity::class.java)
                                     intent.action = AccountActivity.INTENT_ACCOUNTTRAININGSTATUS
@@ -206,7 +180,7 @@ fun AccountMainView(
                                 modifierInside = Modifier.padding(vertical = 7.dp),
                                 content = { Text(context.getString(R.string.account_dashboard_button_logout)) },
                                 horizontalArrangement = Arrangement.Start,
-                                opacity = componentBackgroundAlpha,
+                                opacity = appearanceState.componentOpacity,
                                 clicked = {
                                     logoutDialogVisible.value = true
                                 }
@@ -224,7 +198,7 @@ fun AccountMainView(
                         isControlEnabled = state != ProcessState.Running,
                         isLoggedInBefore = state == ProcessState.Failed,
                         clearOnInvisible = true,
-                        opacity = componentBackgroundAlpha,
+                        opacity = appearanceState.componentOpacity,
                         onForgotPass = {
                             context.openLink(
                                 url = GlobalVariables.LINK_FORGOT_PASSWORD,
@@ -239,7 +213,7 @@ fun AccountMainView(
                             run {
                                 CoroutineScope(Dispatchers.IO).launch {
                                     loginDialogEnabled.value = false
-                                    onShowSnackBar?.let { it(
+                                    onMessageReceived?.let { it(
                                         context.getString(R.string.account_login_loggingin),
                                         true, null, null
                                     ) }
@@ -253,14 +227,14 @@ fun AccountMainView(
                                                     loginDialogEnabled.value = true
                                                     loginDialogVisible.value = false
                                                     mainViewModel.accountSession.reLogin()
-                                                    onShowSnackBar?.let { it(
+                                                    onMessageReceived?.let { it(
                                                         context.getString(R.string.account_login_successful),
                                                         true, null, null
                                                     ) }
                                                 }
                                                 false -> {
                                                     loginDialogEnabled.value = true
-                                                    onShowSnackBar?.let { it(
+                                                    onMessageReceived?.let { it(
                                                         context.getString(R.string.account_login_failed),
                                                         true, null, null
                                                     ) }
@@ -283,14 +257,14 @@ fun AccountMainView(
                                                     loginDialogEnabled.value = true
                                                     loginDialogVisible.value = false
                                                     mainViewModel.accountSession.reLogin()
-                                                    onShowSnackBar?.let { it(
+                                                    onMessageReceived?.let { it(
                                                         context.getString(R.string.account_login_successful),
                                                         true, null, null
                                                     ) }
                                                 }
                                                 false -> {
                                                     loginDialogEnabled.value = true
-                                                    onShowSnackBar?.let { it(
+                                                    onMessageReceived?.let { it(
                                                         context.getString(R.string.account_login_failed),
                                                         true, null, null
                                                     ) }
@@ -315,7 +289,7 @@ fun AccountMainView(
                 logoutDialogVisible.value = false
                 mainViewModel.accountSession.logout(
                     onCompleted = {
-                        onShowSnackBar?.let { it(
+                        onMessageReceived?.let { it(
                             context.getString(R.string.account_logout_loggedout),
                             true, null, null
                         ) }

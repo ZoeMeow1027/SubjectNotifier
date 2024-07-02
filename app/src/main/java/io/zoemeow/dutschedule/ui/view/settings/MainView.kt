@@ -40,6 +40,7 @@ import io.zoemeow.dutschedule.GlobalVariables
 import io.zoemeow.dutschedule.R
 import io.zoemeow.dutschedule.activity.PermissionsActivity
 import io.zoemeow.dutschedule.activity.SettingsActivity
+import io.zoemeow.dutschedule.model.AppearanceState
 import io.zoemeow.dutschedule.model.settings.BackgroundImageOption
 import io.zoemeow.dutschedule.model.settings.ThemeMode
 import io.zoemeow.dutschedule.ui.component.base.DividerItem
@@ -57,12 +58,10 @@ import java.util.Locale
 fun Activity_Settings(
     context: Context,
     snackBarHostState: SnackbarHostState? = null,
-    containerColor: Color,
-    contentColor: Color,
-    @Suppress("UNUSED_PARAMETER") componentBackgroundAlpha: Float = 1f,
+    appearanceState: AppearanceState,
     mainViewModel: MainViewModel,
     mediaRequest: () -> Unit,
-    onShowSnackBar: ((String, Boolean, String?, (() -> Unit)?) -> Unit)? = null,
+    onMessageReceived: ((String, Boolean, String?, (() -> Unit)?) -> Unit)? = null,
     onBack: (() -> Unit)? = null
 ) {
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
@@ -74,8 +73,8 @@ fun Activity_Settings(
         modifier = Modifier.fillMaxSize()
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         snackbarHost = { snackBarHostState?.let { SnackbarHost(hostState = it) } },
-        containerColor = containerColor,
-        contentColor = contentColor,
+        containerColor = appearanceState.containerColor,
+        contentColor = appearanceState.contentColor,
         topBar = {
             LargeTopAppBar(
                 title = { Text(context.getString(R.string.settings_title)) },
@@ -330,7 +329,7 @@ fun Activity_Settings(
                                     BuildConfig.VERSION_CODE
                                 ),
                                 onClick = {
-                                    onShowSnackBar?.let { it(context.getString(R.string.feature_not_ready), true, null, null) }
+                                    onMessageReceived?.let { it(context.getString(R.string.feature_not_ready), true, null, null) }
                                     /* TODO: Implement here: Check for updates */
                                 }
                             )
@@ -413,7 +412,7 @@ fun Activity_Settings(
                             backgroundImage = value
                         )
                 } else {
-                    onShowSnackBar?.let {
+                    onMessageReceived?.let {
                         it(
                             context.getString(R.string.permission_missing_all_file_access),
                             true,

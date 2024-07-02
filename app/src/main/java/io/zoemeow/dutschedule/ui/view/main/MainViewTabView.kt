@@ -33,17 +33,17 @@ import androidx.navigation.compose.rememberNavController
 import io.zoemeow.dutschedule.R
 import io.zoemeow.dutschedule.activity.MainActivity
 import io.zoemeow.dutschedule.activity.NewsActivity
+import io.zoemeow.dutschedule.model.AppearanceState
 import io.zoemeow.dutschedule.model.NavBarItem
-import io.zoemeow.dutschedule.ui.view.account.AccountMainView
-import io.zoemeow.dutschedule.ui.view.news.NewsMainView
+import io.zoemeow.dutschedule.ui.view.account.Activity_Account
+import io.zoemeow.dutschedule.ui.view.news.Activity_News
 import io.zoemeow.dutschedule.ui.view.settings.Activity_Settings
 
 @Composable
 fun MainActivity.MainViewTabbed(
     context: Context,
     snackBarHostState: SnackbarHostState,
-    containerColor: Color,
-    contentColor: Color,
+    appearanceState: AppearanceState
 ) {
     // Initialize for NavController for main activity
     val navController = rememberNavController()
@@ -55,13 +55,13 @@ fun MainActivity.MainViewTabbed(
         modifier = Modifier.fillMaxSize(),
         snackbarHost = { SnackbarHost(hostState = snackBarHostState) },
         containerColor = Color.Transparent,
-        contentColor = contentColor,
+        contentColor = appearanceState.contentColor,
         // https://stackoverflow.com/questions/75328833/compose-scaffold-unnecessary-systembar-padding-due-to-windowcompat-setdecorfi
         contentWindowInsets = WindowInsets.navigationBars,
         bottomBar = {
             NavigationBar(
-                containerColor = containerColor,
-                contentColor = contentColor,
+                containerColor = appearanceState.containerColor,
+                contentColor = appearanceState.contentColor,
                 content = {
                     NavBarItem.getAll().forEach(
                         action = {
@@ -95,20 +95,43 @@ fun MainActivity.MainViewTabbed(
         content = {
             NavHost(
                 navController = navController,
-                startDestination = NavBarItem.news.route,
-                enterTransition = { fadeIn(animationSpec = tween(300)) },
-                exitTransition = { fadeOut(animationSpec = tween(300)) },
-                popEnterTransition = { fadeIn(animationSpec = tween(300)) },
-                popExitTransition = { fadeOut(animationSpec = tween(300)) },
+                startDestination = NavBarItem.dashboard.route,
+                enterTransition = { fadeIn(animationSpec = tween(200)) },
+                exitTransition = { fadeOut(animationSpec = tween(200)) },
+                popEnterTransition = { fadeIn(animationSpec = tween(200)) },
+                popExitTransition = { fadeOut(animationSpec = tween(200)) },
                 modifier = Modifier.padding(it)
             ) {
-                // TODO: Add view here!
-                composable(NavBarItem.news.route) {
-                    NewsMainView(
+                composable(NavBarItem.dashboard.route) {
+                    Activity_MainView_Dashboard(
                         context = context,
-                        containerColor = containerColor,
-                        contentColor = contentColor,
-                        componentBackgroundAlpha = getBackgroundAlpha(),
+                        appearanceState = appearanceState,
+                        mainViewModel = getMainViewModel(),
+                        onNewsOpened = {
+                            navController.navigate(NavBarItem.news.route) {
+                                popUpTo(navController.graph.findStartDestination().id) {
+                                    saveState = true
+                                }
+                                launchSingleTop = true
+                                restoreState = true
+                            }
+                        },
+                        onLoginRequested = {
+                            navController.navigate(NavBarItem.account.route) {
+                                popUpTo(navController.graph.findStartDestination().id) {
+                                    saveState = true
+                                }
+                                launchSingleTop = true
+                                restoreState = true
+                            }
+                        }
+                    )
+                }
+
+                composable(NavBarItem.news.route) {
+                    Activity_News(
+                        context = context,
+                        appearanceState = appearanceState,
                         mainViewModel = getMainViewModel(),
                         searchRequested = {
                             val intent = Intent(context, NewsActivity::class.java)
@@ -119,13 +142,11 @@ fun MainActivity.MainViewTabbed(
                 }
 
                 composable(NavBarItem.account.route) {
-                    AccountMainView(
+                    Activity_Account(
                         context = context,
-                        containerColor = containerColor,
-                        contentColor = contentColor,
-                        componentBackgroundAlpha = getBackgroundAlpha(),
+                        appearanceState = appearanceState,
                         mainViewModel = getMainViewModel(),
-                        onShowSnackBar = { text, clearPrevious, actionText, action ->
+                        onMessageReceived = { text, clearPrevious, actionText, action ->
                             showSnackBar(text = text, clearPrevious = clearPrevious, actionText = actionText, action = action)
                         }
                     )
@@ -137,8 +158,7 @@ fun MainActivity.MainViewTabbed(
                         itemList = getMainViewModel().notificationHistory.toList(),
                         snackBarHostState = null,
                         isVisible = true,
-                        containerColor = containerColor,
-                        contentColor = contentColor,
+                        appearanceState = appearanceState,
                         onClick = { item ->
                             if (listOf(1, 2).contains(item.tag)) {
                                 Intent(context, NewsActivity::class.java).also { intent ->
@@ -177,22 +197,19 @@ fun MainActivity.MainViewTabbed(
                                 },
                                 clearPrevious = true
                             )
-                        },
-                        opacity = getBackgroundAlpha()
+                        }
                     )
                 }
 
                 composable(NavBarItem.settings.route) {
                     Activity_Settings(
                         context = context,
-                        containerColor = containerColor,
-                        contentColor = contentColor,
-                        componentBackgroundAlpha = getBackgroundAlpha(),
+                        appearanceState = appearanceState,
                         mainViewModel = getMainViewModel(),
                         mediaRequest = {
                             pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
                         },
-                        onShowSnackBar = { text, clearPrevious, actionText, action ->
+                        onMessageReceived = { text, clearPrevious, actionText, action ->
                             showSnackBar(text = text, clearPrevious = clearPrevious, actionText = actionText, action = action)
                         }
                     )

@@ -1,6 +1,5 @@
 package io.zoemeow.dutschedule.ui.view.news
 
-import android.app.Activity.RESULT_CANCELED
 import android.content.Context
 import android.content.Intent
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -46,6 +45,7 @@ import com.google.gson.Gson
 import io.dutwrapper.dutwrapper.model.news.NewsGlobalItem
 import io.zoemeow.dutschedule.R
 import io.zoemeow.dutschedule.activity.NewsActivity
+import io.zoemeow.dutschedule.model.AppearanceState
 import io.zoemeow.dutschedule.model.ProcessState
 import io.zoemeow.dutschedule.model.news.NewsFetchType
 import io.zoemeow.dutschedule.ui.component.news.NewsListPage
@@ -55,37 +55,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-@Composable
-fun NewsActivity.MainView(
-    context: Context,
-    snackBarHostState: SnackbarHostState,
-    containerColor: Color,
-    contentColor: Color,
-    searchRequested: (() -> Unit)? = null
-) {
-    NewsMainView(
-        context = context,
-        snackBarHostState = snackBarHostState,
-        containerColor = containerColor,
-        contentColor = contentColor,
-        searchRequested = searchRequested,
-        componentBackgroundAlpha = getBackgroundAlpha(),
-        mainViewModel = getMainViewModel(),
-        onBack = {
-            setResult(RESULT_CANCELED)
-            finish()
-        }
-    )
-}
-
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
-fun NewsMainView(
+fun Activity_News(
     context: Context,
     snackBarHostState: SnackbarHostState? = null,
-    containerColor: Color,
-    contentColor: Color,
-    componentBackgroundAlpha: Float = 1f,
+    appearanceState: AppearanceState,
     mainViewModel: MainViewModel,
     searchRequested: (() -> Unit)? = null,
     onBack: (() -> Unit)? = null
@@ -96,8 +71,8 @@ fun NewsMainView(
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         snackbarHost = { snackBarHostState?.let { SnackbarHost(hostState = it) } },
-        containerColor = containerColor,
-        contentColor = contentColor,
+        containerColor = appearanceState.containerColor,
+        contentColor = appearanceState.contentColor,
         topBar = {
             Box(
                 contentAlignment = Alignment.BottomCenter,
@@ -238,7 +213,7 @@ fun NewsMainView(
                         NewsListPage(
                             newsList = mainViewModel.newsInstance.newsGlobal.data.toList(),
                             processState = mainViewModel.newsInstance.newsGlobal.processState.value,
-                            opacity = componentBackgroundAlpha,
+                            opacity = appearanceState.componentOpacity,
                             itemClicked = { newsItem ->
                                 context.startActivity(
                                     Intent(
@@ -264,11 +239,10 @@ fun NewsMainView(
                     }
 
                     1 -> {
-                        @Suppress("UNCHECKED_CAST")
                         (NewsListPage(
                             newsList = mainViewModel.newsInstance.newsSubject.data.toList() as List<NewsGlobalItem>,
                             processState = mainViewModel.newsInstance.newsSubject.processState.value,
-                            opacity = componentBackgroundAlpha,
+                            opacity = appearanceState.componentOpacity,
                             itemClicked = { newsItem ->
                                 context.startActivity(
                                     Intent(

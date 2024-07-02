@@ -7,11 +7,12 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.Color
 import dagger.hilt.android.AndroidEntryPoint
 import io.zoemeow.dutschedule.R
+import io.zoemeow.dutschedule.model.AppearanceState
 import io.zoemeow.dutschedule.model.settings.BackgroundImageOption
 import io.zoemeow.dutschedule.ui.view.settings.Activity_Settings
+import io.zoemeow.dutschedule.ui.view.settings.Activity_Settings_AboutApplication
 import io.zoemeow.dutschedule.ui.view.settings.Activity_Settings_AppLanguageSettings
 import io.zoemeow.dutschedule.ui.view.settings.Activity_Settings_ExperimentSettings
 import io.zoemeow.dutschedule.ui.view.settings.Activity_Settings_NewsNotificationSettings
@@ -25,6 +26,7 @@ class SettingsActivity : BaseActivity() {
         const val INTENT_EXPERIMENTSETTINGS = "settings_experimentsettings"
         const val INTENT_LANGUAGESETTINGS = "settings_languagesettings"
         const val INTENT_NEWSNOTIFICATIONSETTINGS = "settings_newsnotificaitonsettings"
+        const val INTENT_ABOUTACTIVITY = "settings_about"
     }
 
     @Composable
@@ -62,17 +64,21 @@ class SettingsActivity : BaseActivity() {
     override fun OnMainView(
         context: Context,
         snackBarHostState: SnackbarHostState,
-        containerColor: Color,
-        contentColor: Color
+        appearanceState: AppearanceState
     ) {
         when (intent.action) {
             INTENT_PARSENEWSSUBJECTNOTIFICATION -> {
                 Activity_Settings_ParseNewsSubjectNotification(
                     context = context,
                     snackBarHostState = snackBarHostState,
-                    containerColor = containerColor,
-                    contentColor = contentColor,
-                    activity = this,
+                    appearanceState = appearanceState,
+                    isEnabled = getMainViewModel().appSettings.value.newsBackgroundParseNewsSubject,
+                    onChange = {
+                        getMainViewModel().appSettings.value = getMainViewModel().appSettings.value.clone(
+                            newsBackgroundParseNewsSubject = !getMainViewModel().appSettings.value.newsBackgroundParseNewsSubject
+                        )
+                        getMainViewModel().saveSettings()
+                    },
                     onBack = {
                         setResult(RESULT_CANCELED)
                         finish()
@@ -84,9 +90,16 @@ class SettingsActivity : BaseActivity() {
                 Activity_Settings_ExperimentSettings(
                     context = context,
                     snackBarHostState = snackBarHostState,
-                    containerColor = containerColor,
-                    contentColor = contentColor,
-                    activity = this,
+                    appearanceState = appearanceState,
+                    mainViewModel = getMainViewModel(),
+                    onMessageReceived = { msg, forceDismissBefore, actionText, action ->
+                        showSnackBar(
+                            text = msg,
+                            clearPrevious = forceDismissBefore,
+                            actionText = actionText,
+                            action = action
+                        )
+                    },
                     onBack = {
                         setResult(RESULT_CANCELED)
                         finish()
@@ -98,8 +111,7 @@ class SettingsActivity : BaseActivity() {
                 Activity_Settings_AppLanguageSettings(
                     context = context,
                     snackBarHostState = snackBarHostState,
-                    containerColor = containerColor,
-                    contentColor = contentColor,
+                    appearanceState = appearanceState,
                     onBack = {
                         setResult(RESULT_CANCELED)
                         finish()
@@ -111,8 +123,7 @@ class SettingsActivity : BaseActivity() {
                 Activity_Settings_NewsNotificationSettings(
                     context = context,
                     snackBarHostState = snackBarHostState,
-                    containerColor = containerColor,
-                    contentColor = contentColor,
+                    appearanceState = appearanceState,
                     onBack = {
                         setResult(RESULT_CANCELED)
                         finish()
@@ -194,10 +205,12 @@ class SettingsActivity : BaseActivity() {
                         )
                         getMainViewModel().appSettings.value = dataTemp
                         getMainViewModel().saveSettings(saveSettingsOnly = true)
+                        @Suppress("KotlinConstantConditions")
                         showSnackBar(
                             text = when (code) {
                                 -1 -> context.getString(R.string.settings_newsnotify_newssubject_notify_disabled)
                                 0 -> context.getString(R.string.settings_newsnotify_newssubject_notify_all)
+                                // TODO: Implement this branch "Match your schedule" to avoid issue
                                 1 -> context.getString(R.string.settings_newsnotify_newssubject_notify_matchsubsch)
                                 2 -> context.getString(R.string.settings_newsnotify_newssubject_notify_matchfilter)
                                 // TODO: No code valid
@@ -252,8 +265,19 @@ class SettingsActivity : BaseActivity() {
                                 clearPrevious = true
                             )
                         } catch (_: Exception) { }
-                    },
-                    opacity = getBackgroundAlpha()
+                    }
+                )
+            }
+
+            INTENT_ABOUTACTIVITY -> {
+                Activity_Settings_AboutApplication(
+                    context = context,
+                    snackBarHostState = snackBarHostState,
+                    appearanceState = appearanceState,
+                    onBack = {
+                        setResult(RESULT_CANCELED)
+                        finish()
+                    }
                 )
             }
 
@@ -261,11 +285,9 @@ class SettingsActivity : BaseActivity() {
                 Activity_Settings(
                     context = context,
                     snackBarHostState = snackBarHostState,
-                    containerColor = containerColor,
-                    contentColor = contentColor,
-                    componentBackgroundAlpha = getBackgroundAlpha(),
+                    appearanceState = appearanceState,
                     mainViewModel = getMainViewModel(),
-                    onShowSnackBar = { text, clearPrevious, actionText, action ->
+                    onMessageReceived = { text, clearPrevious, actionText, action ->
                         showSnackBar(text = text, clearPrevious = clearPrevious, actionText = actionText, action = action)
                     },
                     onBack = {

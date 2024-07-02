@@ -41,6 +41,7 @@
     <string name="date_duration_today">Today</string>
     <string name="date_duration_yesterday">Yesterday</string>
     <!-- Main activity string -->
+    <string name="main_dashboard_title">Dashboard</string>
     <string name="main_account_notloggedin">Not logged in</string>
     <string name="main_account_fetching">Fetching…</string>
     <!-- Android notification string -->

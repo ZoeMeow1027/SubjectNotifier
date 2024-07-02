@@ -33,7 +33,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import io.zoemeow.dutschedule.R
-import io.zoemeow.dutschedule.activity.BaseActivity
+import io.zoemeow.dutschedule.model.AppearanceState
 import io.zoemeow.dutschedule.ui.component.base.SwitchWithTextInSurface
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -41,9 +41,9 @@ import io.zoemeow.dutschedule.ui.component.base.SwitchWithTextInSurface
 fun Activity_Settings_ParseNewsSubjectNotification(
     context: Context,
     snackBarHostState: SnackbarHostState,
-    containerColor: Color,
-    contentColor: Color,
-    activity: BaseActivity,
+    appearanceState: AppearanceState,
+    isEnabled: Boolean = false,
+    onChange: () -> Unit,
     onBack: () -> Unit
 ) {
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
@@ -52,8 +52,8 @@ fun Activity_Settings_ParseNewsSubjectNotification(
         modifier = Modifier.fillMaxSize()
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         snackbarHost = { SnackbarHost(hostState = snackBarHostState) },
-        containerColor = containerColor,
-        contentColor = contentColor,
+        containerColor = appearanceState.containerColor,
+        contentColor = appearanceState.contentColor,
         topBar = {
             LargeTopAppBar(
                 title = { Text(context.getString(R.string.settings_parsenewssubject_title)) },
@@ -91,7 +91,7 @@ fun Activity_Settings_ParseNewsSubjectNotification(
                             .padding(bottom = 5.dp),
                         shape = RoundedCornerShape(30.dp),
                         color = MaterialTheme.colorScheme.secondaryContainer.copy(
-                            alpha = activity.getBackgroundAlpha()
+                            alpha = appearanceState.componentOpacity
                         ),
                         content = {
                             Column(
@@ -99,7 +99,7 @@ fun Activity_Settings_ParseNewsSubjectNotification(
                                     .padding(20.dp),
                                 content = {
                                     Text(
-                                        when (activity.getMainViewModel().appSettings.value.newsBackgroundParseNewsSubject) {
+                                        when (isEnabled) {
                                             true -> context.getString(R.string.settings_parsenewssubject_preview_titleenabled)
                                             false -> context.getString(R.string.settings_parsenewssubject_preview_titledisabled)
                                         },
@@ -107,7 +107,7 @@ fun Activity_Settings_ParseNewsSubjectNotification(
                                         modifier = Modifier.padding(bottom = 5.dp)
                                     )
                                     Text(
-                                        when (activity.getMainViewModel().appSettings.value.newsBackgroundParseNewsSubject) {
+                                        when (isEnabled) {
                                             true -> context.getString(R.string.settings_parsenewssubject_preview_descenabled)
                                             false -> context.getString(R.string.settings_parsenewssubject_preview_descdisabled)
                                         }
@@ -119,12 +119,9 @@ fun Activity_Settings_ParseNewsSubjectNotification(
                     SwitchWithTextInSurface(
                         text = context.getString(R.string.settings_parsenewssubject_choice_enable),
                         enabled = true,
-                        checked = activity.getMainViewModel().appSettings.value.newsBackgroundParseNewsSubject,
+                        checked = isEnabled,
                         onCheckedChange = {
-                            activity.getMainViewModel().appSettings.value = activity.getMainViewModel().appSettings.value.clone(
-                                newsBackgroundParseNewsSubject = !activity.getMainViewModel().appSettings.value.newsBackgroundParseNewsSubject
-                            )
-                            activity.getMainViewModel().saveSettings()
+                            onChange()
                         }
                     )
                     Column(

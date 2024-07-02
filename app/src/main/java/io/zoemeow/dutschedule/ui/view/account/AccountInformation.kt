@@ -1,6 +1,5 @@
 package io.zoemeow.dutschedule.ui.view.account
 
-import android.app.Activity.RESULT_OK
 import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -47,26 +46,29 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import io.zoemeow.dutschedule.R
-import io.zoemeow.dutschedule.activity.AccountActivity
+import io.zoemeow.dutschedule.model.AppearanceState
 import io.zoemeow.dutschedule.model.ProcessState
 import io.zoemeow.dutschedule.ui.component.base.OutlinedTextBox
+import io.zoemeow.dutschedule.viewmodel.MainViewModel
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AccountActivity.AccountInformation(
+fun Activity_Account_AccountInformation(
     context: Context,
     snackBarHostState: SnackbarHostState,
-    containerColor: Color,
-    contentColor: Color
+    appearanceState: AppearanceState,
+    mainViewModel: MainViewModel,
+    onMessageReceived: (String, Boolean, String?, (() -> Unit)?) -> Unit, // (msg, forceDismissBefore, actionText, action)
+    onBack: () -> Unit
 ) {
     val clipboardManager: ClipboardManager = LocalClipboardManager.current
     val scope = rememberCoroutineScope()
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         snackbarHost = { SnackbarHost(hostState = snackBarHostState) },
-        containerColor = containerColor,
-        contentColor = contentColor,
+        containerColor = appearanceState.containerColor,
+        contentColor = appearanceState.contentColor,
         topBar = {
             Box(
                 contentAlignment = Alignment.BottomCenter,
@@ -77,8 +79,7 @@ fun AccountActivity.AccountInformation(
                         navigationIcon = {
                             IconButton(
                                 onClick = {
-                                    setResult(RESULT_OK)
-                                    finish()
+                                    onBack()
                                 },
                                 content = {
                                     Icon(
@@ -90,7 +91,7 @@ fun AccountActivity.AccountInformation(
                             )
                         }
                     )
-                    if (getMainViewModel().accountSession.accountInformation.processState.value == ProcessState.Running) {
+                    if (mainViewModel.accountSession.accountInformation.processState.value == ProcessState.Running) {
                         LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
                     }
                 }
@@ -100,10 +101,10 @@ fun AccountActivity.AccountInformation(
             val pageInfoTooltipState = rememberTooltipState(isPersistent = true)
             BottomAppBar(
                 floatingActionButton = {
-                    if (getMainViewModel().accountSession.accountInformation.processState.value != ProcessState.Running) {
+                    if (mainViewModel.accountSession.accountInformation.processState.value != ProcessState.Running) {
                         FloatingActionButton(
                             onClick = {
-                                getMainViewModel().accountSession.fetchAccountInformation(force = true)
+                                mainViewModel.accountSession.fetchAccountInformation(force = true)
                             },
                             content = {
                                 Icon(
@@ -160,18 +161,12 @@ fun AccountActivity.AccountInformation(
                     fun copyToClipboard(s: String? = null) {
                         if (!s.isNullOrEmpty()) {
                             clipboardManager.setText(AnnotatedString(s))
-                            showSnackBar(
-                                context.getString(R.string.account_accinfo_snackbar_copied),
-                                clearPrevious = true
-                            )
+                            onMessageReceived(context.getString(R.string.account_accinfo_snackbar_copied), true, null, null)
                         } else {
-                            showSnackBar(
-                                context.getString(R.string.account_accinfo_snackbar_nocopy),
-                                clearPrevious = true
-                            )
+                            onMessageReceived(context.getString(R.string.account_accinfo_snackbar_nocopy), true, null, null)
                         }
                     }
-                    getMainViewModel().accountSession.accountInformation.data.value?.let { data ->
+                    mainViewModel.accountSession.accountInformation.data.value?.let { data ->
                         Column(
                             modifier = Modifier
                                 .fillMaxSize()

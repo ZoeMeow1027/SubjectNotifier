@@ -6,8 +6,8 @@ import android.util.Log
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.Color
 import dagger.hilt.android.AndroidEntryPoint
+import io.zoemeow.dutschedule.model.AppearanceState
 import io.zoemeow.dutschedule.model.settings.BackgroundImageOption
 import io.zoemeow.dutschedule.service.BaseService
 import io.zoemeow.dutschedule.service.NewsBackgroundUpdateService
@@ -61,15 +61,13 @@ class MainActivity : BaseActivity() {
     override fun OnMainView(
         context: Context,
         snackBarHostState: SnackbarHostState,
-        containerColor: Color,
-        contentColor: Color
+        appearanceState: AppearanceState
     ) {
         if (getMainViewModel().appSettings.value.mainScreenDashboardView) {
             MainViewDashboard(
                 context = context,
                 snackBarHostState = snackBarHostState,
-                containerColor = containerColor,
-                contentColor = contentColor,
+                appearanceState = appearanceState,
                 newsClicked = {
                     context.startActivity(Intent(context, NewsActivity::class.java))
                 },
@@ -89,8 +87,7 @@ class MainActivity : BaseActivity() {
             MainViewTabbed(
                 context = context,
                 snackBarHostState = snackBarHostState,
-                containerColor = containerColor,
-                contentColor = contentColor
+                appearanceState = appearanceState
             )
         }
     }

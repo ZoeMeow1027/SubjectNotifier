@@ -1,8 +1,6 @@
 package io.zoemeow.dutschedule.ui.view.news
 
-import android.app.Activity.RESULT_OK
 import android.content.Context
-import androidx.activity.ComponentActivity
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -32,24 +30,26 @@ import io.dutwrapper.dutwrapper.model.news.NewsGlobalItem
 import io.dutwrapper.dutwrapper.model.news.NewsSubjectItem
 import io.zoemeow.dutschedule.R
 import io.zoemeow.dutschedule.activity.NewsActivity
+import io.zoemeow.dutschedule.model.AppearanceState
 import io.zoemeow.dutschedule.ui.component.news.NewsDetailScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NewsActivity.NewsDetail(
+fun Activity_News_NewsDetail(
     context: Context,
     snackBarHostState: SnackbarHostState,
-    containerColor: Color,
-    contentColor: Color
+    appearanceState: AppearanceState,
+    newsType: String? = null,
+    newsData: String? = null,
+    onLinkClicked: ((String) -> Unit)? = null,
+    onMessageReceived: (String, Boolean, String?, (() -> Unit)?) -> Unit, // (msg, forceDismissBefore, actionText, action)
+    onBack: () -> Unit
 ) {
-    val newsType = intent.getStringExtra("type")
-    val newsData = intent.getStringExtra("data")
-
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         snackbarHost = { SnackbarHost(hostState = snackBarHostState) },
-        containerColor = containerColor,
-        contentColor = contentColor,
+        containerColor = appearanceState.containerColor,
+        contentColor = appearanceState.contentColor,
         topBar = {
             TopAppBar(
                 title = { Text(context.getString(R.string.news_detail_title)) },
@@ -57,8 +57,7 @@ fun NewsActivity.NewsDetail(
                 navigationIcon = {
                     IconButton(
                         onClick = {
-                            setResult(RESULT_OK)
-                            finish()
+                            onBack()
                         },
                         content = {
                             Icon(
@@ -83,20 +82,11 @@ fun NewsActivity.NewsDetail(
                     },
                     onClick = {
                         try {
-//                                (Gson().fromJson<NewsSubjectItem>(newsData, object : TypeToken<NewsSubjectItem>() {}.type).also {
-//                                    getMainViewModel().appSettings.value.newsFilterList.add()
-//                                }
                             // TODO: Develop a add news filter function for news subject detail.
-                            showSnackBar(
-                                text = context.getString(R.string.feature_not_ready),
-                                clearPrevious = true
-                            )
+                            onMessageReceived(context.getString(R.string.feature_not_ready), true, null, null)
                         } catch (ex: Exception) {
                             ex.printStackTrace()
-                            showSnackBar(
-                                text = context.getString(R.string.news_detail_addtofilter_failed),
-                                clearPrevious = true
-                            )
+                            onMessageReceived(context.getString(R.string.news_detail_addtofilter_failed), true, null, null)
                         }
                     }
                 )
@@ -111,11 +101,7 @@ fun NewsActivity.NewsDetail(
                         newsItem = Gson().fromJson(newsData, object : TypeToken<NewsGlobalItem>() {}.type),
                         newsType = NewsType.Global,
                         linkClicked = { link ->
-                            openLink(
-                                url = link,
-                                context = this,
-                                customTab = getMainViewModel().appSettings.value.openLinkInsideApp
-                            )
+                            onLinkClicked?.let { it(link) }
                         }
                     )
                 }
@@ -126,11 +112,7 @@ fun NewsActivity.NewsDetail(
                         newsItem = Gson().fromJson(newsData, object : TypeToken<NewsSubjectItem>() {}.type) as NewsGlobalItem,
                         newsType = NewsType.Subject,
                         linkClicked = { link ->
-                            openLink(
-                                url = link,
-                                context = this,
-                                customTab = getMainViewModel().appSettings.value.openLinkInsideApp
-                            )
+                            onLinkClicked?.let { it(link) }
                         }
                     )
                 }

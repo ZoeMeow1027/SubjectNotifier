@@ -1,6 +1,5 @@
 package io.zoemeow.dutschedule.ui.view.account
 
-import android.app.Activity.RESULT_CANCELED
 import android.content.Context
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInVertically
@@ -55,6 +54,7 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
@@ -63,22 +63,27 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.dutwrapper.dutwrapper.model.accounts.trainingresult.SubjectResult
 import io.zoemeow.dutschedule.R
-import io.zoemeow.dutschedule.activity.AccountActivity
+import io.zoemeow.dutschedule.model.AppearanceState
 import io.zoemeow.dutschedule.model.ProcessState
 import io.zoemeow.dutschedule.ui.component.account.SubjectResult
 import io.zoemeow.dutschedule.ui.component.base.OutlinedTextBox
 import io.zoemeow.dutschedule.utils.toNonAccent
+import io.zoemeow.dutschedule.viewmodel.MainViewModel
 import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
-fun AccountActivity.TrainingSubjectResult(
+fun Activity_Account_TrainingSubjectResult(
     context: Context,
     snackBarHostState: SnackbarHostState,
-    containerColor: Color,
-    contentColor: Color
+    appearanceState: AppearanceState,
+    mainViewModel: MainViewModel,
+    // TODO: onMessageReceived when copy a property
+    @Suppress("UNUSED_PARAMETER") onMessageReceived: (String, Boolean, String?, (() -> Unit)?) -> Unit, // (msg, forceDismissBefore, actionText, action)
+    onBack: () -> Unit
 ) {
     val focusRequester = remember { FocusRequester() }
+    val focusManager = LocalFocusManager.current
 
     // Search area (true to display them)
     val searchEnabled = remember { mutableStateOf(false) }
@@ -126,8 +131,8 @@ fun AccountActivity.TrainingSubjectResult(
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         snackbarHost = { SnackbarHost(hostState = snackBarHostState) },
-        containerColor = containerColor,
-        contentColor = contentColor,
+        containerColor = appearanceState.containerColor,
+        contentColor = appearanceState.contentColor,
         topBar = {
             Box(
                 contentAlignment = Alignment.BottomCenter,
@@ -140,8 +145,7 @@ fun AccountActivity.TrainingSubjectResult(
                         navigationIcon = {
                             IconButton(
                                 onClick = {
-                                    setResult(RESULT_CANCELED)
-                                    finish()
+                                    onBack()
                                 },
                                 content = {
                                     Icon(
@@ -153,7 +157,7 @@ fun AccountActivity.TrainingSubjectResult(
                             )
                         }
                     )
-                    if (getMainViewModel().accountSession.accountTrainingStatus.processState.value == ProcessState.Running) {
+                    if (mainViewModel.accountSession.accountTrainingStatus.processState.value == ProcessState.Running) {
                         LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
                     }
                 }
@@ -182,11 +186,11 @@ fun AccountActivity.TrainingSubjectResult(
                     )
                 },
                 floatingActionButton = {
-                    if (getMainViewModel().accountSession.accountTrainingStatus.processState.value != ProcessState.Running) {
+                    if (mainViewModel.accountSession.accountTrainingStatus.processState.value != ProcessState.Running) {
                         FloatingActionButton(
                             onClick = {
-                                clearAllFocusAndHideKeyboard()
-                                getMainViewModel().accountSession.fetchAccountTrainingStatus(force = true)
+                                focusManager.clearFocus(force = true)
+                                mainViewModel.accountSession.fetchAccountTrainingStatus(force = true)
                             },
                             content = {
                                 Icon(
@@ -246,7 +250,7 @@ fun AccountActivity.TrainingSubjectResult(
                                 }
                             }
                         }
-                        items(getMainViewModel().accountSession.accountTrainingStatus.data.value?.subjectResultList?.filter { p -> run {
+                        items(mainViewModel.accountSession.accountTrainingStatus.data.value?.subjectResultList?.filter { p -> run {
                             // Filter with school year
                             if (schYearOptionText.value.isEmpty()) return@run true
                             if (p.schoolYear == schYearOptionText.value) return@run true
@@ -264,7 +268,7 @@ fun AccountActivity.TrainingSubjectResult(
                                     selectedSubject.value = subjectItem
                                     modalBottomSheetEnabled.value = true
                                 },
-                                opacity = getBackgroundAlpha()
+                                opacity = appearanceState.componentOpacity
                             )
                         }
                     }
@@ -320,7 +324,7 @@ fun AccountActivity.TrainingSubjectResult(
                                                     schYearShowOption.value = false
                                                 }
                                             )
-                                            (getMainViewModel().accountSession.accountTrainingStatus.data.value?.subjectResultList?.map { it.schoolYear }?.toList()?.distinct()?.reversed() ?: listOf()).forEach {
+                                            (mainViewModel.accountSession.accountTrainingStatus.data.value?.subjectResultList?.map { it.schoolYear }?.toList()?.distinct()?.reversed() ?: listOf()).forEach {
                                                 DropdownMenuItem(
                                                     modifier = Modifier.background(
                                                         color = when (schYearOptionText.value == it) {
@@ -356,7 +360,7 @@ fun AccountActivity.TrainingSubjectResult(
                                 ),
                                 keyboardActions = KeyboardActions(
                                     onDone = {
-                                        clearAllFocusAndHideKeyboard()
+                                        focusManager.clearFocus(force = true)
                                     }
                                 ),
                                 trailingIcon = {
@@ -411,7 +415,7 @@ fun AccountActivity.TrainingSubjectResult(
     val hasRun = remember { mutableStateOf(false) }
     run {
         if (!hasRun.value) {
-            getMainViewModel().accountSession.fetchAccountTrainingStatus()
+            mainViewModel.accountSession.fetchAccountTrainingStatus()
             hasRun.value = true
         }
     }

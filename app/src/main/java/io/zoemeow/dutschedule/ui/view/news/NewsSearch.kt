@@ -1,6 +1,5 @@
 package io.zoemeow.dutschedule.ui.view.news
 
-import android.app.Activity.RESULT_CANCELED
 import android.content.Context
 import android.content.Intent
 import androidx.activity.compose.BackHandler
@@ -34,6 +33,7 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -41,6 +41,7 @@ import com.google.gson.Gson
 import io.dutwrapper.dutwrapper.model.enums.NewsType
 import io.zoemeow.dutschedule.R
 import io.zoemeow.dutschedule.activity.NewsActivity
+import io.zoemeow.dutschedule.model.AppearanceState
 import io.zoemeow.dutschedule.model.ProcessState
 import io.zoemeow.dutschedule.ui.component.news.NewsSearchOptionAndHistory
 import io.zoemeow.dutschedule.ui.component.news.NewsSearchResult
@@ -48,15 +49,16 @@ import io.zoemeow.dutschedule.viewmodel.NewsSearchViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NewsActivity.NewsSearch(
+fun Activity_News_NewsSearch(
     context: Context,
     snackBarHostState: SnackbarHostState,
-    containerColor: Color,
-    contentColor: Color
+    appearanceState: AppearanceState,
+    onBack: () -> Unit
 ) {
     val newsSearchViewModel: NewsSearchViewModel = viewModel()
     val lazyListState = rememberLazyListState()
     val focusRequester = remember { FocusRequester() }
+    val focusManager = LocalFocusManager.current
 
     val isSearchFocused: MutableTransitionState<Boolean> = remember {
         MutableTransitionState(false).apply {
@@ -65,14 +67,14 @@ fun NewsActivity.NewsSearch(
     }
 
     fun dismissFocus() {
-        clearAllFocusAndHideKeyboard()
+        focusManager.clearFocus(force = true)
         isSearchFocused.targetState = false
     }
 
     Scaffold(
         snackbarHost = { SnackbarHost(hostState = snackBarHostState) },
-        containerColor = containerColor,
-        contentColor = contentColor,
+        containerColor = appearanceState.containerColor,
+        contentColor = appearanceState.contentColor,
         topBar = {
             TopAppBar(
                 title = {
@@ -124,8 +126,7 @@ fun NewsActivity.NewsSearch(
                             if (isSearchFocused.targetState) {
                                 dismissFocus()
                             } else {
-                                setResult(RESULT_CANCELED)
-                                finish()
+                                onBack()
                             }
                         },
                         content = {
@@ -161,7 +162,7 @@ fun NewsActivity.NewsSearch(
                     .padding(horizontal = 10.dp),
                 newsList = newsSearchViewModel.newsList,
                 lazyListState = lazyListState,
-                opacity = getBackgroundAlpha(),
+                opacity = appearanceState.componentOpacity,
                 processState = newsSearchViewModel.progress.value,
                 onEndOfList = {
                     newsSearchViewModel.invokeSearch()

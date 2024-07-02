@@ -35,11 +35,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import dagger.hilt.android.AndroidEntryPoint
+import io.zoemeow.dutschedule.model.AppearanceState
 import io.zoemeow.dutschedule.model.HelpLinkInfo
 import io.zoemeow.dutschedule.ui.component.helpandexternallink.HelpLinkClickable
+import io.zoemeow.dutschedule.utils.openLink
 
 @AndroidEntryPoint
 class HelpActivity : BaseActivity() {
@@ -52,16 +55,14 @@ class HelpActivity : BaseActivity() {
     override fun OnMainView(
         context: Context,
         snackBarHostState: SnackbarHostState,
-        containerColor: Color,
-        contentColor: Color
+        appearanceState: AppearanceState
     ) {
         when (intent.action) {
             "view_externallink" -> {
                 ExternalLinkView(
                     context = context,
                     snackBarHostState = snackBarHostState,
-                    containerColor = containerColor,
-                    contentColor = contentColor
+                    appearanceState = appearanceState
                 )
             }
 
@@ -77,17 +78,17 @@ class HelpActivity : BaseActivity() {
     private fun ExternalLinkView(
         context: Context,
         snackBarHostState: SnackbarHostState,
-        containerColor: Color,
-        contentColor: Color
+        appearanceState: AppearanceState
     ) {
         val focusRequester = remember { FocusRequester() }
+        val focusManager = LocalFocusManager.current
         val searchText = remember { mutableStateOf("") }
 
         Scaffold(
             modifier = Modifier.fillMaxSize(),
             snackbarHost = { SnackbarHost(hostState = snackBarHostState) },
-            containerColor = containerColor,
-            contentColor = contentColor,
+            containerColor = appearanceState.containerColor,
+            contentColor = appearanceState.contentColor,
             topBar = {
                 TopAppBar(
                     title = { Text(text = "External links - DUT School") },
@@ -115,15 +116,19 @@ class HelpActivity : BaseActivity() {
                         .padding(it)
                         .fillMaxSize()
                         .padding(horizontal = 20.dp)
-                        .clickable { clearAllFocusAndHideKeyboard() },
+                        .clickable {
+                            focusManager.clearFocus(force = true)
+                        },
                     content = {
                         Surface(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(bottom = 7.dp)
-                                .clickable { clearAllFocusAndHideKeyboard() },
+                                .clickable {
+                                    focusManager.clearFocus(force = true)
+                                },
                             color = MaterialTheme.colorScheme.secondaryContainer.copy(
-                                alpha = getBackgroundAlpha()
+                                alpha = appearanceState.componentOpacity
                             ),
                             shape = RoundedCornerShape(7.dp),
                             content = {
@@ -171,7 +176,7 @@ class HelpActivity : BaseActivity() {
                             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
                             keyboardActions = KeyboardActions(
                                 onDone = {
-                                    clearAllFocusAndHideKeyboard()
+                                    focusManager.clearFocus(force = true)
                                 }
                             )
                         )
@@ -179,7 +184,9 @@ class HelpActivity : BaseActivity() {
                             modifier = Modifier
                                 .fillMaxSize()
                                 .verticalScroll(rememberScrollState())
-                                .clickable { clearAllFocusAndHideKeyboard() },
+                                .clickable {
+                                    focusManager.clearFocus(force = true)
+                                },
                             content = {
                                 HelpLinkInfo.getAllExternalLink().filter { item ->
                                     searchText.value.isEmpty() ||
@@ -190,13 +197,12 @@ class HelpActivity : BaseActivity() {
                                     HelpLinkClickable(
                                         item = item,
                                         modifier = Modifier.fillMaxWidth().padding(bottom = 7.dp),
-                                        opacity = getBackgroundAlpha(),
+                                        opacity = appearanceState.componentOpacity,
                                         linkClicked = {
-                                            clearAllFocusAndHideKeyboard()
+                                            focusManager.clearFocus(force = true)
                                             try {
-                                                openLink(
+                                                context.openLink(
                                                     url = item.url,
-                                                    context = context,
                                                     customTab = getMainViewModel().appSettings.value.openLinkInsideApp
                                                 )
                                             } catch (ex: Exception) {

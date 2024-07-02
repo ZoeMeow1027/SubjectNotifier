@@ -41,6 +41,7 @@
     <string name="date_duration_today">Hôm nay</string>
     <string name="date_duration_yesterday">Hôm qua</string>
     <!-- Main activity string -->
+    <string name="main_dashboard_title">Tổng quan</string>
     <string name="main_account_notloggedin">Chưa đăng nhập</string>
     <string name="main_account_fetching">Đang tải…</string>
     <!-- Android notification string -->

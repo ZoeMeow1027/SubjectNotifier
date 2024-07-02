@@ -1,7 +1,6 @@
 package io.zoemeow.dutschedule.ui.component.main
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -42,7 +41,6 @@ fun SummaryItem(
                         .wrapContentHeight()
                         .padding(padding)
                         .clip(RoundedCornerShape(7.dp))
-                        .clickable { clicked() }
                         .background(MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0f)),
                 ) {
                     CircularProgressIndicator()

@@ -20,17 +20,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
 import io.zoemeow.dutschedule.R
+import io.zoemeow.dutschedule.model.AppearanceState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Activity_Settings_AboutApplication(
     context: Context,
     snackBarHostState: SnackbarHostState,
-    containerColor: Color,
-    contentColor: Color,
-    onBackRequested: () -> Unit,
-    backgroundOpacity: Float = 1f,
-    controlOpacity: Float = 1f
+    appearanceState: AppearanceState,
+    onBack: () -> Unit
 ) {
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
 
@@ -38,8 +36,8 @@ fun Activity_Settings_AboutApplication(
         modifier = Modifier.fillMaxSize()
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         snackbarHost = { SnackbarHost(hostState = snackBarHostState) },
-        containerColor = containerColor,
-        contentColor = contentColor,
+        containerColor = appearanceState.containerColor,
+        contentColor = appearanceState.contentColor,
         topBar = {
             LargeTopAppBar(
                 title = { Text("About") },
@@ -50,7 +48,7 @@ fun Activity_Settings_AboutApplication(
                 navigationIcon = {
                     IconButton(
                         onClick = {
-                            onBackRequested()
+                            onBack()
                         },
                         content = {
                             Icon(

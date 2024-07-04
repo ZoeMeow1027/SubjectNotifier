@@ -25,6 +25,7 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.PlainTooltip
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SegmentedButton
 import androidx.compose.material3.SegmentedButtonDefaults
@@ -32,8 +33,11 @@ import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.material3.TooltipBox
+import androidx.compose.material3.TooltipDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberTooltipState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -79,7 +83,10 @@ fun Activity_News(
                 content = {
                     TopAppBar(
                         title = { Text(text = context.getString(R.string.news_title)) },
-                        colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent),
+                        colors = TopAppBarDefaults.largeTopAppBarColors(
+                            containerColor = Color.Transparent,
+                            scrolledContainerColor = Color.Transparent
+                        ),
                         navigationIcon = {
                             if (onBack != null) {
                                 IconButton(
@@ -97,12 +104,24 @@ fun Activity_News(
                             }
                         },
                         actions = {
-                            IconButton(
-                                onClick = {
-                                    searchRequested?.let { it() }
+                            val newsSearchTooltipSearch = rememberTooltipState()
+                            TooltipBox(
+                                positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
+                                tooltip = {
+                                    PlainTooltip {
+                                        Text(text = context.getString(R.string.news_action_search))
+                                    }
                                 },
+                                state = newsSearchTooltipSearch,
                                 content = {
-                                    Icon(Icons.Default.Search, context.getString(R.string.action_search))
+                                    IconButton(
+                                        onClick = {
+                                            searchRequested?.let { it() }
+                                        },
+                                        content = {
+                                            Icon(Icons.Default.Search, context.getString(R.string.news_action_search))
+                                        }
+                                    )
                                 }
                             )
                         }

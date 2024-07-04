@@ -2,8 +2,7 @@ package io.zoemeow.dutschedule.ui.view.main
 
 import android.content.Context
 import android.content.Intent
-import androidx.activity.result.PickVisualMediaRequest
-import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -22,6 +21,8 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -31,13 +32,16 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import io.zoemeow.dutschedule.R
+import io.zoemeow.dutschedule.activity.MiscellaneousActivity
 import io.zoemeow.dutschedule.activity.MainActivity
 import io.zoemeow.dutschedule.activity.NewsActivity
+import io.zoemeow.dutschedule.activity.SettingsActivity
 import io.zoemeow.dutschedule.model.AppearanceState
 import io.zoemeow.dutschedule.model.NavBarItem
+import io.zoemeow.dutschedule.model.settings.BackgroundImageOption
 import io.zoemeow.dutschedule.ui.view.account.Activity_Account
 import io.zoemeow.dutschedule.ui.view.news.Activity_News
-import io.zoemeow.dutschedule.ui.view.settings.Activity_Settings
+import io.zoemeow.dutschedule.utils.BackgroundImageUtil
 
 @Composable
 fun MainActivity.MainViewTabbed(
@@ -50,6 +54,8 @@ fun MainActivity.MainViewTabbed(
     // Nav Route
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = backStackEntry?.destination?.route
+
+    val isNotificationOpened = remember { mutableStateOf(false) }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -107,6 +113,18 @@ fun MainActivity.MainViewTabbed(
                         context = context,
                         appearanceState = appearanceState,
                         mainViewModel = getMainViewModel(),
+                        notificationCount = getMainViewModel().notificationHistory.size,
+                        onNotificationPanelRequested = {
+                            isNotificationOpened.value = true
+                        },
+                        onExternalLinkClicked = {
+                            val intent = Intent(context, MiscellaneousActivity::class.java)
+                            intent.action = MiscellaneousActivity.INTENT_EXTERNALLINKS
+                            context.startActivity(intent)
+                        },
+                        onSettingsRequested = {
+                            context.startActivity(Intent(context, SettingsActivity::class.java))
+                        },
                         onNewsOpened = {
                             navController.navigate(NavBarItem.news.route) {
                                 popUpTo(navController.graph.findStartDestination().id) {
@@ -152,69 +170,80 @@ fun MainActivity.MainViewTabbed(
                     )
                 }
 
-                composable(NavBarItem.notification.route) {
-                    NotificationScaffold(
-                        context = context,
-                        itemList = getMainViewModel().notificationHistory.toList(),
-                        snackBarHostState = null,
-                        isVisible = true,
-                        appearanceState = appearanceState,
-                        onClick = { item ->
-                            if (listOf(1, 2).contains(item.tag)) {
-                                Intent(context, NewsActivity::class.java).also { intent ->
-                                    intent.action = NewsActivity.INTENT_NEWSDETAILACTIVITY
-                                    for (map1 in item.parameters) {
-                                        intent.putExtra(map1.key, map1.value)
-                                    }
-                                    context.startActivity(intent)
-                                }
-                            }
-                        },
-                        onClear = { item ->
-                            val itemTemp = item.clone()
-                            getMainViewModel().notificationHistory.remove(item)
-                            getMainViewModel().saveSettings()
-                            showSnackBar(
-                                text = context.getString(R.string.notification_removed),
-                                actionText = context.getString(R.string.action_undo),
-                                action = {
-                                    getMainViewModel().notificationHistory.add(itemTemp)
-                                    getMainViewModel().saveSettings()
-                                }
-                            )
-                        },
-                        onClearAll = {
-                            showSnackBar(
-                                text = context.getString(R.string.notification_removeall_confirm),
-                                actionText = context.getString(R.string.action_confirm),
-                                action = {
-                                    getMainViewModel().saveSettings()
-                                    getMainViewModel().notificationHistory.clear()
-                                    showSnackBar(
-                                        text = context.getString(R.string.notification_removeall_removed),
-                                        clearPrevious = true
-                                    )
-                                },
-                                clearPrevious = true
-                            )
-                        }
-                    )
-                }
-
-                composable(NavBarItem.settings.route) {
-                    Activity_Settings(
-                        context = context,
-                        appearanceState = appearanceState,
-                        mainViewModel = getMainViewModel(),
-                        mediaRequest = {
-                            pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
-                        },
-                        onMessageReceived = { text, clearPrevious, actionText, action ->
-                            showSnackBar(text = text, clearPrevious = clearPrevious, actionText = actionText, action = action)
-                        }
-                    )
-                }
+//                composable(NavBarItem.settings.route) {
+//                    Activity_Settings(
+//                        context = context,
+//                        appearanceState = appearanceState,
+//                        mainViewModel = getMainViewModel(),
+//                        mediaRequest = {
+//                            pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+//                        },
+//                        onMessageReceived = { text, clearPrevious, actionText, action ->
+//                            showSnackBar(text = text, clearPrevious = clearPrevious, actionText = actionText, action = action)
+//                        }
+//                    )
+//                }
             }
         }
     )
+    NotificationScaffold(
+        context = context,
+        itemList = getMainViewModel().notificationHistory,
+        snackBarHostState = snackBarHostState,
+        isVisible = isNotificationOpened.value,
+        appearanceState = appearanceState,
+        backgroundImage = when (getMainViewModel().appSettings.value.backgroundImage) {
+            BackgroundImageOption.None -> null
+            BackgroundImageOption.YourCurrentWallpaper -> BackgroundImageUtil.getCurrentWallpaperBackground(context)
+            BackgroundImageOption.PickFileFromMedia -> BackgroundImageUtil.getImageFromAppData(context)
+        },
+        onDismiss = {
+            clearSnackBar()
+            isNotificationOpened.value = false
+        },
+        onClick = { item ->
+            if (listOf(1, 2).contains(item.tag)) {
+                Intent(context, NewsActivity::class.java).also {
+                    it.action = NewsActivity.INTENT_NEWSDETAILACTIVITY
+                    for (map1 in item.parameters) {
+                        it.putExtra(map1.key, map1.value)
+                    }
+                    context.startActivity(it)
+                }
+            }
+        },
+        onClear = { item ->
+            val item1 = item.clone()
+            getMainViewModel().notificationHistory.remove(item)
+            getMainViewModel().saveSettings()
+            showSnackBar(
+                text = context.getString(R.string.notification_removed),
+                actionText = context.getString(R.string.action_undo),
+                action = {
+                    getMainViewModel().notificationHistory.add(item1)
+                    getMainViewModel().saveSettings()
+                }
+            )
+        },
+        onClearAll = {
+            showSnackBar(
+                text = context.getString(R.string.notification_removeall_confirm),
+                actionText = context.getString(R.string.action_confirm),
+                action = {
+                    getMainViewModel().notificationHistory.clear()
+                    getMainViewModel().saveSettings()
+                    showSnackBar(
+                        text = context.getString(R.string.notification_removeall_removed),
+                        clearPrevious = true
+                    )
+                },
+                clearPrevious = true
+            )
+        }
+    )
+    BackHandler(isNotificationOpened.value) {
+        if (isNotificationOpened.value) {
+            isNotificationOpened.value = false
+        }
+    }
 }

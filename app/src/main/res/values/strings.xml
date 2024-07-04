@@ -91,10 +91,7 @@
     <string name="settings_option_experiemntsettings_description">Our current experiment settings before public. Use this at your own risk.</string>
     <string name="settings_category_about">About</string>
     <string name="settings_option_version">Version</string>
-    <string name="settings_option_version_description">Current: %1$s (%2$d)\nClick here to check for update.</string>
-    <string name="settings_option_changelog">Changelog</string>
-    <string name="settings_option_changelog_description">Tap to view app changelog</string>
-    <string name="settings_option_github">GitHub (click to open link)</string>
+    <string name="settings_option_version_description">%1$s (%2$d)</string>
     <!-- Settings Dialog UI string -->
     <string name="settings_dialog_apptheme_title">App theme</string>
     <string name="settings_dialog_apptheme_choice_followdevice">Follow device theme</string>
@@ -198,6 +195,14 @@
     <string name="settings_newsnotify_newsfilter_dialogdelete_yes">Yes, delete it</string>
     <string name="settings_newsnotify_newsfilter_dialogdeleteall_title">Delete all subject filters?</string>
     <string name="settings_newsnotify_newsfilter_dialogdeleteall_description">Are you sure you want to delete all subject filter?\n\nThis action is undone?</string>
+    <!-- About application activity strings -->
+    <string name="settings_about_title">About</string>
+    <string name="settings_about_changelog">Changelog</string>
+    <string name="settings_about_changelog_description">Tap to view app changelog</string>
+    <string name="settings_about_license">License</string>
+    <string name="settings_about_credit">Credits</string>
+    <string name="settings_about_credit_description">Click here to view what libraries has been used in this application</string>
+    <string name="settings_about_github">GitHub (click to open link)</string>
     <!-- Notification UI string -->
     <string name="notification_panel_title">Notifications</string>
     <string name="notification_panel_no_notifications">No notifications</string>
@@ -206,6 +211,7 @@
     <string name="notification_removeall_removed">Successfully cleared all notifications!</string>
     <!-- News activity string -->
     <string name="news_title">News</string>
+    <string name="news_action_search">Search news</string>
     <string name="news_tabname_global">Global</string>
     <string name="news_tabname_subject">Subject</string>
     <!-- News detail activity string -->
@@ -296,9 +302,10 @@
     <string name="account_subjectfee_status_notdoneyet">Not completed yet</string>
     <!-- Account Information activity string -->
     <string name="account_accinfo_title">Account Information</string>
+    <string name="account_accinfo_action_openlink">Open</string>
     <string name="account_accinfo_noinfo">No any information returned from server!\nCheck your login and internet connection, and try again.</string>
     <string name="account_accinfo_editinfo">About editing information</string>
-    <string name="account_accinfo_description">If you want to edit any information below, you need do it in DUT Information System web.</string>
+    <string name="account_accinfo_description">If you want to edit any information, you need to login in DUT Information System web in order to change it.</string>
     <string name="account_accinfo_item_name">Name</string>
     <string name="account_accinfo_item_dateofbirth">Date of birth</string>
     <string name="account_accinfo_item_placeofbirth">Place of birth</string>
@@ -349,6 +356,19 @@
     <string name="account_trainingstatus_subjectresult_credit">Credit(s)</string>
     <string name="account_trainingstatus_subjectresult_pointformula">Point formula</string>
     <string name="account_trainingstatus_subjectresult_finalscore">Point (T10 - T4 - By point char)</string>
+    <!-- External links activity strings -->
+    <string name="miscellaneous_externallinks_mainviewbutton">Related links</string>
+    <string name="miscellaneous_externallinks_title">DUT related links</string>
+    <string name="miscellaneous_externallinks_action_search">Search</string>
+    <string name="miscellaneous_externallinks_action_aboutrelatedlink">About DUT related links</string>
+    <string name="miscellaneous_externallinks_tooltip_aboutrelatedlink">This page will show most used links, so some links could be missed here. You can navigate to official DUT page for more information.</string>
+    <string name="miscellaneous_externallinks_searchaexternallink">Search a link</string>
+    <!-- Activity name strings -->
+    <string name="activity_name_news">DutSchedule - News</string>
+    <string name="activity_name_accounts">DutSchedule - Accounts</string>
+    <string name="activity_name_settings">DutSchedule - Settings</string>
+    <string name="activity_name_miscellaneous">DutSchedule - Miscellaneous</string>
+    <string name="activity_service_newsbackground">News background update service</string>
     <!-- -->
     <string name="data_unknown">(unknown)</string>
     <string name="data_noscore">(no score)</string>

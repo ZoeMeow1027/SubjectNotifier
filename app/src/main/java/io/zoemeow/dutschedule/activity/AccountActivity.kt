@@ -11,6 +11,7 @@ import io.zoemeow.dutschedule.ui.view.account.Activity_Account_SubjectInformatio
 import io.zoemeow.dutschedule.ui.view.account.Activity_Account_SubjectFee
 import io.zoemeow.dutschedule.ui.view.account.Activity_Account_TrainingResult
 import io.zoemeow.dutschedule.ui.view.account.Activity_Account_TrainingSubjectResult
+import io.zoemeow.dutschedule.utils.openLink
 
 @AndroidEntryPoint
 class AccountActivity: BaseActivity() {
@@ -78,6 +79,12 @@ class AccountActivity: BaseActivity() {
                             clearPrevious = forceDismissBefore,
                             actionText = actionText,
                             action = action
+                        )
+                    },
+                    onLinkClicked = { link ->
+                        context.openLink(
+                            url = link,
+                            customTab = getMainViewModel().appSettings.value.openLinkInsideApp
                         )
                     },
                     onBack = {

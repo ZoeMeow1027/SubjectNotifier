@@ -8,6 +8,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import dagger.hilt.android.AndroidEntryPoint
+import io.zoemeow.dutschedule.GlobalVariables
 import io.zoemeow.dutschedule.R
 import io.zoemeow.dutschedule.model.AppearanceState
 import io.zoemeow.dutschedule.model.settings.BackgroundImageOption
@@ -18,6 +19,7 @@ import io.zoemeow.dutschedule.ui.view.settings.Activity_Settings_ExperimentSetti
 import io.zoemeow.dutschedule.ui.view.settings.Activity_Settings_NewsNotificationSettings
 import io.zoemeow.dutschedule.ui.view.settings.Activity_Settings_ParseNewsSubjectNotification
 import io.zoemeow.dutschedule.utils.BackgroundImageUtil
+import io.zoemeow.dutschedule.utils.openLink
 
 @AndroidEntryPoint
 class SettingsActivity : BaseActivity() {
@@ -274,6 +276,12 @@ class SettingsActivity : BaseActivity() {
                     context = context,
                     snackBarHostState = snackBarHostState,
                     appearanceState = appearanceState,
+                    onLinkClicked = { link ->
+                        context.openLink(
+                            url = link,
+                            customTab = getMainViewModel().appSettings.value.openLinkInsideApp,
+                        )
+                    },
                     onBack = {
                         setResult(RESULT_CANCELED)
                         finish()

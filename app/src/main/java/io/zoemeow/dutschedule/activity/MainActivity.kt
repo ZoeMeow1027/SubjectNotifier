@@ -78,7 +78,7 @@ class MainActivity : BaseActivity() {
                     context.startActivity(Intent(context, SettingsActivity::class.java))
                 },
                 externalLinkClicked = {
-                    val intent = Intent(context, HelpActivity::class.java)
+                    val intent = Intent(context, MiscellaneousActivity::class.java)
                     intent.action = "view_externallink"
                     context.startActivity(intent)
                 }

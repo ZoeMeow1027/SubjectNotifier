@@ -91,10 +91,7 @@
     <string name="settings_option_experiemntsettings_description">Các cài đặt thử nghiệm của chúng tôi trước khi đưa vào chính thức. Sử dụng nó một cách thận trọng.</string>
     <string name="settings_category_about">Về ứng dụng</string>
     <string name="settings_option_version">Phiên bản</string>
-    <string name="settings_option_version_description">Hiện tại: %1$s (%2$d)\nNhấp vào đây để kiểm tra cập nhật.</string>
-    <string name="settings_option_changelog">Nhật ký thay đổi</string>
-    <string name="settings_option_changelog_description">Nhấn để xem ghi chú phát hành của ứng dụng</string>
-    <string name="settings_option_github">GitHub (nhấp để mở liên kết)</string>
+    <string name="settings_option_version_description">%1$s (%2$d)</string>
     <!-- Settings Dialog UI string -->
     <string name="settings_dialog_apptheme_title">Chủ đề ứng dụng</string>
     <string name="settings_dialog_apptheme_choice_followdevice">Theo chủ đề hệ thống</string>
@@ -198,6 +195,14 @@
     <string name="settings_newsnotify_newsfilter_dialogdelete_yes">Đúng, xóa nó</string>
     <string name="settings_newsnotify_newsfilter_dialogdeleteall_title">Xóa tất cả bộ lọc tin tức?</string>
     <string name="settings_newsnotify_newsfilter_dialogdeleteall_description">Bạn có chắc chắn muốn xóa tất cả bộ lọc tin tức không?\n\nHành động này không thể hoàn tác.</string>
+    <!-- About application activity strings -->
+    <string name="settings_about_title">Về ứng dụng</string>
+    <string name="settings_about_changelog">Nhật ký thay đổi</string>
+    <string name="settings_about_changelog_description">Nhấn để xem ghi chú phát hành của ứng dụng</string>
+    <string name="settings_about_license">Giấy phép</string>
+    <string name="settings_about_credit">Credit</string>
+    <string name="settings_about_credit_description">Nhấp vào đây để xem các thành phần mà ứng dụng này đã sử dụng</string>
+    <string name="settings_about_github">GitHub (nhấp để mở liên kết)</string>
     <!-- Notification UI string -->
     <string name="notification_panel_title">Thông báo</string>
     <string name="notification_panel_no_notifications">Không có thông báo</string>
@@ -206,6 +211,7 @@
     <string name="notification_removeall_removed">Đã xóa tất cả thông báo!</string>
     <!-- News activity string -->
     <string name="news_title">Tin tức</string>
+    <string name="news_action_search">Tìm kiếm tin tức</string>
     <string name="news_tabname_global">Chung</string>
     <string name="news_tabname_subject">Lớp học phần</string>
     <!-- News detail activity string -->
@@ -296,9 +302,10 @@
     <string name="account_subjectfee_status_notdoneyet">Chưa thanh toán</string>
     <!-- Account Information activity string -->
     <string name="account_accinfo_title">Thông tin tài khoản</string>
+    <string name="account_accinfo_action_openlink">Mở</string>
     <string name="account_accinfo_noinfo">Không có thông tin nào được trả từ máy chủ!\nKiểm tra thông tin đăng nhập và kết nối internet của bạn, và thử lại.</string>
     <string name="account_accinfo_editinfo">Về việc thay đổi thông tin</string>
-    <string name="account_accinfo_description">Nếu bạn muốn thay đổi thông tin nào đó, bạn cần thay đổi nó trong trang web của trường.</string>
+    <string name="account_accinfo_description">Nếu bạn muốn thay đổi thông tin nào đó, bạn cần đăng nhập trong trang web của trường để thay đổi.</string>
     <string name="account_accinfo_item_name">Tên</string>
     <string name="account_accinfo_item_dateofbirth">Ngày sinh</string>
     <string name="account_accinfo_item_placeofbirth">Nơi sinh</string>
@@ -349,6 +356,19 @@
     <string name="account_trainingstatus_subjectresult_credit">Số tín chỉ</string>
     <string name="account_trainingstatus_subjectresult_pointformula">Công thức điểm</string>
     <string name="account_trainingstatus_subjectresult_finalscore">Điểm (T10 - T4 - Bằng chữ)</string>
+    <!-- External links activity strings -->
+    <string name="miscellaneous_externallinks_mainviewbutton">Liên kết liên quan</string>
+    <string name="miscellaneous_externallinks_title">Liên kết liên quan của DUT</string>
+    <string name="miscellaneous_externallinks_action_search">Tìm kiếm</string>
+    <string name="miscellaneous_externallinks_action_aboutrelatedlink">Về liên kết liên quan của DUT</string>
+    <string name="miscellaneous_externallinks_tooltip_aboutrelatedlink">Trang này sẽ hiển thị liên kết được sử dụng nhiều nhất, vì vậy một số liên kết sẽ không xuất hiện tại đây. Bạn có thể điều hướng đến trang chính thức của DUT để biết thêm thông tin.</string>
+    <string name="miscellaneous_externallinks_searchaexternallink">Tìm kiếm liên kết</string>
+    <!-- Activity name strings -->
+    <string name="activity_name_news">DutSchedule - Tin tức</string>
+    <string name="activity_name_accounts">DutSchedule - Tài khoản</string>
+    <string name="activity_name_settings">DutSchedule - Cài đặt</string>
+    <string name="activity_name_miscellaneous">DutSchedule - Linh tinh</string>
+    <string name="activity_service_newsbackground">Cập nhật tin tức trong nền</string>
     <!-- -->
     <string name="data_unknown">(không rõ)</string>
     <string name="data_noscore">(không có điểm)</string>

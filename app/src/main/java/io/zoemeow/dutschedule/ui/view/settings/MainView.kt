@@ -24,7 +24,9 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
@@ -329,44 +331,10 @@ fun Activity_Settings(
                                     BuildConfig.VERSION_CODE
                                 ),
                                 onClick = {
-                                    onMessageReceived?.let { it(context.getString(R.string.feature_not_ready), true, null, null) }
-                                    /* TODO: Implement here: Check for updates */
-                                }
-                            )
-                            OptionItem(
-                                modifierInside = Modifier.padding(horizontal = 20.dp, vertical = 15.dp),
-                                leadingIcon = {
-                                    Icon(
-                                        imageVector = ImageVector.vectorResource(R.drawable.google_fonts_device_reset_24),
-                                        "",
-                                        modifier = Modifier.padding(end = 15.dp)
-                                    )
-                                },
-                                title = context.getString(R.string.settings_option_changelog),
-                                description = context.getString(R.string.settings_option_changelog_description),
-                                onClick = {
-                                    context.openLink(
-                                        url = GlobalVariables.LINK_CHANGELOG,
-                                        customTab = mainViewModel.appSettings.value.openLinkInsideApp,
-                                    )
-                                }
-                            )
-                            OptionItem(
-                                modifierInside = Modifier.padding(horizontal = 20.dp, vertical = 15.dp),
-                                leadingIcon = {
-                                    Icon(
-                                        imageVector = ImageVector.vectorResource(R.drawable.github_mark_24),
-                                        "repository",
-                                        modifier = Modifier.padding(end = 15.dp)
-                                    )
-                                },
-                                title = context.getString(R.string.settings_option_github),
-                                description = GlobalVariables.LINK_REPOSITORY,
-                                onClick = {
-                                    context.openLink(
-                                        url = GlobalVariables.LINK_REPOSITORY,
-                                        customTab = mainViewModel.appSettings.value.openLinkInsideApp,
-                                    )
+                                    // onMessageReceived?.let { it(context.getString(R.string.feature_not_ready), true, null, null) }
+                                    val intent = Intent(context, SettingsActivity::class.java)
+                                    intent.action = SettingsActivity.INTENT_ABOUTACTIVITY
+                                    context.startActivity(intent)
                                 }
                             )
                         }

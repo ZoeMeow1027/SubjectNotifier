@@ -49,6 +49,7 @@ import io.zoemeow.dutschedule.R
 import io.zoemeow.dutschedule.model.AppearanceState
 import io.zoemeow.dutschedule.model.ProcessState
 import io.zoemeow.dutschedule.ui.component.base.OutlinedTextBox
+import io.zoemeow.dutschedule.utils.openLink
 import io.zoemeow.dutschedule.viewmodel.MainViewModel
 import kotlinx.coroutines.launch
 
@@ -59,11 +60,13 @@ fun Activity_Account_AccountInformation(
     snackBarHostState: SnackbarHostState,
     appearanceState: AppearanceState,
     mainViewModel: MainViewModel,
+    onLinkClicked: ((String) -> Unit)? = null,
     onMessageReceived: (String, Boolean, String?, (() -> Unit)?) -> Unit, // (msg, forceDismissBefore, actionText, action)
     onBack: () -> Unit
 ) {
     val clipboardManager: ClipboardManager = LocalClipboardManager.current
     val scope = rememberCoroutineScope()
+
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         snackbarHost = { SnackbarHost(hostState = snackBarHostState) },
@@ -98,7 +101,10 @@ fun Activity_Account_AccountInformation(
             )
         },
         bottomBar = {
-            val pageInfoTooltipState = rememberTooltipState(isPersistent = true)
+            val pageInfoTooltipState = rememberTooltipState(
+                isPersistent = true,
+                initialIsVisible = true
+            )
             BottomAppBar(
                 floatingActionButton = {
                     if (mainViewModel.accountSession.accountInformation.processState.value != ProcessState.Running) {
@@ -123,6 +129,14 @@ fun Activity_Account_AccountInformation(
                                 title = { Text(context.getString(R.string.account_accinfo_editinfo)) },
                                 text = {
                                     Text(context.getString(R.string.account_accinfo_description))
+                                },
+                                action = {
+                                    TextButton(
+                                        onClick = { onLinkClicked?.let { it("http://sv.dut.udn.vn") } },
+                                        content = {
+                                            Text(context.getString(R.string.account_accinfo_action_openlink))
+                                        }
+                                    )
                                 }
                             )
                         },

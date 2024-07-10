@@ -20,18 +20,13 @@ import io.zoemeow.dutschedule.model.news.NewsFetchType
 import io.zoemeow.dutschedule.model.settings.AppSettings
 import io.zoemeow.dutschedule.repository.DutRequestRepository
 import io.zoemeow.dutschedule.repository.FileModuleRepository
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import io.zoemeow.dutschedule.utils.launchOnScope
 import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val fileModuleRepository: FileModuleRepository,
-    private val dutRequestRepository: DutRequestRepository,
+    dutRequestRepository: DutRequestRepository,
 ) : ViewModel() {
     val appSettings: MutableState<AppSettings> = mutableStateOf(AppSettings())
 
@@ -41,11 +36,11 @@ class MainViewModel @Inject constructor(
             when (eventId) {
                 1 -> {
                     Log.d("app", "triggered saved login")
-                    saveSettings()
+                    saveApplicationSettings(saveAccountCache = true)
                 }
                 2, 3, 4, 5 -> {
                     // TODO: Save account cache here!
-                    // saveSettings()
+                    saveApplicationSettings(saveAccountCache = true)
                 }
             }
         }
@@ -55,9 +50,9 @@ class MainViewModel @Inject constructor(
         dutRequestRepository = dutRequestRepository,
         onEventSent = {eventId ->
             when (eventId) {
-                1 -> {
+                1, 2 -> {
                     Log.d("app", "triggered saved news")
-                    saveSettings()
+                    saveApplicationSettings(saveNewsCache = true)
                 }
             }
         }
@@ -101,34 +96,46 @@ class MainViewModel @Inject constructor(
 
     val notificationHistory = mutableStateListOf<NotificationHistory>()
 
-    private fun loadCacheNotification() {
-        launchOnScope(
-            script = {
-                notificationHistory.clear()
-                notificationHistory.addAll(fileModuleRepository.getNotificationHistory())
-            }
-        )
-    }
-
-
     /**
      * Save all current settings to file in storage.
      */
-    fun saveSettings(
-        saveSettingsOnly: Boolean = false,
+    fun saveApplicationSettings(
+        saveNewsCache: Boolean = false,
+        saveAccountCache: Boolean = false,
+        saveNotificationCache: Boolean = false,
+        saveUserSettings: Boolean = false,
         onCompleted: (() -> Unit)? = null
     ) {
         launchOnScope(
             script = {
-                fileModuleRepository.saveAppSettings(appSettings.value)
-                fileModuleRepository.saveAccountSession(accountSession.getAccountSession() ?: AccountSession())
-
-                if (!saveSettingsOnly) {
+                if (saveNewsCache) {
+                    newsInstance.exportNewsCache(
+                        onDataExported = { newsGlobalItems, i, l, newsSubjectItems, i2, l2 ->
+                            fileModuleRepository.saveCacheNewsGlobal(
+                                newsList = newsGlobalItems,
+                                newsNextPage = i,
+                                lastRequest = l
+                            )
+                            fileModuleRepository.saveCacheNewsSubject(
+                                newsList = newsSubjectItems,
+                                newsNextPage = i2,
+                                lastRequest = l2
+                            )
+                        }
+                    )
+                }
+                if (saveAccountCache) {
                     fileModuleRepository.saveAccountSubjectScheduleCache(ArrayList(accountSession.getSubjectScheduleCache()))
-                    fileModuleRepository.saveNotificationHistory(ArrayList(notificationHistory.toList()))
 
                     // Reload school year in Account
                     accountSession.setSchoolYear(appSettings.value.currentSchoolYear)
+                }
+                if (saveNotificationCache) {
+                    fileModuleRepository.saveNotificationHistory(ArrayList(notificationHistory.toList()))
+                }
+                if (saveUserSettings) {
+                    fileModuleRepository.saveAppSettings(appSettings.value)
+                    fileModuleRepository.saveAccountSession(accountSession.getAccountSession() ?: AccountSession())
                 }
             },
             invokeOnCompleted = { onCompleted?.let { it() } }
@@ -138,17 +145,30 @@ class MainViewModel @Inject constructor(
     /**
      * Load all cache if possible for offline reading.
      */
-    private fun loadCache() {
+    private fun loadApplicationSettings(
+        onCompleted: (() -> Unit)? = null
+    ) {
         launchOnScope(
             script = {
-                // Get all news cache
-                fileModuleRepository.getCacheNewsGlobal { newsGlobalItems, i, lq ->
-                    newsInstance.loadNewsCache(newsGlobalItems, i, lq, null, null, null)
-                }
-                fileModuleRepository.getCacheNewsSubject { newsSubjectItems, i, lq ->
-                    newsInstance.loadNewsCache(null, null, null, newsSubjectItems, i, lq)
-                }
+                // App settings
+                appSettings.value = fileModuleRepository.getAppSettings()
+                accountSession.setAccountSession(fileModuleRepository.getAccountSession())
+                accountSession.setSchoolYear(schoolYearItem = appSettings.value.currentSchoolYear)
 
+                // Notification cache
+                notificationHistory.clear()
+                notificationHistory.addAll(fileModuleRepository.getNotificationHistory())
+
+                // Load all cache if possible for offline reading.
+                // Global news cache
+                fileModuleRepository.getCacheNewsGlobal { newsGlobalItems, i, lq ->
+                    newsInstance.importNewsCache(newsGlobalItems, i, lq, null, null, null)
+                }
+                // Subject news cache
+                fileModuleRepository.getCacheNewsSubject { newsSubjectItems, i, lq ->
+                    newsInstance.importNewsCache(null, null, null, newsSubjectItems, i, lq)
+                }
+                // Subject schedule cache
                 fileModuleRepository.getAccountSubjectScheduleCache().also {
                     accountSession.setSubjectScheduleCache(it)
                 }
@@ -164,56 +184,33 @@ class MainViewModel @Inject constructor(
                         } catch (_: Exception) { }
                     }
                 }
-            }
+            },
+            invokeOnCompleted = { onCompleted?.let { it() } }
         )
     }
 
-    private fun launchOnScope(
-        script: () -> Unit,
-        invokeOnCompleted: ((Throwable?) -> Unit)? = null
-    ) {
-        CoroutineScope(Dispatchers.Main).launch {
-            withContext(Dispatchers.IO) {
-                script()
-            }
-        }.invokeOnCompletion { thr ->
-            invokeOnCompleted?.let { it(thr) }
-        }
-    }
-
-    private val _runOnStartup = MutableStateFlow(false)
-    val runOnStartup = _runOnStartup.asStateFlow()
-
-    private fun runOnStartup(invokeOnCompleted: (() -> Unit)? = null) {
-        if (_runOnStartup.value)
-            return
-
-        appSettings.value = fileModuleRepository.getAppSettings()
-        accountSession.setAccountSession(fileModuleRepository.getAccountSession())
-        accountSession.setSchoolYear(schoolYearItem = appSettings.value.currentSchoolYear)
-
-        invokeOnCompleted?.let { it() }
-    }
-
+    private val _runOnStartup = mutableStateOf(false)
     init {
-        runOnStartup(
-            invokeOnCompleted = {
-                loadCache()
-                refreshCurrentSchoolYearWeek()
-                loadCacheNotification()
-                accountSession.reLogin(force = true)
-                launchOnScope(script = {
-                    newsInstance.fetchGlobalNews(
-                        fetchType = NewsFetchType.FirstPage,
-                        forceRequest = true
-                    )
-                    newsInstance.fetchSubjectNews(
-                        fetchType = NewsFetchType.FirstPage,
-                        forceRequest = true
-                    )
-                })
-                _runOnStartup.value = true
-            }
-        )
+        if (!_runOnStartup.value) {
+            loadApplicationSettings(
+                onCompleted = {
+                    accountSession.reLogin(force = true)
+                    refreshCurrentSchoolYearWeek()
+
+                    launchOnScope(script = {
+                        newsInstance.fetchGlobalNews(
+                            fetchType = NewsFetchType.FirstPage,
+                            forceRequest = true
+                        )
+                        newsInstance.fetchSubjectNews(
+                            fetchType = NewsFetchType.FirstPage,
+                            forceRequest = true
+                        )
+                    })
+                }
+            )
+
+            _runOnStartup.value = true
+        }
     }
 }

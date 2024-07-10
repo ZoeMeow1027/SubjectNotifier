@@ -33,7 +33,6 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import io.zoemeow.dutschedule.R
 import io.zoemeow.dutschedule.activity.MiscellaneousActivity
-import io.zoemeow.dutschedule.activity.MainActivity
 import io.zoemeow.dutschedule.activity.NewsActivity
 import io.zoemeow.dutschedule.activity.SettingsActivity
 import io.zoemeow.dutschedule.model.AppearanceState
@@ -42,12 +41,16 @@ import io.zoemeow.dutschedule.model.settings.BackgroundImageOption
 import io.zoemeow.dutschedule.ui.view.account.Activity_Account
 import io.zoemeow.dutschedule.ui.view.news.Activity_News
 import io.zoemeow.dutschedule.utils.BackgroundImageUtil
+import io.zoemeow.dutschedule.viewmodel.MainViewModel
 
 @Composable
-fun MainActivity.MainViewTabbed(
+fun Activity_MainView_MainViewTabView(
     context: Context,
+    mainViewModel: MainViewModel,
     snackBarHostState: SnackbarHostState,
-    appearanceState: AppearanceState
+    appearanceState: AppearanceState,
+    onMessageReceived: (String, Boolean, String?, (() -> Unit)?) -> Unit, // (msg, forceDismissBefore, actionText, action)
+    onMessageClear: () -> Unit
 ) {
     // Initialize for NavController for main activity
     val navController = rememberNavController()
@@ -112,8 +115,8 @@ fun MainActivity.MainViewTabbed(
                     Activity_MainView_Dashboard(
                         context = context,
                         appearanceState = appearanceState,
-                        mainViewModel = getMainViewModel(),
-                        notificationCount = getMainViewModel().notificationHistory.size,
+                        mainViewModel = mainViewModel,
+                        notificationCount = mainViewModel.notificationHistory.size,
                         onNotificationPanelRequested = {
                             isNotificationOpened.value = true
                         },
@@ -150,7 +153,7 @@ fun MainActivity.MainViewTabbed(
                     Activity_News(
                         context = context,
                         appearanceState = appearanceState,
-                        mainViewModel = getMainViewModel(),
+                        mainViewModel = mainViewModel,
                         searchRequested = {
                             val intent = Intent(context, NewsActivity::class.java)
                             intent.action = NewsActivity.INTENT_SEARCHACTIVITY
@@ -163,9 +166,9 @@ fun MainActivity.MainViewTabbed(
                     Activity_Account(
                         context = context,
                         appearanceState = appearanceState,
-                        mainViewModel = getMainViewModel(),
+                        mainViewModel = mainViewModel,
                         onMessageReceived = { text, clearPrevious, actionText, action ->
-                            showSnackBar(text = text, clearPrevious = clearPrevious, actionText = actionText, action = action)
+                            onMessageReceived(text, clearPrevious, actionText, action)
                         }
                     )
                 }
@@ -188,17 +191,17 @@ fun MainActivity.MainViewTabbed(
     )
     NotificationScaffold(
         context = context,
-        itemList = getMainViewModel().notificationHistory,
+        itemList = mainViewModel.notificationHistory,
         snackBarHostState = snackBarHostState,
         isVisible = isNotificationOpened.value,
         appearanceState = appearanceState,
-        backgroundImage = when (getMainViewModel().appSettings.value.backgroundImage) {
+        backgroundImage = when (mainViewModel.appSettings.value.backgroundImage) {
             BackgroundImageOption.None -> null
             BackgroundImageOption.YourCurrentWallpaper -> BackgroundImageUtil.getCurrentWallpaperBackground(context)
             BackgroundImageOption.PickFileFromMedia -> BackgroundImageUtil.getImageFromAppData(context)
         },
         onDismiss = {
-            clearSnackBar()
+            onMessageClear()
             isNotificationOpened.value = false
         },
         onClick = { item ->
@@ -214,31 +217,32 @@ fun MainActivity.MainViewTabbed(
         },
         onClear = { item ->
             val item1 = item.clone()
-            getMainViewModel().notificationHistory.remove(item)
-            getMainViewModel().saveSettings()
-            showSnackBar(
-                text = context.getString(R.string.notification_removed),
-                actionText = context.getString(R.string.action_undo),
-                action = {
-                    getMainViewModel().notificationHistory.add(item1)
-                    getMainViewModel().saveSettings()
-                }
-            )
+            mainViewModel.notificationHistory.remove(item)
+            mainViewModel.saveApplicationSettings(saveNotificationCache = true)
+            onMessageReceived(
+                context.getString(R.string.notification_removed),
+                true,
+                context.getString(R.string.action_undo)
+            ) {
+                mainViewModel.notificationHistory.add(item1)
+                mainViewModel.saveApplicationSettings(saveNotificationCache = true)
+            }
         },
         onClearAll = {
-            showSnackBar(
-                text = context.getString(R.string.notification_removeall_confirm),
-                actionText = context.getString(R.string.action_confirm),
-                action = {
-                    getMainViewModel().notificationHistory.clear()
-                    getMainViewModel().saveSettings()
-                    showSnackBar(
-                        text = context.getString(R.string.notification_removeall_removed),
-                        clearPrevious = true
-                    )
-                },
-                clearPrevious = true
-            )
+            onMessageReceived(
+                context.getString(R.string.notification_removeall_confirm),
+                true,
+                context.getString(R.string.action_confirm),
+            ) {
+                mainViewModel.notificationHistory.clear()
+                mainViewModel.saveApplicationSettings(saveNotificationCache = true)
+                onMessageReceived(
+                    context.getString(R.string.notification_removeall_removed),
+                    true,
+                    null,
+                    null
+                )
+            }
         }
     )
     BackHandler(isNotificationOpened.value) {

@@ -8,7 +8,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import dagger.hilt.android.AndroidEntryPoint
-import io.zoemeow.dutschedule.GlobalVariables
 import io.zoemeow.dutschedule.R
 import io.zoemeow.dutschedule.model.AppearanceState
 import io.zoemeow.dutschedule.model.settings.BackgroundImageOption
@@ -19,6 +18,7 @@ import io.zoemeow.dutschedule.ui.view.settings.Activity_Settings_ExperimentSetti
 import io.zoemeow.dutschedule.ui.view.settings.Activity_Settings_NewsNotificationSettings
 import io.zoemeow.dutschedule.ui.view.settings.Activity_Settings_ParseNewsSubjectNotification
 import io.zoemeow.dutschedule.utils.BackgroundImageUtil
+import io.zoemeow.dutschedule.utils.NotificationsUtil
 import io.zoemeow.dutschedule.utils.openLink
 
 @AndroidEntryPoint
@@ -34,6 +34,11 @@ class SettingsActivity : BaseActivity() {
     @Composable
     override fun OnPreloadOnce() { }
 
+    override fun onResume() {
+        super.onResume()
+        NotificationsUtil.initializeNotificationChannel(this)
+    }
+
     // When active
     private val pickMedia =
         registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
@@ -43,18 +48,17 @@ class SettingsActivity : BaseActivity() {
                 getMainViewModel().appSettings.value = getMainViewModel().appSettings.value.clone(
                     backgroundImage = BackgroundImageOption.None
                 )
-                getMainViewModel().saveSettings(
+                Log.d("PhotoPicker", "Switched to None to avoid cache!")
+                BackgroundImageUtil.saveImageToAppData(this, uri)
+                Log.d("PhotoPicker", "Copied image to app data!")
+                getMainViewModel().appSettings.value = getMainViewModel().appSettings.value.clone(
+                    backgroundImage = BackgroundImageOption.PickFileFromMedia
+                )
+                Log.d("PhotoPicker", "Switched to PickFileFromMedia!")
+                getMainViewModel().saveApplicationSettings(
+                    saveUserSettings = true,
                     onCompleted = {
-                        BackgroundImageUtil.saveImageToAppData(this, uri)
-                        Log.d("PhotoPicker", "Copied!")
-                        getMainViewModel().appSettings.value = getMainViewModel().appSettings.value.clone(
-                            backgroundImage = BackgroundImageOption.PickFileFromMedia
-                        )
-                        getMainViewModel().saveSettings(
-                            onCompleted = {
-                                Log.d("PhotoPicker", "Copied!")
-                            }
-                        )
+                        Log.d("PhotoPicker", "Done saving settings!")
                     }
                 )
             } else {
@@ -79,7 +83,7 @@ class SettingsActivity : BaseActivity() {
                         getMainViewModel().appSettings.value = getMainViewModel().appSettings.value.clone(
                             newsBackgroundParseNewsSubject = !getMainViewModel().appSettings.value.newsBackgroundParseNewsSubject
                         )
-                        getMainViewModel().saveSettings()
+                        getMainViewModel().saveApplicationSettings(saveUserSettings = true)
                     },
                     onBack = {
                         setResult(RESULT_CANCELED)
@@ -114,6 +118,9 @@ class SettingsActivity : BaseActivity() {
                     context = context,
                     snackBarHostState = snackBarHostState,
                     appearanceState = appearanceState,
+                    onNotificationRegister = {
+                        NotificationsUtil.initializeNotificationChannel(this)
+                    },
                     onBack = {
                         setResult(RESULT_CANCELED)
                         finish()
@@ -139,7 +146,7 @@ class SettingsActivity : BaseActivity() {
                                     fetchNewsBackgroundDuration = duration
                                 )
                                 getMainViewModel().appSettings.value = dataTemp
-                                getMainViewModel().saveSettings(saveSettingsOnly = true)
+                                getMainViewModel().saveApplicationSettings(saveUserSettings = true)
                                 showSnackBar(
                                     text = context.getString(
                                         R.string.settings_newsnotify_fetchnewsinbackground_enabled,
@@ -164,7 +171,7 @@ class SettingsActivity : BaseActivity() {
                                 fetchNewsBackgroundDuration = 0
                             )
                             getMainViewModel().appSettings.value = dataTemp
-                            getMainViewModel().saveSettings(saveSettingsOnly = true)
+                            getMainViewModel().saveApplicationSettings(saveUserSettings = true)
                             showSnackBar(
                                 text = context.getString(R.string.settings_newsnotify_fetchnewsinbackground_disabled),
                                 clearPrevious = true
@@ -183,7 +190,7 @@ class SettingsActivity : BaseActivity() {
                             newsBackgroundGlobalEnabled = enabled
                         )
                         getMainViewModel().appSettings.value = dataTemp
-                        getMainViewModel().saveSettings(saveSettingsOnly = true)
+                        getMainViewModel().saveApplicationSettings(saveUserSettings = true)
                         showSnackBar(
                             text = when (enabled) {
                                 true -> context.getString(R.string.settings_newsnotify_newsglobal_enabled)
@@ -206,7 +213,7 @@ class SettingsActivity : BaseActivity() {
                             newsBackgroundSubjectEnabled = code
                         )
                         getMainViewModel().appSettings.value = dataTemp
-                        getMainViewModel().saveSettings(saveSettingsOnly = true)
+                        getMainViewModel().saveApplicationSettings(saveUserSettings = true)
                         @Suppress("KotlinConstantConditions")
                         showSnackBar(
                             text = when (code) {
@@ -226,7 +233,7 @@ class SettingsActivity : BaseActivity() {
                         // Add a filter
                         try {
                             getMainViewModel().appSettings.value.newsBackgroundFilterList.add(subjectCode)
-                            getMainViewModel().saveSettings(saveSettingsOnly = true)
+                            getMainViewModel().saveApplicationSettings(saveUserSettings = true)
                             showSnackBar(
                                 text = context.getString(
                                     R.string.settings_newsnotify_newsfilter_notify_add,
@@ -244,7 +251,7 @@ class SettingsActivity : BaseActivity() {
                         try {
                             val data = subjectCode.copy()
                             getMainViewModel().appSettings.value.newsBackgroundFilterList.remove(subjectCode)
-                            getMainViewModel().saveSettings(saveSettingsOnly = true)
+                            getMainViewModel().saveApplicationSettings(saveUserSettings = true)
                             showSnackBar(
                                 text = context.getString(
                                     R.string.settings_newsnotify_newsfilter_notify_delete,
@@ -261,7 +268,7 @@ class SettingsActivity : BaseActivity() {
                         // Delete all filters
                         try {
                             getMainViewModel().appSettings.value.newsBackgroundFilterList.clear()
-                            getMainViewModel().saveSettings(saveSettingsOnly = true)
+                            getMainViewModel().saveApplicationSettings(saveUserSettings = true)
                             showSnackBar(
                                 text = context.getString(R.string.settings_newsnotify_newsfilter_notify_deleteall),
                                 clearPrevious = true

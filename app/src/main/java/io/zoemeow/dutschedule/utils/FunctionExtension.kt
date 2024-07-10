@@ -5,30 +5,22 @@ import android.content.Intent
 import android.net.Uri
 import androidx.browser.customtabs.CustomTabColorSchemeParams
 import androidx.browser.customtabs.CustomTabsIntent
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.RowScope
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshotFlow
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.math.BigInteger
 import java.security.MessageDigest
 import java.text.Normalizer
-import java.util.Locale
 
 fun Context.openLink(
     url: String,
@@ -92,35 +84,6 @@ fun Modifier.endOfListReached(
     return this
 }
 
-@Composable
-fun RowScope.TableCell(
-    modifier: Modifier = Modifier,
-    text: String,
-    backgroundColor: Color = MaterialTheme.colorScheme.surface,
-    contentAlign: Alignment = Alignment.Center,
-    textAlign: TextAlign = TextAlign.Start,
-    weight: Float
-) {
-    Surface(
-        modifier = modifier.weight(weight),
-        border = BorderStroke(0.5.dp, MaterialTheme.colorScheme.inverseSurface),
-        color = backgroundColor,
-        content = {
-            Box(
-                modifier = Modifier.padding(1.dp),
-                contentAlignment = contentAlign,
-                content = {
-                    Text(
-                        text = text,
-                        textAlign = textAlign,
-                        modifier = Modifier.padding(8.dp),
-                    )
-                }
-            )
-        }
-    )
-}
-
 fun String.toNonAccent(): String {
     val temp = Normalizer.normalize(this, Normalizer.Form.NFD)
     return "\\p{InCombiningDiacriticalMarks}+".toRegex().replace(temp, "")
@@ -147,4 +110,22 @@ fun getRandomString(length: Int): String {
     return (1..length)
         .map { allowedChars.random() }
         .joinToString("")
+}
+
+fun launchOnScope(
+    script: () -> Unit,
+    invokeOnCompleted: ((Throwable?) -> Unit)? = null
+) {
+    var exRoot: Throwable? = null
+    CoroutineScope(Dispatchers.Main).launch {
+        withContext(Dispatchers.IO) {
+            try {
+                script()
+            } catch (ex: Exception) {
+                exRoot = ex
+            }
+        }
+    }.invokeOnCompletion {
+        invokeOnCompleted?.let { it(exRoot) }
+    }
 }

@@ -16,7 +16,7 @@ fun SummaryItem(
     title: String,
     content: @Composable () -> Unit,
     isLoading: Boolean = false,
-    clicked: () -> Unit,
+    clicked: (() -> Unit)? = null,
     padding: PaddingValues = PaddingValues(10.dp),
     opacity: Float = 1.0f
 ) {

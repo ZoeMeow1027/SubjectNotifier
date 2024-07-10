@@ -41,9 +41,23 @@
     <string name="date_duration_today">Today</string>
     <string name="date_duration_yesterday">Yesterday</string>
     <!-- Main activity string -->
-    <string name="main_dashboard_title">Dashboard</string>
+    <string name="main_dashboard_title">Overview</string>
     <string name="main_account_notloggedin">Not logged in</string>
     <string name="main_account_fetching">Fetching…</string>
+    <string name="main_dashboard_widget_msg_notloggedin">You haven\'t logged in! We can\'t fetch data for you!\nTo continue, please login.</string>
+    <string name="main_dashboard_widget_notloggedin_title">Login-only widgets</string>
+    <string name="main_dashboard_widget_notloggedin_description">Lessons in today and affected lessons widget will available after logged in. To do so, click here to navigate to login page.</string>
+    <string name="main_dashboard_widget_datetime_title">Date &amp; time</string>
+    <string name="main_dashboard_widget_datetime_schoolstat">School year: %1$s - Week: %2$s\nCurrent lesson: %3$s</string>
+    <string name="main_dashboard_widget_datetime_datetimestat">Date and time: %s\n(based on your current region settings)\n</string>
+    <string name="main_dashboard_widget_lessontoday_title">Your subjects today</string>
+    <string name="main_dashboard_widget_lessontoday_completed">You have completed all lessons today. Have a rest!</string>
+    <string name="main_dashboard_widget_lessontoday_availabletoday_1">You have 1 lesson remaining today:\n\n%1$s</string>
+    <string name="main_dashboard_widget_lessontoday_availabletoday_other">You have %1$d lessons remaining today:\n\n%2$s</string>
+    <string name="main_dashboard_widget_lessontoday_availablepending_1">You have 1 lesson today:\n\n%1$s</string>
+    <string name="main_dashboard_widget_lessontoday_availablepending_other">You have %1$d lessons today:\n\n%2$s</string>
+    <string name="main_dashboard_widget_news_title">News</string>
+    <string name="main_dashboard_widget_news_status">Tap here to open news.\nGlobal news: %1$s new today, %2$s+ new last 7 days.</string>
     <!-- Android notification string -->
     <string name="notification_announcement_title">App updates</string>
     <string name="notification_announcement_description">This will send you app recommend and important updates.</string>
@@ -123,6 +137,7 @@
     <string name="settings_experiment_option_currentschyear_insummer"> (in summer)</string>
     <string name="settings_experiment_category_appearance">Appearance</string>
     <string name="settings_experiment_option_required_enableimage">You need enable background image to take effect</string>
+    <string name="settings_experiment_option_backgroundandcomponentopacity">Background &amp; component opacity</string>
     <string name="settings_experiment_option_bgopacity">Background opacity</string>
     <string name="settings_experiment_option_componentopacity">Component opacity</string>
     <string name="settings_experiment_option_dashboardview">Main screen dashboard view</string>

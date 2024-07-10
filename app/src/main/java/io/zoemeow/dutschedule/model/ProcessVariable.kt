@@ -5,10 +5,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import io.zoemeow.dutschedule.GlobalVariables
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import io.zoemeow.dutschedule.utils.launchOnScope
 
 data class ProcessVariable<T>(
     val processState: MutableState<ProcessState> = mutableStateOf(ProcessState.NotRunYet),
@@ -34,19 +31,6 @@ data class ProcessVariable<T>(
             processState.value = ProcessState.NotRunYet
             lastRequest.longValue = 0
             data.value = null
-        }
-    }
-
-    private fun launchOnScope(
-        script: () -> Unit,
-        invokeOnCompleted: ((Throwable?) -> Unit)? = null
-    ) {
-        CoroutineScope(Dispatchers.Main).launch {
-            withContext(Dispatchers.IO) {
-                script()
-            }
-        }.invokeOnCompletion { thr ->
-            invokeOnCompleted?.let { it(thr) }
         }
     }
 

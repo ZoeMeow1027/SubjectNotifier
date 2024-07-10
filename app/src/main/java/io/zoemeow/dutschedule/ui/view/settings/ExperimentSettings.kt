@@ -122,26 +122,11 @@ fun Activity_Settings_ExperimentSettings(
                         content = {
                             OptionItem(
                                 modifierInside = Modifier.padding(horizontal = 20.dp, vertical = 15.dp),
-                                title = context.getString(R.string.settings_experiment_option_bgopacity),
+                                title = context.getString(R.string.settings_experiment_option_backgroundandcomponentopacity),
                                 description = String.format(
                                     Locale.ROOT,
-                                    "%2.0f%% %s",
+                                    "%2.0f%% - %2.0f%% %s",
                                     (mainViewModel.appSettings.value.backgroundImageOpacity * 100),
-                                    if (mainViewModel.appSettings.value.backgroundImage == BackgroundImageOption.None) {
-                                        "(${context.getString(R.string.settings_experiment_option_required_enableimage)})"
-                                    } else ""
-                                ),
-                                onClick = {
-                                    onMessageReceived(context.getString(R.string.feature_not_ready), true, null, null)
-                                    /* TODO: Implement here: Background opacity */
-                                }
-                            )
-                            OptionItem(
-                                modifierInside = Modifier.padding(horizontal = 20.dp, vertical = 15.dp),
-                                title = context.getString(R.string.settings_experiment_option_componentopacity),
-                                description = String.format(
-                                    Locale.ROOT,
-                                    "%2.0f%% %s",
                                     (mainViewModel.appSettings.value.componentOpacity * 100),
                                     if (mainViewModel.appSettings.value.backgroundImage == BackgroundImageOption.None) {
                                         "(${context.getString(R.string.settings_experiment_option_required_enableimage)})"
@@ -149,7 +134,7 @@ fun Activity_Settings_ExperimentSettings(
                                 ),
                                 onClick = {
                                     onMessageReceived(context.getString(R.string.feature_not_ready), true, null, null)
-                                    /* TODO: Implement here: Component opacity */
+                                    /* TODO: Implement here: Background and Component opacity */
                                 }
                             )
                             // https://stackoverflow.com/questions/72932093/jetpack-compose-is-there-a-way-to-restart-whole-app-programmatically
@@ -179,7 +164,8 @@ fun Activity_Settings_ExperimentSettings(
                                             mainViewModel.appSettings.value.clone(
                                                 mainScreenDashboardView = !mainViewModel.appSettings.value.mainScreenDashboardView
                                             )
-                                        mainViewModel.saveSettings(
+                                        mainViewModel.saveApplicationSettings(
+                                            saveUserSettings = true,
                                             onCompleted = {
                                                 val packageManager: PackageManager =
                                                     context.packageManager
@@ -228,7 +214,7 @@ fun Activity_Settings_ExperimentSettings(
             mainViewModel.appSettings.value = mainViewModel.appSettings.value.clone(
                 currentSchoolYear = it
             )
-            mainViewModel.saveSettings()
+            mainViewModel.saveApplicationSettings(saveUserSettings = true)
             dialogSchoolYear.value = false
         }
     )

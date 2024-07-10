@@ -209,15 +209,16 @@ fun Activity_MainView_Dashboard_Body(
                 .verticalScroll(rememberScrollState())
         ) {
             DateAndTimeSummaryItem(
+                context = context,
                 padding = PaddingValues(bottom = 10.dp, start = 15.dp, end = 15.dp),
                 isLoading = mainViewModel.currentSchoolYearWeek.processState.value == ProcessState.Running,
                 currentSchoolWeek = mainViewModel.currentSchoolYearWeek.data.value,
                 opacity = appearanceState.componentOpacity
             )
-            when (mainViewModel.accountSession.accountSession.processState.value) {
-                ProcessState.Successful,
-                ProcessState.Failed -> {
+            when (mainViewModel.accountSession.accountSession.data.value?.accountAuth?.isValidLogin()) {
+                true -> {
                     LessonTodaySummaryItem(
+                        context = context,
                         padding = PaddingValues(bottom = 10.dp, start = 15.dp, end = 15.dp),
                         hasLoggedIn = mainViewModel.accountSession.accountSession.processState.value == ProcessState.Successful,
                         isLoading = mainViewModel.accountSession.accountSession.processState.value == ProcessState.Running || mainViewModel.accountSession.subjectSchedule.processState.value == ProcessState.Running,
@@ -233,7 +234,8 @@ fun Activity_MainView_Dashboard_Body(
                         affectedList = mainViewModel.accountSession.subjectSchedule.data.filter { subSch ->
                             subSch.subjectStudy.scheduleList.any { schItem -> schItem.dayOfWeek + 1 == CustomDateUtil.getCurrentDayOfWeek() } &&
                                     subSch.subjectStudy.scheduleList.any { schItem ->
-                                        schItem.lesson.end >= CustomClock.getCurrent().toDUTLesson2().lesson
+                                        schItem.lesson.end >= CustomClock.getCurrent()
+                                            .toDUTLesson2().lesson
                                     }
                         }.toList(),
                         opacity = appearanceState.componentOpacity
@@ -257,18 +259,18 @@ fun Activity_MainView_Dashboard_Body(
                         opacity = appearanceState.componentOpacity
                     )
                 }
-                ProcessState.NotRunYet -> {
-                    // TODO: Toast for not logged in here
+
+                else -> {
                     SummaryItem(
                         padding = PaddingValues(bottom = 10.dp, start = 15.dp, end = 15.dp),
-                        title = "Login-only widgets",
+                        title = context.getString(R.string.main_dashboard_widget_notloggedin_title),
                         opacity = appearanceState.componentOpacity,
                         clicked = {
                             onLoginRequested?.let { it() }
                         },
                         content = {
                             Text(
-                                text = "Lessons in today and affected lessons widget will available after logged in. To do so, click here to navigate to login page.",
+                                text = context.getString(R.string.main_dashboard_widget_notloggedin_description),
                                 style = MaterialTheme.typography.bodyMedium,
                                 modifier = Modifier
                                     .padding(horizontal = 15.dp)
@@ -277,9 +279,9 @@ fun Activity_MainView_Dashboard_Body(
                         }
                     )
                 }
-                else -> { }
             }
             SchoolNewsSummaryItem(
+                context = context,
                 padding = PaddingValues(bottom = 10.dp, start = 15.dp, end = 15.dp),
                 newsToday = run {
                     val today = LocalDateTime(

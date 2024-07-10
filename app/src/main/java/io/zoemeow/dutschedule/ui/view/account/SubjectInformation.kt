@@ -172,7 +172,7 @@ fun Activity_Account_SubjectInformation(
                         it.add(item)
                     }
                 )
-                mainViewModel.saveSettings()
+                mainViewModel.saveApplicationSettings(saveUserSettings = true)
                 onMessageReceived(context.getString(
                         R.string.account_subjectinfo_filter_added,
                         item

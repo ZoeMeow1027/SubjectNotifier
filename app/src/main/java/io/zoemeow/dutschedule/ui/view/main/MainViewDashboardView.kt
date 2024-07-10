@@ -242,13 +242,13 @@ fun MainActivity.MainViewDashboard(
         onClear = { item ->
             val item1 = item.clone()
             getMainViewModel().notificationHistory.remove(item)
-            getMainViewModel().saveSettings()
+            getMainViewModel().saveApplicationSettings(saveNotificationCache = true)
             showSnackBar(
                 text = context.getString(R.string.notification_removed),
                 actionText = context.getString(R.string.action_undo),
                 action = {
                     getMainViewModel().notificationHistory.add(item1)
-                    getMainViewModel().saveSettings()
+                    getMainViewModel().saveApplicationSettings(saveNotificationCache = true)
                 }
             )
         },
@@ -258,7 +258,7 @@ fun MainActivity.MainViewDashboard(
                 actionText = context.getString(R.string.action_confirm),
                 action = {
                     getMainViewModel().notificationHistory.clear()
-                    getMainViewModel().saveSettings()
+                    getMainViewModel().saveApplicationSettings(saveNotificationCache = true)
                     showSnackBar(
                         text = context.getString(R.string.notification_removeall_removed),
                         clearPrevious = true

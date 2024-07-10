@@ -24,9 +24,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
@@ -38,7 +36,6 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import io.zoemeow.dutschedule.BuildConfig
-import io.zoemeow.dutschedule.GlobalVariables
 import io.zoemeow.dutschedule.R
 import io.zoemeow.dutschedule.activity.PermissionsActivity
 import io.zoemeow.dutschedule.activity.SettingsActivity
@@ -51,7 +48,6 @@ import io.zoemeow.dutschedule.ui.component.base.OptionSwitchItem
 import io.zoemeow.dutschedule.ui.component.settings.ContentRegion
 import io.zoemeow.dutschedule.ui.component.settings.DialogAppBackgroundSettings
 import io.zoemeow.dutschedule.ui.component.settings.DialogAppThemeSettings
-import io.zoemeow.dutschedule.utils.openLink
 import io.zoemeow.dutschedule.viewmodel.MainViewModel
 import java.util.Locale
 
@@ -198,7 +194,7 @@ fun Activity_Settings(
                                         mainViewModel.appSettings.value.clone(
                                             blackBackground = value
                                         )
-                                    mainViewModel.saveSettings()
+                                    mainViewModel.saveApplicationSettings(saveUserSettings = true)
                                 }
                             )
                             OptionItem(
@@ -286,7 +282,7 @@ fun Activity_Settings(
                                         mainViewModel.appSettings.value.clone(
                                             openLinkInsideApp = value
                                         )
-                                    mainViewModel.saveSettings()
+                                    mainViewModel.saveApplicationSettings(saveUserSettings = true)
                                 }
                             )
                             OptionItem(
@@ -354,7 +350,7 @@ fun Activity_Settings(
                 themeMode = themeMode,
                 dynamicColor = dynamicColor
             )
-            mainViewModel.saveSettings()
+            mainViewModel.saveApplicationSettings(saveUserSettings = true)
         }
     )
     DialogAppBackgroundSettings(
@@ -401,7 +397,7 @@ fun Activity_Settings(
         }
 
         dialogBackground.value = false
-        mainViewModel.saveSettings()
+        mainViewModel.saveApplicationSettings(saveUserSettings = true)
     }
     BackHandler(
         enabled = dialogAppTheme.value || dialogBackground.value,

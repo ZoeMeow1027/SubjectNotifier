@@ -36,7 +36,6 @@ class NewsBackgroundUpdateService : BaseService(
     private lateinit var file: FileModuleRepository
     private lateinit var dutRequestRepository: DutRequestRepository
     private lateinit var settings: AppSettings
-    private lateinit var newsInstance: DUTNewsInstance
 
     override fun onInitialize() {
         file = FileModuleRepository(this)
@@ -68,56 +67,20 @@ class NewsBackgroundUpdateService : BaseService(
         // val nofityType = intent?.getIntExtra("news.service.variable.notifytype", 0) ?: 0
 
         when (intent?.action) {
-            "news.service.action.fetchglobal" -> {
-                fetchNewsGlobal(
-                    fetchType = when (fetchType) {
-                        0 -> NewsFetchType.NextPage
-                        1 -> NewsFetchType.FirstPage
-                        2 -> NewsFetchType.ClearAndFirstPage
-                        else -> NewsFetchType.NextPage
-                    }
-                )
-            }
-            "news.service.action.fetchsubject" -> {
-                fetchNewsSubject(
-                    fetchType = when (fetchType) {
-                        0 -> NewsFetchType.NextPage
-                        1 -> NewsFetchType.FirstPage
-                        2 -> NewsFetchType.ClearAndFirstPage
-                        else -> NewsFetchType.NextPage
-                    }
-                )
-            }
-            "news.service.action.fetchall" -> {
-                fetchNewsGlobal(
-                    fetchType = when (fetchType) {
-                        0 -> NewsFetchType.NextPage
-                        1 -> NewsFetchType.FirstPage
-                        2 -> NewsFetchType.ClearAndFirstPage
-                        else -> NewsFetchType.NextPage
-                    }
-                )
-                fetchNewsSubject(
-                    fetchType = when (fetchType) {
-                        0 -> NewsFetchType.NextPage
-                        1 -> NewsFetchType.FirstPage
-                        2 -> NewsFetchType.ClearAndFirstPage
-                        else -> NewsFetchType.NextPage
-                    }
-                )
-            }
             "news.service.action.fetchallpage1background" -> {
-                fetchNewsGlobal(
-                    fetchType = NewsFetchType.FirstPage
-                )
-                fetchNewsSubject(
-                    fetchType = NewsFetchType.FirstPage
-                )
-
-                // Schedule next run
-                if (schedule) {
-                    scheduleNextRun()
+                fetchNews {
+                    // Schedule next run
+                    if (schedule) {
+                        scheduleNextRun()
+                    }
+                    stopSelf()
                 }
+//                fetchNewsGlobal(
+//                    fetchType = NewsFetchType.FirstPage
+//                )
+//                fetchNewsSubject(
+//                    fetchType = NewsFetchType.FirstPage
+//                )
             }
             "news.service.action.fetchallpage1background.skipfirst" -> {
                 // Do nothing
@@ -125,9 +88,188 @@ class NewsBackgroundUpdateService : BaseService(
                 // Schedule next run
                 if (schedule) {
                     scheduleNextRun()
+                    stopSelf()
                 }
             }
             else -> {}
+        }
+    }
+
+    private fun fetchNews(onDone: (() -> Unit)? = null) {
+        var newsGlobalDone = false
+        var newsSubjectDone = false
+        var notifyGlobalDone = false
+        var notifySubjectDone = false
+
+        fun returnToMain() {
+            if (newsGlobalDone && newsSubjectDone && notifyGlobalDone && notifySubjectDone) {
+                // TODO: Return to main here
+                onDone?.let { it() }
+            }
+        }
+
+        // If no notification permission, news notification must be aborted to avoid exception
+        val notificationPermission = PermissionsActivity.checkPermissionNotification(this).isGranted
+
+        val dutNewsInstance = DUTNewsInstance(
+            dutRequestRepository = dutRequestRepository,
+            onEventSent = { when (it) {
+                1 -> {
+                    newsGlobalDone = true
+                    returnToMain()
+                }
+                2 -> {
+                    newsSubjectDone = true
+                    returnToMain()
+                }
+            } }
+        )
+
+        // Load news cache
+        file.getCacheNewsGlobal { newsList, page, lastRequest ->
+            dutNewsInstance.importNewsCache(
+                globalNewsList = newsList,
+                globalNewsIndex = page,
+                globalNewsLastRequest = lastRequest
+            )
+        }
+        file.getCacheNewsSubject { newsList, page, lastRequest ->
+            dutNewsInstance.importNewsCache(
+                subjectNewsList = newsList,
+                subjectNewsIndex = page,
+                subjectNewsLastRequest = lastRequest
+            )
+        }
+
+        // Fetch news and direct notify here!
+        if (dutNewsInstance.newsGlobal.lastRequest.longValue + (settings.newsBackgroundDuration * 60 * 1000) > System.currentTimeMillis()) {
+            // throw Exception("Request too fast. Try again later.")
+            // TODO: Throw exception here
+            Log.d("NewsBackgroundService", "Request too fast in news global. Try again later.")
+            newsGlobalDone = true
+            notifyGlobalDone = true
+            returnToMain()
+        } else {
+            dutNewsInstance.fetchGlobalNews(
+                fetchType = NewsFetchType.FirstPage,
+                forceRequest = true,
+                onDone = { newsList ->
+                    Log.d("NewsBackgroundService", "News global count: ${newsList.size}")
+
+                    // If we are not have news notifications permission, stop here
+                    if (!notificationPermission) {
+                        notifyGlobalDone = true
+                        returnToMain()
+                        return@fetchGlobalNews
+                    }
+
+                    // If user turned off news global notifications, stop here
+                    if (!settings.newsBackgroundGlobalEnabled) {
+                        notifyGlobalDone = true
+                        returnToMain()
+                        return@fetchGlobalNews
+                    }
+
+                    try {
+                        newsList.forEach {
+                            notifyNewsGlobal(this, it)
+                        }
+                        Log.d("NewsBackgroundService", "Done executing function in news global.")
+                    } catch (ex: Exception) {
+                        Log.w("NewsBackgroundService", "An error was occurred when executing function in news global.")
+                        ex.printStackTrace()
+                    }
+
+                    file.saveCacheNewsGlobal(
+                        newsList = dutNewsInstance.newsGlobal.data,
+                        newsNextPage = (dutNewsInstance.newsGlobal.parameters["nextPage"] ?: "0").toInt(),
+                        lastRequest = dutNewsInstance.newsGlobal.lastRequest.longValue
+                    )
+                    notifyGlobalDone = true
+                    returnToMain()
+                }
+            )
+        }
+
+        if (dutNewsInstance.newsSubject.lastRequest.longValue + (settings.newsBackgroundDuration * 60 * 1000) > System.currentTimeMillis()) {
+            // throw Exception("Request too fast. Try again later.")
+            // TODO: Throw exception here
+            Log.d("NewsBackgroundService", "Request too fast in news subject. Try again later.")
+            newsSubjectDone = true
+            notifySubjectDone = true
+            returnToMain()
+        } else {
+            dutNewsInstance.fetchSubjectNews(
+                fetchType = NewsFetchType.FirstPage,
+                forceRequest = true,
+                onDone = { newsList ->
+                    Log.d("NewsBackgroundService", "News subject count: ${newsList.size}")
+
+                    // If we are not have news notifications permission, stop here
+                    if (!notificationPermission) {
+                        notifySubjectDone = true
+                        returnToMain()
+                        return@fetchSubjectNews
+                    }
+
+                    // If user turned off news subject notifications, stop here
+                    if (settings.newsBackgroundSubjectEnabled == -1) {
+                        notifySubjectDone = true
+                        returnToMain()
+                        return@fetchSubjectNews
+                    }
+
+                    try {
+                        newsList.forEach { newsItem ->
+                            Log.d("NewsBackgroundService", "News subject index: ${newsList.indexOf(newsItem)}")
+
+                            // Default value is false.
+                            var notifyRequired = false
+                            // If enabled news filter, do following.
+
+                            // settings.newsBackgroundSubjectEnabled == 0 -> All news enabled
+                            if (settings.newsBackgroundSubjectEnabled == 0) {
+                                notifyRequired = true
+                            }
+                            // TODO: settings.newsBackgroundSubjectEnabled == 1 action
+                            // settings.newsBackgroundSubjectEnabled == 2
+                            else if (settings.newsBackgroundFilterList.any { source ->
+                                    newsItem.affectedClass.any { targetGroup ->
+                                        targetGroup.codeList.any { target ->
+                                            source.isEquals(
+                                                SubjectCode(
+                                                    target.studentYearId,
+                                                    target.classId,
+                                                    targetGroup.subjectName
+                                                )
+                                            )
+                                        }
+                                    }
+                                }
+                            ) notifyRequired = true
+
+                            // TODO: If no notify/notify settings is off, continue with return@forEach.
+                            // notifyRequired and notify variable
+
+                            if (notifyRequired) {
+                                notifyNewsSubject(this, newsItem)
+                            }
+                        }
+                        Log.d("NewsBackgroundService", "Done executing function in news subject.")
+                    } catch (ex: Exception) {
+                        Log.w("NewsBackgroundService", "An error was occurred when executing function in news subject.")
+                        ex.printStackTrace()
+                    }
+
+                    file.saveCacheNewsSubject(
+                        newsList = dutNewsInstance.newsSubject.data,
+                        newsNextPage = (dutNewsInstance.newsSubject.parameters["nextPage"] ?: "0").toInt(),
+                        lastRequest = dutNewsInstance.newsSubject.lastRequest.longValue
+                    )
+                    notifySubjectDone = true
+                    returnToMain()
+                }
+            )
         }
     }
 
@@ -581,7 +723,8 @@ class NewsBackgroundUpdateService : BaseService(
     }
 
     override fun onCompleted(result: ProcessState) {
-        stopSelf()
+        // TODO: We need another process result here!
+        // stopSelf()
     }
 
     override fun onDestroying() { }

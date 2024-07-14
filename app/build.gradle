@@ -9,12 +9,12 @@ plugins {
 
 android {
     namespace 'io.zoemeow.dutschedule'
-    compileSdk 34
+    compileSdk 35
 
     defaultConfig {
         applicationId "io.zoemeow.dutschedule"
         minSdk 21
-        targetSdkVersion 34
+        targetSdkVersion 35
         versionCode 1574
         versionName "2.0-draft19"
 
@@ -135,4 +135,8 @@ dependencies {
 // Allow references to generated code
 kapt {
     correctErrorTypes true
+}
+
+hilt {
+    enableAggregatingTask = true
 }

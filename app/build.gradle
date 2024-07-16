@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id 'org.jetbrains.kotlin.plugin.compose'
 
     id 'com.google.dagger.hilt.android'
     // https://stackoverflow.com/questions/70550883/warning-the-following-options-were-not-recognized-by-any-processor-dagger-f
@@ -96,8 +97,8 @@ dependencies {
     // runtimeOnly 'androidx.compose.material:material-icons-extended:1.6.3'
 
     // Google Dagger/Hilt
-    implementation 'com.google.dagger:hilt-android:2.49'
-    kapt 'com.google.dagger:hilt-compiler:2.49'
+    implementation 'com.google.dagger:hilt-android:2.51.1'
+    kapt 'com.google.dagger:hilt-compiler:2.51.1'
 
     // Accompanist - Pull-to-refresh - https://mvnrepository.com/artifact/com.google.accompanist/accompanist-swiperefresh
     implementation 'com.google.accompanist:accompanist-swiperefresh:0.33.2-alpha'

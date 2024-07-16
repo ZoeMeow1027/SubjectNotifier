@@ -13,6 +13,7 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
+import io.zoemeow.dutschedule.activity.BrowserActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -35,12 +36,15 @@ fun Context.openLink(
         }
 
         true -> {
-            val builder = CustomTabsIntent.Builder()
-            val defaultColors = CustomTabColorSchemeParams.Builder().build()
-            builder.setDefaultColorSchemeParams(defaultColors)
-
-            val customTabsIntent = builder.build()
-            customTabsIntent.launchUrl(this, Uri.parse(url))
+            val intent = Intent(this, BrowserActivity::class.java)
+            intent.putExtra("url", url)
+            this.startActivity(intent)
+//            val builder = CustomTabsIntent.Builder()
+//            val defaultColors = CustomTabColorSchemeParams.Builder().build()
+//            builder.setDefaultColorSchemeParams(defaultColors)
+//
+//            val customTabsIntent = builder.build()
+//            customTabsIntent.launchUrl(this, Uri.parse(url))
         }
     }
 }

@@ -15,11 +15,13 @@
     <string name="action_grant">Cho phép</string>
     <string name="action_confirm">Xác nhận</string>
     <string name="action_refresh">Làm mới</string>
+    <string name="action_menu">Menu</string>
     <string name="action_search">Tìm kiếm</string>
     <string name="action_undo">Hoàn tác</string>
     <string name="action_close">Đóng</string>
     <string name="action_display">Hiển thị</string>
     <string name="action_hide">Ẩn</string>
+    <string name="action_share">Chia sẻ</string>
     <!-- Tooltip string -->
     <string name="tooltip_selected">Đã chọn</string>
     <string name="tooltip_info">Thông tin</string>
@@ -135,6 +137,9 @@
     <string name="settings_experiment_option_currentschyear">Năm học hiện tại</string>
     <string name="settings_experiment_option_currentschyear_description">Năm: 20%1$d-20%2$d, học kỳ: %3$s%4$s</string>
     <string name="settings_experiment_option_currentschyear_insummer"> (học kỳ hè)</string>
+    <string name="settings_experiment_category_news">Tin tức</string>
+    <string name="settings_experiment_option_opennewsinpopup">Mở tin tức đã chọn trong popup</string>
+    <string name="settings_experiment_option_opennewsinpopup_description">Nếu bị vô hiệu hóa, chúng tôi sẽ mở tin tức trong màn hình mới</string>
     <string name="settings_experiment_category_appearance">Hiển thị</string>
     <string name="settings_experiment_option_required_enableimage">Bạn cần bật hình nền ứng dụng để tùy chọn có tác dụng</string>
     <string name="settings_experiment_option_backgroundandcomponentopacity">Độ mờ hình nền &amp; thành phần điều khiển</string>
@@ -384,6 +389,24 @@
     <string name="activity_name_settings">DutSchedule - Cài đặt</string>
     <string name="activity_name_miscellaneous">DutSchedule - Linh tinh</string>
     <string name="activity_service_newsbackground">Cập nhật tin tức trong nền</string>
+    <!-- Browser activity strings -->
+    <string name="activity_browser_loading">Đang tải…</string>
+    <string name="activity_browser_copylink">Sao chép liên kết</string>
+    <string name="activity_browser_copiedlink">Đã sao chép liên kết hiện tại vào bộ nhớ tạm!</string>
+    <string name="activity_browser_openindefaultbrowser">Mở trong trình duyệt mặc định</string>
+    <!-- Permission request activity strings -->
+    <string name="activity_permissionrequest_title">Danh sách quyền được yêu cầu</string>
+    <string name="activity_permissionrequest_description">Dưới đây là tất cả các quyền được yêu cầu bởi ứng dụng này. Nhấn vào một quyền để cấp quyền đó. Nếu bạn không thể cấp hoặc muốn thu hồi quyền, bạn có thể làm điều đó bằng cách mở Cài đặt ứng dụng Android bên dưới.</string>
+    <string name="activity_permissionrequest_status_allowed">Đã cho phép</string>
+    <string name="activity_permissionrequest_status_declined">Đã từ chối</string>
+    <string name="activity_permissionrequest_snackbar_alreadygranted">Bạn đã cho phép quyền này!</string>
+    <string name="activity_permissionrequest_action_openandroidsettings">Mở cài đặt ứng dụng Android</string>
+    <string name="activity_permissionrequest_permission_notification_title">Thông báo</string>
+    <string name="activity_permissionrequest_permission_notification_description">Cho phép ứng dụng này gửi thông báo mới (tin tức chung và tin tức lớp học phần), cập nhật ứng dụng… Bạn vẫn có thể thay đổi nhóm thông báo nào sẽ thông báo cho bạn trong cài đặt ứng dụng.</string>
+    <string name="activity_permissionrequest_permission_manageexternalstorage_title">Truy cập tất cả tập tin</string>
+    <string name="activity_permissionrequest_permission_manageexternalstorage_description">Ứng dụng này sẽ sử dụng quyền đó để lấy hình nền hiện tại của bạn làm hình nền ứng dụng. Đó là tất cả! Bạn vẫn có thể chọn ảnh làm hình nền ứng dụng mà không cần quyền này.</string>
+    <string name="activity_permissionrequest_permission_scheduleexactalarm_title">Lên lịch báo thức chính xác</string>
+    <string name="activity_permissionrequest_permission_scheduleexactalarm_description">Cho phép ứng dụng này lên lịch dịch vụ để cập nhật tin tức trong nền cho bạn.</string>
     <!-- -->
     <string name="data_unknown">(không rõ)</string>
     <string name="data_noscore">(không có điểm)</string>

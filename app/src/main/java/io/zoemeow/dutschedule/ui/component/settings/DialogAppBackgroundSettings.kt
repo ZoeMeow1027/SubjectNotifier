@@ -61,7 +61,7 @@ fun DialogAppBackgroundSettings(
                                     "\n(${context.getString(R.string.settings_dialog_wallpaperbackground_choice_currentwallpaper_disa14)})"
                                 }
                                 // Permission is not granted.
-                                (!PermissionsActivity.checkPermissionManageExternalStorage().isGranted) -> {
+                                (!PermissionsActivity.checkPermissionManageExternalStorage(context = context).isGranted) -> {
                                     "\n(${context.getString(R.string.settings_dialog_wallpaperbackground_choice_currentwallpaper_dismisperext)})"
                                 }
                                 // Else, no exception
@@ -71,7 +71,7 @@ fun DialogAppBackgroundSettings(
                         isSelected = value == BackgroundImageOption.YourCurrentWallpaper,
                         onClick = {
                             val compSdk = Build.VERSION.SDK_INT < Build.VERSION_CODES.UPSIDE_DOWN_CAKE
-                            val compPer = PermissionsActivity.checkPermissionManageExternalStorage().isGranted
+                            val compPer = PermissionsActivity.checkPermissionManageExternalStorage(context = context).isGranted
                             if (compSdk && compPer) {
                                 onDismiss()
                                 onValueChanged(BackgroundImageOption.YourCurrentWallpaper)

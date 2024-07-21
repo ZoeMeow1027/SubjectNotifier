@@ -86,18 +86,19 @@ abstract class BaseActivity: ComponentActivity() {
                 content = {
                     val context = LocalContext.current
 
-                    val draw: Bitmap? = when (getMainViewModel().appSettings.value.backgroundImage) {
+                    when (getMainViewModel().appSettings.value.backgroundImage) {
                         BackgroundImageOption.None -> null
                         BackgroundImageOption.YourCurrentWallpaper -> BackgroundImageUtil.getCurrentWallpaperBackground(context)
                         BackgroundImageOption.PickFileFromMedia -> BackgroundImageUtil.getImageFromAppData(context)
-                    }
-                    if (draw != null) {
-                        Image(
-                            modifier = Modifier.fillMaxSize(),
-                            bitmap = draw.asImageBitmap(),
-                            contentDescription = "background_image",
-                            contentScale = ContentScale.Crop
-                        )
+                    }.also { wallpaper ->
+                        if (wallpaper != null) {
+                            Image(
+                                modifier = Modifier.fillMaxSize(),
+                                bitmap = wallpaper.asImageBitmap(),
+                                contentDescription = "background_image",
+                                contentScale = ContentScale.Crop
+                            )
+                        }
                     }
 
                     @Composable

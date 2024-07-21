@@ -22,7 +22,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import io.zoemeow.dutschedule.R
 
 @Composable
 fun SwitchWithTextInSurface(
@@ -98,4 +101,18 @@ fun SwitchWithTextInSurface(
             }
         )
     }
+}
+
+@Preview
+@Composable
+private fun Preview() {
+    val context = LocalContext.current
+    SwitchWithTextInSurface(
+        text = context.getString(R.string.settings_newsnotify_fetchnewsinbackground),
+        enabled = true,
+        checked = true,
+        onCheckedChange = {
+            // Refresh news state changed, default is 30 minutes
+        }
+    )
 }

@@ -369,7 +369,7 @@ fun Activity_Settings(
 
             BackgroundImageOption.YourCurrentWallpaper -> {
                 val compPer =
-                    PermissionsActivity.checkPermissionManageExternalStorage().isGranted
+                    PermissionsActivity.checkPermissionManageExternalStorage(context = context).isGranted
                 if (compPer) {
                     mainViewModel.appSettings.value =
                         mainViewModel.appSettings.value.clone(

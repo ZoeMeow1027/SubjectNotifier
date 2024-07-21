@@ -38,9 +38,11 @@ import io.zoemeow.dutschedule.activity.SettingsActivity
 import io.zoemeow.dutschedule.model.AppearanceState
 import io.zoemeow.dutschedule.model.NavBarItem
 import io.zoemeow.dutschedule.model.settings.BackgroundImageOption
+import io.zoemeow.dutschedule.ui.component.news.NewsPopup
 import io.zoemeow.dutschedule.ui.view.account.Activity_Account
 import io.zoemeow.dutschedule.ui.view.news.Activity_News
 import io.zoemeow.dutschedule.utils.BackgroundImageUtil
+import io.zoemeow.dutschedule.utils.openLink
 import io.zoemeow.dutschedule.viewmodel.MainViewModel
 
 @Composable
@@ -58,7 +60,13 @@ fun Activity_MainView_MainViewTabView(
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = backStackEntry?.destination?.route
 
+    // Notification Scaffold visible
     val isNotificationOpened = remember { mutableStateOf(false) }
+
+    // News Detail Scaffold popup visible
+    val isNewsDetailScaffoldOpened = remember { mutableStateOf(false) }
+    val newsDetailType = remember { mutableStateOf<String?>(null) }
+    val newsDetailData = remember { mutableStateOf<String?>(null) }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -158,6 +166,23 @@ fun Activity_MainView_MainViewTabView(
                             val intent = Intent(context, NewsActivity::class.java)
                             intent.action = NewsActivity.INTENT_SEARCHACTIVITY
                             context.startActivity(intent)
+                        },
+                        onNewsClicked = { newsType, newsData ->
+                            if (mainViewModel.appSettings.value.openNewsInModalBottomSheet) {
+                                newsDetailType.value = newsType
+                                newsDetailData.value = newsData
+                                isNewsDetailScaffoldOpened.value = true
+                            } else {
+                                context.startActivity(
+                                    Intent(
+                                        context,
+                                        NewsActivity::class.java
+                                    ).also { intent ->
+                                        intent.action = NewsActivity.INTENT_NEWSDETAILACTIVITY
+                                        intent.putExtra("type", newsType)
+                                        intent.putExtra("data", newsData)
+                                    })
+                            }
                         }
                     )
                 }
@@ -172,20 +197,6 @@ fun Activity_MainView_MainViewTabView(
                         }
                     )
                 }
-
-//                composable(NavBarItem.settings.route) {
-//                    Activity_Settings(
-//                        context = context,
-//                        appearanceState = appearanceState,
-//                        mainViewModel = getMainViewModel(),
-//                        mediaRequest = {
-//                            pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
-//                        },
-//                        onMessageReceived = { text, clearPrevious, actionText, action ->
-//                            showSnackBar(text = text, clearPrevious = clearPrevious, actionText = actionText, action = action)
-//                        }
-//                    )
-//                }
             }
         }
     )
@@ -245,7 +256,26 @@ fun Activity_MainView_MainViewTabView(
             }
         }
     )
-    BackHandler(isNotificationOpened.value) {
+    NewsPopup(
+        isVisible = isNewsDetailScaffoldOpened.value,
+        context = context,
+        snackBarHostState = snackBarHostState,
+        appearanceState = appearanceState,
+        onMessageReceived = onMessageReceived,
+        newsType = newsDetailType.value,
+        newsData = newsDetailData.value,
+        onDismiss = { isNewsDetailScaffoldOpened.value = false },
+        onLinkClicked = { link ->
+            context.openLink(
+                url = link,
+                customTab = mainViewModel.appSettings.value.openLinkInsideApp
+            )
+        },
+    )
+    BackHandler(isNotificationOpened.value || isNewsDetailScaffoldOpened.value) {
+        if (isNewsDetailScaffoldOpened.value) {
+            isNewsDetailScaffoldOpened.value = false
+        }
         if (isNotificationOpened.value) {
             isNotificationOpened.value = false
         }

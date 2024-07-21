@@ -23,20 +23,29 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Share
+import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.PlainTooltip
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.material3.TooltipBox
+import androidx.compose.material3.TooltipDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberTooltipState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -57,7 +66,6 @@ import io.zoemeow.dutschedule.R
 import io.zoemeow.dutschedule.model.AppearanceState
 import io.zoemeow.dutschedule.model.settings.ThemeMode
 import io.zoemeow.dutschedule.utils.openLink
-
 
 @AndroidEntryPoint
 class BrowserActivity : BaseActivity() {
@@ -96,7 +104,7 @@ class BrowserActivity : BaseActivity() {
     ) {
         val clipboardManager: ClipboardManager = LocalClipboardManager.current
 
-        val title = remember { mutableStateOf("Loading...") }
+        val title = remember { mutableStateOf(context.getString(R.string.activity_browser_loading)) }
         val url = remember { mutableStateOf("") }
         val progress = remember { mutableFloatStateOf(0F) }
 
@@ -111,6 +119,10 @@ class BrowserActivity : BaseActivity() {
             }
         }
 
+        val isMenuOpened = remember { mutableStateOf(false) }
+        val refreshTooltipState = rememberTooltipState()
+        val menuTooltipState = rememberTooltipState()
+
         Scaffold(
             modifier = Modifier.fillMaxSize(),
             snackbarHost = { SnackbarHost(hostState = snackBarHostState) },
@@ -123,10 +135,7 @@ class BrowserActivity : BaseActivity() {
                         TopAppBar(
                             title = {
                                 Column(
-                                    modifier = Modifier.clickable {
-                                        clipboardManager.setText(AnnotatedString(url.value))
-                                        showSnackBar("Copied current URL to clipboard!", true)
-                                    },
+                                    modifier = Modifier,
                                     horizontalAlignment = Alignment.Start,
                                     verticalArrangement = Arrangement.Center
                                 ) {
@@ -162,38 +171,112 @@ class BrowserActivity : BaseActivity() {
                                 )
                             },
                             actions = {
-                                IconButton(
-                                    onClick = {
-                                        val sendIntent: Intent = Intent().apply {
-                                            action = Intent.ACTION_SEND
-                                            putExtra(Intent.EXTRA_TEXT, url.value)
-                                            type = "text/plain"
+                                TooltipBox(
+                                    positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
+                                    tooltip = {
+                                        PlainTooltip {
+                                            Text(text = context.getString(R.string.action_refresh))
                                         }
-                                        val shareIntent = Intent.createChooser(sendIntent, null)
-                                        context.startActivity(shareIntent)
                                     },
+                                    state = refreshTooltipState,
                                     content = {
-                                        Icon(
-                                            Icons.Default.Share,
-                                            "Share",
-                                            modifier = Modifier.size(25.dp)
+                                        IconButton(
+                                            onClick = {
+                                                if (!isLoading.value) {
+                                                    webView?.reload()
+                                                }
+                                            },
+                                            content = {
+                                                if (isLoading.value) {
+                                                    CircularProgressIndicator(
+                                                        modifier = Modifier.size(25.dp),
+                                                        strokeWidth = 2.dp
+                                                    )
+                                                } else {
+                                                    Icon(
+                                                        Icons.Default.Refresh,
+                                                        context.getString(R.string.action_refresh)
+                                                    )
+                                                }
+                                            }
                                         )
                                     }
                                 )
-                                IconButton(
-                                    onClick = {
-                                        try {
-                                            context.openLink(
-                                                url.value,
-                                                customTab = false
-                                            )
-                                        } catch (_: Exception) {}
+                                TooltipBox(
+                                    positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
+                                    tooltip = {
+                                        PlainTooltip {
+                                            Text(text = context.getString(R.string.action_menu))
+                                        }
                                     },
+                                    state = menuTooltipState,
                                     content = {
-                                        Icon(
-                                            ImageVector.vectorResource(id = R.drawable.ic_baseline_openinnew_24),
-                                            "Open in default browser",
-                                            modifier = Modifier.size(25.dp)
+                                        IconButton(
+                                            onClick = { isMenuOpened.value = true },
+                                            content = {
+                                                Icon(
+                                                    Icons.Default.MoreVert,
+                                                    context.getString(R.string.action_menu),
+                                                    modifier = Modifier.size(25.dp)
+                                                )
+                                            }
+                                        )
+                                    }
+                                )
+                                DropdownMenu(
+                                    expanded = isMenuOpened.value,
+                                    onDismissRequest = { isMenuOpened.value = false },
+                                    content = {
+                                        DropdownMenuItem(
+                                            leadingIcon = { Icon(
+                                                ImageVector.vectorResource(id = R.drawable.ic_baseline_content_copy_24),
+                                                context.getString(R.string.action_copy),
+                                                modifier = Modifier.size(25.dp)
+                                            ) },
+                                            text = { Text(context.getString(R.string.activity_browser_copylink)) },
+                                            onClick = {
+                                                isMenuOpened.value = false
+
+                                                clipboardManager.setText(AnnotatedString(url.value))
+                                                showSnackBar(context.getString(R.string.activity_browser_copiedlink), true)
+                                            }
+                                        )
+                                        DropdownMenuItem(
+                                            leadingIcon = { Icon(
+                                                Icons.Default.Share,
+                                                context.getString(R.string.action_share),
+                                                modifier = Modifier.size(25.dp)
+                                            ) },
+                                            text = { Text(context.getString(R.string.action_share)) },
+                                            onClick = {
+                                                isMenuOpened.value = false
+
+                                                val sendIntent: Intent = Intent().apply {
+                                                    action = Intent.ACTION_SEND
+                                                    putExtra(Intent.EXTRA_TEXT, url.value)
+                                                    type = "text/plain"
+                                                }
+                                                val shareIntent = Intent.createChooser(sendIntent, null)
+                                                context.startActivity(shareIntent)
+                                            }
+                                        )
+                                        DropdownMenuItem(
+                                            leadingIcon = { Icon(
+                                                ImageVector.vectorResource(id = R.drawable.ic_baseline_openinnew_24),
+                                                context.getString(R.string.activity_browser_openindefaultbrowser),
+                                                modifier = Modifier.size(25.dp)
+                                            ) },
+                                            text = { Text(context.getString(R.string.activity_browser_openindefaultbrowser)) },
+                                            onClick = {
+                                                isMenuOpened.value = false
+
+                                                try {
+                                                    context.openLink(
+                                                        url.value,
+                                                        customTab = false
+                                                    )
+                                                } catch (_: Exception) {}
+                                            }
                                         )
                                     }
                                 )
@@ -207,16 +290,6 @@ class BrowserActivity : BaseActivity() {
                         }
                     }
                 )
-            },
-            floatingActionButton = {
-                if (!isLoading.value) {
-                    FloatingActionButton(onClick = { webView?.reload() }) {
-                        Icon(
-                            Icons.Default.Refresh,
-                            context.getString(R.string.action_refresh)
-                        )
-                    }
-                }
             }
         ) { paddingValues ->
             // Adding a WebView inside AndroidView
@@ -259,7 +332,7 @@ class BrowserActivity : BaseActivity() {
                         this.webChromeClient = object : WebChromeClient() {
                             override fun onReceivedTitle(view: WebView?, tChanged: String?) {
                                 super.onReceivedTitle(view, tChanged)
-                                title.value = tChanged ?: "(unknown)"
+                                title.value = tChanged ?: context.getString(R.string.data_unknown)
                             }
 
                             override fun onProgressChanged(view: WebView?, newProgress: Int) {
@@ -269,6 +342,8 @@ class BrowserActivity : BaseActivity() {
                             }
                         }
                         this.settings.javaScriptEnabled = true
+                        this.settings.builtInZoomControls = true
+                        this.settings.displayZoomControls = false
                         this.settings.setSupportZoom(true)
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                             this.settings.isAlgorithmicDarkeningAllowed = appearanceState.currentAppModeState == ThemeMode.DarkMode

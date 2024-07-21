@@ -16,7 +16,7 @@ android {
         applicationId "io.zoemeow.dutschedule"
         minSdk 21
         targetSdkVersion 35
-        versionCode 1574
+        versionCode 1605
         versionName "2.0-draft19"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"

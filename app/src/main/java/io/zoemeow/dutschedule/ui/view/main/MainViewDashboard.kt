@@ -240,24 +240,24 @@ fun Activity_MainView_Dashboard_Body(
                         }.toList(),
                         opacity = appearanceState.componentOpacity
                     )
-                    AffectedLessonsSummaryItem(
-                        padding = PaddingValues(bottom = 10.dp, start = 15.dp, end = 15.dp),
-                        hasLoggedIn = mainViewModel.accountSession.accountSession.processState.value == ProcessState.Successful,
-                        isLoading = mainViewModel.accountSession.accountSession.processState.value == ProcessState.Running || mainViewModel.accountSession.subjectSchedule.processState.value == ProcessState.Running,
-                        clicked = {
-                            if (mainViewModel.accountSession.accountSession.processState.value != ProcessState.Successful) {
-                                onLoginRequested?.let { it() }
-                            }
-                        },
-                        affectedList = arrayListOf(
-                            "ie1i0921d - i029di12",
-                            "ie1i0921d - i029di12",
-                            "ie1i0921d - i029di12",
-                            "ie1i0921d - i029di12",
-                            "ie1i0921d - i029di12"
-                        ),
-                        opacity = appearanceState.componentOpacity
-                    )
+//                    AffectedLessonsSummaryItem(
+//                        padding = PaddingValues(bottom = 10.dp, start = 15.dp, end = 15.dp),
+//                        hasLoggedIn = mainViewModel.accountSession.accountSession.processState.value == ProcessState.Successful,
+//                        isLoading = mainViewModel.accountSession.accountSession.processState.value == ProcessState.Running || mainViewModel.accountSession.subjectSchedule.processState.value == ProcessState.Running,
+//                        clicked = {
+//                            if (mainViewModel.accountSession.accountSession.processState.value != ProcessState.Successful) {
+//                                onLoginRequested?.let { it() }
+//                            }
+//                        },
+//                        affectedList = arrayListOf(
+//                            "ie1i0921d - i029di12",
+//                            "ie1i0921d - i029di12",
+//                            "ie1i0921d - i029di12",
+//                            "ie1i0921d - i029di12",
+//                            "ie1i0921d - i029di12"
+//                        ),
+//                        opacity = appearanceState.componentOpacity
+//                    )
                 }
 
                 else -> {

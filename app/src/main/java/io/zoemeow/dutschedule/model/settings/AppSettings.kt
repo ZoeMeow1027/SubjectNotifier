@@ -55,6 +55,9 @@ data class AppSettings(
 
     @SerializedName("appsettings.globalvariables.schoolyear")
     val currentSchoolYear: SchoolYearItem = SchoolYearItem(),
+
+    @SerializedName("appsettings.behavor.clicknewsinmain")
+    val openNewsInModalBottomSheet: Boolean = true
 ): Serializable {
     fun clone(
         mainScreenDashboardView: Boolean? = null,
@@ -69,7 +72,8 @@ data class AppSettings(
         newsBackgroundGlobalEnabled: Boolean? = null,
         newsBackgroundSubjectEnabled: Int? = null,
         newsBackgroundParseNewsSubject: Boolean? = null,
-        currentSchoolYear: SchoolYearItem? = null
+        currentSchoolYear: SchoolYearItem? = null,
+        openNewsInModalBottomSheet: Boolean? = null
     ): AppSettings {
         return AppSettings(
             mainScreenDashboardView = mainScreenDashboardView ?: this.mainScreenDashboardView,
@@ -88,7 +92,8 @@ data class AppSettings(
             newsBackgroundGlobalEnabled = newsBackgroundGlobalEnabled ?: this.newsBackgroundGlobalEnabled,
             newsBackgroundSubjectEnabled = newsBackgroundSubjectEnabled ?: this.newsBackgroundSubjectEnabled,
             newsBackgroundParseNewsSubject = newsBackgroundParseNewsSubject ?: this.newsBackgroundParseNewsSubject,
-            currentSchoolYear = currentSchoolYear ?: this.currentSchoolYear
+            currentSchoolYear = currentSchoolYear ?: this.currentSchoolYear,
+            openNewsInModalBottomSheet = openNewsInModalBottomSheet ?: this.openNewsInModalBottomSheet
         )
     }
 }

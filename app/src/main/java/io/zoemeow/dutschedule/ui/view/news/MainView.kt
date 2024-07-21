@@ -1,7 +1,6 @@
 package io.zoemeow.dutschedule.ui.view.news
 
 import android.content.Context
-import android.content.Intent
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -67,6 +66,7 @@ fun Activity_News(
     appearanceState: AppearanceState,
     mainViewModel: MainViewModel,
     searchRequested: (() -> Unit)? = null,
+    onNewsClicked: ((String?, String?) -> Unit)? = null,
     onBack: (() -> Unit)? = null
 ) {
     val pagerState = rememberPagerState(initialPage = 0, pageCount = { 2 })
@@ -234,15 +234,10 @@ fun Activity_News(
                             processState = mainViewModel.newsInstance.newsGlobal.processState.value,
                             opacity = appearanceState.componentOpacity,
                             itemClicked = { newsItem ->
-                                context.startActivity(
-                                    Intent(
-                                        context,
-                                        NewsActivity::class.java
-                                    ).also {
-                                        it.action = NewsActivity.INTENT_NEWSDETAILACTIVITY
-                                        it.putExtra("type", NewsActivity.NEWSTYPE_NEWSGLOBAL)
-                                        it.putExtra("data", Gson().toJson(newsItem))
-                                    })
+                                onNewsClicked?.let { it(
+                                    NewsActivity.NEWSTYPE_NEWSGLOBAL,
+                                    Gson().toJson(newsItem)
+                                ) }
                             },
                             endOfListReached = {
                                 CoroutineScope(Dispatchers.Main).launch {
@@ -263,15 +258,10 @@ fun Activity_News(
                             processState = mainViewModel.newsInstance.newsSubject.processState.value,
                             opacity = appearanceState.componentOpacity,
                             itemClicked = { newsItem ->
-                                context.startActivity(
-                                    Intent(
-                                        context,
-                                        NewsActivity::class.java
-                                    ).also {
-                                        it.action = NewsActivity.INTENT_NEWSDETAILACTIVITY
-                                        it.putExtra("type", NewsActivity.NEWSTYPE_NEWSSUBJECT)
-                                        it.putExtra("data", Gson().toJson(newsItem))
-                                    })
+                                onNewsClicked?.let { it(
+                                    NewsActivity.NEWSTYPE_NEWSSUBJECT,
+                                    Gson().toJson(newsItem)
+                                ) }
                             },
                             endOfListReached = {
                                 CoroutineScope(Dispatchers.Main).launch {

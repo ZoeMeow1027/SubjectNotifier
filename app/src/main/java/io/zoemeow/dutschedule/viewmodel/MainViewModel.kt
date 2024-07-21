@@ -150,11 +150,6 @@ class MainViewModel @Inject constructor(
     ) {
         launchOnScope(
             script = {
-                // App settings
-                appSettings.value = fileModuleRepository.getAppSettings()
-                accountSession.setAccountSession(fileModuleRepository.getAccountSession())
-                accountSession.setSchoolYear(schoolYearItem = appSettings.value.currentSchoolYear)
-
                 // Notification cache
                 notificationHistory.clear()
                 notificationHistory.addAll(fileModuleRepository.getNotificationHistory())
@@ -192,6 +187,11 @@ class MainViewModel @Inject constructor(
     private val _runOnStartup = mutableStateOf(false)
     init {
         if (!_runOnStartup.value) {
+            // App settings
+            appSettings.value = fileModuleRepository.getAppSettings()
+            accountSession.setAccountSession(fileModuleRepository.getAccountSession())
+            accountSession.setSchoolYear(schoolYearItem = appSettings.value.currentSchoolYear)
+
             loadApplicationSettings(
                 onCompleted = {
                     accountSession.reLogin(force = true)

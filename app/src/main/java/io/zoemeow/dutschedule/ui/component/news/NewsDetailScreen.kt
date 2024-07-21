@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.selection.SelectionContainer
@@ -67,7 +68,7 @@ private fun NewsDetailBody_NewsGlobal(
 ) {
     Box(
         modifier = Modifier
-            .fillMaxSize()
+            .wrapContentSize()
             .padding(padding)
             .verticalScroll(rememberScrollState())
     ) {

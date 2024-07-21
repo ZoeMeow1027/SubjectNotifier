@@ -95,14 +95,15 @@ class PermissionsActivity : BaseActivity() {
         val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
 
         Scaffold(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxSize()
                 .nestedScroll(scrollBehavior.nestedScrollConnection),
             snackbarHost = { SnackbarHost(hostState = snackBarHostState) },
             containerColor = appearanceState.containerColor,
             contentColor = appearanceState.contentColor,
             topBar = {
                 LargeTopAppBar(
-                    title = { Text(text = "Permissions request") },
+                    title = { Text(text = context.getString(R.string.activity_permissionrequest_title)) },
                     colors = TopAppBarDefaults.largeTopAppBarColors(containerColor = Color.Transparent, scrolledContainerColor = Color.Transparent),
                     navigationIcon = {
                         IconButton(
@@ -130,7 +131,7 @@ class PermissionsActivity : BaseActivity() {
                         ExtendedFloatingActionButton(
                             onClick = { fabClicked?.let { it() } },
                             icon = { Icon(Icons.Default.Settings, "") },
-                            text = { Text("Open Android app settings") }
+                            text = { Text(context.getString(R.string.activity_permissionrequest_action_openandroidsettings)) }
                         )
                     },
                     actions = {}
@@ -144,8 +145,7 @@ class PermissionsActivity : BaseActivity() {
                         .padding(horizontal = 15.dp),
                     content = {
                         Text(
-                            "Below is all permissions requested by this app. Click a permission to grant that. " +
-                                    "You can deny some permissions if you don't need some app features by open Android app settings.",
+                            context.getString(R.string.activity_permissionrequest_description),
                             modifier = Modifier.padding(vertical = 10.dp),
                             style = MaterialTheme.typography.bodyMedium
                         )
@@ -156,9 +156,11 @@ class PermissionsActivity : BaseActivity() {
                             content = {
                                 permissionStatusList.forEach { item ->
                                     PermissionInformation(
+                                        context = context,
                                         title = item.name,
+                                        permissionCode = item.code,
 //                                        description = "${item.code}\n\n${item.description}",
-                                        description = "\n${item.description}",
+                                        description = item.description,
                                         isRequired = false,
                                         isGranted = item.isGranted,
                                         padding = PaddingValues(bottom = 10.dp),
@@ -166,7 +168,7 @@ class PermissionsActivity : BaseActivity() {
                                         clicked = {
                                             permissionRequest?.let {
                                                 if (item.isGranted) {
-                                                    showSnackBar("You're already granted this permission!", true)
+                                                    showSnackBar(context.getString(R.string.activity_permissionrequest_snackbar_alreadygranted), true)
                                                 } else it(item.code)
                                             }
                                         }
@@ -200,17 +202,16 @@ class PermissionsActivity : BaseActivity() {
         fun getAllPermissions(context: Context): List<PermissionCheckResult> {
             return listOf(
                 checkPermissionNotification(context),
-                checkPermissionManageExternalStorage(),
+                checkPermissionManageExternalStorage(context),
                 checkPermissionScheduleExactAlarm(context)
             )
         }
 
         fun checkPermissionNotification(context: Context): PermissionCheckResult {
             return PermissionCheckResult(
-                name = "Notifications",
+                name = context.getString(R.string.activity_permissionrequest_permission_notification_title),
                 code = "android.permission.POST_NOTIFICATIONS",
-                description = "Allow this app to send new announcements " +
-                        "(news global and news subject) and other for you.",
+                description = context.getString(R.string.activity_permissionrequest_permission_notification_description),
                 isGranted = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                     ContextCompat.checkSelfPermission(
                         context, Manifest.permission.POST_NOTIFICATIONS
@@ -220,13 +221,11 @@ class PermissionsActivity : BaseActivity() {
         }
 
         // https://stackoverflow.com/questions/73620790/android-13-how-to-request-write-external-storage
-        fun checkPermissionManageExternalStorage(): PermissionCheckResult {
+        fun checkPermissionManageExternalStorage(context: Context): PermissionCheckResult {
             return PermissionCheckResult(
-                name = "Manage External Storage",
+                name = context.getString(R.string.activity_permissionrequest_permission_manageexternalstorage_title),
                 code = "android.permission.MANAGE_EXTERNAL_STORAGE",
-                description = "This app will use your current wallpaper as app background wallpaper. " +
-                        "We promise not to upload or modify any data on your device, including your wallpaper. " +
-                        "If you don't want to grant this permission, you can use \"Choose a image from media\" instead.",
+                description = context.getString(R.string.activity_permissionrequest_permission_manageexternalstorage_description),
                 isGranted = when {
                     Build.VERSION.SDK_INT >= Build.VERSION_CODES.R ->
                         Environment.isExternalStorageManager()
@@ -238,9 +237,9 @@ class PermissionsActivity : BaseActivity() {
         fun checkPermissionScheduleExactAlarm(context: Context): PermissionCheckResult {
             val alarmManager: AlarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
             return PermissionCheckResult(
-                name = "Schedule Exact Alarm",
+                name = context.getString(R.string.activity_permissionrequest_permission_scheduleexactalarm_title),
                 code = "android.permission.SCHEDULE_EXACT_ALARM",
-                description = "Allow this app to schedule service to update news in background for you.",
+                description = context.getString(R.string.activity_permissionrequest_permission_scheduleexactalarm_description),
                 isGranted = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                     alarmManager.canScheduleExactAlarms()
                 } else true

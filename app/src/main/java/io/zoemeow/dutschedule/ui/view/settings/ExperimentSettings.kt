@@ -118,6 +118,29 @@ fun Activity_Settings_ExperimentSettings(
                     ContentRegion(
                         modifier = Modifier.padding(top = 10.dp),
                         textModifier = Modifier.padding(horizontal = 20.dp),
+                        text = context.getString(R.string.settings_experiment_category_news),
+                        content = {
+                            OptionSwitchItem(
+                                modifierInside = Modifier.padding(horizontal = 20.dp, vertical = 15.dp),
+                                title = context.getString(R.string.settings_experiment_option_opennewsinpopup),
+                                isVisible = true,
+                                isEnabled = true,
+                                isChecked = mainViewModel.appSettings.value.openNewsInModalBottomSheet,
+                                description = context.getString(R.string.settings_experiment_option_opennewsinpopup_description),
+                                onValueChanged = { value ->
+                                    mainViewModel.appSettings.value =
+                                        mainViewModel.appSettings.value.clone(
+                                            openNewsInModalBottomSheet = value
+                                        )
+                                    mainViewModel.saveApplicationSettings(saveUserSettings = true)
+                                }
+                            )
+                        }
+                    )
+                    DividerItem(padding = PaddingValues(top = 5.dp, bottom = 15.dp))
+                    ContentRegion(
+                        modifier = Modifier.padding(top = 10.dp),
+                        textModifier = Modifier.padding(horizontal = 20.dp),
                         text = context.getString(R.string.settings_experiment_category_appearance),
                         content = {
                             OptionItem(

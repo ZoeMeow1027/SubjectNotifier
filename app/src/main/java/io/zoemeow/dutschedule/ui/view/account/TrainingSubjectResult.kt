@@ -61,7 +61,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import io.dutwrapper.dutwrapper.model.accounts.trainingresult.SubjectResult
+import io.dutwrapper.dutwrapper.AccountInformation
 import io.zoemeow.dutschedule.R
 import io.zoemeow.dutschedule.model.AppearanceState
 import io.zoemeow.dutschedule.model.ProcessState
@@ -98,9 +98,9 @@ fun Activity_Account_TrainingSubjectResult(
     val sheetState = rememberModalBottomSheetState(
         skipPartiallyExpanded = true
     )
-    val selectedSubject = remember { mutableStateOf<SubjectResult?>(null) }
+    val selectedSubject = remember { mutableStateOf<AccountInformation.SubjectResult?>(null) }
 
-    fun subjectResultToMap(item: SubjectResult): Map<String, String?> {
+    fun subjectResultToMap(item: AccountInformation.SubjectResult): Map<String, String?> {
         return mapOf(
             context.getString(R.string.account_trainingstatus_subjectresult_schoolyear) to "${item.schoolYear ?: context.getString(R.string.data_unknown)}${ if (item.isExtendedSemester) " (${context.getString(R.string.account_trainingstatus_subjectresult_schoolyear_insummer)})" else "" }",
             context.getString(R.string.account_trainingstatus_subjectresult_subjectcode) to (item.id ?: context.getString(R.string.data_unknown)),
@@ -123,7 +123,7 @@ fun Activity_Account_TrainingSubjectResult(
                     item.resultT10
                 ) else context.getString(R.string.data_noscore),
                 if (item.resultT4 != null) String.format(Locale.ROOT, "%.2f", item.resultT4) else context.getString(R.string.data_noscore),
-                if (item.resultByCharacter.isNullOrEmpty()) "(${context.getString(R.string.data_noscore)})" else item.resultByCharacter
+                if (item.resultByChar.isNullOrEmpty()) "(${context.getString(R.string.data_noscore)})" else item.resultByChar
             )
         )
     }

@@ -8,7 +8,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import io.dutwrapper.dutwrapper.model.accounts.SubjectScheduleItem
+import io.dutwrapper.dutwrapper.AccountInformation.SubjectInformation
 import io.zoemeow.dutschedule.R
 import io.zoemeow.dutschedule.model.CustomClock
 import java.util.Locale
@@ -18,7 +18,7 @@ fun LessonTodaySummaryItem(
     context: Context,
     hasLoggedIn: Boolean = false,
     isLoading: Boolean = false,
-    affectedList: List<SubjectScheduleItem> = listOf(),
+    affectedList: List<SubjectInformation> = listOf(),
     padding: PaddingValues = PaddingValues(),
     clicked: () -> Unit,
     opacity: Float = 1.0f
@@ -43,7 +43,7 @@ fun LessonTodaySummaryItem(
                                     Locale.ROOT,
                                     "%s (%s)",
                                     item.name,
-                                    item.subjectStudy.scheduleList.filter { it.lesson.end >= currentLesson.lesson }.joinToString(
+                                    item.scheduleStudy.scheduleList.filter { it.lesson.end >= currentLesson.lesson }.joinToString(
                                         separator = ", ",
                                         transform = { String.format(Locale.ROOT, "%d-%d", it.lesson.start, it.lesson.end) }
                                     )

@@ -3,10 +3,10 @@ package io.zoemeow.dutschedule.model.account
 import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
-import io.dutwrapper.dutwrapper.model.accounts.AccountInformation
-import io.dutwrapper.dutwrapper.model.accounts.SubjectFeeItem
-import io.dutwrapper.dutwrapper.model.accounts.SubjectScheduleItem
-import io.dutwrapper.dutwrapper.model.accounts.trainingresult.AccountTrainingStatus
+import io.dutwrapper.dutwrapper.AccountInformation.StudentInformation
+import io.dutwrapper.dutwrapper.AccountInformation.SubjectFee
+import io.dutwrapper.dutwrapper.AccountInformation.SubjectInformation
+import io.dutwrapper.dutwrapper.AccountInformation.TrainingStatus
 import io.zoemeow.dutschedule.model.ProcessState
 import io.zoemeow.dutschedule.model.VariableListState
 import io.zoemeow.dutschedule.model.VariableState
@@ -40,10 +40,10 @@ class DUTAccountInstance(
     @Suppress("KDocUnresolvedReference")
     val accountSession: VariableState<AccountSession> = VariableState(data = mutableStateOf(null))
     private val schoolYear: MutableState<SchoolYearItem?> = mutableStateOf(null)
-    val subjectSchedule: VariableListState<SubjectScheduleItem> = VariableListState()
-    val subjectFee: VariableListState<SubjectFeeItem> = VariableListState()
-    val accountInformation: VariableState<AccountInformation> = VariableState(data = mutableStateOf(null))
-    val accountTrainingStatus: VariableState<AccountTrainingStatus> = VariableState(data = mutableStateOf(null))
+    val subjectSchedule: VariableListState<SubjectInformation> = VariableListState()
+    val subjectFee: VariableListState<SubjectFee> = VariableListState()
+    val accountInformation: VariableState<StudentInformation> = VariableState(data = mutableStateOf(null))
+    val accountTrainingStatus: VariableState<TrainingStatus> = VariableState(data = mutableStateOf(null))
 
     private fun checkVariable(): Boolean {
         return when {
@@ -65,12 +65,12 @@ class DUTAccountInstance(
         this.accountSession.data.value = accountSession.clone()
     }
 
-    fun setSubjectScheduleCache(data: List<SubjectScheduleItem>) {
+    fun setSubjectScheduleCache(data: List<SubjectInformation>) {
         this.subjectSchedule.data.clear()
         this.subjectSchedule.data.addAll(data)
     }
 
-    fun getSubjectScheduleCache(): List<SubjectScheduleItem> {
+    fun getSubjectScheduleCache(): List<SubjectInformation> {
         return this.subjectSchedule.data.toList()
     }
 

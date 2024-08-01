@@ -6,7 +6,13 @@
 ## Known issues
 - `Your current wallpaper` option in app background settings will be disabled on Android 14 and later. You can check why in `Issue` tab in repository.
 
-## 2.0-draft19 (1467)
+## 2.0-draft20 (1638) (Working in progress)
+- [Imporvement] Updated dependencies to latest.
+  - [Change] Need to modify any file to update functions about `dutwrapper` dependency.
+- [Change] This application will no longer direct links when URL Protocol is used (ex: example://,...).
+  - A option that enable them will be available in future version.
+
+## 2.0-draft19 (1605)
 - [Rework] Account Training Subject Result screen.
 - [Improve] Update dependencies to latest.
   - This will resolve crash app when sv.dut.udn.vn is not reachable.

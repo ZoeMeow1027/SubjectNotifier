@@ -7,10 +7,8 @@ import android.content.Intent
 import android.os.Build
 import android.util.Log
 import com.google.gson.Gson
-import io.dutwrapper.dutwrapper.model.enums.LessonStatus
-import io.dutwrapper.dutwrapper.model.enums.NewsType
-import io.dutwrapper.dutwrapper.model.news.NewsGlobalItem
-import io.dutwrapper.dutwrapper.model.news.NewsSubjectItem
+import io.dutwrapper.dutwrapper.News
+import io.dutwrapper.dutwrapper.News.NewsItem
 import io.zoemeow.dutschedule.R
 import io.zoemeow.dutschedule.activity.NewsActivity
 import io.zoemeow.dutschedule.activity.PermissionsActivity
@@ -318,7 +316,7 @@ class NewsBackgroundUpdateService : BaseService(
                 val anyMatch = newsList.any { newsSourceItem ->
                     newsSourceItem.date == newsTargetItem.date
                             && newsSourceItem.title == newsTargetItem.title
-                            && newsSourceItem.contentString == newsTargetItem.contentString
+                            && newsSourceItem.content == newsTargetItem.content
                 }
                 val anyNeedUpdated = newsList.any { newsSourceItem ->
                     newsSourceItem.date == newsTargetItem.date
@@ -437,7 +435,7 @@ class NewsBackgroundUpdateService : BaseService(
                 val anyMatch = newsList.any { newsSourceItem ->
                     newsSourceItem.date == newsTargetItem.date
                             && newsSourceItem.title == newsTargetItem.title
-                            && newsSourceItem.contentString == newsTargetItem.contentString
+                            && newsSourceItem.content == newsTargetItem.content
                 }
                 val anyNeedUpdated = newsList.any { newsSourceItem ->
                     newsSourceItem.date == newsTargetItem.date
@@ -541,14 +539,14 @@ class NewsBackgroundUpdateService : BaseService(
 
     private fun notifyNewsGlobal(
         context: Context,
-        newsItem: NewsGlobalItem
+        newsItem: NewsItem
     ) {
         // Add to notification list
         addToNotificationList(
             title = newsItem.title,
-            description = newsItem.contentString,
+            description = newsItem.content,
             newsDate = newsItem.date,
-            type = NewsType.Global,
+            type = News.NewsType.Global,
             jsonData = Gson().toJson(newsItem)
         )
 
@@ -565,7 +563,7 @@ class NewsBackgroundUpdateService : BaseService(
 
     private fun notifyNewsSubject(
         context: Context,
-        newsItem: NewsSubjectItem
+        newsItem: News.NewsSubjectItem
     ) {
         if (settings.newsBackgroundParseNewsSubject) {
             // Affected classrooms
@@ -591,7 +589,7 @@ class NewsBackgroundUpdateService : BaseService(
 
             // Title will make announcement about lecturer and subjects
             val notifyTitle = when (newsItem.lessonStatus) {
-                LessonStatus.Leaving -> {
+                News.LessonStatus.Leaving -> {
                     context.getString(
                         R.string.service_newsbackgroundservice_newssubject_title_noannouncement,
                         context.getString(R.string.service_newsbackgroundservice_newssubject_title_noannouncement_leaving),
@@ -599,7 +597,7 @@ class NewsBackgroundUpdateService : BaseService(
                         affectedClassrooms
                     )
                 }
-                LessonStatus.MakeUp -> {
+                News.LessonStatus.MakeUpLesson -> {
                     context.getString(
                         R.string.service_newsbackgroundservice_newssubject_title_noannouncement,
                         context.getString(R.string.service_newsbackgroundservice_newssubject_title_noannouncement_makeup),
@@ -619,8 +617,8 @@ class NewsBackgroundUpdateService : BaseService(
             val notifyContentList = arrayListOf<String>()
             // Date and lessons
             if (
-                newsItem.lessonStatus == LessonStatus.Leaving ||
-                newsItem.lessonStatus == LessonStatus.MakeUp
+                newsItem.lessonStatus == News.LessonStatus.Leaving ||
+                newsItem.lessonStatus == News.LessonStatus.MakeUpLesson
             ) {
                 // Date & lessons
                 notifyContentList.add(
@@ -631,7 +629,7 @@ class NewsBackgroundUpdateService : BaseService(
                     )
                 )
                 // Make-up room
-                if (newsItem.lessonStatus == LessonStatus.MakeUp) {
+                if (newsItem.lessonStatus == News.LessonStatus.MakeUpLesson) {
                     // Make up in room
                     notifyContentList.add(
                         context.getString(
@@ -641,7 +639,7 @@ class NewsBackgroundUpdateService : BaseService(
                     )
                 }
             } else {
-                notifyContentList.add(newsItem.contentString)
+                notifyContentList.add(newsItem.content)
             }
 
             // TODO: Add to notification list - Disabled due to not excluding here
@@ -678,7 +676,7 @@ class NewsBackgroundUpdateService : BaseService(
                 channelId = "notification.id.news.subject",
                 newsMD5 = "${newsItem.date}_${newsItem.title}".calcMD5(),
                 newsTitle = newsItem.title,
-                newsDescription = newsItem.contentString,
+                newsDescription = newsItem.content,
                 jsonData = Gson().toJson(newsItem)
             )
         }
@@ -688,7 +686,7 @@ class NewsBackgroundUpdateService : BaseService(
         title: String,
         description: String,
         newsDate: Long,
-        type: NewsType,
+        type: News.NewsType,
         jsonData: String
     ) {
         // Load notification history
@@ -699,15 +697,15 @@ class NewsBackgroundUpdateService : BaseService(
             title = title,
             description = description,
             tag = when (type) {
-                NewsType.Global -> 1
-                NewsType.Subject -> 2
+                News.NewsType.Global -> 1
+                News.NewsType.Subject -> 2
                 else -> 0
             },
             timestamp = newsDate,
             parameters = mapOf(
                 "type" to when (type) {
-                    NewsType.Global -> NewsActivity.NEWSTYPE_NEWSGLOBAL
-                    NewsType.Subject -> NewsActivity.NEWSTYPE_NEWSSUBJECT
+                    News.NewsType.Global -> NewsActivity.NEWSTYPE_NEWSGLOBAL
+                    News.NewsType.Subject -> NewsActivity.NEWSTYPE_NEWSSUBJECT
                     else -> ""
                 },
                 "data" to jsonData

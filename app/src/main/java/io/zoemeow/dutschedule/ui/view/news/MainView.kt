@@ -45,7 +45,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.google.gson.Gson
-import io.dutwrapper.dutwrapper.model.news.NewsGlobalItem
+import io.dutwrapper.dutwrapper.News.NewsItem
 import io.zoemeow.dutschedule.R
 import io.zoemeow.dutschedule.activity.NewsActivity
 import io.zoemeow.dutschedule.model.AppearanceState
@@ -254,7 +254,7 @@ fun Activity_News(
 
                     1 -> {
                         (NewsListPage(
-                            newsList = mainViewModel.newsInstance.newsSubject.data.toList() as List<NewsGlobalItem>,
+                            newsList = mainViewModel.newsInstance.newsSubject.data.toList() as List<NewsItem>,
                             processState = mainViewModel.newsInstance.newsSubject.processState.value,
                             opacity = appearanceState.componentOpacity,
                             itemClicked = { newsItem ->

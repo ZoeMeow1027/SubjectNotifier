@@ -19,17 +19,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import io.dutwrapper.dutwrapper.model.news.NewsGlobalItem
+import io.dutwrapper.dutwrapper.News.NewsItem
 import io.zoemeow.dutschedule.model.ProcessState
 import io.zoemeow.dutschedule.utils.CustomDateUtil
 import io.zoemeow.dutschedule.utils.endOfListReached
 
 @Composable
 fun NewsListPage(
-    newsList: List<NewsGlobalItem> = listOf(),
+    newsList: List<NewsItem> = listOf(),
     processState: ProcessState = ProcessState.NotRunYet,
     endOfListReached: (() -> Unit)? = null,
-    itemClicked: ((NewsGlobalItem) -> Unit)? = null,
+    itemClicked: ((NewsItem) -> Unit)? = null,
     lazyListState: LazyListState = rememberLazyListState(),
     opacity: Float = 1f
 ) {
@@ -66,7 +66,7 @@ fun NewsListPage(
                                 items (newsGroup.value) { newsItem ->
                                     NewsListItem(
                                         title = newsItem.title ?: "",
-                                        description = newsItem.contentString ?: "",
+                                        description = newsItem.content ?: "",
                                         opacity = opacity,
                                         onClick = {
                                             itemClicked?.let { it(newsItem) }

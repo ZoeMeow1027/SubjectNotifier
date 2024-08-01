@@ -3,8 +3,8 @@ package io.zoemeow.dutschedule.repository
 import android.content.Context
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import io.dutwrapper.dutwrapper.model.accounts.SubjectScheduleItem
-import io.dutwrapper.dutwrapper.model.utils.DutSchoolYearItem
+import io.dutwrapper.dutwrapper.AccountInformation.SubjectInformation
+import io.dutwrapper.dutwrapper.Utils
 import io.zoemeow.dutschedule.model.NotificationHistory
 import io.zoemeow.dutschedule.model.account.AccountSession
 import io.zoemeow.dutschedule.model.news.NewsGlobalItem
@@ -13,6 +13,7 @@ import io.zoemeow.dutschedule.model.news.NewsSubjectItem
 import io.zoemeow.dutschedule.model.settings.AppSettings
 import java.io.File
 
+@Suppress("PrivatePropertyName", "SpellCheckingInspection")
 class FileModuleRepository(
     context: Context
 ) {
@@ -201,14 +202,14 @@ class FileModuleRepository(
         file.writeText(Gson().toJson(data))
     }
 
-    fun getAccountSubjectScheduleCache(): ArrayList<SubjectScheduleItem> {
+    fun getAccountSubjectScheduleCache(): ArrayList<SubjectInformation> {
         val file = File(PATH_ACCOUNT_SUBJECTSCHEDULE_CACHE)
         try {
             file.bufferedReader().apply {
                 val text = this.use { it.readText() }
-                val objItem = Gson().fromJson<ArrayList<SubjectScheduleItem>>(
+                val objItem = Gson().fromJson<ArrayList<SubjectInformation>>(
                     text,
-                    (object : TypeToken<ArrayList<SubjectScheduleItem>>() {}.type)
+                    (object : TypeToken<ArrayList<SubjectInformation>>() {}.type)
                 )
                 this.close()
                 return objItem
@@ -219,7 +220,7 @@ class FileModuleRepository(
         }
     }
 
-    fun saveAccountSubjectScheduleCache(data: ArrayList<SubjectScheduleItem>) {
+    fun saveAccountSubjectScheduleCache(data: ArrayList<SubjectInformation>) {
         val file = File(PATH_ACCOUNT_SUBJECTSCHEDULE_CACHE)
         file.writeText(Gson().toJson(data))
     }
@@ -242,7 +243,7 @@ class FileModuleRepository(
         }
     }
 
-    fun saveCurrentSchoolYearCache(data: DutSchoolYearItem?, lastRequest: Long) {
+    fun saveCurrentSchoolYearCache(data: Utils.DutSchoolYearItem?, lastRequest: Long) {
         val file = File(PATH_SCHOOLYEAR_CACHE)
         val dataMap = mapOf("data" to Gson().toJson(data), "lastrequest" to lastRequest)
         file.writeText(Gson().toJson(dataMap))

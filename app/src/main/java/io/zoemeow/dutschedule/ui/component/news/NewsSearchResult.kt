@@ -17,7 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import io.dutwrapper.dutwrapper.model.news.NewsGlobalItem
+import io.dutwrapper.dutwrapper.News.NewsItem
 import io.zoemeow.dutschedule.R
 import io.zoemeow.dutschedule.model.ProcessState
 import io.zoemeow.dutschedule.utils.endOfListReached
@@ -26,12 +26,12 @@ import io.zoemeow.dutschedule.utils.endOfListReached
 fun NewsSearchResult(
     context: Context,
     modifier: Modifier = Modifier,
-    newsList: List<NewsGlobalItem>,
+    newsList: List<NewsItem>,
     lazyListState: LazyListState,
     opacity: Float = 1f,
     processState: ProcessState,
     onEndOfList: (() -> Unit)? = null,
-    onItemClicked: ((NewsGlobalItem) -> Unit)? = null
+    onItemClicked: ((NewsItem) -> Unit)? = null
 ) {
     Column(modifier = modifier) {
         if (processState == ProcessState.Running) {
@@ -86,7 +86,7 @@ fun NewsSearchResult(
                     items(newsList) { item ->
                         NewsListItem(
                             title = item.title,
-                            description = item.contentString,
+                            description = item.content,
                             dateTime = item.date,
                             opacity = opacity,
                             onClick = {

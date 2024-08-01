@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -15,13 +14,12 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import io.dutwrapper.dutwrapper.model.accounts.SubjectFeeItem
+import io.dutwrapper.dutwrapper.AccountInformation.SubjectFee
 import io.zoemeow.dutschedule.GlobalVariables
 import io.zoemeow.dutschedule.R
 import io.zoemeow.dutschedule.ui.component.base.Tag
@@ -30,7 +28,7 @@ import io.zoemeow.dutschedule.ui.component.base.Tag
 @Composable
 fun AccountSubjectFeeInformation(
     modifier: Modifier = Modifier,
-    item: SubjectFeeItem,
+    item: SubjectFee,
     onClick: (() -> Unit)? = null,
     opacity: Float = 1f
 ) {

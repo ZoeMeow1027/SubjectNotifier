@@ -38,7 +38,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.gson.Gson
-import io.dutwrapper.dutwrapper.model.enums.NewsType
+import io.dutwrapper.dutwrapper.News
 import io.zoemeow.dutschedule.R
 import io.zoemeow.dutschedule.activity.NewsActivity
 import io.zoemeow.dutschedule.model.AppearanceState
@@ -175,7 +175,7 @@ fun Activity_News_NewsSearch(
                             NewsActivity::class.java
                         ).also {
                             it.action = NewsActivity.INTENT_NEWSDETAILACTIVITY
-                            it.putExtra("type", if (newsSearchViewModel.type.value == NewsType.Subject) NewsActivity.NEWSTYPE_NEWSSUBJECT else NewsActivity.NEWSTYPE_NEWSGLOBAL)
+                            it.putExtra("type", if (newsSearchViewModel.type.value == News.NewsType.Subject) NewsActivity.NEWSTYPE_NEWSSUBJECT else NewsActivity.NEWSTYPE_NEWSGLOBAL)
                             it.putExtra("data", Gson().toJson(item))
                         })
                 }

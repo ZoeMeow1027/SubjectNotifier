@@ -24,23 +24,21 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.unit.dp
-import io.dutwrapper.dutwrapper.model.enums.LessonStatus
-import io.dutwrapper.dutwrapper.model.enums.NewsType
-import io.dutwrapper.dutwrapper.model.news.NewsGlobalItem
-import io.dutwrapper.dutwrapper.model.news.NewsSubjectItem
+import io.dutwrapper.dutwrapper.News
+import io.dutwrapper.dutwrapper.News.NewsItem
 import io.zoemeow.dutschedule.R
 import io.zoemeow.dutschedule.utils.CustomDateUtil
 
 @Composable
 fun NewsDetailScreen(
     context: Context,
-    newsItem: NewsGlobalItem,
-    newsType: NewsType,
+    newsItem: NewsItem,
+    newsType: News.NewsType,
     padding: PaddingValues = PaddingValues(0.dp),
     linkClicked: ((String) -> Unit)? = null
 ) {
     when (newsType) {
-        NewsType.Global -> {
+        News.NewsType.Global -> {
             NewsDetailBody_NewsGlobal(
                 context = context,
                 padding = padding,
@@ -48,11 +46,11 @@ fun NewsDetailScreen(
                 linkClicked = linkClicked
             )
         }
-        NewsType.Subject -> {
+        News.NewsType.Subject -> {
             NewsDetailBody_NewsSubject(
                 context = context,
                 padding = padding,
-                newsItem = newsItem as NewsSubjectItem,
+                newsItem = newsItem as News.NewsSubjectItem,
                 linkClicked = linkClicked
             )
         }
@@ -63,7 +61,7 @@ fun NewsDetailScreen(
 private fun NewsDetailBody_NewsGlobal(
     context: Context,
     padding: PaddingValues,
-    newsItem: NewsGlobalItem,
+    newsItem: NewsItem,
     linkClicked: ((String) -> Unit)? = null
 ) {
     Box(
@@ -101,20 +99,20 @@ private fun NewsDetailBody_NewsGlobal(
                 modifier = Modifier.padding(bottom = 10.dp)
             )
             val annotatedString = buildAnnotatedString {
-                if (newsItem.contentString != null) {
+                if (newsItem.content != null) {
                     // Parse all string to annotated string.
-                    append(newsItem.contentString)
+                    append(newsItem.content)
                     // Adjust color for annotated string to follow system mode.
                     addStyle(
                         style = SpanStyle(color = MaterialTheme.colorScheme.inverseSurface),
                         start = 0,
-                        end = newsItem.contentString.length
+                        end = newsItem.content.length
                     )
                     // Adjust for detected link.
-                    newsItem.links?.forEach {
+                    newsItem.resources?.forEach {
                         addStringAnnotation(
                             tag = it.position!!.toString(),
-                            annotation = it.url!!,
+                            annotation = it.content!!,
                             start = it.position,
                             end = it.position + it.text!!.length
                         )
@@ -132,7 +130,7 @@ private fun NewsDetailBody_NewsGlobal(
                     style = MaterialTheme.typography.bodyLarge,
                     onClick = {
                         try {
-                            newsItem.links?.forEach { item ->
+                            newsItem.resources?.forEach { item ->
                                 annotatedString
                                     .getStringAnnotations(item.position!!.toString(), it, it)
                                     .firstOrNull()
@@ -166,7 +164,7 @@ private fun NewsDetailBody_NewsGlobal(
 private fun NewsDetailBody_NewsSubject(
     context: Context,
     padding: PaddingValues,
-    newsItem: NewsSubjectItem,
+    newsItem: News.NewsSubjectItem,
     linkClicked: ((String) -> Unit)? = null
 ) {
     val optionsScrollState = rememberScrollState()
@@ -242,16 +240,16 @@ private fun NewsDetailBody_NewsSubject(
             )
             // Affecting lessons, hour, room.
             if (arrayListOf(
-                    LessonStatus.Leaving,
-                    LessonStatus.MakeUp
+                    News.LessonStatus.Leaving,
+                    News.LessonStatus.MakeUpLesson
                 ).contains(newsItem.lessonStatus)
             ) {
                 Text(
                     text = context.getString(
                         R.string.news_detail_newssubject_subjectstatus,
                         when (newsItem.lessonStatus) {
-                            LessonStatus.Leaving -> context.getString(R.string.news_detail_newssubject_subjectstatus_leaving)
-                            LessonStatus.MakeUp -> context.getString(R.string.news_detail_newssubject_subjectstatus_makeup)
+                            News.LessonStatus.Leaving -> context.getString(R.string.news_detail_newssubject_subjectstatus_leaving)
+                            News.LessonStatus.MakeUpLesson -> context.getString(R.string.news_detail_newssubject_subjectstatus_makeup)
                             else -> context.getString(R.string.news_detail_newssubject_subjectstatus_unknown)
                         }
                     ),
@@ -273,7 +271,7 @@ private fun NewsDetailBody_NewsSubject(
                     ),
                     style = MaterialTheme.typography.bodyLarge,
                 )
-                if (newsItem.lessonStatus == LessonStatus.MakeUp) {
+                if (newsItem.lessonStatus == News.LessonStatus.MakeUpLesson) {
                     Spacer(modifier = Modifier.size(5.dp))
                     Text(
                         text = context.getString(
@@ -290,20 +288,20 @@ private fun NewsDetailBody_NewsSubject(
                 )
             }
             val annotatedString = buildAnnotatedString {
-                if (newsItem.contentString != null) {
+                if (newsItem.content != null) {
                     // Parse all string to annotated string.
-                    append(newsItem.contentString)
+                    append(newsItem.content)
                     // Adjust color for annotated string to follow system mode.
                     addStyle(
                         style = SpanStyle(color = MaterialTheme.colorScheme.inverseSurface),
                         start = 0,
-                        end = newsItem.contentString.length
+                        end = newsItem.content.length
                     )
                     // Adjust for detected link.
-                    newsItem.links?.forEach {
+                    newsItem.resources?.forEach {
                         addStringAnnotation(
                             tag = it.position!!.toString(),
-                            annotation = it.url!!,
+                            annotation = it.content!!,
                             start = it.position,
                             end = it.position + it.text!!.length
                         )
@@ -321,7 +319,7 @@ private fun NewsDetailBody_NewsSubject(
                     style = MaterialTheme.typography.bodyLarge,
                     onClick = {
                         try {
-                            newsItem.links?.forEach { item ->
+                            newsItem.resources?.forEach { item ->
                                 annotatedString
                                     .getStringAnnotations(
                                         item.position!!.toString(),

@@ -1,7 +1,7 @@
 package io.zoemeow.dutschedule.model.account
 
 import com.google.gson.annotations.SerializedName
-import io.dutwrapper.dutwrapper.Account
+import io.dutwrapper.dutwrapper.Accounts
 import java.io.Serializable
 
 data class AccountSession(
@@ -36,8 +36,8 @@ data class AccountSession(
         )
     }
 
-    fun toAccountSessionSuper(): Account.Session {
-        return Account.Session(
+    fun toAccountSessionSuper(): Accounts.Session {
+        return Accounts.Session(
             sessionId,
             viewState,
             viewStateGenerator

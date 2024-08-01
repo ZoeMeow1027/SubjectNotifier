@@ -321,8 +321,9 @@ class BrowserActivity : BaseActivity() {
                                     // Otherwise allow the OS to handle things like tel, mailto, etc.
                                     request?.let { req ->
                                         try {
-                                            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(req.url?.toString()))
-                                            context.startActivity(intent)
+//                                            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(req.url?.toString()))
+//                                            context.startActivity(intent)
+                                            // TODO: User choice about pass this url protocol to app activity
                                         } catch (_: Exception) {}
                                     }
                                     return true

@@ -33,7 +33,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import io.dutwrapper.dutwrapper.model.accounts.SubjectScheduleItem
+import io.dutwrapper.dutwrapper.AccountInformation.SubjectInformation
 import io.zoemeow.dutschedule.R
 import io.zoemeow.dutschedule.model.AppearanceState
 import io.zoemeow.dutschedule.model.ProcessState
@@ -51,7 +51,7 @@ fun Activity_Account_SubjectInformation(
     onMessageReceived: (String, Boolean, String?, (() -> Unit)?) -> Unit, // (msg, forceDismissBefore, actionText, action)
     onBack: () -> Unit
 ) {
-    val subjectScheduleItem: MutableState<SubjectScheduleItem?> = remember { mutableStateOf(null) }
+    val subjectScheduleItem: MutableState<SubjectInformation?> = remember { mutableStateOf(null) }
     val subjectDetailVisible = remember { mutableStateOf(false) }
 
     Scaffold(

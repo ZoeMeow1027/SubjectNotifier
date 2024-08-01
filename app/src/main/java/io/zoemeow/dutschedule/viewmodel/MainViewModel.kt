@@ -9,7 +9,6 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.dutwrapper.dutwrapper.Utils
-import io.dutwrapper.dutwrapper.model.utils.DutSchoolYearItem
 import io.zoemeow.dutschedule.model.NotificationHistory
 import io.zoemeow.dutschedule.model.ProcessState
 import io.zoemeow.dutschedule.model.VariableState
@@ -58,7 +57,7 @@ class MainViewModel @Inject constructor(
         }
     )
 
-    val currentSchoolYearWeek = VariableState<DutSchoolYearItem?>(
+    val currentSchoolYearWeek = VariableState<Utils.DutSchoolYearItem?>(
         data = mutableStateOf(null)
     )
 
@@ -173,7 +172,7 @@ class MainViewModel @Inject constructor(
                         try {
                             currentSchoolYearWeek.data.value = Gson().fromJson(
                                 it["data"] ?: "",
-                                (object : TypeToken<DutSchoolYearItem?>() {}.type)
+                                (object : TypeToken<Utils.DutSchoolYearItem?>() {}.type)
                             )
                             currentSchoolYearWeek.lastRequest.longValue = (it["lastrequest"] ?: "0").toLong()
                         } catch (_: Exception) { }

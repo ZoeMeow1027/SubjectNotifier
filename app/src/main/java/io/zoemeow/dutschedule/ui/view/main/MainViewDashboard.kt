@@ -232,8 +232,8 @@ fun Activity_MainView_Dashboard_Body(
                             }
                         },
                         affectedList = mainViewModel.accountSession.subjectSchedule.data.filter { subSch ->
-                            subSch.subjectStudy.scheduleList.any { schItem -> schItem.dayOfWeek + 1 == CustomDateUtil.getCurrentDayOfWeek() } &&
-                                    subSch.subjectStudy.scheduleList.any { schItem ->
+                            subSch.scheduleStudy.scheduleList.any { schItem -> schItem.dayOfWeek + 1 == CustomDateUtil.getCurrentDayOfWeek() } &&
+                                    subSch.scheduleStudy.scheduleList.any { schItem ->
                                         schItem.lesson.end >= CustomClock.getCurrent()
                                             .toDUTLesson2().lesson
                                     }

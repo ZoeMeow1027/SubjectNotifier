@@ -26,9 +26,9 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import io.dutwrapper.dutwrapper.model.enums.NewsType
-import io.dutwrapper.dutwrapper.model.news.NewsGlobalItem
-import io.dutwrapper.dutwrapper.model.news.NewsSubjectItem
+import io.dutwrapper.dutwrapper.News
+import io.dutwrapper.dutwrapper.News.NewsItem
+import io.dutwrapper.dutwrapper.News.NewsSubjectItem
 import io.zoemeow.dutschedule.R
 import io.zoemeow.dutschedule.activity.NewsActivity
 import io.zoemeow.dutschedule.model.AppearanceState
@@ -106,8 +106,8 @@ fun Activity_News_NewsDetail(
                     NewsDetailScreen(
                         context = context,
                         padding = it,
-                        newsItem = Gson().fromJson(newsData, object : TypeToken<NewsGlobalItem>() {}.type),
-                        newsType = NewsType.Global,
+                        newsItem = Gson().fromJson(newsData, object : TypeToken<NewsItem>() {}.type),
+                        newsType = News.NewsType.Global,
                         linkClicked = { link ->
                             onLinkClicked?.let { it(link) }
                         }
@@ -117,8 +117,8 @@ fun Activity_News_NewsDetail(
                     NewsDetailScreen(
                         context = context,
                         padding = it,
-                        newsItem = Gson().fromJson(newsData, object : TypeToken<NewsSubjectItem>() {}.type) as NewsGlobalItem,
-                        newsType = NewsType.Subject,
+                        newsItem = Gson().fromJson(newsData, object : TypeToken<NewsSubjectItem>() {}.type) as NewsItem,
+                        newsType = News.NewsType.Subject,
                         linkClicked = { link ->
                             onLinkClicked?.let { it(link) }
                         }

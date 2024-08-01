@@ -1,18 +1,11 @@
 package io.zoemeow.dutschedule.ui.component.news
 
 import android.content.Context
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.waterfall
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Clear
@@ -24,7 +17,6 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -37,9 +29,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import io.dutwrapper.dutwrapper.model.enums.NewsType
-import io.dutwrapper.dutwrapper.model.news.NewsGlobalItem
-import io.dutwrapper.dutwrapper.model.news.NewsSubjectItem
+import io.dutwrapper.dutwrapper.News
+import io.dutwrapper.dutwrapper.News.NewsItem
 import io.zoemeow.dutschedule.R
 import io.zoemeow.dutschedule.activity.NewsActivity
 import io.zoemeow.dutschedule.model.AppearanceState
@@ -130,8 +121,8 @@ fun NewsPopup(
                             NewsDetailScreen(
                                 context = context,
                                 padding = paddingValues,
-                                newsItem = Gson().fromJson(newsData, object : TypeToken<NewsGlobalItem>() {}.type),
-                                newsType = NewsType.Global,
+                                newsItem = Gson().fromJson(newsData, object : TypeToken<NewsItem>() {}.type),
+                                newsType = News.NewsType.Global,
                                 linkClicked = { link ->
                                     onLinkClicked?.let { it(link) }
                                 }
@@ -141,8 +132,8 @@ fun NewsPopup(
                             NewsDetailScreen(
                                 context = context,
                                 padding = paddingValues,
-                                newsItem = Gson().fromJson(newsData, object : TypeToken<NewsSubjectItem>() {}.type) as NewsGlobalItem,
-                                newsType = NewsType.Subject,
+                                newsItem = Gson().fromJson(newsData, object : TypeToken<News.NewsSubjectItem>() {}.type) as NewsItem,
+                                newsType = News.NewsType.Subject,
                                 linkClicked = { link ->
                                     onLinkClicked?.let { it(link) }
                                 }

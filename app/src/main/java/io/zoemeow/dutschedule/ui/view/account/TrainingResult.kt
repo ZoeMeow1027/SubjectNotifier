@@ -242,11 +242,11 @@ fun Activity_Account_TrainingResult(
                                                     content = {
                                                         CheckboxOption(
                                                             title = context.getString(R.string.account_trainingstatus_graduatebox_certandgraduateresult_havepe),
-                                                            isChecked = it.graduateStatus?.hasSigGDTC == true
+                                                            isChecked = it.graduateStatus?.hasSigPhysicalEducation == true
                                                         )
                                                         CheckboxOption(
                                                             title = context.getString(R.string.account_trainingstatus_graduatebox_certandgraduateresult_havende),
-                                                            isChecked = it.graduateStatus?.hasSigGDQP == true
+                                                            isChecked = it.graduateStatus?.hasSigNationalDefenseEducation == true
                                                         )
                                                         CheckboxOption(
                                                             title = context.getString(R.string.account_trainingstatus_graduatebox_certandgraduateresult_haveenglish),

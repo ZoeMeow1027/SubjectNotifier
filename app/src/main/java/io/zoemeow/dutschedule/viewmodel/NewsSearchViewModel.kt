@@ -6,9 +6,8 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.dutwrapper.dutwrapper.model.enums.NewsSearchType
-import io.dutwrapper.dutwrapper.model.enums.NewsType
-import io.dutwrapper.dutwrapper.model.news.NewsGlobalItem
+import io.dutwrapper.dutwrapper.News
+import io.dutwrapper.dutwrapper.News.NewsItem
 import io.zoemeow.dutschedule.model.ProcessState
 import io.zoemeow.dutschedule.model.news.NewsSearchHistory
 import io.zoemeow.dutschedule.repository.DutRequestRepository
@@ -28,10 +27,10 @@ class NewsSearchViewModel @Inject constructor(
     val query = mutableStateOf("")
 
     // Search method
-    val method = mutableStateOf(NewsSearchType.ByTitle)
+    val method = mutableStateOf(News.NewsSearchType.ByTitle)
 
     // News search type
-    val type = mutableStateOf(NewsType.Global)
+    val type = mutableStateOf(News.NewsType.Global)
     //</editor-fold>
 
     //<editor-fold desc="Runtime variables - Don't modify these variables to avoid issues">
@@ -39,7 +38,7 @@ class NewsSearchViewModel @Inject constructor(
     val progress = mutableStateOf(ProcessState.NotRunYet)
 
     // News result
-    val newsList = mutableStateListOf<NewsGlobalItem>()
+    val newsList = mutableStateListOf<NewsItem>()
 
     // News page
     private val newsPage = mutableIntStateOf(1)
@@ -76,7 +75,7 @@ class NewsSearchViewModel @Inject constructor(
                 if (startOver) {
                     newsList.clear()
                 }
-                if (type.value == NewsType.Subject) {
+                if (type.value == News.NewsType.Subject) {
                     newsList.addAll(
                         dutRequestRepository.getNewsSubject(
                             if (startOver) 1 else newsPage.intValue,

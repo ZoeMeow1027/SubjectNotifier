@@ -105,7 +105,7 @@ class DUTNewsInstance(
                     val anyMatch = newsGlobal.data.any { newsSourceItem ->
                         newsSourceItem.date == newsTargetItem.date
                                 && newsSourceItem.title == newsTargetItem.title
-                                && newsSourceItem.contentString == newsTargetItem.contentString
+                                && newsSourceItem.content == newsTargetItem.content
                     }
                     val anyNeedUpdated = newsGlobal.data.any { newsSourceItem ->
                         newsSourceItem.date == newsTargetItem.date
@@ -204,7 +204,7 @@ class DUTNewsInstance(
                     val anyMatch = newsSubject.data.any { newsSourceItem ->
                         newsSourceItem.date == newsTargetItem.date
                                 && newsSourceItem.title == newsTargetItem.title
-                                && newsSourceItem.contentString == newsTargetItem.contentString
+                                && newsSourceItem.content == newsTargetItem.content
                     }
                     val anyNeedUpdated = newsSubject.data.any { newsSourceItem ->
                         newsSourceItem.date == newsTargetItem.date

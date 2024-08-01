@@ -22,7 +22,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import io.dutwrapper.dutwrapper.model.accounts.trainingresult.SubjectResult
+import io.dutwrapper.dutwrapper.AccountInformation
 import io.zoemeow.dutschedule.GlobalVariables
 import io.zoemeow.dutschedule.R
 import io.zoemeow.dutschedule.ui.component.base.Tag
@@ -30,7 +30,7 @@ import io.zoemeow.dutschedule.ui.component.base.Tag
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun SubjectResult(
-    subjectResult: SubjectResult,
+    subjectResult: AccountInformation.SubjectResult,
     modifier: Modifier = Modifier,
     onClick: (() -> Unit)? = null,
     opacity: Float = 1f
@@ -71,7 +71,7 @@ fun SubjectResult(
                 }
                 Spacer(modifier = Modifier.size(3.dp))
                 Text(
-                    "${subjectResult.resultT10} / ${subjectResult.resultT4} / ${subjectResult.resultByCharacter}",
+                    "${subjectResult.resultT10} / ${subjectResult.resultT4} / ${subjectResult.resultByChar}",
                     style = MaterialTheme.typography.bodyMedium
                 )
             }
@@ -83,7 +83,7 @@ fun SubjectResult(
 @Composable
 private fun SubjectResultPreview() {
     SubjectResult(
-        SubjectResult(
+        AccountInformation.SubjectResult(
             64, "2023-2024", false, "1023623.2220.19.14", "Toán ứng dụng Công nghệ thông tin",
             2.0, "Point formula", 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, "F", true
         )

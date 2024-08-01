@@ -16,7 +16,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import io.dutwrapper.dutwrapper.model.utils.DutSchoolYearItem
+import io.dutwrapper.dutwrapper.Utils
 import io.zoemeow.dutschedule.R
 import io.zoemeow.dutschedule.model.CustomClock
 import io.zoemeow.dutschedule.utils.CustomDateUtil
@@ -27,7 +27,7 @@ fun DateAndTimeSummaryItem(
     context: Context,
     padding: PaddingValues = PaddingValues(),
     isLoading: Boolean = false,
-    currentSchoolWeek: DutSchoolYearItem? = null,
+    currentSchoolWeek: Utils.DutSchoolYearItem? = null,
     opacity: Float = 1.0f
 ) {
     val dateTimeString = remember { mutableStateOf("") }

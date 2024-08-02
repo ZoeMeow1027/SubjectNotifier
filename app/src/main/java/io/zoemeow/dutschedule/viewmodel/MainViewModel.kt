@@ -36,6 +36,7 @@ class MainViewModel @Inject constructor(
                 1 -> {
                     Log.d("app", "triggered saved login")
                     saveApplicationSettings(saveAccountCache = true)
+                    saveApplicationSettings(saveUserSettings = true)
                 }
                 2, 3, 4, 5 -> {
                     // TODO: Save account cache here!

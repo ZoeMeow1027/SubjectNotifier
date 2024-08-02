@@ -6,7 +6,11 @@
 ## Known issues
 - `Your current wallpaper` option in app background settings will be disabled on Android 14 and later. You can check why in `Issue` tab in repository.
 
-## 2.0-draft20 (1638) (Working in progress)
+## 2.0-draft21 (1653) (Working in progress)
+- [Change] Wallpaper settings and background opacity/component opacity will be grouped into one.
+- [Fix] Fix a issue cause account session remains even after logged out.
+
+## 2.0-draft20 (1638)
 - [Imporvement] Updated dependencies to latest.
   - [Change] Need to modify any file to update functions about `dutwrapper` dependency.
 - [Change] This application will no longer direct links when URL Protocol is used (ex: example://,...).
@@ -16,8 +20,8 @@
 - [Rework] Account Training Subject Result screen.
 - [Improve] Update dependencies to latest.
   - This will resolve crash app when sv.dut.udn.vn is not reachable.
-- [Fixed] Account Training Result score isn't readable when in dark mode.
-- [Removed] ~~NewsGlobalGroupByDate~~, ~~NewsSubjectGroupByDate~~.
+- [Fix] Account Training Result score isn't readable when in dark mode.
+- [Remove] ~~NewsGlobalGroupByDate~~, ~~NewsSubjectGroupByDate~~.
 
 ## 2.0-draft18 (1448)
 - [Improve] Update dependencies to latest
@@ -26,12 +30,12 @@
   - This will resolve login issue when server rebooted
 - [Improve] When you're failed when logging in but done it before, this will show a option for you to re-login instead.
 - [Improve] Improve Vietnamese strings
-- [Changes] SchoolYearChooser will choose between two arrows instead of ComboBox
-- [Changes] Account
+- [Change] SchoolYearChooser will choose between two arrows instead of ComboBox
+- [Change] Account
   - Account Information: Show a tooltip about editing contents
   - Account Subject Fee: Show total price and credits about this school year / semester
   - Account Training Status: Redesign UI
-- [Changes] Main Screen (tab mode)
+- [Change] Main Screen (tab mode)
   - Remove SnackbarState in Notifications (fixes duplicate SnackbarState)
 
 ## 2.0-draft17 (1404)
@@ -50,7 +54,7 @@
 - [Improve] Update Vietnamese strings for most screens, but not done yet.
 - [Improve] Optimized codes and updated dependencies to latest.
   - Updated dependencies to latest to fix issues about Account feature.
-- [Fixed] [#24](https://github.com/ZoeMeow1027/DutSchedule/issues/24).
+- [Fix] [#24](https://github.com/ZoeMeow1027/DutSchedule/issues/24).
 - [Known Issue] Some settings won't load after update. You might need to reconfig them in settings. I'm sorry about that.
 
 ## 2.0-draft16 (1063)

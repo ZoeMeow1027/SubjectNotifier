@@ -22,6 +22,7 @@
     <string name="action_display">Hiển thị</string>
     <string name="action_hide">Ẩn</string>
     <string name="action_share">Chia sẻ</string>
+    <string name="action_reset">Đặt lại</string>
     <!-- Tooltip string -->
     <string name="tooltip_selected">Đã chọn</string>
     <string name="tooltip_info">Thông tin</string>
@@ -93,7 +94,7 @@
     <string name="settings_option_apptheme_choice_dynamiccolorenabled">(dynamic color đang bật)</string>
     <string name="settings_option_blackbackground">Nền đen</string>
     <string name="settings_option_blackbackground_description">Đặt màu nền của ứng dụng là màu đen. Chỉ hoạt động trong chế độ tối và bạn không bật hình nền ứng dụng.</string>
-    <string name="settings_option_wallpaperbackground">Hình nền ứng dụng</string>
+    <string name="settings_option_wallpaperbackground">Hình nền &amp; thành phần điều khiển</string>
     <string name="settings_option_wallpaperbackground_choice_none">Đã vô hiệu hoá</string>
     <string name="settings_option_wallpaperbackground_choice_currentwallpaper">Hình nền hiện tại của bạn</string>
     <string name="settings_option_wallpaperbackground_choice_pickedimage">Ảnh bạn đã chọn</string>
@@ -106,7 +107,7 @@
     <string name="settings_option_experiemntsettings">Cài đặt thử nghiệm</string>
     <string name="settings_option_experiemntsettings_description">Các cài đặt thử nghiệm của chúng tôi trước khi đưa vào chính thức. Sử dụng nó một cách thận trọng.</string>
     <string name="settings_category_about">Về ứng dụng</string>
-    <string name="settings_option_version">Phiên bản</string>
+    <string name="settings_option_about">Về ứng dụng</string>
     <string name="settings_option_version_description">%1$s (%2$d)</string>
     <!-- Settings Dialog UI string -->
     <string name="settings_dialog_apptheme_title">Chủ đề ứng dụng</string>
@@ -115,12 +116,20 @@
     <string name="settings_dialog_apptheme_choice_light">Chủ đề sáng</string>
     <string name="settings_dialog_apptheme_choice_dynamiccolor">Dynamic color</string>
     <string name="settings_dialog_apptheme_note">Hệ điều hành của bạn cần tối thiểu:\n- Android 9 để theo chủ đề hệ thống;\n- Android 12 để bật dynamic color.</string>
-    <string name="settings_dialog_wallpaperbackground_title">Hình nền ứng dụng</string>
-    <string name="settings_dialog_wallpaperbackground_choice_none">Đã vô hiệu hóa</string>
-    <string name="settings_dialog_wallpaperbackground_choice_currentwallpaper">Hình nền hiện tại của bạn</string>
-    <string name="settings_dialog_wallpaperbackground_choice_currentwallpaper_disa14">Tùy chọn này không có sẵn trên Android 14</string>
-    <string name="settings_dialog_wallpaperbackground_choice_currentwallpaper_dismisperext">Bạn cần phải cho phép Quyền truy cập mọi tệp</string>
-    <string name="settings_dialog_wallpaperbackground_choice_pickaimage">Chọn một hình ảnh từ phương tiện</string>
+    <!-- Wallpaper and Controls settings activity string-->
+    <string name="settings_wallpaperandcontrols_title">Cài đặt hình nền và thành phần điều khiển</string>
+    <string name="settings_wallpaperandcontrols_category_enabled">Trạng thái hình nền</string>
+    <string name="settings_wallpaperandcontrols_choice_none">Đã vô hiệu hóa</string>
+    <string name="settings_wallpaperandcontrols_choice_currentwallpaper">Hình nền hiện tại của bạn</string>
+    <string name="settings_wallpaperandcontrols_choice_currentwallpaper_disa14">Tùy chọn này không có sẵn trên Android 14</string>
+    <string name="settings_wallpaperandcontrols_choice_currentwallpaper_dismisperext">Bạn cần phải cho phép Quyền truy cập mọi tệp</string>
+    <string name="settings_wallpaperandcontrols_choice_pickaimage">Chọn hình ảnh từ phương tiện</string>
+    <string name="settings_wallpaperandcontrols_resetbuttonleading">Nhấn nút này để</string>
+    <string name="settings_wallpaperandcontrols_category_componentopacity">Cài đặt độ mờ nút bấm</string>
+    <string name="settings_wallpaperandcontrols_option_bgopacity">Độ mờ hình nền</string>
+    <string name="settings_wallpaperandcontrols_option_bgopacity_description">Điều này sẽ thay đổi độ mờ hình nền của bạn</string>
+    <string name="settings_wallpaperandcontrols_option_componentopacity">Độ mờ thành phần điều khiển</string>
+    <string name="settings_wallpaperandcontrols_option_componentopacity_description">Điều này sẽ thay đổi độ mờ thành phần điều khiển</string>
     <!-- Settings Language activity string-->
     <string name="settings_applanguage_title">Ngôn ngữ ứng dụng</string>
     <!-- Settings Parse news subject activity string -->
@@ -141,10 +150,6 @@
     <string name="settings_experiment_option_opennewsinpopup">Mở tin tức đã chọn trong popup</string>
     <string name="settings_experiment_option_opennewsinpopup_description">Nếu bị vô hiệu hóa, chúng tôi sẽ mở tin tức trong màn hình mới</string>
     <string name="settings_experiment_category_appearance">Hiển thị</string>
-    <string name="settings_experiment_option_required_enableimage">Bạn cần bật hình nền ứng dụng để tùy chọn có tác dụng</string>
-    <string name="settings_experiment_option_backgroundandcomponentopacity">Độ mờ hình nền &amp; thành phần điều khiển</string>
-    <string name="settings_experiment_option_bgopacity">Độ mờ hình nền</string>
-    <string name="settings_experiment_option_componentopacity">Độ mờ thành phần điều khiển</string>
     <string name="settings_experiment_option_dashboardview">Chế độ xem bảng tổng quát trên màn hình chính</string>
     <string name="settings_experiment_option_dashboardview_choice_enabled">Đã bật</string>
     <string name="settings_experiment_option_dashboardview_choice_disabled">Đã vô hiệu hóa (chế độ xem điều hướng thẻ)</string>

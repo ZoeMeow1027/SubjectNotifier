@@ -16,8 +16,9 @@ android {
         applicationId "io.zoemeow.dutschedule"
         minSdk 21
         targetSdkVersion 35
-        versionCode 1638
-        versionName "2.0-draft20"
+        // TODO: This isn't final version. This line will be removed when release. Current is 2.0-draft21
+        versionCode 1653
+        versionName "2.0-draft21"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {

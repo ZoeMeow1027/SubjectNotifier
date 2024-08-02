@@ -143,23 +143,6 @@ fun Activity_Settings_ExperimentSettings(
                         textModifier = Modifier.padding(horizontal = 20.dp),
                         text = context.getString(R.string.settings_experiment_category_appearance),
                         content = {
-                            OptionItem(
-                                modifierInside = Modifier.padding(horizontal = 20.dp, vertical = 15.dp),
-                                title = context.getString(R.string.settings_experiment_option_backgroundandcomponentopacity),
-                                description = String.format(
-                                    Locale.ROOT,
-                                    "%2.0f%% - %2.0f%% %s",
-                                    (mainViewModel.appSettings.value.backgroundImageOpacity * 100),
-                                    (mainViewModel.appSettings.value.componentOpacity * 100),
-                                    if (mainViewModel.appSettings.value.backgroundImage == BackgroundImageOption.None) {
-                                        "(${context.getString(R.string.settings_experiment_option_required_enableimage)})"
-                                    } else ""
-                                ),
-                                onClick = {
-                                    onMessageReceived(context.getString(R.string.feature_not_ready), true, null, null)
-                                    /* TODO: Implement here: Background and Component opacity */
-                                }
-                            )
                             // https://stackoverflow.com/questions/72932093/jetpack-compose-is-there-a-way-to-restart-whole-app-programmatically
                             OptionSwitchItem(
                                 modifierInside = Modifier.padding(horizontal = 20.dp, vertical = 15.dp),

@@ -1,10 +1,20 @@
 package io.zoemeow.dutschedule.model.settings
 
 import com.google.gson.annotations.SerializedName
+import io.zoemeow.dutschedule.BuildConfig
 import io.zoemeow.dutschedule.model.account.SchoolYearItem
 import java.io.Serializable
 
+@Suppress("SpellCheckingInspection")
 data class AppSettings(
+    /**
+     * Config version. This will helpful when migrating to new version.
+     *
+     * @since v2.0-draft21
+     */
+    @SerializedName("version")
+    val version: Int = BuildConfig.VERSION_CODE,
+
     @SerializedName("appsettings.layout.mainview.dashboardview")
     val mainScreenDashboardView: Boolean = false,
 
@@ -56,10 +66,18 @@ data class AppSettings(
     @SerializedName("appsettings.globalvariables.schoolyear")
     val currentSchoolYear: SchoolYearItem = SchoolYearItem(),
 
+    /**
+     * Is news opened in bottom sheet?
+     *
+     * true: News will open in bottom sheet.
+     * false: News will open in new activity.
+     * @since v2.0-draft19
+     */
     @SerializedName("appsettings.behavor.clicknewsinmain")
     val openNewsInModalBottomSheet: Boolean = true
 ): Serializable {
     fun clone(
+        version: Int? = null,
         mainScreenDashboardView: Boolean? = null,
         themeMode: ThemeMode? = null,
         dynamicColor: Boolean? = null,
@@ -68,6 +86,7 @@ data class AppSettings(
         openLinkInsideApp: Boolean? = null,
         newsFilterList: ArrayList<SubjectCode>? = null,
         backgroundImageOpacity: Float? = null,
+        componentOpacity: Float? = null,
         fetchNewsBackgroundDuration: Int? = null,
         newsBackgroundGlobalEnabled: Boolean? = null,
         newsBackgroundSubjectEnabled: Int? = null,
@@ -76,6 +95,7 @@ data class AppSettings(
         openNewsInModalBottomSheet: Boolean? = null
     ): AppSettings {
         return AppSettings(
+            version = version ?: this.version,
             mainScreenDashboardView = mainScreenDashboardView ?: this.mainScreenDashboardView,
             themeMode = themeMode ?: this.themeMode,
             dynamicColor = dynamicColor ?: this.dynamicColor,
@@ -84,6 +104,7 @@ data class AppSettings(
             openLinkInsideApp = openLinkInsideApp ?: this.openLinkInsideApp,
             newsBackgroundFilterList = newsFilterList ?: this.newsBackgroundFilterList,
             backgroundImageOpacity = backgroundImageOpacity ?: this.backgroundImageOpacity,
+            componentOpacity = componentOpacity ?: this.componentOpacity,
             newsBackgroundDuration = when (fetchNewsBackgroundDuration) {
                 null -> this.newsBackgroundDuration
                 0 -> 0

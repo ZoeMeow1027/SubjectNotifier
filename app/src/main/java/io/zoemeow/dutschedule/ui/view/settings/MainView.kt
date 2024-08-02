@@ -46,7 +46,6 @@ import io.zoemeow.dutschedule.ui.component.base.DividerItem
 import io.zoemeow.dutschedule.ui.component.base.OptionItem
 import io.zoemeow.dutschedule.ui.component.base.OptionSwitchItem
 import io.zoemeow.dutschedule.ui.component.settings.ContentRegion
-import io.zoemeow.dutschedule.ui.component.settings.DialogAppBackgroundSettings
 import io.zoemeow.dutschedule.ui.component.settings.DialogAppThemeSettings
 import io.zoemeow.dutschedule.viewmodel.MainViewModel
 import java.util.Locale
@@ -65,7 +64,6 @@ fun Activity_Settings(
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
 
     val dialogAppTheme: MutableState<Boolean> = remember { mutableStateOf(false) }
-    val dialogBackground: MutableState<Boolean> = remember { mutableStateOf(false) }
 
     Scaffold(
         modifier = Modifier.fillMaxSize()
@@ -212,7 +210,11 @@ fun Activity_Settings(
                                     BackgroundImageOption.YourCurrentWallpaper -> context.getString(R.string.settings_option_wallpaperbackground_choice_currentwallpaper)
                                     BackgroundImageOption.PickFileFromMedia -> context.getString(R.string.settings_option_wallpaperbackground_choice_pickedimage)
                                 },
-                                onClick = { dialogBackground.value = true }
+                                onClick = {
+                                    val intent = Intent(context, SettingsActivity::class.java)
+                                    intent.action = SettingsActivity.INTENT_WALLPAPERANDCONTROLSSETTINGS
+                                    context.startActivity(intent)
+                                }
                             )
                         }
                     )
@@ -320,7 +322,7 @@ fun Activity_Settings(
                                         modifier = Modifier.padding(end = 15.dp)
                                     )
                                 },
-                                title = context.getString(R.string.settings_category_about),
+                                title = context.getString(R.string.settings_option_about),
                                 description = context.getString(
                                     R.string.settings_option_version_description,
                                     BuildConfig.VERSION_NAME,
@@ -353,57 +355,10 @@ fun Activity_Settings(
             mainViewModel.saveApplicationSettings(saveUserSettings = true)
         }
     )
-    DialogAppBackgroundSettings(
-        context = context,
-        value = mainViewModel.appSettings.value.backgroundImage,
-        isVisible = dialogBackground.value,
-        onDismiss = { dialogBackground.value = false }
-    ) { value ->
-        when (value) {
-            BackgroundImageOption.None -> {
-                mainViewModel.appSettings.value =
-                    mainViewModel.appSettings.value.clone(
-                        backgroundImage = value
-                    )
-            }
-
-            BackgroundImageOption.YourCurrentWallpaper -> {
-                val compPer =
-                    PermissionsActivity.checkPermissionManageExternalStorage(context = context).isGranted
-                if (compPer) {
-                    mainViewModel.appSettings.value =
-                        mainViewModel.appSettings.value.clone(
-                            backgroundImage = value
-                        )
-                } else {
-                    onMessageReceived?.let {
-                        it(
-                            context.getString(R.string.permission_missing_all_file_access),
-                            true,
-                            context.getString(R.string.action_grant)
-                        ) {
-                            Intent(context, PermissionsActivity::class.java).also {
-                                context.startActivity(it)
-                            }
-                        }
-                    }
-                }
-            }
-
-            BackgroundImageOption.PickFileFromMedia -> {
-                // Launch the photo picker and let the user choose only images.
-                mediaRequest()
-            }
-        }
-
-        dialogBackground.value = false
-        mainViewModel.saveApplicationSettings(saveUserSettings = true)
-    }
     BackHandler(
-        enabled = dialogAppTheme.value || dialogBackground.value,
+        enabled = dialogAppTheme.value,
         onBack = {
             dialogAppTheme.value = false
-            dialogBackground.value = false
         }
     )
 }

@@ -22,6 +22,7 @@
     <string name="action_display">Display</string>
     <string name="action_hide">Hide</string>
     <string name="action_share">Share</string>
+    <string name="action_reset">Reset</string>
     <!-- Tooltip string -->
     <string name="tooltip_selected">Selected</string>
     <string name="tooltip_info">Information</string>
@@ -93,7 +94,7 @@
     <string name="settings_option_apptheme_choice_dynamiccolorenabled">(dynamic color enabled)</string>
     <string name="settings_option_blackbackground">Black background</string>
     <string name="settings_option_blackbackground_description">Make app background to black color. Only in dark mode and turned off background image.</string>
-    <string name="settings_option_wallpaperbackground">App background wallpaper</string>
+    <string name="settings_option_wallpaperbackground">Background wallpaper &amp; controls</string>
     <string name="settings_option_wallpaperbackground_choice_none">Disabled</string>
     <string name="settings_option_wallpaperbackground_choice_currentwallpaper">Your current wallpaper</string>
     <string name="settings_option_wallpaperbackground_choice_pickedimage">Your picked image</string>
@@ -106,7 +107,7 @@
     <string name="settings_option_experiemntsettings">Experiment settings</string>
     <string name="settings_option_experiemntsettings_description">Our current experiment settings before public. Use this at your own risk.</string>
     <string name="settings_category_about">About</string>
-    <string name="settings_option_version">Version</string>
+    <string name="settings_option_about">About</string>
     <string name="settings_option_version_description">%1$s (%2$d)</string>
     <!-- Settings Dialog UI string -->
     <string name="settings_dialog_apptheme_title">App theme</string>
@@ -115,12 +116,20 @@
     <string name="settings_dialog_apptheme_choice_light">Light mode</string>
     <string name="settings_dialog_apptheme_choice_dynamiccolor">Dynamic color</string>
     <string name="settings_dialog_apptheme_note">Your OS needs at least:\n- Android 9 to follow device theme;\n- Android 12 to enable dynamic color.</string>
-    <string name="settings_dialog_wallpaperbackground_title">App background wallpaper</string>
-    <string name="settings_dialog_wallpaperbackground_choice_none">Disabled</string>
-    <string name="settings_dialog_wallpaperbackground_choice_currentwallpaper">Your current wallpaper</string>
-    <string name="settings_dialog_wallpaperbackground_choice_currentwallpaper_disa14">This option is unavailable on Android 14</string>
-    <string name="settings_dialog_wallpaperbackground_choice_currentwallpaper_dismisperext">You\'ll need to grant access all file access permission</string>
-    <string name="settings_dialog_wallpaperbackground_choice_pickaimage">Pick a image from media</string>
+    <!-- Wallpaper and Controls settings activity string-->
+    <string name="settings_wallpaperandcontrols_title">Wallpaper and Control Settings</string>
+    <string name="settings_wallpaperandcontrols_category_enabled">Wallpaper state</string>
+    <string name="settings_wallpaperandcontrols_choice_none">Disabled</string>
+    <string name="settings_wallpaperandcontrols_choice_currentwallpaper">Your current wallpaper</string>
+    <string name="settings_wallpaperandcontrols_choice_currentwallpaper_disa14">This option is unavailable on Android 14</string>
+    <string name="settings_wallpaperandcontrols_choice_currentwallpaper_dismisperext">You\'ll need to grant access all file access permission</string>
+    <string name="settings_wallpaperandcontrols_choice_pickaimage">Pick a image from media</string>
+    <string name="settings_wallpaperandcontrols_resetbuttonleading">Press this button to</string>
+    <string name="settings_wallpaperandcontrols_category_componentopacity">Control opacity settings</string>
+    <string name="settings_wallpaperandcontrols_option_bgopacity">Background opacity</string>
+    <string name="settings_wallpaperandcontrols_option_bgopacity_description">This will change your background opacity</string>
+    <string name="settings_wallpaperandcontrols_option_componentopacity">Component opacity</string>
+    <string name="settings_wallpaperandcontrols_option_componentopacity_description">This will change your component opacity</string>
     <!-- Settings Language activity string-->
     <string name="settings_applanguage_title">App language</string>
     <!-- Settings Parse news subject activity string -->
@@ -141,10 +150,6 @@
     <string name="settings_experiment_option_opennewsinpopup">Open clicked news in popup</string>
     <string name="settings_experiment_option_opennewsinpopup_description">If disabled, we will open news in new screen</string>
     <string name="settings_experiment_category_appearance">Appearance</string>
-    <string name="settings_experiment_option_required_enableimage">You need enable background image to take effect</string>
-    <string name="settings_experiment_option_backgroundandcomponentopacity">Background &amp; component opacity</string>
-    <string name="settings_experiment_option_bgopacity">Background opacity</string>
-    <string name="settings_experiment_option_componentopacity">Component opacity</string>
     <string name="settings_experiment_option_dashboardview">Main screen dashboard view</string>
     <string name="settings_experiment_option_dashboardview_choice_enabled">Enabled</string>
     <string name="settings_experiment_option_dashboardview_choice_disabled">Disabled (navigation tab view)</string>

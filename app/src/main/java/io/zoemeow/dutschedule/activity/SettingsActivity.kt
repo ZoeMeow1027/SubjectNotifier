@@ -17,6 +17,7 @@ import io.zoemeow.dutschedule.ui.view.settings.Activity_Settings_AppLanguageSett
 import io.zoemeow.dutschedule.ui.view.settings.Activity_Settings_ExperimentSettings
 import io.zoemeow.dutschedule.ui.view.settings.Activity_Settings_NewsNotificationSettings
 import io.zoemeow.dutschedule.ui.view.settings.Activity_Settings_ParseNewsSubjectNotification
+import io.zoemeow.dutschedule.ui.view.settings.Activity_Settings_WallpaperAndControlsSettings
 import io.zoemeow.dutschedule.utils.BackgroundImageUtil
 import io.zoemeow.dutschedule.utils.NotificationsUtil
 import io.zoemeow.dutschedule.utils.openLink
@@ -28,6 +29,7 @@ class SettingsActivity : BaseActivity() {
         const val INTENT_EXPERIMENTSETTINGS = "settings_experimentsettings"
         const val INTENT_LANGUAGESETTINGS = "settings_languagesettings"
         const val INTENT_NEWSNOTIFICATIONSETTINGS = "settings_newsnotificaitonsettings"
+        const val INTENT_WALLPAPERANDCONTROLSSETTINGS = "settings_wallpaperandcontrolssettings"
         const val INTENT_ABOUTACTIVITY = "settings_about"
     }
 
@@ -274,6 +276,74 @@ class SettingsActivity : BaseActivity() {
                                 clearPrevious = true
                             )
                         } catch (_: Exception) { }
+                    }
+                )
+            }
+
+            INTENT_WALLPAPERANDCONTROLSSETTINGS -> {
+                Activity_Settings_WallpaperAndControlsSettings(
+                    context = context,
+                    snackBarHostState = snackBarHostState,
+                    appearanceState = appearanceState,
+                    onBack = {
+                        setResult(RESULT_CANCELED)
+                        finish()
+                    },
+                    valueBackgroundState = getMainViewModel().appSettings.value.backgroundImage,
+                    onValueBackgroundStateChanged = {
+                        // We need to manually processing here.
+                        when (it) {
+                            BackgroundImageOption.None -> {
+                                getMainViewModel().appSettings.value =
+                                    getMainViewModel().appSettings.value.clone(
+                                        backgroundImage = it
+                                    )
+                            }
+
+                            BackgroundImageOption.YourCurrentWallpaper -> {
+                                val compPer =
+                                    PermissionsActivity.checkPermissionManageExternalStorage(context = context).isGranted
+                                if (compPer) {
+                                    getMainViewModel().appSettings.value =
+                                        getMainViewModel().appSettings.value.clone(
+                                            backgroundImage = it
+                                        )
+                                } else {
+                                    showSnackBar(
+                                        text = context.getString(R.string.permission_missing_all_file_access),
+                                        clearPrevious = true,
+                                        actionText = context.getString(R.string.action_grant)
+                                    ) {
+                                        Intent(context, PermissionsActivity::class.java).also { intent ->
+                                            context.startActivity(intent)
+                                        }
+                                    }
+                                }
+                            }
+
+                            BackgroundImageOption.PickFileFromMedia -> {
+                                // Launch the photo picker and let the user choose only images.
+                                pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+                            }
+                        }
+                    },
+                    valueBackgroundOpacity = getMainViewModel().appSettings.value.backgroundImageOpacity,
+                    onValueBackgroundOpacityChanged = {
+                        if (getMainViewModel().appSettings.value.backgroundImage != BackgroundImageOption.None) {
+                            getMainViewModel().appSettings.value = getMainViewModel().appSettings.value.clone(
+                                backgroundImageOpacity = it
+                            )
+                            getMainViewModel().saveApplicationSettings(saveUserSettings = true)
+                        }
+                    },
+                    valueComponentOpacity = getMainViewModel().appSettings.value.componentOpacity,
+                    onValueComponentOpacityChanged = {
+                        if (getMainViewModel().appSettings.value.backgroundImage != BackgroundImageOption.None) {
+                            getMainViewModel().appSettings.value = getMainViewModel().appSettings.value.clone(
+                                componentOpacity = it
+                            )
+                            getMainViewModel().saveApplicationSettings(saveUserSettings = true)
+                        }
                     }
                 )
             }

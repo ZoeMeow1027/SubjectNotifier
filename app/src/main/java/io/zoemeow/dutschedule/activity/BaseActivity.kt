@@ -155,14 +155,6 @@ abstract class BaseActivity: ComponentActivity() {
         }
     }
 
-    fun getBackgroundAlpha(): Float {
-        return when (getMainViewModel().appSettings.value.backgroundImage != BackgroundImageOption.None) {
-            true -> getMainViewModel().appSettings.value.backgroundImageOpacity
-            false -> 1f
-            // true -> return mainViewModel.appSettings.value.
-        }
-    }
-
     @Composable
     abstract fun OnPreloadOnce()
 

@@ -6,7 +6,6 @@ A unofficial Android app to provide better UI from [sv.dut.udn.vn](http://sv.dut
 - Release version: [![https://github.com/ZoeMeow1027/DutSchedule](https://img.shields.io/github/v/release/ZoeMeow1027/DutSchedule)](https://github.com/ZoeMeow1027/DutSchedule/releases)
 - Pre-release version: [![https://github.com/ZoeMeow1027/DutSchedule/tree/draft](https://img.shields.io/github/v/tag/ZoeMeow1027/DutSchedule?label=pre-release%20tag)](https://github.com/ZoeMeow1027/DutSchedule/tree/draft)
 - Badge provided by [https://shields.io/](https://shields.io/).
-- If you want to view changelog, [click here](#where-can-i-found-app-changelog).
 
 # Features & Screenshots?
 - These screenshot will get you to app summary. Just navigate to [screenshot](SCREENSHOT.md) and open images to view details.
@@ -40,8 +39,8 @@ If you found a issue, you can report this via [issue tab](https://github.com/Zoe
   - On Android 14, Google is restricted for getting current wallpaper on Android 14 or later. This issue will be delayed very loong until a posible fix. You can [see why here](https://github.com/ZoeMeow1027/DutSchedule/issues/19).
 
 # Developing
-- Required Gradle: 8.8
-  - Older version of Gradle may be failed while building.
+- Required Gradle: 8.9
+  - Older version of Gradle might be failed while building.
 - Build with Android Studio:
   - Make sure your IDE support [Gradle](https://gradle.org/releases/) above, which can be fixed by upgrading your IDE.
   - After that, just build and run app normally as you do with another Android project.

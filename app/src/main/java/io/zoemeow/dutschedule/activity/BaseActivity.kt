@@ -1,13 +1,9 @@
 package io.zoemeow.dutschedule.activity
 
 import android.content.Context
-import android.graphics.Bitmap
 import android.os.Bundle
-import android.os.StrictMode
 import androidx.activity.ComponentActivity
-import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxSize
@@ -24,14 +20,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.core.view.WindowCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.zoemeow.dutschedule.model.AppearanceState
 import io.zoemeow.dutschedule.model.settings.BackgroundImageOption
 import io.zoemeow.dutschedule.model.settings.ThemeMode
 import io.zoemeow.dutschedule.ui.theme.DutScheduleTheme
-import io.zoemeow.dutschedule.utils.BackgroundImageUtil
+import io.zoemeow.dutschedule.utils.ActivityUtils
+import io.zoemeow.dutschedule.utils.BackgroundImageUtils
 import io.zoemeow.dutschedule.viewmodel.MainViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -45,26 +41,19 @@ abstract class BaseActivity: ComponentActivity() {
             return mainViewModel != null
         }
     }
+
     private lateinit var snackBarHostState: SnackbarHostState
     private lateinit var snackBarScope: CoroutineScope
+    private lateinit var context: Context
     private val loadScriptAtStartup = mutableStateOf(true)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         // A surface container using the 'background' color from the theme
         super.onCreate(savedInstanceState)
 
-        WindowCompat.setDecorFitsSystemWindows(window, true)
+        ActivityUtils.makeActivityFullScreen(this)
+        ActivityUtils.permitAllNetworkPolicy()
 
-        enableEdgeToEdge(
-            // This app is only ever in dark mode, so hard code detectDarkMode to true.
-            SystemBarStyle.auto(
-                android.graphics.Color.TRANSPARENT,
-                android.graphics.Color.TRANSPARENT,
-                detectDarkMode = { true }
-            )
-        )
-
-        permitAllNetworkPolicy()
         setContent {
             // Initialize MainViewModel
             if (!isMainViewModelInitialized()) {
@@ -84,17 +73,14 @@ abstract class BaseActivity: ComponentActivity() {
                 dynamicColor = getMainViewModel().appSettings.value.dynamicColor,
                 translucentStatusBar = getMainViewModel().appSettings.value.backgroundImage != BackgroundImageOption.None,
                 content = {
-                    val context = LocalContext.current
+                    context = LocalContext.current
 
-                    when (getMainViewModel().appSettings.value.backgroundImage) {
-                        BackgroundImageOption.None -> null
-                        BackgroundImageOption.YourCurrentWallpaper -> BackgroundImageUtil.getCurrentWallpaperBackground(context)
-                        BackgroundImageOption.PickFileFromMedia -> BackgroundImageUtil.getImageFromAppData(context)
-                    }.also { wallpaper ->
-                        if (wallpaper != null) {
+                    // Image (if set)
+                    BackgroundImageUtils.backgroundImageCache.also { wall ->
+                        wall.value?.let {
                             Image(
                                 modifier = Modifier.fillMaxSize(),
-                                bitmap = wallpaper.asImageBitmap(),
+                                bitmap = it.asImageBitmap(),
                                 contentDescription = "background_image",
                                 contentScale = ContentScale.Crop
                             )
@@ -151,6 +137,12 @@ abstract class BaseActivity: ComponentActivity() {
             if (loadScriptAtStartup.value) {
                 loadScriptAtStartup.value = false
                 OnPreloadOnce()
+
+                // Initialize background image (if set)
+                BackgroundImageUtils.setBackgroundImageCacheOption(
+                    context = context,
+                    backgroundOption = getMainViewModel().appSettings.value.backgroundImage
+                )
             }
         }
     }
@@ -171,6 +163,10 @@ abstract class BaseActivity: ComponentActivity() {
             mainViewModel = ViewModelProvider(this)[MainViewModel::class.java]
         }
         return mainViewModel!!
+    }
+
+    fun getContext(): Context {
+        return context
     }
 
     fun showSnackBar(
@@ -208,17 +204,5 @@ abstract class BaseActivity: ComponentActivity() {
         snackBarScope.launch {
             snackBarHostState.currentSnackbarData?.dismiss()
         }
-    }
-
-    /**
-     * This will bypass network on main thread exception.
-     * Use this at your own risk.
-     * Target: OkHttp3
-     *
-     * Source: https://blog.cpming.top/p/android-os-networkonmainthreadexception
-     */
-    private fun permitAllNetworkPolicy() {
-        val policy = StrictMode.ThreadPolicy.Builder().permitAll().build()
-        StrictMode.setThreadPolicy(policy)
     }
 }

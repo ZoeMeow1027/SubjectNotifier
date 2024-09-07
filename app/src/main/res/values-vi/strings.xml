@@ -374,6 +374,7 @@
     <string name="account_trainingstatus_subjectresult_allschoolyears">Tất cả năm học</string>
     <string name="account_trainingstatus_subjectresult_searchfilterbutton">Tìm kiếm &amp; lọc</string>
     <string name="account_trainingstatus_subjectresult_restudiedsubject">Môn học đã học lại</string>
+    <string name="account_trainingstatus_subjectresult_subjectname">Tên môn học</string>
     <string name="account_trainingstatus_subjectresult_searchquery">Truy vấn tìm kiếm</string>
     <string name="account_trainingstatus_subjectresult_schoolyear">Năm học</string>
     <string name="account_trainingstatus_subjectresult_schoolyear_insummer">trong học kỳ hè</string>
@@ -381,6 +382,7 @@
     <string name="account_trainingstatus_subjectresult_credit">Số tín chỉ</string>
     <string name="account_trainingstatus_subjectresult_pointformula">Công thức điểm</string>
     <string name="account_trainingstatus_subjectresult_finalscore">Điểm (T10 - T4 - Bằng chữ)</string>
+    <string name="account_trainingstatus_subjectresult_button_copyall">Sao chép tất cả vào khay nhớ tạm</string>
     <!-- External links activity strings -->
     <string name="miscellaneous_externallinks_mainviewbutton">Liên kết liên quan</string>
     <string name="miscellaneous_externallinks_title">Liên kết liên quan của DUT</string>

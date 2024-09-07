@@ -31,14 +31,12 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
 import io.zoemeow.dutschedule.R
 import io.zoemeow.dutschedule.model.AppearanceState
-import io.zoemeow.dutschedule.model.settings.BackgroundImageOption
 import io.zoemeow.dutschedule.ui.component.base.DividerItem
 import io.zoemeow.dutschedule.ui.component.base.OptionItem
 import io.zoemeow.dutschedule.ui.component.base.OptionSwitchItem
 import io.zoemeow.dutschedule.ui.component.settings.ContentRegion
 import io.zoemeow.dutschedule.ui.component.settings.DialogSchoolYearSettings
 import io.zoemeow.dutschedule.viewmodel.MainViewModel
-import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -220,6 +218,7 @@ fun Activity_Settings_ExperimentSettings(
             mainViewModel.appSettings.value = mainViewModel.appSettings.value.clone(
                 currentSchoolYear = it
             )
+            mainViewModel.accountSession.setSchoolYear(it)
             mainViewModel.saveApplicationSettings(saveUserSettings = true)
             dialogSchoolYear.value = false
         }

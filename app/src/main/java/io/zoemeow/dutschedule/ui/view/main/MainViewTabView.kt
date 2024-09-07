@@ -37,11 +37,10 @@ import io.zoemeow.dutschedule.activity.NewsActivity
 import io.zoemeow.dutschedule.activity.SettingsActivity
 import io.zoemeow.dutschedule.model.AppearanceState
 import io.zoemeow.dutschedule.model.NavBarItem
-import io.zoemeow.dutschedule.model.settings.BackgroundImageOption
 import io.zoemeow.dutschedule.ui.component.news.NewsPopup
 import io.zoemeow.dutschedule.ui.view.account.Activity_Account
 import io.zoemeow.dutschedule.ui.view.news.Activity_News
-import io.zoemeow.dutschedule.utils.BackgroundImageUtil
+import io.zoemeow.dutschedule.utils.BackgroundImageUtils
 import io.zoemeow.dutschedule.utils.openLink
 import io.zoemeow.dutschedule.viewmodel.MainViewModel
 
@@ -206,11 +205,7 @@ fun Activity_MainView_MainViewTabView(
         snackBarHostState = snackBarHostState,
         isVisible = isNotificationOpened.value,
         appearanceState = appearanceState,
-        backgroundImage = when (mainViewModel.appSettings.value.backgroundImage) {
-            BackgroundImageOption.None -> null
-            BackgroundImageOption.YourCurrentWallpaper -> BackgroundImageUtil.getCurrentWallpaperBackground(context)
-            BackgroundImageOption.PickFileFromMedia -> BackgroundImageUtil.getImageFromAppData(context)
-        },
+        backgroundImage = BackgroundImageUtils.backgroundImageCache.value,
         onDismiss = {
             onMessageClear()
             isNotificationOpened.value = false

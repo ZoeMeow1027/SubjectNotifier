@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.HorizontalDivider
@@ -21,13 +20,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.LinkAnnotation
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import io.dutwrapper.dutwrapper.News
 import io.dutwrapper.dutwrapper.News.NewsItem
 import io.zoemeow.dutschedule.R
-import io.zoemeow.dutschedule.utils.CustomDateUtil
+import io.zoemeow.dutschedule.utils.CustomDateUtils
 
 @Composable
 fun NewsDetailScreen(
@@ -81,12 +82,12 @@ private fun NewsDetailBody_NewsGlobal(
             )
             Text(
                 text = "⏱ ${
-                    CustomDateUtil.dateUnixToString(
+                    CustomDateUtils.dateUnixToString(
                         newsItem.date,
                         "dd/MM/yyyy",
                         "UTC"
                     )
-                } (${CustomDateUtil.unixToDurationWithLocale(
+                } (${CustomDateUtils.unixToDurationWithLocale(
                     context = context,
                     unix = newsItem.date
                 )})",
@@ -100,14 +101,11 @@ private fun NewsDetailBody_NewsGlobal(
             )
             val annotatedString = buildAnnotatedString {
                 if (newsItem.content != null) {
-                    // Parse all string to annotated string.
-                    append(newsItem.content)
                     // Adjust color for annotated string to follow system mode.
-                    addStyle(
-                        style = SpanStyle(color = MaterialTheme.colorScheme.inverseSurface),
-                        start = 0,
-                        end = newsItem.content.length
-                    )
+                    withStyle(SpanStyle(color = MaterialTheme.colorScheme.inverseSurface)) {
+                        // Parse all string to annotated string.
+                        append(newsItem.content)
+                    }
                     // Adjust for detected link.
                     newsItem.resources?.forEach {
                         addStringAnnotation(
@@ -121,39 +119,41 @@ private fun NewsDetailBody_NewsGlobal(
                             start = it.position,
                             end = it.position + it.text.length
                         )
+                        if (it.type == "link") {
+                            addLink(
+                                clickable = LinkAnnotation.Clickable(
+                                    tag = "link",
+                                    linkInteractionListener = { _ ->
+                                        try {
+                                            var urlTemp = it.content
+                                            urlTemp =
+                                                urlTemp.replace(
+                                                    "http://",
+                                                    "http://",
+                                                    ignoreCase = true
+                                                )
+                                            urlTemp = urlTemp.replace(
+                                                "https://",
+                                                "https://",
+                                                ignoreCase = true
+                                            )
+                                            linkClicked?.let { it(urlTemp) }
+                                        } catch (_: Exception) {
+                                            // TODO: Exception for can't open link here!
+                                        }
+                                    }
+                                ),
+                                start = it.position,
+                                it.position + it.text.length
+                            )
+                        }
                     }
                 }
             }
             SelectionContainer {
-                ClickableText(
+                Text(
                     text = annotatedString,
-                    style = MaterialTheme.typography.bodyLarge,
-                    onClick = {
-                        try {
-                            newsItem.resources?.forEach { item ->
-                                annotatedString
-                                    .getStringAnnotations(item.position!!.toString(), it, it)
-                                    .firstOrNull()
-                                    ?.let { url ->
-                                        var urlTemp = url.item
-                                        urlTemp =
-                                            urlTemp.replace(
-                                                "http://",
-                                                "http://",
-                                                ignoreCase = true
-                                            )
-                                        urlTemp = urlTemp.replace(
-                                            "https://",
-                                            "https://",
-                                            ignoreCase = true
-                                        )
-                                        linkClicked?.let { it(urlTemp) }
-                                    }
-                            }
-                        } catch (_: Exception) {
-                            // TODO: Exception for can't open link here!
-                        }
-                    }
+                    style = MaterialTheme.typography.bodyLarge
                 )
             }
         }
@@ -188,12 +188,12 @@ private fun NewsDetailBody_NewsSubject(
             )
             Text(
                 text = "⏱ ${
-                    CustomDateUtil.dateUnixToString(
+                    CustomDateUtils.dateUnixToString(
                         newsItem.date,
                         "dd/MM/yyyy",
                         "UTC"
                     )
-                } (${CustomDateUtil.unixToDurationWithLocale(
+                } (${CustomDateUtils.unixToDurationWithLocale(
                     context = context,
                     unix = newsItem.date
                 )})",
@@ -267,7 +267,7 @@ private fun NewsDetailBody_NewsSubject(
                 Text(
                     text = context.getString(
                         R.string.news_detail_newssubject_subjectdate,
-                        CustomDateUtil.dateUnixToString(newsItem.affectedDate, "dd/MM/yyyy", "UTC")
+                        CustomDateUtils.dateUnixToString(newsItem.affectedDate, "dd/MM/yyyy", "UTC")
                     ),
                     style = MaterialTheme.typography.bodyLarge,
                 )
@@ -289,14 +289,11 @@ private fun NewsDetailBody_NewsSubject(
             }
             val annotatedString = buildAnnotatedString {
                 if (newsItem.content != null) {
-                    // Parse all string to annotated string.
-                    append(newsItem.content)
                     // Adjust color for annotated string to follow system mode.
-                    addStyle(
-                        style = SpanStyle(color = MaterialTheme.colorScheme.inverseSurface),
-                        start = 0,
-                        end = newsItem.content.length
-                    )
+                    withStyle(SpanStyle(color = MaterialTheme.colorScheme.inverseSurface)) {
+                        // Parse all string to annotated string.
+                        append(newsItem.content)
+                    }
                     // Adjust for detected link.
                     newsItem.resources?.forEach {
                         addStringAnnotation(
@@ -310,43 +307,41 @@ private fun NewsDetailBody_NewsSubject(
                             start = it.position,
                             end = it.position + it.text.length
                         )
+                        if (it.type == "link") {
+                            addLink(
+                                clickable = LinkAnnotation.Clickable(
+                                    tag = "link",
+                                    linkInteractionListener = { _ ->
+                                        try {
+                                            var urlTemp = it.content
+                                            urlTemp =
+                                                urlTemp.replace(
+                                                    "http://",
+                                                    "http://",
+                                                    ignoreCase = true
+                                                )
+                                            urlTemp = urlTemp.replace(
+                                                "https://",
+                                                "https://",
+                                                ignoreCase = true
+                                            )
+                                            linkClicked?.let { it(urlTemp) }
+                                        } catch (_: Exception) {
+                                            // TODO: Exception for can't open link here!
+                                        }
+                                    }
+                                ),
+                                start = it.position,
+                                it.position + it.text.length
+                            )
+                        }
                     }
                 }
             }
             SelectionContainer {
-                ClickableText(
+                Text(
                     text = annotatedString,
-                    style = MaterialTheme.typography.bodyLarge,
-                    onClick = {
-                        try {
-                            newsItem.resources?.forEach { item ->
-                                annotatedString
-                                    .getStringAnnotations(
-                                        item.position!!.toString(),
-                                        it,
-                                        it
-                                    )
-                                    .firstOrNull()
-                                    ?.let { url ->
-                                        var urlTemp = url.toString()
-                                        urlTemp =
-                                            urlTemp.replace(
-                                                "http://",
-                                                "http://",
-                                                ignoreCase = true
-                                            )
-                                        urlTemp = urlTemp.replace(
-                                            "https://",
-                                            "https://",
-                                            ignoreCase = true
-                                        )
-                                        linkClicked?.let { it(urlTemp) }
-                                    }
-                            }
-                        } catch (_: Exception) {
-                            // TODO: Exception for can't open link here!
-                        }
-                    }
+                    style = MaterialTheme.typography.bodyLarge
                 )
             }
         }

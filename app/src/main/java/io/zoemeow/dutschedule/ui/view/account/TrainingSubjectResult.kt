@@ -25,9 +25,11 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.FloatingActionButton
@@ -35,6 +37,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MenuAnchorType
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
@@ -54,8 +57,11 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.ClipboardManager
+import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
@@ -79,11 +85,13 @@ fun Activity_Account_TrainingSubjectResult(
     appearanceState: AppearanceState,
     mainViewModel: MainViewModel,
     // TODO: onMessageReceived when copy a property
-    @Suppress("UNUSED_PARAMETER") onMessageReceived: (String, Boolean, String?, (() -> Unit)?) -> Unit, // (msg, forceDismissBefore, actionText, action)
+    onMessageReceived: (String, Boolean, String?, (() -> Unit)?) -> Unit, // (msg, forceDismissBefore, actionText, action)
     onBack: () -> Unit
 ) {
     val focusRequester = remember { FocusRequester() }
     val focusManager = LocalFocusManager.current
+
+    val clipboardManager: ClipboardManager = LocalClipboardManager.current
 
     // Search area (true to display them)
     val searchEnabled = remember { mutableStateOf(false) }
@@ -103,7 +111,7 @@ fun Activity_Account_TrainingSubjectResult(
     fun subjectResultToMap(item: AccountInformation.SubjectResult): Map<String, String?> {
         return mapOf(
             context.getString(R.string.account_trainingstatus_subjectresult_schoolyear) to "${item.schoolYear ?: context.getString(R.string.data_unknown)}${ if (item.isExtendedSemester) " (${context.getString(R.string.account_trainingstatus_subjectresult_schoolyear_insummer)})" else "" }",
-            context.getString(R.string.account_trainingstatus_subjectresult_subjectcode) to (item.id ?: context.getString(R.string.data_unknown)),
+            context.getString(R.string.account_trainingstatus_subjectresult_subjectcode) to (item.id.toString() ?: context.getString(R.string.data_unknown)),
             context.getString(R.string.account_trainingstatus_subjectresult_credit) to item.credit.toString(),
             context.getString(R.string.account_trainingstatus_subjectresult_pointformula) to (item.pointFormula ?: context.getString(R.string.data_unknown)),
             "BT" to item.pointBT?.toString(),
@@ -300,7 +308,7 @@ fun Activity_Account_TrainingSubjectResult(
                                     OutlinedTextField(
                                         modifier = Modifier
                                             .fillMaxWidth()
-                                            .menuAnchor(),
+                                            .menuAnchor(MenuAnchorType.PrimaryNotEditable, true),
                                         label = { Text(context.getString(R.string.account_trainingstatus_subjectresult_schoolyear)) },
                                         readOnly = true,
                                         value = schYearOptionText.value.ifEmpty { context.getString(R.string.account_trainingstatus_subjectresult_allschoolyears) },
@@ -381,6 +389,14 @@ fun Activity_Account_TrainingSubjectResult(
                     onDismissRequest = { modalBottomSheetEnabled.value = false },
                     sheetState = sheetState,
                 ) {
+                    fun copyToClipboard(s: String? = null) {
+                        if (!s.isNullOrEmpty()) {
+                            clipboardManager.setText(AnnotatedString(s))
+                            onMessageReceived(context.getString(R.string.account_accinfo_snackbar_copied), true, null, null)
+                        } else {
+                            onMessageReceived(context.getString(R.string.account_accinfo_snackbar_nocopy), true, null, null)
+                        }
+                    }
                     Column(
                         modifier = Modifier.padding(horizontal = 15.dp),
                         horizontalAlignment = Alignment.CenterHorizontally,
@@ -399,10 +415,59 @@ fun Activity_Account_TrainingSubjectResult(
                                         OutlinedTextBox(
                                             modifier = Modifier.fillMaxWidth(),
                                             title = key,
-                                            value = value
+                                            value = value,
+                                            trailingIcon = {
+                                                IconButton(
+                                                    onClick = {
+                                                        copyToClipboard(value)
+                                                    },
+                                                    content = {
+                                                        Icon(
+                                                            ImageVector.vectorResource(R.drawable.ic_baseline_content_copy_24),
+                                                            context.getString(R.string.action_copy)
+                                                        )
+                                                    }
+                                                )
+                                            },
                                         )
                                     }
                                 }
+                            }
+                            Row(
+                                modifier = Modifier.fillMaxWidth().padding(top = 7.dp),
+                                horizontalArrangement = Arrangement.Center
+                            ) {
+                                Button(
+                                    onClick = {
+                                        selectedSubject.value?.let { item ->
+                                            copyToClipboard(
+                                                String.format(
+                                                    Locale.ROOT,
+                                                    "%s: %s\n%s",
+                                                    context.getString(R.string.account_trainingstatus_subjectresult_subjectname),
+                                                    selectedSubject.value?.name ?: context.getString(R.string.data_nodata),
+                                                    subjectResultToMap(item)
+                                                        .map { p -> "${p.key}: ${p.value}" }
+                                                        .toList()
+                                                        .joinToString(separator = "\n")
+                                                )
+                                            )
+                                        }
+                                    },
+                                    content = {
+                                        Row(
+                                            verticalAlignment = Alignment.CenterVertically,
+                                            content = {
+                                                Icon(
+                                                    ImageVector.vectorResource(R.drawable.ic_baseline_content_copy_24),
+                                                    context.getString(R.string.action_copy),
+                                                    modifier = Modifier.padding(end = 7.dp)
+                                                )
+                                                Text(context.getString(R.string.account_trainingstatus_subjectresult_button_copyall))
+                                            }
+                                        )
+                                    }
+                                )
                             }
                             Spacer(modifier = Modifier.size(5.dp))
                         }

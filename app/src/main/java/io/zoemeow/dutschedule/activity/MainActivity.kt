@@ -11,7 +11,7 @@ import io.zoemeow.dutschedule.service.BaseService
 import io.zoemeow.dutschedule.service.NewsBackgroundUpdateService
 import io.zoemeow.dutschedule.ui.view.main.Activity_MainView_MainViewTabView
 import io.zoemeow.dutschedule.ui.view.main.MainViewDashboard
-import io.zoemeow.dutschedule.utils.NotificationsUtil
+import io.zoemeow.dutschedule.utils.NotificationUtils
 
 @AndroidEntryPoint
 class MainActivity : BaseActivity() {
@@ -23,7 +23,7 @@ class MainActivity : BaseActivity() {
                 Log.d("NewsBackgroundService", "Cancelled schedule")
             }
         )
-        NotificationsUtil.initializeNotificationChannel(this)
+        NotificationUtils.initializeNotificationChannel(this)
     }
 
     @Composable

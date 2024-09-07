@@ -42,8 +42,7 @@ import io.zoemeow.dutschedule.activity.MainActivity
 import io.zoemeow.dutschedule.activity.NewsActivity
 import io.zoemeow.dutschedule.model.AppearanceState
 import io.zoemeow.dutschedule.model.ProcessState
-import io.zoemeow.dutschedule.model.settings.BackgroundImageOption
-import io.zoemeow.dutschedule.utils.BackgroundImageUtil
+import io.zoemeow.dutschedule.utils.BackgroundImageUtils
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -219,11 +218,7 @@ fun MainActivity.MainViewDashboard(
         snackBarHostState = snackBarHostState,
         isVisible = isNotificationOpened.value,
         appearanceState = appearanceState,
-        backgroundImage = when (getMainViewModel().appSettings.value.backgroundImage) {
-            BackgroundImageOption.None -> null
-            BackgroundImageOption.YourCurrentWallpaper -> BackgroundImageUtil.getCurrentWallpaperBackground(context)
-            BackgroundImageOption.PickFileFromMedia -> BackgroundImageUtil.getImageFromAppData(context)
-        },
+        backgroundImage = BackgroundImageUtils.backgroundImageCache.value,
         onDismiss = {
             clearSnackBar()
             isNotificationOpened.value = false

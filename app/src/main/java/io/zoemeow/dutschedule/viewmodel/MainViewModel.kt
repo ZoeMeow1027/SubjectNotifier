@@ -189,6 +189,7 @@ class MainViewModel @Inject constructor(
         if (!_runOnStartup.value) {
             // App settings
             appSettings.value = fileModuleRepository.getAppSettings()
+
             accountSession.setAccountSession(fileModuleRepository.getAccountSession())
             accountSession.setSchoolYear(schoolYearItem = appSettings.value.currentSchoolYear)
 

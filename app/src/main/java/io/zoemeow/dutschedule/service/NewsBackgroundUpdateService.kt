@@ -20,10 +20,9 @@ import io.zoemeow.dutschedule.model.settings.AppSettings
 import io.zoemeow.dutschedule.model.settings.SubjectCode
 import io.zoemeow.dutschedule.repository.DutRequestRepository
 import io.zoemeow.dutschedule.repository.FileModuleRepository
-import io.zoemeow.dutschedule.utils.CustomDateUtil
-import io.zoemeow.dutschedule.utils.CustomDateUtil.Companion.dateUnixToString
-import io.zoemeow.dutschedule.utils.CustomDateUtil.Companion.getCurrentDateAndTimeToString
-import io.zoemeow.dutschedule.utils.NotificationsUtil
+import io.zoemeow.dutschedule.utils.CustomDateUtils.Companion.dateUnixToString
+import io.zoemeow.dutschedule.utils.CustomDateUtils.Companion.getCurrentDateAndTimeToString
+import io.zoemeow.dutschedule.utils.NotificationUtils
 import io.zoemeow.dutschedule.utils.calcMD5
 
 class NewsBackgroundUpdateService : BaseService(
@@ -551,7 +550,7 @@ class NewsBackgroundUpdateService : BaseService(
         )
 
         // Notify here
-        NotificationsUtil.showNewsNotification(
+        NotificationUtils.showNewsNotification(
             context = context,
             channelId = "notification.id.news.global",
             newsMD5 = "${newsItem.date}_${newsItem.title}".calcMD5(),
@@ -624,7 +623,7 @@ class NewsBackgroundUpdateService : BaseService(
                 notifyContentList.add(
                     context.getString(
                         R.string.service_newsbackgroundservice_newssubject_date,
-                        CustomDateUtil.dateUnixToString(newsItem.affectedDate, "dd/MM/yyyy"),
+                        dateUnixToString(newsItem.affectedDate, "dd/MM/yyyy"),
                         if (newsItem.affectedLesson != null) newsItem.affectedLesson.toString() else context.getString(R.string.service_newsbackgroundservice_newssubject_lessonunknown)
                     )
                 )
@@ -652,7 +651,7 @@ class NewsBackgroundUpdateService : BaseService(
 //            )
 
             // Notify here
-            NotificationsUtil.showNewsNotification(
+            NotificationUtils.showNewsNotification(
                 context = context,
                 channelId = "notification.id.news.subject",
                 newsMD5 = "${newsItem.date}_${newsItem.title}".calcMD5(),
@@ -671,7 +670,7 @@ class NewsBackgroundUpdateService : BaseService(
 //            )
 
             // Notify here
-            NotificationsUtil.showNewsNotification(
+            NotificationUtils.showNewsNotification(
                 context = context,
                 channelId = "notification.id.news.subject",
                 newsMD5 = "${newsItem.date}_${newsItem.title}".calcMD5(),

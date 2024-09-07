@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import io.dutwrapper.dutwrapper.Utils
 import io.zoemeow.dutschedule.R
 import io.zoemeow.dutschedule.model.CustomClock
-import io.zoemeow.dutschedule.utils.CustomDateUtil
+import io.zoemeow.dutschedule.utils.CustomDateUtils
 import kotlinx.coroutines.delay
 
 @Composable
@@ -82,7 +82,7 @@ fun DateAndTimeSummaryItem(
         while (true) {
             context.getString(
                 R.string.main_dashboard_widget_datetime_datetimestat,
-                CustomDateUtil.getCurrentDateAndTimeToString("dd/MM/yyyy HH:mm:ss")
+                CustomDateUtils.getCurrentDateAndTimeToString("dd/MM/yyyy HH:mm:ss")
             ).also { dateTimeString.value = it }
             delay(1000)
         }

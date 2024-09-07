@@ -182,13 +182,12 @@ fun Activity_Account_TrainingResult(
                                                                 end = avg4Leading.length + avg4Trailing.length + 1 + schYear.length
                                                             )
                                                         }
-                                                        ClickableText(
+                                                        Text(
                                                             text = data1,
                                                             style = TextStyle(
                                                                 textAlign = TextAlign.Center,
                                                                 color = OutlinedTextFieldDefaults.colors().focusedTextColor
-                                                            ),
-                                                            onClick = { _ -> }
+                                                            )
                                                         )
                                                     }
                                                 )

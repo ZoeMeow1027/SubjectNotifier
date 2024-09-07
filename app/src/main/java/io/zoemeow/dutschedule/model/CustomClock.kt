@@ -2,6 +2,7 @@ package io.zoemeow.dutschedule.model
 
 import java.io.Serializable
 import java.util.Calendar
+import java.util.Locale
 
 class CustomClock : Serializable {
     val hour: Int
@@ -24,7 +25,7 @@ class CustomClock : Serializable {
     override fun toString(): String {
 //        val numberFormat = DecimalFormat("00")
 //        return "${numberFormat.format(this.hour)}:${numberFormat.format(this.minute)}"
-        return String.format("%2d:%2d", hour, minute)
+        return String.format(Locale.ROOT, "%2d:%2d", hour, minute)
     }
 
     // 0 if a = b, < 0 of a < b, > 0 if a > b

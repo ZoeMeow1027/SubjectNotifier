@@ -39,7 +39,6 @@ import io.dutwrapper.dutwrapper.News
 import io.zoemeow.dutschedule.R
 import io.zoemeow.dutschedule.model.news.NewsSearchHistory
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NewsSearchOptionAndHistory(
     context: Context,

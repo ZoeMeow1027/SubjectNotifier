@@ -39,7 +39,7 @@ import io.zoemeow.dutschedule.R
 import io.zoemeow.dutschedule.model.AppearanceState
 import io.zoemeow.dutschedule.model.NotificationHistory
 import io.zoemeow.dutschedule.ui.component.main.NotificationItem
-import io.zoemeow.dutschedule.utils.CustomDateUtil
+import io.zoemeow.dutschedule.utils.CustomDateUtils
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -129,7 +129,7 @@ fun NotificationScaffold(
                                     .toSortedMap(compareByDescending { it })
                                     .forEach(action = { group ->
                                         Text(
-                                            CustomDateUtil.unixToDurationWithLocale(
+                                            CustomDateUtils.unixToDurationWithLocale(
                                                 context = context,
                                                 unix = group.key
                                             ),

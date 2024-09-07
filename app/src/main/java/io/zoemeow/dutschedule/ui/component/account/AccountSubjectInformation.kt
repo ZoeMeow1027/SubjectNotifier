@@ -16,7 +16,7 @@ import androidx.compose.ui.unit.dp
 import io.dutwrapper.dutwrapper.AccountInformation.SubjectInformation
 import io.zoemeow.dutschedule.GlobalVariables
 import io.zoemeow.dutschedule.R
-import io.zoemeow.dutschedule.utils.CustomDateUtil
+import io.zoemeow.dutschedule.utils.CustomDateUtils
 
 @Composable
 fun SubjectInformation(
@@ -53,7 +53,7 @@ fun SubjectInformation(
                                 transform = { schItem ->
                                     context.getString(
                                         R.string.account_subjectinfo_summary_schitem,
-                                        CustomDateUtil.dayOfWeekInString(context, schItem.dayOfWeek, true),
+                                        CustomDateUtils.dayOfWeekInString(context, schItem.dayOfWeek, true),
                                         schItem.lesson.start,
                                         schItem.lesson.end,
                                         schItem.room

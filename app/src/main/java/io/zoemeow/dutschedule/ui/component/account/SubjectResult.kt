@@ -23,6 +23,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.dutwrapper.dutwrapper.AccountInformation
+import io.dutwrapper.dutwrapper.AccountInformation.SubjectCode
 import io.zoemeow.dutschedule.GlobalVariables
 import io.zoemeow.dutschedule.R
 import io.zoemeow.dutschedule.ui.component.base.Tag
@@ -84,7 +85,7 @@ fun SubjectResult(
 private fun SubjectResultPreview() {
     SubjectResult(
         AccountInformation.SubjectResult(
-            64, "2023-2024", false, "1023623.2220.19.14", "Toán ứng dụng Công nghệ thông tin",
+            64, "2023-2024", false, SubjectCode("1023623.2220.19.14"), "Toán ứng dụng Công nghệ thông tin",
             2.0, "Point formula", 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, "F", true
         )
     )

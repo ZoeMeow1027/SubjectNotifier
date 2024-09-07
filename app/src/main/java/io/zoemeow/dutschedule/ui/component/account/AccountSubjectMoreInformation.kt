@@ -23,7 +23,7 @@ import io.zoemeow.dutschedule.GlobalVariables
 import io.zoemeow.dutschedule.R
 import io.zoemeow.dutschedule.model.settings.SubjectCode
 import io.zoemeow.dutschedule.ui.component.base.DialogBase
-import io.zoemeow.dutschedule.utils.CustomDateUtil
+import io.zoemeow.dutschedule.utils.CustomDateUtils
 
 @Composable
 fun AccountSubjectMoreInformation(
@@ -63,7 +63,7 @@ fun AccountSubjectMoreInformation(
                                 it.scheduleStudy.scheduleList.joinToString(
                                     separator = "; ",
                                     transform = { item1 ->
-                                        "${CustomDateUtil.dayOfWeekInString(context, item1.dayOfWeek + 1)},${item1.lesson.start}-${item1.lesson.end},${item1.room}"
+                                        "${CustomDateUtils.dayOfWeekInString(context, item1.dayOfWeek + 1)},${item1.lesson.start}-${item1.lesson.end},${item1.room}"
                                     }
                                 )
                             } ?: ""
@@ -94,7 +94,7 @@ fun AccountSubjectMoreInformation(
                             ))
                             CustomText(context.getString(
                                 R.string.account_subjectinfo_data_scheduleexam_date,
-                                CustomDateUtil.dateUnixToString(
+                                CustomDateUtils.dateUnixToString(
                                     item.scheduleExam.date,
                                     "dd/MM/yyyy HH:mm",
                                     "GMT+7"

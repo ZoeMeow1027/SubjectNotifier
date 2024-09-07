@@ -375,12 +375,14 @@
     <string name="account_trainingstatus_subjectresult_searchfilterbutton">Search &amp; filter</string>
     <string name="account_trainingstatus_subjectresult_restudiedsubject">Restudied subject</string>
     <string name="account_trainingstatus_subjectresult_searchquery">Search query</string>
+    <string name="account_trainingstatus_subjectresult_subjectname">Subject name</string>
     <string name="account_trainingstatus_subjectresult_schoolyear">School year</string>
     <string name="account_trainingstatus_subjectresult_schoolyear_insummer">in summer</string>
     <string name="account_trainingstatus_subjectresult_subjectcode">Subject code</string>
     <string name="account_trainingstatus_subjectresult_credit">Credit(s)</string>
     <string name="account_trainingstatus_subjectresult_pointformula">Point formula</string>
     <string name="account_trainingstatus_subjectresult_finalscore">Point (T10 - T4 - By point char)</string>
+    <string name="account_trainingstatus_subjectresult_button_copyall">Copy all to clipboard</string>
     <!-- External links activity strings -->
     <string name="miscellaneous_externallinks_mainviewbutton">Related links</string>
     <string name="miscellaneous_externallinks_title">DUT related links</string>

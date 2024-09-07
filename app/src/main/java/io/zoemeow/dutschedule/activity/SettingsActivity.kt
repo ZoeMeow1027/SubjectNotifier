@@ -18,8 +18,8 @@ import io.zoemeow.dutschedule.ui.view.settings.Activity_Settings_ExperimentSetti
 import io.zoemeow.dutschedule.ui.view.settings.Activity_Settings_NewsNotificationSettings
 import io.zoemeow.dutschedule.ui.view.settings.Activity_Settings_ParseNewsSubjectNotification
 import io.zoemeow.dutschedule.ui.view.settings.Activity_Settings_WallpaperAndControlsSettings
-import io.zoemeow.dutschedule.utils.BackgroundImageUtil
-import io.zoemeow.dutschedule.utils.NotificationsUtil
+import io.zoemeow.dutschedule.utils.BackgroundImageUtils
+import io.zoemeow.dutschedule.utils.NotificationUtils
 import io.zoemeow.dutschedule.utils.openLink
 
 @AndroidEntryPoint
@@ -38,7 +38,7 @@ class SettingsActivity : BaseActivity() {
 
     override fun onResume() {
         super.onResume()
-        NotificationsUtil.initializeNotificationChannel(this)
+        NotificationUtils.initializeNotificationChannel(this)
     }
 
     // When active
@@ -47,20 +47,35 @@ class SettingsActivity : BaseActivity() {
             // Callback is invoked after the user selects a media item or closes the photo picker.
             if (uri != null) {
                 Log.d("PhotoPicker", "Selected URI: $uri")
+                Log.d("PhotoPicker", "Switching BackgroundImageOption to None to avoid cache...")
                 getMainViewModel().appSettings.value = getMainViewModel().appSettings.value.clone(
                     backgroundImage = BackgroundImageOption.None
                 )
-                Log.d("PhotoPicker", "Switched to None to avoid cache!")
-                BackgroundImageUtil.saveImageToAppData(this, uri)
-                Log.d("PhotoPicker", "Copied image to app data!")
-                getMainViewModel().appSettings.value = getMainViewModel().appSettings.value.clone(
-                    backgroundImage = BackgroundImageOption.PickFileFromMedia
-                )
-                Log.d("PhotoPicker", "Switched to PickFileFromMedia!")
-                getMainViewModel().saveApplicationSettings(
-                    saveUserSettings = true,
+                BackgroundImageUtils.setImageToAppData(
+                    context = this.getContext(),
+                    uri = uri,
                     onCompleted = {
-                        Log.d("PhotoPicker", "Done saving settings!")
+                        if (it) {
+                            Log.d("PhotoPicker", "Copying image to app data!")
+                            BackgroundImageUtils.setBackgroundImageCacheOption(
+                                context = this.getContext(),
+                                backgroundOption = getMainViewModel().appSettings.value.backgroundImage
+                            )
+                            Log.d("PhotoPicker", "Switching BackgroundImageOption to PickFileFromMedia...")
+                            getMainViewModel().appSettings.value = getMainViewModel().appSettings.value.clone(
+                                backgroundImage = BackgroundImageOption.PickFileFromMedia
+                            )
+                            BackgroundImageUtils.setBackgroundImageCacheOption(
+                                context = this.getContext(),
+                                backgroundOption = getMainViewModel().appSettings.value.backgroundImage
+                            )
+                            getMainViewModel().saveApplicationSettings(
+                                saveUserSettings = true,
+                                onCompleted = {
+                                    Log.d("PhotoPicker", "Done saving settings!")
+                                }
+                            )
+                        }
                     }
                 )
             } else {
@@ -121,7 +136,7 @@ class SettingsActivity : BaseActivity() {
                     snackBarHostState = snackBarHostState,
                     appearanceState = appearanceState,
                     onNotificationRegister = {
-                        NotificationsUtil.initializeNotificationChannel(this)
+                        NotificationUtils.initializeNotificationChannel(this)
                     },
                     onBack = {
                         setResult(RESULT_CANCELED)
@@ -298,6 +313,13 @@ class SettingsActivity : BaseActivity() {
                                     getMainViewModel().appSettings.value.clone(
                                         backgroundImage = it
                                     )
+                                BackgroundImageUtils.setBackgroundImageCacheOption(
+                                    context = context,
+                                    backgroundOption = getMainViewModel().appSettings.value.backgroundImage
+                                )
+                                getMainViewModel().saveApplicationSettings(
+                                    saveUserSettings = true
+                                )
                             }
 
                             BackgroundImageOption.YourCurrentWallpaper -> {
@@ -308,6 +330,13 @@ class SettingsActivity : BaseActivity() {
                                         getMainViewModel().appSettings.value.clone(
                                             backgroundImage = it
                                         )
+                                    BackgroundImageUtils.setBackgroundImageCacheOption(
+                                        context = context,
+                                        backgroundOption = getMainViewModel().appSettings.value.backgroundImage
+                                    )
+                                    getMainViewModel().saveApplicationSettings(
+                                        saveUserSettings = true
+                                    )
                                 } else {
                                     showSnackBar(
                                         text = context.getString(R.string.permission_missing_all_file_access),

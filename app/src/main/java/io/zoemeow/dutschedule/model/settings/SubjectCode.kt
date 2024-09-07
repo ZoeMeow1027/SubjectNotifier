@@ -14,6 +14,6 @@ data class SubjectCode(
     }
 
     override fun toString(): String {
-        return "${studentYearId}.${classId} - ${subjectName}"
+        return "${studentYearId}.${classId} - $subjectName"
     }
 }

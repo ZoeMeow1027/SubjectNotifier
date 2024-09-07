@@ -59,10 +59,10 @@ fun DutScheduleTheme(
         SideEffect {
             val window = (view.context as Activity).window
             // window.statusBarColor = colorScheme.primary.toArgb()
-            window.statusBarColor = when (translucentStatusBar) {
-                true -> android.graphics.Color.TRANSPARENT
-                false -> colorScheme.primary.toArgb()
-            }
+//            window.statusBarColor = when (translucentStatusBar) {
+//                true -> android.graphics.Color.TRANSPARENT
+//                false -> colorScheme.primary.toArgb()
+//            }
             WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = when (translucentStatusBar) {
                 true -> !darkTheme
                 false -> darkTheme

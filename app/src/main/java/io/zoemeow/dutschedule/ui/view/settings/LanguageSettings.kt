@@ -43,7 +43,6 @@ import androidx.compose.ui.unit.sp
 import androidx.core.os.LocaleListCompat
 import io.zoemeow.dutschedule.R
 import io.zoemeow.dutschedule.model.AppearanceState
-import io.zoemeow.dutschedule.utils.NotificationsUtil
 import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)

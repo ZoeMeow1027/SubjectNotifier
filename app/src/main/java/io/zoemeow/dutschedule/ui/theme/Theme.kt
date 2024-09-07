@@ -63,10 +63,11 @@ fun DutScheduleTheme(
 //                true -> android.graphics.Color.TRANSPARENT
 //                false -> colorScheme.primary.toArgb()
 //            }
-            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = when (translucentStatusBar) {
-                true -> !darkTheme
-                false -> darkTheme
-            }
+//            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = when (translucentStatusBar) {
+//                true -> !darkTheme
+//                false -> darkTheme
+//            }
+            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = !darkTheme
         }
     }
 

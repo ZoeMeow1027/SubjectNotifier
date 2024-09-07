@@ -15,11 +15,14 @@
     <string name="action_grant">Cho phép</string>
     <string name="action_confirm">Xác nhận</string>
     <string name="action_refresh">Làm mới</string>
+    <string name="action_menu">Menu</string>
     <string name="action_search">Tìm kiếm</string>
     <string name="action_undo">Hoàn tác</string>
     <string name="action_close">Đóng</string>
     <string name="action_display">Hiển thị</string>
     <string name="action_hide">Ẩn</string>
+    <string name="action_share">Chia sẻ</string>
+    <string name="action_reset">Đặt lại</string>
     <!-- Tooltip string -->
     <string name="tooltip_selected">Đã chọn</string>
     <string name="tooltip_info">Thông tin</string>
@@ -41,8 +44,23 @@
     <string name="date_duration_today">Hôm nay</string>
     <string name="date_duration_yesterday">Hôm qua</string>
     <!-- Main activity string -->
+    <string name="main_dashboard_title">Tổng quan</string>
     <string name="main_account_notloggedin">Chưa đăng nhập</string>
     <string name="main_account_fetching">Đang tải…</string>
+    <string name="main_dashboard_widget_msg_notloggedin">Bạn chưa đăng nhập! Chúng tôi không thể tải dữ liệu cho bạn!\nĐể tiếp tục, hãy đăng nhập.</string>
+    <string name="main_dashboard_widget_notloggedin_title">Một số widget đã ẩn</string>
+    <string name="main_dashboard_widget_notloggedin_description">Widget tiết học hôm nay và tiết học bị ảnh hưởng sẽ có sẵn khi đăng nhập. Để tiếp tục, nhấp vào đây để điều hướng đến trang đăng nhập.</string>
+    <string name="main_dashboard_widget_datetime_title">Ngày &amp; giờ</string>
+    <string name="main_dashboard_widget_datetime_schoolstat">Năm học: %1$s - Tuần: %2$s\nTiết học hiện tại: %3$s</string>
+    <string name="main_dashboard_widget_datetime_datetimestat">Ngày và giờ: %s\n(dựa theo cài đặt vùng hiện tại của bạn)\n</string>
+    <string name="main_dashboard_widget_lessontoday_title">Tiết học hôm nay của bạn</string>
+    <string name="main_dashboard_widget_lessontoday_completed">Bạn đã hoàn thành tất cả môn học hôm nay. Hãy nghỉ ngơi!</string>
+    <string name="main_dashboard_widget_lessontoday_availabletoday_1">Bạn còn 1 môn học còn lại trong hôm nay:\n\n%1$s</string>
+    <string name="main_dashboard_widget_lessontoday_availabletoday_other">Bạn còn %1$d môn học còn lại trong hôm nay:\n\n%2$s</string>
+    <string name="main_dashboard_widget_lessontoday_availablepending_1">Bạn có 1 môn học còn lại trong hôm nay:\n\n%1$s</string>
+    <string name="main_dashboard_widget_lessontoday_availablepending_other">Bạn có %1$d môn học còn lại trong hôm nay:\n\n%2$s</string>
+    <string name="main_dashboard_widget_news_title">Tin tức</string>
+    <string name="main_dashboard_widget_news_status">Nhấn vào đây để mở tin tức.\nTin tức chung: %1$s mới hôm nay, %2$s+ mới trong 7 ngày qua.</string>
     <!-- Android notification string -->
     <string name="notification_announcement_title">Thông báo ứng dụng</string>
     <string name="notification_announcement_description">Kênh này sẽ gửi thông báo cập nhật quan trọng của ứng dụng cho bạn.</string>
@@ -76,7 +94,7 @@
     <string name="settings_option_apptheme_choice_dynamiccolorenabled">(dynamic color đang bật)</string>
     <string name="settings_option_blackbackground">Nền đen</string>
     <string name="settings_option_blackbackground_description">Đặt màu nền của ứng dụng là màu đen. Chỉ hoạt động trong chế độ tối và bạn không bật hình nền ứng dụng.</string>
-    <string name="settings_option_wallpaperbackground">Hình nền ứng dụng</string>
+    <string name="settings_option_wallpaperbackground">Hình nền &amp; thành phần điều khiển</string>
     <string name="settings_option_wallpaperbackground_choice_none">Đã vô hiệu hoá</string>
     <string name="settings_option_wallpaperbackground_choice_currentwallpaper">Hình nền hiện tại của bạn</string>
     <string name="settings_option_wallpaperbackground_choice_pickedimage">Ảnh bạn đã chọn</string>
@@ -89,11 +107,8 @@
     <string name="settings_option_experiemntsettings">Cài đặt thử nghiệm</string>
     <string name="settings_option_experiemntsettings_description">Các cài đặt thử nghiệm của chúng tôi trước khi đưa vào chính thức. Sử dụng nó một cách thận trọng.</string>
     <string name="settings_category_about">Về ứng dụng</string>
-    <string name="settings_option_version">Phiên bản</string>
-    <string name="settings_option_version_description">Hiện tại: %1$s (%2$d)\nNhấp vào đây để kiểm tra cập nhật.</string>
-    <string name="settings_option_changelog">Nhật ký thay đổi</string>
-    <string name="settings_option_changelog_description">Nhấn để xem ghi chú phát hành của ứng dụng</string>
-    <string name="settings_option_github">GitHub (nhấp để mở liên kết)</string>
+    <string name="settings_option_about">Về ứng dụng</string>
+    <string name="settings_option_version_description">%1$s (%2$d)</string>
     <!-- Settings Dialog UI string -->
     <string name="settings_dialog_apptheme_title">Chủ đề ứng dụng</string>
     <string name="settings_dialog_apptheme_choice_followdevice">Theo chủ đề hệ thống</string>
@@ -101,12 +116,20 @@
     <string name="settings_dialog_apptheme_choice_light">Chủ đề sáng</string>
     <string name="settings_dialog_apptheme_choice_dynamiccolor">Dynamic color</string>
     <string name="settings_dialog_apptheme_note">Hệ điều hành của bạn cần tối thiểu:\n- Android 9 để theo chủ đề hệ thống;\n- Android 12 để bật dynamic color.</string>
-    <string name="settings_dialog_wallpaperbackground_title">Hình nền ứng dụng</string>
-    <string name="settings_dialog_wallpaperbackground_choice_none">Đã vô hiệu hóa</string>
-    <string name="settings_dialog_wallpaperbackground_choice_currentwallpaper">Hình nền hiện tại của bạn</string>
-    <string name="settings_dialog_wallpaperbackground_choice_currentwallpaper_disa14">Tùy chọn này không có sẵn trên Android 14</string>
-    <string name="settings_dialog_wallpaperbackground_choice_currentwallpaper_dismisperext">Bạn cần phải cho phép Quyền truy cập mọi tệp</string>
-    <string name="settings_dialog_wallpaperbackground_choice_pickaimage">Chọn một hình ảnh từ phương tiện</string>
+    <!-- Wallpaper and Controls settings activity string-->
+    <string name="settings_wallpaperandcontrols_title">Cài đặt hình nền và thành phần điều khiển</string>
+    <string name="settings_wallpaperandcontrols_category_enabled">Trạng thái hình nền</string>
+    <string name="settings_wallpaperandcontrols_choice_none">Đã vô hiệu hóa</string>
+    <string name="settings_wallpaperandcontrols_choice_currentwallpaper">Hình nền hiện tại của bạn</string>
+    <string name="settings_wallpaperandcontrols_choice_currentwallpaper_disa14">Tùy chọn này không có sẵn trên Android 14</string>
+    <string name="settings_wallpaperandcontrols_choice_currentwallpaper_dismisperext">Bạn cần phải cho phép Quyền truy cập mọi tệp</string>
+    <string name="settings_wallpaperandcontrols_choice_pickaimage">Chọn hình ảnh từ phương tiện</string>
+    <string name="settings_wallpaperandcontrols_resetbuttonleading">Nhấn nút này để</string>
+    <string name="settings_wallpaperandcontrols_category_componentopacity">Cài đặt độ mờ nút bấm</string>
+    <string name="settings_wallpaperandcontrols_option_bgopacity">Độ mờ hình nền</string>
+    <string name="settings_wallpaperandcontrols_option_bgopacity_description">Điều này sẽ thay đổi độ mờ hình nền của bạn</string>
+    <string name="settings_wallpaperandcontrols_option_componentopacity">Độ mờ thành phần điều khiển</string>
+    <string name="settings_wallpaperandcontrols_option_componentopacity_description">Điều này sẽ thay đổi độ mờ thành phần điều khiển</string>
     <!-- Settings Language activity string-->
     <string name="settings_applanguage_title">Ngôn ngữ ứng dụng</string>
     <!-- Settings Parse news subject activity string -->
@@ -123,10 +146,10 @@
     <string name="settings_experiment_option_currentschyear">Năm học hiện tại</string>
     <string name="settings_experiment_option_currentschyear_description">Năm: 20%1$d-20%2$d, học kỳ: %3$s%4$s</string>
     <string name="settings_experiment_option_currentschyear_insummer"> (học kỳ hè)</string>
+    <string name="settings_experiment_category_news">Tin tức</string>
+    <string name="settings_experiment_option_opennewsinpopup">Mở tin tức đã chọn trong popup</string>
+    <string name="settings_experiment_option_opennewsinpopup_description">Nếu bị vô hiệu hóa, chúng tôi sẽ mở tin tức trong màn hình mới</string>
     <string name="settings_experiment_category_appearance">Hiển thị</string>
-    <string name="settings_experiment_option_required_enableimage">Bạn cần bật hình nền ứng dụng để tùy chọn có tác dụng</string>
-    <string name="settings_experiment_option_bgopacity">Độ mờ hình nền</string>
-    <string name="settings_experiment_option_componentopacity">Độ mờ thành phần điều khiển</string>
     <string name="settings_experiment_option_dashboardview">Chế độ xem bảng tổng quát trên màn hình chính</string>
     <string name="settings_experiment_option_dashboardview_choice_enabled">Đã bật</string>
     <string name="settings_experiment_option_dashboardview_choice_disabled">Đã vô hiệu hóa (chế độ xem điều hướng thẻ)</string>
@@ -197,6 +220,14 @@
     <string name="settings_newsnotify_newsfilter_dialogdelete_yes">Đúng, xóa nó</string>
     <string name="settings_newsnotify_newsfilter_dialogdeleteall_title">Xóa tất cả bộ lọc tin tức?</string>
     <string name="settings_newsnotify_newsfilter_dialogdeleteall_description">Bạn có chắc chắn muốn xóa tất cả bộ lọc tin tức không?\n\nHành động này không thể hoàn tác.</string>
+    <!-- About application activity strings -->
+    <string name="settings_about_title">Về ứng dụng</string>
+    <string name="settings_about_changelog">Nhật ký thay đổi</string>
+    <string name="settings_about_changelog_description">Nhấn để xem ghi chú phát hành của ứng dụng</string>
+    <string name="settings_about_license">Giấy phép</string>
+    <string name="settings_about_credit">Credit</string>
+    <string name="settings_about_credit_description">Nhấp vào đây để xem các thành phần mà ứng dụng này đã sử dụng</string>
+    <string name="settings_about_github">GitHub (nhấp để mở liên kết)</string>
     <!-- Notification UI string -->
     <string name="notification_panel_title">Thông báo</string>
     <string name="notification_panel_no_notifications">Không có thông báo</string>
@@ -205,6 +236,7 @@
     <string name="notification_removeall_removed">Đã xóa tất cả thông báo!</string>
     <!-- News activity string -->
     <string name="news_title">Tin tức</string>
+    <string name="news_action_search">Tìm kiếm tin tức</string>
     <string name="news_tabname_global">Chung</string>
     <string name="news_tabname_subject">Lớp học phần</string>
     <!-- News detail activity string -->
@@ -295,9 +327,10 @@
     <string name="account_subjectfee_status_notdoneyet">Chưa thanh toán</string>
     <!-- Account Information activity string -->
     <string name="account_accinfo_title">Thông tin tài khoản</string>
+    <string name="account_accinfo_action_openlink">Mở</string>
     <string name="account_accinfo_noinfo">Không có thông tin nào được trả từ máy chủ!\nKiểm tra thông tin đăng nhập và kết nối internet của bạn, và thử lại.</string>
     <string name="account_accinfo_editinfo">Về việc thay đổi thông tin</string>
-    <string name="account_accinfo_description">Nếu bạn muốn thay đổi thông tin nào đó, bạn cần thay đổi nó trong trang web của trường.</string>
+    <string name="account_accinfo_description">Nếu bạn muốn thay đổi thông tin nào đó, bạn cần đăng nhập trong trang web của trường để thay đổi.</string>
     <string name="account_accinfo_item_name">Tên</string>
     <string name="account_accinfo_item_dateofbirth">Ngày sinh</string>
     <string name="account_accinfo_item_placeofbirth">Nơi sinh</string>
@@ -341,6 +374,7 @@
     <string name="account_trainingstatus_subjectresult_allschoolyears">Tất cả năm học</string>
     <string name="account_trainingstatus_subjectresult_searchfilterbutton">Tìm kiếm &amp; lọc</string>
     <string name="account_trainingstatus_subjectresult_restudiedsubject">Môn học đã học lại</string>
+    <string name="account_trainingstatus_subjectresult_subjectname">Tên môn học</string>
     <string name="account_trainingstatus_subjectresult_searchquery">Truy vấn tìm kiếm</string>
     <string name="account_trainingstatus_subjectresult_schoolyear">Năm học</string>
     <string name="account_trainingstatus_subjectresult_schoolyear_insummer">trong học kỳ hè</string>
@@ -348,6 +382,38 @@
     <string name="account_trainingstatus_subjectresult_credit">Số tín chỉ</string>
     <string name="account_trainingstatus_subjectresult_pointformula">Công thức điểm</string>
     <string name="account_trainingstatus_subjectresult_finalscore">Điểm (T10 - T4 - Bằng chữ)</string>
+    <string name="account_trainingstatus_subjectresult_button_copyall">Sao chép tất cả vào khay nhớ tạm</string>
+    <!-- External links activity strings -->
+    <string name="miscellaneous_externallinks_mainviewbutton">Liên kết liên quan</string>
+    <string name="miscellaneous_externallinks_title">Liên kết liên quan của DUT</string>
+    <string name="miscellaneous_externallinks_action_search">Tìm kiếm</string>
+    <string name="miscellaneous_externallinks_action_aboutrelatedlink">Về liên kết liên quan của DUT</string>
+    <string name="miscellaneous_externallinks_tooltip_aboutrelatedlink">Trang này sẽ hiển thị liên kết được sử dụng nhiều nhất, vì vậy một số liên kết sẽ không xuất hiện tại đây. Bạn có thể điều hướng đến trang chính thức của DUT để biết thêm thông tin.</string>
+    <string name="miscellaneous_externallinks_searchaexternallink">Tìm kiếm liên kết</string>
+    <!-- Activity name strings -->
+    <string name="activity_name_news">DutSchedule - Tin tức</string>
+    <string name="activity_name_accounts">DutSchedule - Tài khoản</string>
+    <string name="activity_name_settings">DutSchedule - Cài đặt</string>
+    <string name="activity_name_miscellaneous">DutSchedule - Linh tinh</string>
+    <string name="activity_service_newsbackground">Cập nhật tin tức trong nền</string>
+    <!-- Browser activity strings -->
+    <string name="activity_browser_loading">Đang tải…</string>
+    <string name="activity_browser_copylink">Sao chép liên kết</string>
+    <string name="activity_browser_copiedlink">Đã sao chép liên kết hiện tại vào bộ nhớ tạm!</string>
+    <string name="activity_browser_openindefaultbrowser">Mở trong trình duyệt mặc định</string>
+    <!-- Permission request activity strings -->
+    <string name="activity_permissionrequest_title">Danh sách quyền được yêu cầu</string>
+    <string name="activity_permissionrequest_description">Dưới đây là tất cả các quyền được yêu cầu bởi ứng dụng này. Nhấn vào một quyền để cấp quyền đó. Nếu bạn không thể cấp hoặc muốn thu hồi quyền, bạn có thể làm điều đó bằng cách mở Cài đặt ứng dụng Android bên dưới.</string>
+    <string name="activity_permissionrequest_status_allowed">Đã cho phép</string>
+    <string name="activity_permissionrequest_status_declined">Đã từ chối</string>
+    <string name="activity_permissionrequest_snackbar_alreadygranted">Bạn đã cho phép quyền này!</string>
+    <string name="activity_permissionrequest_action_openandroidsettings">Mở cài đặt ứng dụng Android</string>
+    <string name="activity_permissionrequest_permission_notification_title">Thông báo</string>
+    <string name="activity_permissionrequest_permission_notification_description">Cho phép ứng dụng này gửi thông báo mới (tin tức chung và tin tức lớp học phần), cập nhật ứng dụng… Bạn vẫn có thể thay đổi nhóm thông báo nào sẽ thông báo cho bạn trong cài đặt ứng dụng.</string>
+    <string name="activity_permissionrequest_permission_manageexternalstorage_title">Truy cập tất cả tập tin</string>
+    <string name="activity_permissionrequest_permission_manageexternalstorage_description">Ứng dụng này sẽ sử dụng quyền đó để lấy hình nền hiện tại của bạn làm hình nền ứng dụng. Đó là tất cả! Bạn vẫn có thể chọn ảnh làm hình nền ứng dụng mà không cần quyền này.</string>
+    <string name="activity_permissionrequest_permission_scheduleexactalarm_title">Lên lịch báo thức chính xác</string>
+    <string name="activity_permissionrequest_permission_scheduleexactalarm_description">Cho phép ứng dụng này lên lịch dịch vụ để cập nhật tin tức trong nền cho bạn.</string>
     <!-- -->
     <string name="data_unknown">(không rõ)</string>
     <string name="data_noscore">(không có điểm)</string>

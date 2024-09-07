@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 @Composable
@@ -39,12 +40,15 @@ fun SimpleCardItem(
             .padding(padding)
             .clip(RoundedCornerShape(7.dp))
             .background(MaterialTheme.colorScheme.secondaryContainer.copy(alpha = opacity))
-            .apply {
-                if (clicked != null) this.clickable { clicked() }
+            .run {
+                if (clicked != null) return@run this.clickable { clicked() }
+                else return@run this
             }
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth().padding(bottom = 5.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 5.dp),
             horizontalArrangement = if (isTitleCentered) Arrangement.Center else Arrangement.Start,
             content = {
                 Text(
@@ -57,4 +61,18 @@ fun SimpleCardItem(
         )
         content?.let { it() }
     }
+}
+
+@Preview
+@Composable
+private fun Preview() {
+    SimpleCardItem(
+        title = "Abc",
+        content = {
+            Text("1")
+            Text("2")
+            Text("3")
+            Text("4")
+        }
+    )
 }

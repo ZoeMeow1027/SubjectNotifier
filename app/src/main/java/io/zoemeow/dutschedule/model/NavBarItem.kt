@@ -2,8 +2,7 @@ package io.zoemeow.dutschedule.model
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
-import androidx.compose.material.icons.filled.Notifications
-import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.ui.graphics.vector.ImageVector
 import io.zoemeow.dutschedule.R
 
@@ -14,6 +13,12 @@ data class NavBarItem(
     val route: String
 ) {
     companion object {
+        val dashboard = NavBarItem(
+            titleResId = R.string.main_dashboard_title,
+            icon = Icons.Default.Home,
+            route = "dashboard"
+        )
+
         val news = NavBarItem(
             titleResId = R.string.news_title,
             resourceIconId = R.drawable.ic_baseline_newspaper_24,
@@ -26,20 +31,20 @@ data class NavBarItem(
             route = "account"
         )
 
-        val notification = NavBarItem(
-            titleResId = R.string.notification_panel_title,
-            icon = Icons.Default.Notifications,
-            route = "notifications"
-        )
+//        val notification = NavBarItem(
+//            titleResId = R.string.notification_panel_title,
+//            icon = Icons.Default.Notifications,
+//            route = "notifications"
+//        )
 
-        val settings = NavBarItem(
-            titleResId = R.string.settings_title,
-            icon = Icons.Default.Settings,
-            route = "settings"
-        )
+//        val settings = NavBarItem(
+//            titleResId = R.string.settings_title,
+//            icon = Icons.Default.Settings,
+//            route = "settings"
+//        )
 
         fun getAll(): List<NavBarItem> {
-            return listOf(news, account, notification, settings)
+            return listOf(dashboard, news, account)
         }
     }
 }

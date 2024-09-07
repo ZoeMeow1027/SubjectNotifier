@@ -3,14 +3,12 @@ package io.zoemeow.dutschedule.model.news
 import io.zoemeow.dutschedule.model.ProcessState
 import io.zoemeow.dutschedule.model.VariableListState
 import io.zoemeow.dutschedule.repository.DutRequestRepository
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import io.zoemeow.dutschedule.utils.launchOnScope
 
 /**
  * @param onEventSent Event when done:
- * 1: Done
+ * 1: Done global news
+ * 2: Done subject news
  */
 class DUTNewsInstance(
     private val dutRequestRepository: DutRequestRepository,
@@ -24,7 +22,7 @@ class DUTNewsInstance(
         parameters = mutableMapOf("nextPage" to "1")
     )
 
-    fun loadNewsCache(
+    fun importNewsCache(
         globalNewsList: List<NewsGlobalItem>? = null,
         globalNewsIndex: Int? = null,
         globalNewsLastRequest: Long? = null,
@@ -54,34 +52,26 @@ class DUTNewsInstance(
         onDataExported: (
             List<NewsGlobalItem>,
             Int,
+            Long,
             List<NewsSubjectItem>,
-            Int
+            Int,
+            Long
         ) -> Unit
     ) {
         onDataExported(
             newsGlobal.data,
             newsGlobal.parameters["nextPage"]?.toIntOrNull() ?: 1,
+            newsGlobal.lastRequest.longValue,
             newsSubject.data,
             newsSubject.parameters["nextPage"]?.toIntOrNull() ?: 1,
+            newsSubject.lastRequest.longValue
         )
-    }
-
-    private fun launchOnScope(
-        script: () -> Unit,
-        invokeOnCompleted: ((Throwable?) -> Unit)? = null
-    ) {
-        CoroutineScope(Dispatchers.Main).launch {
-            withContext(Dispatchers.IO) {
-                script()
-            }
-        }.invokeOnCompletion { thr ->
-            invokeOnCompleted?.let { it(thr) }
-        }
     }
 
     fun fetchGlobalNews(
         fetchType: NewsFetchType = NewsFetchType.NextPage,
-        forceRequest: Boolean = true
+        forceRequest: Boolean = true,
+        onDone: ((List<NewsGlobalItem>) -> Unit)? = null
     ) {
         if (!newsGlobal.isSuccessfulRequestExpired() && !forceRequest) {
             return
@@ -91,6 +81,7 @@ class DUTNewsInstance(
         }
         newsGlobal.processState.value = ProcessState.Running
 
+        val latestNews = arrayListOf<NewsGlobalItem>()
         launchOnScope(
             script = {
                 // Get news from internet
@@ -110,12 +101,11 @@ class DUTNewsInstance(
                 // - Filter latest news into a variable
                 // - Remove duplicated news
                 // - Update news from server
-                val latestNews = arrayListOf<NewsGlobalItem>()
                 newsFromInternet.forEach { newsTargetItem ->
                     val anyMatch = newsGlobal.data.any { newsSourceItem ->
                         newsSourceItem.date == newsTargetItem.date
                                 && newsSourceItem.title == newsTargetItem.title
-                                && newsSourceItem.contentString == newsTargetItem.contentString
+                                && newsSourceItem.content == newsTargetItem.content
                     }
                     val anyNeedUpdated = newsGlobal.data.any { newsSourceItem ->
                         newsSourceItem.date == newsTargetItem.date
@@ -166,6 +156,7 @@ class DUTNewsInstance(
                 }
             },
             invokeOnCompleted = {
+                onDone?.let { it(latestNews) }
                 newsGlobal.lastRequest.longValue = System.currentTimeMillis()
                 newsGlobal.processState.value = when {
                     it == null -> ProcessState.Successful
@@ -178,7 +169,8 @@ class DUTNewsInstance(
 
     fun fetchSubjectNews(
         fetchType: NewsFetchType = NewsFetchType.NextPage,
-        forceRequest: Boolean = true
+        forceRequest: Boolean = true,
+        onDone: ((List<NewsSubjectItem>) -> Unit)? = null
     ) {
         if (!newsSubject.isSuccessfulRequestExpired() && !forceRequest) {
             return
@@ -188,6 +180,7 @@ class DUTNewsInstance(
         }
         newsSubject.processState.value = ProcessState.Running
 
+        val latestNews = arrayListOf<NewsSubjectItem>()
         launchOnScope(
             script = {
                 // Get news from internet
@@ -207,12 +200,11 @@ class DUTNewsInstance(
                 // - Filter latest news into a variable
                 // - Remove duplicated news
                 // - Update news from server
-                val latestNews = arrayListOf<NewsSubjectItem>()
                 newsFromInternet.forEach { newsTargetItem ->
                     val anyMatch = newsSubject.data.any { newsSourceItem ->
                         newsSourceItem.date == newsTargetItem.date
                                 && newsSourceItem.title == newsTargetItem.title
-                                && newsSourceItem.contentString == newsTargetItem.contentString
+                                && newsSourceItem.content == newsTargetItem.content
                     }
                     val anyNeedUpdated = newsSubject.data.any { newsSourceItem ->
                         newsSourceItem.date == newsTargetItem.date
@@ -263,12 +255,13 @@ class DUTNewsInstance(
                 }
             },
             invokeOnCompleted = {
+                onDone?.let { it(latestNews) }
                 newsSubject.lastRequest.longValue = System.currentTimeMillis()
                 newsSubject.processState.value = when {
                     it == null -> ProcessState.Successful
                     else -> ProcessState.Failed
                 }
-                onEventSent?.let { it(1) }
+                onEventSent?.let { it(2) }
             }
         )
     }

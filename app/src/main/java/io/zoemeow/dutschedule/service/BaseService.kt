@@ -74,6 +74,10 @@ abstract class BaseService(
 
     abstract fun onInitialize()
 
+    /*
+     * This will self-destroyed after ran over 3 minutes, so keep in mind of done process
+     * before 3 minutes.
+     */
     abstract fun doWorkBackground(intent: Intent?)
 
     abstract fun onCompleted(result: ProcessState)

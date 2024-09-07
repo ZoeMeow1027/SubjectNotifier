@@ -2,6 +2,7 @@ package io.zoemeow.dutschedule.ui.component.base
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -14,8 +15,8 @@ import androidx.compose.ui.unit.sp
 @Composable
 fun Tag(
     text: String = "",
-    textColor: Color = Color.Black,
-    backColor: Color = Color.White
+    textColor: Color = ButtonDefaults.elevatedButtonColors().contentColor,
+    backColor: Color = ButtonDefaults.elevatedButtonColors().containerColor
 ) {
     Surface(
         shape = RoundedCornerShape(20.dp),
@@ -37,11 +38,7 @@ fun Tag(
 @Preview
 @Composable
 private fun TagPreview() {
-    Tag(
-        "Hello",
-        textColor = Color.Black,
-        backColor = Color.Green
-    )
+    Tag("Hello")
 }
 
 @Preview
@@ -51,5 +48,15 @@ private fun TagPreview2() {
         "Failed tag!",
         textColor = Color.White,
         backColor = Color.Red
+    )
+}
+
+@Preview
+@Composable
+private fun TagPreview3() {
+    Tag(
+        "Successful tag",
+        textColor = Color.Black,
+        backColor = Color.Green
     )
 }

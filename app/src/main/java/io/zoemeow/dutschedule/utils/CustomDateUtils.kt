@@ -2,13 +2,9 @@ package io.zoemeow.dutschedule.utils
 
 import android.annotation.SuppressLint
 import android.content.Context
-import androidx.compose.ui.platform.LocalConfiguration
 import com.github.marlonlom.utilities.timeago.TimeAgo
 import com.github.marlonlom.utilities.timeago.TimeAgoMessages
 import io.zoemeow.dutschedule.R
-import kotlinx.datetime.Clock
-import kotlinx.datetime.Instant
-import kotlinx.datetime.toLocalDateTime
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -18,7 +14,7 @@ import kotlin.time.DurationUnit
 import kotlin.time.toDuration
 
 
-class CustomDateUtil {
+class CustomDateUtils {
     companion object {
         /**
          * Get current day of week with Sunday as 1 to Saturday as 7.

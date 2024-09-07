@@ -4,11 +4,12 @@ import android.content.Context
 import android.content.Intent
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.Color
 import dagger.hilt.android.AndroidEntryPoint
-import io.zoemeow.dutschedule.ui.view.news.MainView
-import io.zoemeow.dutschedule.ui.view.news.NewsDetail
-import io.zoemeow.dutschedule.ui.view.news.NewsSearch
+import io.zoemeow.dutschedule.model.AppearanceState
+import io.zoemeow.dutschedule.ui.view.news.Activity_News_NewsDetail
+import io.zoemeow.dutschedule.ui.view.news.Activity_News
+import io.zoemeow.dutschedule.ui.view.news.Activity_News_NewsSearch
+import io.zoemeow.dutschedule.utils.openLink
 
 @AndroidEntryPoint
 class NewsActivity : BaseActivity() {
@@ -28,38 +29,63 @@ class NewsActivity : BaseActivity() {
     override fun OnMainView(
         context: Context,
         snackBarHostState: SnackbarHostState,
-        containerColor: Color,
-        contentColor: Color
+        appearanceState: AppearanceState
     ) {
         when (intent.action) {
             INTENT_SEARCHACTIVITY -> {
-                NewsSearch(
+                Activity_News_NewsSearch(
                     context = context,
                     snackBarHostState = snackBarHostState,
-                    containerColor = containerColor,
-                    contentColor = contentColor,
+                    appearanceState = appearanceState,
+                    onBack = {
+                        setResult(RESULT_CANCELED)
+                        finish()
+                    }
                 )
             }
 
             INTENT_NEWSDETAILACTIVITY -> {
-                NewsDetail(
+                Activity_News_NewsDetail(
                     context = context,
                     snackBarHostState = snackBarHostState,
-                    containerColor = containerColor,
-                    contentColor = contentColor
+                    appearanceState = appearanceState,
+                    newsType = intent.getStringExtra("type"),
+                    newsData = intent.getStringExtra("data"),
+                    onLinkClicked = { link ->
+                        context.openLink(
+                            url = link,
+                            customTab = getMainViewModel().appSettings.value.openLinkInsideApp
+                        )
+                    },
+                    onMessageReceived = { msg, forceDismissBefore, actionText, action ->
+                        showSnackBar(
+                            text = msg,
+                            clearPrevious = forceDismissBefore,
+                            actionText = actionText,
+                            action = action
+                        )
+                    },
+                    onBack = {
+                        setResult(RESULT_CANCELED)
+                        finish()
+                    }
                 )
             }
 
             else -> {
-                MainView(
+                Activity_News(
                     context = context,
                     snackBarHostState = snackBarHostState,
-                    containerColor = containerColor,
-                    contentColor = contentColor,
+                    appearanceState = appearanceState,
+                    mainViewModel = getMainViewModel(),
                     searchRequested = {
                         val intent = Intent(context, NewsActivity::class.java)
                         intent.action = INTENT_SEARCHACTIVITY
                         context.startActivity(intent)
+                    },
+                    onBack = {
+                        setResult(RESULT_CANCELED)
+                        finish()
                     }
                 )
             }

@@ -3,18 +3,15 @@ package io.zoemeow.dutschedule.activity
 import android.content.Context
 import android.content.Intent
 import android.util.Log
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.Color
 import dagger.hilt.android.AndroidEntryPoint
-import io.zoemeow.dutschedule.model.settings.BackgroundImageOption
+import io.zoemeow.dutschedule.model.AppearanceState
 import io.zoemeow.dutschedule.service.BaseService
 import io.zoemeow.dutschedule.service.NewsBackgroundUpdateService
+import io.zoemeow.dutschedule.ui.view.main.Activity_MainView_MainViewTabView
 import io.zoemeow.dutschedule.ui.view.main.MainViewDashboard
-import io.zoemeow.dutschedule.ui.view.main.MainViewTabbed
-import io.zoemeow.dutschedule.utils.BackgroundImageUtil
-import io.zoemeow.dutschedule.utils.NotificationsUtil
+import io.zoemeow.dutschedule.utils.NotificationUtils
 
 @AndroidEntryPoint
 class MainActivity : BaseActivity() {
@@ -26,50 +23,20 @@ class MainActivity : BaseActivity() {
                 Log.d("NewsBackgroundService", "Cancelled schedule")
             }
         )
-        NotificationsUtil.initializeNotificationChannel(this)
+        NotificationUtils.initializeNotificationChannel(this)
     }
-
-    // When active
-    val pickMedia =
-        registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
-            // Callback is invoked after the user selects a media item or closes the photo picker.
-            if (uri != null) {
-                Log.d("PhotoPicker", "Selected URI: $uri")
-                getMainViewModel().appSettings.value = getMainViewModel().appSettings.value.clone(
-                    backgroundImage = BackgroundImageOption.None
-                )
-                getMainViewModel().saveSettings(
-                    onCompleted = {
-                        BackgroundImageUtil.saveImageToAppData(this, uri)
-                        Log.d("PhotoPicker", "Copied!")
-                        getMainViewModel().appSettings.value = getMainViewModel().appSettings.value.clone(
-                            backgroundImage = BackgroundImageOption.PickFileFromMedia
-                        )
-                        getMainViewModel().saveSettings(
-                            onCompleted = {
-                                Log.d("PhotoPicker", "Copied!")
-                            }
-                        )
-                    }
-                )
-            } else {
-                Log.d("PhotoPicker", "No media selected")
-            }
-        }
 
     @Composable
     override fun OnMainView(
         context: Context,
         snackBarHostState: SnackbarHostState,
-        containerColor: Color,
-        contentColor: Color
+        appearanceState: AppearanceState
     ) {
         if (getMainViewModel().appSettings.value.mainScreenDashboardView) {
             MainViewDashboard(
                 context = context,
                 snackBarHostState = snackBarHostState,
-                containerColor = containerColor,
-                contentColor = contentColor,
+                appearanceState = appearanceState,
                 newsClicked = {
                     context.startActivity(Intent(context, NewsActivity::class.java))
                 },
@@ -80,17 +47,28 @@ class MainActivity : BaseActivity() {
                     context.startActivity(Intent(context, SettingsActivity::class.java))
                 },
                 externalLinkClicked = {
-                    val intent = Intent(context, HelpActivity::class.java)
+                    val intent = Intent(context, MiscellaneousActivity::class.java)
                     intent.action = "view_externallink"
                     context.startActivity(intent)
                 }
             )
         } else {
-            MainViewTabbed(
+            Activity_MainView_MainViewTabView(
                 context = context,
+                mainViewModel = getMainViewModel(),
                 snackBarHostState = snackBarHostState,
-                containerColor = containerColor,
-                contentColor = contentColor
+                appearanceState = appearanceState,
+                onMessageReceived = { msg, forceDismissBefore, actionText, action ->
+                    showSnackBar(
+                        text = msg,
+                        clearPrevious = forceDismissBefore,
+                        actionText = actionText,
+                        action = action
+                    )
+                },
+                onMessageClear = {
+                    clearSnackBar()
+                }
             )
         }
     }
@@ -108,7 +86,7 @@ class MainActivity : BaseActivity() {
             BaseService.startService(
                 context = this,
                 intent = Intent(applicationContext, NewsBackgroundUpdateService::class.java).also {
-                    it.action = "news.service.action.fetchallpage1background.skipfirst"
+                    it.action = "news.service.action.fetchallpage1background"
                 }
             )
         }

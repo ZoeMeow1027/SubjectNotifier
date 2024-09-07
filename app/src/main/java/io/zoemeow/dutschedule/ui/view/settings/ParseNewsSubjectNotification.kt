@@ -1,6 +1,5 @@
 package io.zoemeow.dutschedule.ui.view.settings
 
-import android.app.Activity.RESULT_OK
 import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -17,47 +16,55 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import io.zoemeow.dutschedule.R
-import io.zoemeow.dutschedule.activity.SettingsActivity
+import io.zoemeow.dutschedule.model.AppearanceState
 import io.zoemeow.dutschedule.ui.component.base.SwitchWithTextInSurface
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SettingsActivity.ParseNewsSubjectNotification(
+fun Activity_Settings_ParseNewsSubjectNotification(
     context: Context,
     snackBarHostState: SnackbarHostState,
-    containerColor: Color,
-    contentColor: Color
+    appearanceState: AppearanceState,
+    isEnabled: Boolean = false,
+    onChange: () -> Unit,
+    onBack: () -> Unit
 ) {
+    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
+
     Scaffold(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxSize()
+            .nestedScroll(scrollBehavior.nestedScrollConnection),
         snackbarHost = { SnackbarHost(hostState = snackBarHostState) },
-        containerColor = containerColor,
-        contentColor = contentColor,
+        containerColor = appearanceState.containerColor,
+        contentColor = appearanceState.contentColor,
         topBar = {
-            TopAppBar(
+            LargeTopAppBar(
                 title = { Text(context.getString(R.string.settings_parsenewssubject_title)) },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent),
+                colors = TopAppBarDefaults.largeTopAppBarColors(
+                    containerColor = Color.Transparent,
+                    scrolledContainerColor = Color.Transparent
+                ),
                 navigationIcon = {
                     IconButton(
                         onClick = {
-                            setResult(RESULT_OK)
-                            finish()
+                            onBack()
                         },
                         content = {
                             Icon(
@@ -67,7 +74,8 @@ fun SettingsActivity.ParseNewsSubjectNotification(
                             )
                         }
                     )
-                }
+                },
+                scrollBehavior = scrollBehavior
             )
         },
         content = {
@@ -83,7 +91,7 @@ fun SettingsActivity.ParseNewsSubjectNotification(
                             .padding(bottom = 5.dp),
                         shape = RoundedCornerShape(30.dp),
                         color = MaterialTheme.colorScheme.secondaryContainer.copy(
-                            alpha = getControlBackgroundAlpha()
+                            alpha = appearanceState.componentOpacity
                         ),
                         content = {
                             Column(
@@ -91,7 +99,7 @@ fun SettingsActivity.ParseNewsSubjectNotification(
                                     .padding(20.dp),
                                 content = {
                                     Text(
-                                        when (getMainViewModel().appSettings.value.newsBackgroundParseNewsSubject) {
+                                        when (isEnabled) {
                                             true -> context.getString(R.string.settings_parsenewssubject_preview_titleenabled)
                                             false -> context.getString(R.string.settings_parsenewssubject_preview_titledisabled)
                                         },
@@ -99,7 +107,7 @@ fun SettingsActivity.ParseNewsSubjectNotification(
                                         modifier = Modifier.padding(bottom = 5.dp)
                                     )
                                     Text(
-                                        when (getMainViewModel().appSettings.value.newsBackgroundParseNewsSubject) {
+                                        when (isEnabled) {
                                             true -> context.getString(R.string.settings_parsenewssubject_preview_descenabled)
                                             false -> context.getString(R.string.settings_parsenewssubject_preview_descdisabled)
                                         }
@@ -111,12 +119,9 @@ fun SettingsActivity.ParseNewsSubjectNotification(
                     SwitchWithTextInSurface(
                         text = context.getString(R.string.settings_parsenewssubject_choice_enable),
                         enabled = true,
-                        checked = getMainViewModel().appSettings.value.newsBackgroundParseNewsSubject,
+                        checked = isEnabled,
                         onCheckedChange = {
-                            getMainViewModel().appSettings.value = getMainViewModel().appSettings.value.clone(
-                                newsBackgroundParseNewsSubject = !getMainViewModel().appSettings.value.newsBackgroundParseNewsSubject
-                            )
-                            getMainViewModel().saveSettings()
+                            onChange()
                         }
                     )
                     Column(

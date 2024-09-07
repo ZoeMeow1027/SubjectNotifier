@@ -1,49 +1,33 @@
 package io.zoemeow.dutschedule.activity
 
 import android.content.Context
-import android.content.Intent
-import android.graphics.Bitmap
-import android.net.Uri
 import android.os.Bundle
-import android.os.StrictMode
-import android.window.SplashScreen
 import androidx.activity.ComponentActivity
-import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.browser.customtabs.CustomTabColorSchemeParams
-import androidx.browser.customtabs.CustomTabsIntent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.platform.SoftwareKeyboardController
-import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.core.view.WindowCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
+import io.zoemeow.dutschedule.model.AppearanceState
 import io.zoemeow.dutschedule.model.settings.BackgroundImageOption
 import io.zoemeow.dutschedule.model.settings.ThemeMode
 import io.zoemeow.dutschedule.ui.theme.DutScheduleTheme
-import io.zoemeow.dutschedule.utils.BackgroundImageUtil
+import io.zoemeow.dutschedule.utils.ActivityUtils
+import io.zoemeow.dutschedule.utils.BackgroundImageUtils
 import io.zoemeow.dutschedule.viewmodel.MainViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -51,89 +35,100 @@ import kotlinx.coroutines.launch
 
 abstract class BaseActivity: ComponentActivity() {
     companion object {
-        private lateinit var mainViewModel: MainViewModel
+        private var mainViewModel: MainViewModel? = null
 
         private fun isMainViewModelInitialized(): Boolean {
-            return ::mainViewModel.isInitialized
+            return mainViewModel != null
         }
     }
+
     private lateinit var snackBarHostState: SnackbarHostState
     private lateinit var snackBarScope: CoroutineScope
+    private lateinit var context: Context
     private val loadScriptAtStartup = mutableStateOf(true)
-    private var focusManager: FocusManager? = null
-    private var keyboardController: SoftwareKeyboardController? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         // A surface container using the 'background' color from the theme
         super.onCreate(savedInstanceState)
 
-        WindowCompat.setDecorFitsSystemWindows(window, true)
+        ActivityUtils.makeActivityFullScreen(this)
+        ActivityUtils.permitAllNetworkPolicy()
 
-        enableEdgeToEdge(
-            // This app is only ever in dark mode, so hard code detectDarkMode to true.
-            SystemBarStyle.auto(
-                android.graphics.Color.TRANSPARENT,
-                android.graphics.Color.TRANSPARENT,
-                detectDarkMode = { true }
-            )
-        )
-
-        permitAllPolicy()
         setContent {
             // Initialize MainViewModel
             if (!isMainViewModelInitialized()) {
                 mainViewModel = viewModel()
             }
 
-            // SnackBar state
+            // Initialize SnackBar state
             snackBarHostState = remember { SnackbarHostState() }
             snackBarScope = rememberCoroutineScope()
 
-            // Initialize focus manager & software keyboard controller
-            focusManager = LocalFocusManager.current
-            keyboardController = LocalSoftwareKeyboardController.current
-
             DutScheduleTheme(
-                darkTheme = when (mainViewModel.appSettings.value.themeMode) {
+                darkTheme = when (getMainViewModel().appSettings.value.themeMode) {
                     ThemeMode.DarkMode -> true
                     ThemeMode.LightMode -> false
                     ThemeMode.FollowDeviceTheme -> isSystemInDarkTheme()
                 },
-                dynamicColor = mainViewModel.appSettings.value.dynamicColor,
+                dynamicColor = getMainViewModel().appSettings.value.dynamicColor,
                 translucentStatusBar = getMainViewModel().appSettings.value.backgroundImage != BackgroundImageOption.None,
                 content = {
-                    val context = LocalContext.current
+                    context = LocalContext.current
 
-                    val draw: Bitmap? = when (mainViewModel.appSettings.value.backgroundImage) {
-                        BackgroundImageOption.None -> null
-                        BackgroundImageOption.YourCurrentWallpaper -> BackgroundImageUtil.getCurrentWallpaperBackground(context)
-                        BackgroundImageOption.PickFileFromMedia -> BackgroundImageUtil.getImageFromAppData(context)
+                    // Image (if set)
+                    BackgroundImageUtils.backgroundImageCache.also { wall ->
+                        wall.value?.let {
+                            Image(
+                                modifier = Modifier.fillMaxSize(),
+                                bitmap = it.asImageBitmap(),
+                                contentDescription = "background_image",
+                                contentScale = ContentScale.Crop
+                            )
+                        }
                     }
-                    if (draw != null) {
-                        Image(
-                            modifier = Modifier.fillMaxSize(),
-                            bitmap = draw.asImageBitmap(),
-                            contentDescription = "background_image",
-                            contentScale = ContentScale.Crop
-                        )
+
+                    @Composable
+                    fun isAppInDarkMode(): Boolean {
+                        return when (getMainViewModel().appSettings.value.themeMode) {
+                            ThemeMode.LightMode -> false
+                            ThemeMode.DarkMode -> true
+                            ThemeMode.FollowDeviceTheme -> isSystemInDarkTheme()
+                        }
                     }
 
                     OnMainView(
+                        context = context,
                         snackBarHostState = snackBarHostState,
-                        containerColor = when (mainViewModel.appSettings.value.backgroundImage) {
-                            BackgroundImageOption.None -> when (mainViewModel.appSettings.value.blackBackground) {
-                                true -> if (isAppInDarkMode()) Color.Black else MaterialTheme.colorScheme.background
-                                false -> MaterialTheme.colorScheme.background
+                        appearanceState = AppearanceState(
+                            containerColor = when (getMainViewModel().appSettings.value.backgroundImage) {
+                                BackgroundImageOption.None -> when (getMainViewModel().appSettings.value.blackBackground) {
+                                    true -> if (isAppInDarkMode()) Color.Black else MaterialTheme.colorScheme.background
+                                    false -> MaterialTheme.colorScheme.background
+                                }
+                                BackgroundImageOption.YourCurrentWallpaper -> MaterialTheme.colorScheme.background.copy(
+                                    alpha = getMainViewModel().appSettings.value.backgroundImageOpacity
+                                )
+                                BackgroundImageOption.PickFileFromMedia -> MaterialTheme.colorScheme.background.copy(
+                                    alpha = getMainViewModel().appSettings.value.backgroundImageOpacity
+                                )
+                            },
+                            contentColor = if (isAppInDarkMode()) Color.White else Color.Black,
+                            currentAppModeState = when (getMainViewModel().appSettings.value.themeMode) {
+                                ThemeMode.FollowDeviceTheme -> when (isSystemInDarkTheme()) {
+                                    true -> ThemeMode.DarkMode
+                                    false -> ThemeMode.LightMode
+                                }
+                                else -> getMainViewModel().appSettings.value.themeMode
+                            },
+                            backgroundOpacity = when (getMainViewModel().appSettings.value.backgroundImage != BackgroundImageOption.None) {
+                                true -> getMainViewModel().appSettings.value.backgroundImageOpacity
+                                false -> 1f
+                            },
+                            componentOpacity = when (getMainViewModel().appSettings.value.backgroundImage != BackgroundImageOption.None) {
+                                true -> getMainViewModel().appSettings.value.componentOpacity
+                                false -> 1f
                             }
-                            BackgroundImageOption.YourCurrentWallpaper -> MaterialTheme.colorScheme.background.copy(
-                                alpha = getMainViewModel().appSettings.value.backgroundImageOpacity
-                            )
-                            BackgroundImageOption.PickFileFromMedia -> MaterialTheme.colorScheme.background.copy(
-                                alpha = getMainViewModel().appSettings.value.backgroundImageOpacity
-                            )
-                        },
-                        contentColor = if (isAppInDarkMode()) Color.White else Color.Black,
-                        context = context
+                        )
                     )
                 },
             )
@@ -142,24 +137,14 @@ abstract class BaseActivity: ComponentActivity() {
             if (loadScriptAtStartup.value) {
                 loadScriptAtStartup.value = false
                 OnPreloadOnce()
+
+                // Initialize background image (if set)
+                BackgroundImageUtils.setBackgroundImageCacheOption(
+                    context = context,
+                    backgroundOption = getMainViewModel().appSettings.value.backgroundImage
+                )
             }
         }
-    }
-
-    @Composable
-    fun isAppInDarkMode(
-        themeMode: ThemeMode = mainViewModel.appSettings.value.themeMode
-    ): Boolean {
-        return when (themeMode) {
-            ThemeMode.LightMode -> false
-            ThemeMode.DarkMode -> true
-            ThemeMode.FollowDeviceTheme -> isSystemInDarkTheme()
-        }
-    }
-
-    fun clearAllFocusAndHideKeyboard() {
-        keyboardController?.hide()
-        focusManager?.clearFocus(force = true)
     }
 
     @Composable
@@ -169,8 +154,7 @@ abstract class BaseActivity: ComponentActivity() {
     abstract fun OnMainView(
         context: Context,
         snackBarHostState: SnackbarHostState,
-        containerColor: Color,
-        contentColor: Color
+        appearanceState: AppearanceState
     )
 
     fun getMainViewModel(): MainViewModel {
@@ -178,15 +162,11 @@ abstract class BaseActivity: ComponentActivity() {
             // Initialize MainViewModel if this isn't initialized before.
             mainViewModel = ViewModelProvider(this)[MainViewModel::class.java]
         }
-        return mainViewModel
+        return mainViewModel!!
     }
 
-    fun getControlBackgroundAlpha(): Float {
-        return when (mainViewModel.appSettings.value.backgroundImage != BackgroundImageOption.None) {
-            true -> mainViewModel.appSettings.value.componentOpacity
-            false -> 1f
-            // true -> return mainViewModel.appSettings.value.
-        }
+    fun getContext(): Context {
+        return context
     }
 
     fun showSnackBar(
@@ -224,41 +204,5 @@ abstract class BaseActivity: ComponentActivity() {
         snackBarScope.launch {
             snackBarHostState.currentSnackbarData?.dismiss()
         }
-    }
-
-    fun openLink(
-        url: String,
-        context: Context,
-        customTab: Boolean = true
-    ) {
-        when (customTab) {
-            false -> {
-                context.startActivity(
-                    Intent(Intent.ACTION_VIEW, Uri.parse(url))
-                        .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                )
-            }
-
-            true -> {
-                val builder = CustomTabsIntent.Builder()
-                val defaultColors = CustomTabColorSchemeParams.Builder().build()
-                builder.setDefaultColorSchemeParams(defaultColors)
-
-                val customTabsIntent = builder.build()
-                customTabsIntent.launchUrl(context, Uri.parse(url))
-            }
-        }
-    }
-
-    /**
-     * This will bypass network on main thread exception.
-     * Use this at your own risk.
-     * Target: OkHttp3
-     *
-     * Source: https://blog.cpming.top/p/android-os-networkonmainthreadexception
-     */
-    private fun permitAllPolicy() {
-        val policy = StrictMode.ThreadPolicy.Builder().permitAll().build()
-        StrictMode.setThreadPolicy(policy)
     }
 }

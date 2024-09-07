@@ -1,14 +1,10 @@
 package io.zoemeow.dutschedule.repository
 
-import io.dutwrapper.dutwrapper.Account
+import io.dutwrapper.dutwrapper.AccountInformation
+import io.dutwrapper.dutwrapper.AccountInformation.SubjectInformation
+import io.dutwrapper.dutwrapper.AccountInformation.TrainingStatus
+import io.dutwrapper.dutwrapper.Accounts
 import io.dutwrapper.dutwrapper.News
-import io.dutwrapper.dutwrapper.model.accounts.AccountInformation
-import io.dutwrapper.dutwrapper.model.accounts.SubjectFeeItem
-import io.dutwrapper.dutwrapper.model.accounts.SubjectScheduleItem
-import io.dutwrapper.dutwrapper.model.accounts.trainingresult.AccountTrainingStatus
-import io.dutwrapper.dutwrapper.model.enums.NewsSearchType
-import io.dutwrapper.dutwrapper.model.news.NewsGlobalItem
-import io.dutwrapper.dutwrapper.model.news.NewsSubjectItem
 import io.zoemeow.dutschedule.model.account.AccountSession
 import io.zoemeow.dutschedule.model.account.SchoolYearItem
 import kotlinx.coroutines.CoroutineScope
@@ -18,9 +14,9 @@ import kotlinx.coroutines.launch
 class DutRequestRepository {
     fun getNewsGlobal(
         page: Int = 1,
-        searchType: NewsSearchType? = null,
+        searchType: News.NewsSearchType? = null,
         searchQuery: String? = null
-    ): ArrayList<NewsGlobalItem> {
+    ): ArrayList<News.NewsItem> {
         return try {
             News.getNewsGlobal(page, searchType, searchQuery)
         } catch (ex: Exception) {
@@ -31,9 +27,9 @@ class DutRequestRepository {
 
     fun getNewsSubject(
         page: Int = 1,
-        searchType: NewsSearchType? = null,
+        searchType: News.NewsSearchType? = null,
         searchQuery: String? = null
-    ): ArrayList<NewsSubjectItem> {
+    ): ArrayList<News.NewsSubjectItem> {
         return try {
             News.getNewsSubject(page, searchType, searchQuery)
         } catch (ex: Exception) {
@@ -59,17 +55,17 @@ class DutRequestRepository {
             run {
                 if (accountSession.sessionId == null) return@run false
                 if (System.currentTimeMillis() > accountSession.sessionLastRequest + (1000 * 60 * 5)) return@run false
-                if (!Account.isLoggedIn(accountSession.toAccountSessionSuper())) return@run false
+                if (!Accounts.isLoggedIn(accountSession.toAccountSessionSuper())) return@run false
                 if (forceLogin) return@run false
                 return@run true
             } -> true
             (accountSession.accountAuth.isValidLogin()) -> {
                 try {
-                    val session = Account.getSession()
+                    val session = Accounts.getSession()
 
-                    Account.login(
+                    Accounts.login(
                         session,
-                        Account.AuthInfo(
+                        Accounts.AuthInfo(
                             accountSession.accountAuth.username,
                             accountSession.accountAuth.password
                         )
@@ -77,7 +73,7 @@ class DutRequestRepository {
 
                     // Return here, after send data on result
                     // If successful
-                    if (Account.isLoggedIn(session)) {
+                    if (Accounts.isLoggedIn(session)) {
                         onSessionChanged?.let { it(
                             session.sessionId,
                             System.currentTimeMillis(),
@@ -112,7 +108,7 @@ class DutRequestRepository {
         return try {
             CoroutineScope(Dispatchers.IO).launch {
                 kotlin.runCatching {
-                    Account.logout(accountSession.toAccountSessionSuper())
+                    Accounts.logout(accountSession.toAccountSessionSuper())
                 }
             }
             true
@@ -125,10 +121,10 @@ class DutRequestRepository {
     fun getSubjectSchedule(
         accountSession: AccountSession,
         schoolYearItem: SchoolYearItem
-    ): ArrayList<SubjectScheduleItem>? {
+    ): ArrayList<SubjectInformation>? {
         return try {
-            if (Account.isLoggedIn(accountSession.toAccountSessionSuper())) {
-                Account.fetchSubjectSchedule(
+            if (Accounts.isLoggedIn(accountSession.toAccountSessionSuper())) {
+                Accounts.fetchSubjectSchedule(
                     accountSession.toAccountSessionSuper(),
                     schoolYearItem.year,
                     schoolYearItem.semester
@@ -143,10 +139,10 @@ class DutRequestRepository {
     fun getSubjectFee(
         accountSession: AccountSession,
         schoolYearItem: SchoolYearItem
-    ): ArrayList<SubjectFeeItem>? {
+    ): ArrayList<AccountInformation.SubjectFee>? {
         return try {
-            if (Account.isLoggedIn(accountSession.toAccountSessionSuper())) {
-                Account.fetchSubjectFee(
+            if (Accounts.isLoggedIn(accountSession.toAccountSessionSuper())) {
+                Accounts.fetchSubjectFee(
                     accountSession.toAccountSessionSuper(),
                     schoolYearItem.year,
                     schoolYearItem.semester
@@ -160,10 +156,10 @@ class DutRequestRepository {
 
     fun getAccountInformation(
         accountSession: AccountSession
-    ): AccountInformation? {
+    ): AccountInformation.StudentInformation? {
         return try {
-            if (Account.isLoggedIn(accountSession.toAccountSessionSuper())) {
-                Account.fetchAccountInformation(accountSession.toAccountSessionSuper())
+            if (Accounts.isLoggedIn(accountSession.toAccountSessionSuper())) {
+                Accounts.fetchStudentInformation(accountSession.toAccountSessionSuper())
             }
             else null
         } catch (ex: Exception) {
@@ -174,10 +170,10 @@ class DutRequestRepository {
 
     fun getAccountTrainingStatus(
         accountSession: AccountSession
-    ): AccountTrainingStatus? {
+    ): TrainingStatus? {
         return try {
-            if (Account.isLoggedIn(accountSession.toAccountSessionSuper())) {
-                Account.fetchAccountTrainingStatus(accountSession.toAccountSessionSuper())
+            if (Accounts.isLoggedIn(accountSession.toAccountSessionSuper())) {
+                Accounts.fetchTrainingStatus(accountSession.toAccountSessionSuper())
             }
             else null
         } catch (ex: Exception) {

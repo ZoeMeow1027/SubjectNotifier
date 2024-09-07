@@ -1,9 +1,6 @@
 package io.zoemeow.dutschedule.ui.view.news
 
-import android.app.Activity.RESULT_CANCELED
-import android.app.Activity.RESULT_OK
 import android.content.Context
-import android.content.Intent
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -27,6 +24,7 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.PlainTooltip
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SegmentedButton
 import androidx.compose.material3.SegmentedButtonDefaults
@@ -34,8 +32,11 @@ import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.material3.TooltipBox
+import androidx.compose.material3.TooltipDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberTooltipState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -44,9 +45,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.google.gson.Gson
-import io.dutwrapper.dutwrapper.model.news.NewsGlobalItem
+import io.dutwrapper.dutwrapper.News.NewsItem
 import io.zoemeow.dutschedule.R
 import io.zoemeow.dutschedule.activity.NewsActivity
+import io.zoemeow.dutschedule.model.AppearanceState
 import io.zoemeow.dutschedule.model.ProcessState
 import io.zoemeow.dutschedule.model.news.NewsFetchType
 import io.zoemeow.dutschedule.ui.component.news.NewsListPage
@@ -56,39 +58,15 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NewsActivity.MainView(
-    context: Context,
-    snackBarHostState: SnackbarHostState,
-    containerColor: Color,
-    contentColor: Color,
-    searchRequested: (() -> Unit)? = null
-) {
-    NewsMainView(
-        context = context,
-        snackBarHostState = snackBarHostState,
-        containerColor = containerColor,
-        contentColor = contentColor,
-        searchRequested = searchRequested,
-        componentBackgroundAlpha = getControlBackgroundAlpha(),
-        mainViewModel = getMainViewModel(),
-        onBack = {
-            setResult(RESULT_CANCELED)
-            finish()
-        }
-    )
-}
-
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
-@Composable
-fun NewsMainView(
+fun Activity_News(
     context: Context,
     snackBarHostState: SnackbarHostState? = null,
-    containerColor: Color,
-    contentColor: Color,
-    componentBackgroundAlpha: Float = 1f,
+    appearanceState: AppearanceState,
     mainViewModel: MainViewModel,
     searchRequested: (() -> Unit)? = null,
+    onNewsClicked: ((String?, String?) -> Unit)? = null,
     onBack: (() -> Unit)? = null
 ) {
     val pagerState = rememberPagerState(initialPage = 0, pageCount = { 2 })
@@ -97,15 +75,18 @@ fun NewsMainView(
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         snackbarHost = { snackBarHostState?.let { SnackbarHost(hostState = it) } },
-        containerColor = containerColor,
-        contentColor = contentColor,
+        containerColor = appearanceState.containerColor,
+        contentColor = appearanceState.contentColor,
         topBar = {
             Box(
                 contentAlignment = Alignment.BottomCenter,
                 content = {
                     TopAppBar(
                         title = { Text(text = context.getString(R.string.news_title)) },
-                        colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent),
+                        colors = TopAppBarDefaults.largeTopAppBarColors(
+                            containerColor = Color.Transparent,
+                            scrolledContainerColor = Color.Transparent
+                        ),
                         navigationIcon = {
                             if (onBack != null) {
                                 IconButton(
@@ -123,12 +104,24 @@ fun NewsMainView(
                             }
                         },
                         actions = {
-                            IconButton(
-                                onClick = {
-                                    searchRequested?.let { it() }
+                            val newsSearchTooltipSearch = rememberTooltipState()
+                            TooltipBox(
+                                positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
+                                tooltip = {
+                                    PlainTooltip {
+                                        Text(text = context.getString(R.string.news_action_search))
+                                    }
                                 },
+                                state = newsSearchTooltipSearch,
                                 content = {
-                                    Icon(Icons.Default.Search, context.getString(R.string.action_search))
+                                    IconButton(
+                                        onClick = {
+                                            searchRequested?.let { it() }
+                                        },
+                                        content = {
+                                            Icon(Icons.Default.Search, context.getString(R.string.news_action_search))
+                                        }
+                                    )
                                 }
                             )
                         }
@@ -239,17 +232,12 @@ fun NewsMainView(
                         NewsListPage(
                             newsList = mainViewModel.newsInstance.newsGlobal.data.toList(),
                             processState = mainViewModel.newsInstance.newsGlobal.processState.value,
-                            opacity = componentBackgroundAlpha,
+                            opacity = appearanceState.componentOpacity,
                             itemClicked = { newsItem ->
-                                context.startActivity(
-                                    Intent(
-                                        context,
-                                        NewsActivity::class.java
-                                    ).also {
-                                        it.action = NewsActivity.INTENT_NEWSDETAILACTIVITY
-                                        it.putExtra("type", NewsActivity.NEWSTYPE_NEWSGLOBAL)
-                                        it.putExtra("data", Gson().toJson(newsItem))
-                                    })
+                                onNewsClicked?.let { it(
+                                    NewsActivity.NEWSTYPE_NEWSGLOBAL,
+                                    Gson().toJson(newsItem)
+                                ) }
                             },
                             endOfListReached = {
                                 CoroutineScope(Dispatchers.Main).launch {
@@ -265,21 +253,15 @@ fun NewsMainView(
                     }
 
                     1 -> {
-                        @Suppress("UNCHECKED_CAST")
                         (NewsListPage(
-                            newsList = mainViewModel.newsInstance.newsSubject.data.toList() as List<NewsGlobalItem>,
+                            newsList = mainViewModel.newsInstance.newsSubject.data.toList() as List<NewsItem>,
                             processState = mainViewModel.newsInstance.newsSubject.processState.value,
-                            opacity = componentBackgroundAlpha,
+                            opacity = appearanceState.componentOpacity,
                             itemClicked = { newsItem ->
-                                context.startActivity(
-                                    Intent(
-                                        context,
-                                        NewsActivity::class.java
-                                    ).also {
-                                        it.action = NewsActivity.INTENT_NEWSDETAILACTIVITY
-                                        it.putExtra("type", NewsActivity.NEWSTYPE_NEWSSUBJECT)
-                                        it.putExtra("data", Gson().toJson(newsItem))
-                                    })
+                                onNewsClicked?.let { it(
+                                    NewsActivity.NEWSTYPE_NEWSSUBJECT,
+                                    Gson().toJson(newsItem)
+                                ) }
                             },
                             endOfListReached = {
                                 CoroutineScope(Dispatchers.Main).launch {

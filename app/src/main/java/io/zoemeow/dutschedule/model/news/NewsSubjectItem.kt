@@ -1,13 +1,15 @@
 package io.zoemeow.dutschedule.model.news
 
+import io.dutwrapper.dutwrapper.News
+
 data class NewsSubjectItem(
     var updated: Boolean = false
-) : io.dutwrapper.dutwrapper.model.news.NewsSubjectItem() {
-    fun update(newsItem: io.dutwrapper.dutwrapper.model.news.NewsSubjectItem) {
+) : News.NewsSubjectItem(News.NewsItem()) {
+    fun update(newsItem: News.NewsSubjectItem) {
         this.title = newsItem.title
+        this.contentHtml = newsItem.contentHtml
         this.content = newsItem.content
-        this.contentString = newsItem.contentString
-        this.links = newsItem.links
+        this.resources = newsItem.resources
         this.date = newsItem.date
 
         this.affectedClass = newsItem.affectedClass

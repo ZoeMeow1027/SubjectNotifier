@@ -1,12 +1,10 @@
 package io.zoemeow.dutschedule.ui.view.settings
 
-import android.app.Activity.RESULT_CANCELED
 import android.app.LocaleManager
 import android.content.Context
 import android.os.Build
 import android.os.LocaleList
 import android.util.Log
-import androidx.activity.ComponentActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -25,49 +23,56 @@ import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.os.LocaleListCompat
 import io.zoemeow.dutschedule.R
-import io.zoemeow.dutschedule.activity.SettingsActivity
+import io.zoemeow.dutschedule.model.AppearanceState
 import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SettingsActivity.LanguageSettings(
+fun Activity_Settings_AppLanguageSettings(
     context: Context,
     snackBarHostState: SnackbarHostState,
-    containerColor: Color,
-    contentColor: Color
+    appearanceState: AppearanceState,
+    onNotificationRegister: () -> Unit,
+    onBack: () -> Unit
 ) {
+    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
+
     Scaffold(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxSize()
+            .nestedScroll(scrollBehavior.nestedScrollConnection),
         snackbarHost = { SnackbarHost(hostState = snackBarHostState) },
-        containerColor = containerColor,
-        contentColor = contentColor,
+        containerColor = appearanceState.containerColor,
+        contentColor = appearanceState.contentColor,
         topBar = {
-            TopAppBar(
+            LargeTopAppBar(
                 title = { Text(context.getString(R.string.settings_applanguage_title)) },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent),
+                colors = TopAppBarDefaults.largeTopAppBarColors(
+                    containerColor = Color.Transparent,
+                    scrolledContainerColor = Color.Transparent
+                ),
                 navigationIcon = {
                     IconButton(
                         onClick = {
-                            setResult(RESULT_CANCELED)
-                            finish()
+                            onBack()
                         },
                         content = {
                             Icon(
@@ -90,6 +95,7 @@ fun SettingsActivity.LanguageSettings(
                                 val appLocale: LocaleListCompat = LocaleListCompat.forLanguageTags(defaultLocale)
                                 AppCompatDelegate.setApplicationLocales(appLocale)
                             }
+                            onNotificationRegister()
                         },
                         content = {
                             Icon(
@@ -99,7 +105,8 @@ fun SettingsActivity.LanguageSettings(
                             )
                         }
                     )
-                }
+                },
+                scrollBehavior = scrollBehavior
             )
         },
         content = {
@@ -132,6 +139,7 @@ fun SettingsActivity.LanguageSettings(
                                         val appLocale: LocaleListCompat = LocaleListCompat.forLanguageTags(tag)
                                         AppCompatDelegate.setApplicationLocales(appLocale)
                                     }
+                                    onNotificationRegister()
                                 }
                             )
                         }

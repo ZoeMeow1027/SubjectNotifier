@@ -24,15 +24,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.zoemeow.dutschedule.R
 import io.zoemeow.dutschedule.model.NotificationHistory
-import io.zoemeow.dutschedule.utils.CustomDateUtil
+import io.zoemeow.dutschedule.utils.CustomDateUtils
 import io.zoemeow.dutschedule.utils.getRandomString
 
 @Composable
@@ -72,7 +70,7 @@ fun NotificationItem(
                         ) {
                             if (showDate) {
                                 Text(
-                                    CustomDateUtil.unixToDurationWithLocale(
+                                    CustomDateUtils.unixToDurationWithLocale(
                                         context = context,
                                         unix = item.timestamp
                                     ),

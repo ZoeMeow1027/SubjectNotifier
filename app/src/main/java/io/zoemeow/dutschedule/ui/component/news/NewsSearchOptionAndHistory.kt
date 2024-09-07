@@ -35,12 +35,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
-import io.dutwrapper.dutwrapper.model.enums.NewsSearchType
-import io.dutwrapper.dutwrapper.model.enums.NewsType
+import io.dutwrapper.dutwrapper.News
 import io.zoemeow.dutschedule.R
 import io.zoemeow.dutschedule.model.news.NewsSearchHistory
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NewsSearchOptionAndHistory(
     context: Context,
@@ -49,9 +47,9 @@ fun NewsSearchOptionAndHistory(
     searchHistory: List<NewsSearchHistory>,
     backgroundColor: Color = MaterialTheme.colorScheme.background,
     query: String = "",
-    newsMethod: NewsSearchType,
-    newsType: NewsType,
-    onSettingsChanged: ((String, NewsSearchType, NewsType) -> Unit)? = null,
+    newsMethod: News.NewsSearchType,
+    newsType: News.NewsType,
+    onSettingsChanged: ((String, News.NewsSearchType, News.NewsType) -> Unit)? = null,
     onSearchTriggered: (() -> Unit)? = null,
     onClearHistoryTriggered: (() -> Unit)? = null,
     onDismiss: (() -> Unit)? = null
@@ -78,16 +76,16 @@ fun NewsSearchOptionAndHistory(
                                     .fillMaxWidth()
                                     .padding(bottom = 5.dp),
                                 content = {
-                                    NewsSearchType.values().forEachIndexed { index, item ->
+                                    News.NewsSearchType.entries.forEachIndexed { index, item ->
                                         SegmentedButton(
-                                            shape = SegmentedButtonDefaults.itemShape(index = index, count = NewsSearchType.values().size),
+                                            shape = SegmentedButtonDefaults.itemShape(index = index, count = News.NewsSearchType.entries.size),
                                             onClick = { onSettingsChanged?.let { it(query, item, newsType) } },
                                             selected = newsMethod == item,
                                             label = {
                                                 Text(
                                                     when (item) {
-                                                        NewsSearchType.ByTitle -> context.getString(R.string.news_search_searchoption_method_bytitle)
-                                                        NewsSearchType.ByContent -> context.getString(R.string.news_search_searchoption_method_bycontent)
+                                                        News.NewsSearchType.ByTitle -> context.getString(R.string.news_search_searchoption_method_bytitle)
+                                                        News.NewsSearchType.ByContent -> context.getString(R.string.news_search_searchoption_method_bycontent)
                                                     }
                                                 )
                                             }
@@ -105,9 +103,9 @@ fun NewsSearchOptionAndHistory(
                                     .fillMaxWidth()
                                     .padding(bottom = 5.dp),
                                 content = {
-                                    NewsType.values().forEachIndexed { index, item ->
+                                    News.NewsType.entries.forEachIndexed { index, item ->
                                         SegmentedButton(
-                                            shape = SegmentedButtonDefaults.itemShape(index = index, count = NewsType.values().size),
+                                            shape = SegmentedButtonDefaults.itemShape(index = index, count = News.NewsType.entries.size),
                                             onClick = {
                                                 onSettingsChanged?.let {
                                                     it(query, newsMethod, item)
@@ -117,8 +115,8 @@ fun NewsSearchOptionAndHistory(
                                             label = {
                                                 Text(
                                                     when (item) {
-                                                        NewsType.Subject -> context.getString(R.string.news_search_searchoption_type_bysubject)
-                                                        NewsType.Global -> context.getString(R.string.news_search_searchoption_type_byglobal)
+                                                        News.NewsType.Subject -> context.getString(R.string.news_search_searchoption_type_bysubject)
+                                                        News.NewsType.Global -> context.getString(R.string.news_search_searchoption_type_byglobal)
                                                     }
                                                 )
                                             }
@@ -161,12 +159,12 @@ fun NewsSearchOptionAndHistory(
                                                             Text(context.getString(
                                                                 R.string.news_search_searchoption_history_data,
                                                                 when (queryItem.newsMethod) {
-                                                                    NewsSearchType.ByTitle -> context.getString(R.string.news_search_searchoption_method_bytitle)
-                                                                    NewsSearchType.ByContent -> context.getString(R.string.news_search_searchoption_method_bycontent)
+                                                                    News.NewsSearchType.ByTitle -> context.getString(R.string.news_search_searchoption_method_bytitle)
+                                                                    News.NewsSearchType.ByContent -> context.getString(R.string.news_search_searchoption_method_bycontent)
                                                                 },
                                                                 when (queryItem.newsType) {
-                                                                    NewsType.Subject -> context.getString(R.string.news_search_searchoption_type_bysubject)
-                                                                    NewsType.Global -> context.getString(R.string.news_search_searchoption_type_byglobal)
+                                                                    News.NewsType.Subject -> context.getString(R.string.news_search_searchoption_type_bysubject)
+                                                                    News.NewsType.Global -> context.getString(R.string.news_search_searchoption_type_byglobal)
                                                                 }
                                                             ))
                                                         }

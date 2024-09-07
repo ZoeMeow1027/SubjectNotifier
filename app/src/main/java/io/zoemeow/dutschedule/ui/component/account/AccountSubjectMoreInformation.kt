@@ -18,17 +18,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import io.dutwrapper.dutwrapper.model.accounts.SubjectScheduleItem
+import io.dutwrapper.dutwrapper.AccountInformation.SubjectInformation
 import io.zoemeow.dutschedule.GlobalVariables
 import io.zoemeow.dutschedule.R
 import io.zoemeow.dutschedule.model.settings.SubjectCode
 import io.zoemeow.dutschedule.ui.component.base.DialogBase
-import io.zoemeow.dutschedule.utils.CustomDateUtil
+import io.zoemeow.dutschedule.utils.CustomDateUtils
 
 @Composable
 fun AccountSubjectMoreInformation(
     context: Context,
-    item: SubjectScheduleItem? = null,
+    item: SubjectInformation? = null,
     isVisible: Boolean = false,
     onAddToFilterRequested: ((SubjectCode) -> Unit)? = null,
     dismissClicked: (() -> Unit)? = null,
@@ -60,10 +60,10 @@ fun AccountSubjectMoreInformation(
                         CustomText(context.getString(
                             R.string.account_subjectinfo_data_schedulestudy_dayofweek,
                             item?.let {
-                                it.subjectStudy.scheduleList.joinToString(
+                                it.scheduleStudy.scheduleList.joinToString(
                                     separator = "; ",
                                     transform = { item1 ->
-                                        "${CustomDateUtil.dayOfWeekInString(context, item1.dayOfWeek + 1)},${item1.lesson.start}-${item1.lesson.end},${item1.room}"
+                                        "${CustomDateUtils.dayOfWeekInString(context, item1.dayOfWeek + 1)},${item1.lesson.start}-${item1.lesson.end},${item1.room}"
                                     }
                                 )
                             } ?: ""
@@ -71,7 +71,7 @@ fun AccountSubjectMoreInformation(
                         CustomText(context.getString(
                             R.string.account_subjectinfo_data_schedulestudy_weekrange,
                             item?.let {
-                                it.subjectStudy.weekList.joinToString(
+                                it.scheduleStudy.weekAffected.joinToString(
                                     separator = "; ",
                                     transform = { item1 ->
                                         "${item1.start}-${item1.end}"
@@ -89,20 +89,20 @@ fun AccountSubjectMoreInformation(
                         if (item != null) {
                             CustomText(context.getString(
                                 R.string.account_subjectinfo_data_scheduleexam_group,
-                                item.subjectExam.group,
-                                if (item.subjectExam.isGlobal) context.getString(R.string.account_subjectinfo_data_scheduleexam_groupglobal) else ""
+                                item.scheduleExam.group,
+                                if (item.scheduleExam.isGlobal) context.getString(R.string.account_subjectinfo_data_scheduleexam_groupglobal) else ""
                             ))
                             CustomText(context.getString(
                                 R.string.account_subjectinfo_data_scheduleexam_date,
-                                CustomDateUtil.dateUnixToString(
-                                    item.subjectExam.date,
+                                CustomDateUtils.dateUnixToString(
+                                    item.scheduleExam.date,
                                     "dd/MM/yyyy HH:mm",
                                     "GMT+7"
                                 )
                             ))
                             CustomText(context.getString(
                                 R.string.account_subjectinfo_data_scheduleexam_room,
-                                item.subjectExam.room
+                                item.scheduleExam.room
                             ))
                         } else {
                             CustomText(context.getString(R.string.account_subjectinfo_data_scheduleexam_noexamdate))

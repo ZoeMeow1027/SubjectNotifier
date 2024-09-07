@@ -13,15 +13,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import io.dutwrapper.dutwrapper.model.accounts.SubjectScheduleItem
+import io.dutwrapper.dutwrapper.AccountInformation.SubjectInformation
 import io.zoemeow.dutschedule.GlobalVariables
 import io.zoemeow.dutschedule.R
-import io.zoemeow.dutschedule.utils.CustomDateUtil
+import io.zoemeow.dutschedule.utils.CustomDateUtils
 
 @Composable
 fun SubjectInformation(
     modifier: Modifier = Modifier,
-    item: SubjectScheduleItem,
+    item: SubjectInformation,
     onClick: (() -> Unit)? = null,
     opacity: Float = 1f
 ) {
@@ -48,12 +48,12 @@ fun SubjectInformation(
                         text = context.getString(
                             R.string.account_subjectinfo_summary_schinfo,
                             item.lecturer,
-                            item.subjectStudy.scheduleList.joinToString(
+                            item.scheduleStudy.scheduleList.joinToString(
                                 separator = "\n",
                                 transform = { schItem ->
                                     context.getString(
                                         R.string.account_subjectinfo_summary_schitem,
-                                        CustomDateUtil.dayOfWeekInString(context, schItem.dayOfWeek, true),
+                                        CustomDateUtils.dayOfWeekInString(context, schItem.dayOfWeek, true),
                                         schItem.lesson.start,
                                         schItem.lesson.end,
                                         schItem.room

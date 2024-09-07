@@ -36,31 +36,30 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import io.zoemeow.dutschedule.R
+import io.zoemeow.dutschedule.model.AppearanceState
 import io.zoemeow.dutschedule.model.NotificationHistory
 import io.zoemeow.dutschedule.ui.component.main.NotificationItem
-import io.zoemeow.dutschedule.utils.CustomDateUtil
+import io.zoemeow.dutschedule.utils.CustomDateUtils
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NotificationScaffold(
     context: Context,
-    isVisible: Boolean = false,
-    itemList: List<NotificationHistory>,
-    containerColor: Color,
-    contentColor: Color,
-    backgroundImage: Bitmap? = null,
     snackBarHostState: SnackbarHostState? = null,
+    appearanceState: AppearanceState,
+    itemList: List<NotificationHistory>,
+    backgroundImage: Bitmap? = null,
+    isVisible: Boolean = false,
     onDismiss: (() -> Unit)? = null,
     onClick: ((NotificationHistory) -> Unit)? = null,
     onClear: ((NotificationHistory) -> Unit)? = null,
-    onClearAll: (() -> Unit)? = null,
-    opacity: Float = 1f,
+    onClearAll: (() -> Unit)? = null
 ) {
     AnimatedVisibility(
         visible = isVisible,
         enter = slideInVertically(
             initialOffsetY = {
-                it / 2
+                it
             },
         ),
         exit = slideOutVertically(
@@ -78,8 +77,8 @@ fun NotificationScaffold(
                 )
             }
             Scaffold(
-                containerColor = containerColor,
-                contentColor = contentColor,
+                containerColor = appearanceState.containerColor,
+                contentColor = appearanceState.contentColor,
                 topBar = {
                     TopAppBar(
                         title = { Text(text = context.getString(R.string.notification_panel_title)) },
@@ -130,7 +129,7 @@ fun NotificationScaffold(
                                     .toSortedMap(compareByDescending { it })
                                     .forEach(action = { group ->
                                         Text(
-                                            CustomDateUtil.unixToDurationWithLocale(
+                                            CustomDateUtils.unixToDurationWithLocale(
                                                 context = context,
                                                 unix = group.key
                                             ),
@@ -142,7 +141,7 @@ fun NotificationScaffold(
                                                 context = context,
                                                 modifier = Modifier.padding(top = 2.dp, bottom = 5.dp),
                                                 isVisible = true,
-                                                opacity = opacity,
+                                                opacity = appearanceState.componentOpacity,
                                                 onClick = { onClick?.let { it(item) } },
                                                 onClear = { onClear?.let { it(item) } },
                                                 item = item

@@ -1,6 +1,5 @@
 package io.zoemeow.dutschedule.ui.view.settings
 
-import android.app.Activity.RESULT_CANCELED
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -20,11 +19,11 @@ import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -33,76 +32,52 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import io.zoemeow.dutschedule.BuildConfig
-import io.zoemeow.dutschedule.GlobalVariables
 import io.zoemeow.dutschedule.R
 import io.zoemeow.dutschedule.activity.PermissionsActivity
 import io.zoemeow.dutschedule.activity.SettingsActivity
+import io.zoemeow.dutschedule.model.AppearanceState
 import io.zoemeow.dutschedule.model.settings.BackgroundImageOption
 import io.zoemeow.dutschedule.model.settings.ThemeMode
 import io.zoemeow.dutschedule.ui.component.base.DividerItem
 import io.zoemeow.dutschedule.ui.component.base.OptionItem
 import io.zoemeow.dutschedule.ui.component.base.OptionSwitchItem
 import io.zoemeow.dutschedule.ui.component.settings.ContentRegion
-import io.zoemeow.dutschedule.ui.component.settings.dialog.DialogAppBackgroundSettings
-import io.zoemeow.dutschedule.ui.component.settings.dialog.DialogAppThemeSettings
-import io.zoemeow.dutschedule.utils.openLink
+import io.zoemeow.dutschedule.ui.component.settings.DialogAppThemeSettings
 import io.zoemeow.dutschedule.viewmodel.MainViewModel
 import java.util.Locale
 
-@Composable
-fun SettingsActivity.MainView(
-    context: Context,
-    snackBarHostState: SnackbarHostState,
-    containerColor: Color,
-    contentColor: Color,
-    mediaRequest: () -> Unit
-) {
-    SettingsMainView(
-        context = context,
-        snackBarHostState = snackBarHostState,
-        containerColor = containerColor,
-        contentColor = contentColor,
-        componentBackgroundAlpha = getControlBackgroundAlpha(),
-        mainViewModel = getMainViewModel(),
-        mediaRequest = mediaRequest,
-        onShowSnackBar = { text, clearPrevious, actionText, action ->
-            showSnackBar(text = text, clearPrevious = clearPrevious, actionText = actionText, action = action)
-        },
-        onBack = {
-            setResult(RESULT_CANCELED)
-            finish()
-        }
-    )
-}
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SettingsMainView(
+fun Activity_Settings(
     context: Context,
     snackBarHostState: SnackbarHostState? = null,
-    containerColor: Color,
-    contentColor: Color,
-    @Suppress("UNUSED_PARAMETER") componentBackgroundAlpha: Float = 1f,
+    appearanceState: AppearanceState,
     mainViewModel: MainViewModel,
     mediaRequest: () -> Unit,
-    onShowSnackBar: ((String, Boolean, String?, (() -> Unit)?) -> Unit)? = null,
+    onMessageReceived: ((String, Boolean, String?, (() -> Unit)?) -> Unit)? = null,
     onBack: (() -> Unit)? = null
 ) {
+    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
+
     val dialogAppTheme: MutableState<Boolean> = remember { mutableStateOf(false) }
-    val dialogBackground: MutableState<Boolean> = remember { mutableStateOf(false) }
 
     Scaffold(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxSize()
+            .nestedScroll(scrollBehavior.nestedScrollConnection),
         snackbarHost = { snackBarHostState?.let { SnackbarHost(hostState = it) } },
-        containerColor = containerColor,
-        contentColor = contentColor,
+        containerColor = appearanceState.containerColor,
+        contentColor = appearanceState.contentColor,
         topBar = {
-            TopAppBar(
+            LargeTopAppBar(
                 title = { Text(context.getString(R.string.settings_title)) },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent),
+                colors = TopAppBarDefaults.largeTopAppBarColors(
+                    containerColor = Color.Transparent,
+                    scrolledContainerColor = Color.Transparent
+                ),
                 navigationIcon = {
                     if (onBack != null) {
                         IconButton(
@@ -118,7 +93,8 @@ fun SettingsMainView(
                             }
                         )
                     }
-                }
+                },
+                scrollBehavior = scrollBehavior
             )
         },
         content = {
@@ -216,7 +192,7 @@ fun SettingsMainView(
                                         mainViewModel.appSettings.value.clone(
                                             blackBackground = value
                                         )
-                                    mainViewModel.saveSettings()
+                                    mainViewModel.saveApplicationSettings(saveUserSettings = true)
                                 }
                             )
                             OptionItem(
@@ -234,7 +210,11 @@ fun SettingsMainView(
                                     BackgroundImageOption.YourCurrentWallpaper -> context.getString(R.string.settings_option_wallpaperbackground_choice_currentwallpaper)
                                     BackgroundImageOption.PickFileFromMedia -> context.getString(R.string.settings_option_wallpaperbackground_choice_pickedimage)
                                 },
-                                onClick = { dialogBackground.value = true }
+                                onClick = {
+                                    val intent = Intent(context, SettingsActivity::class.java)
+                                    intent.action = SettingsActivity.INTENT_WALLPAPERANDCONTROLSSETTINGS
+                                    context.startActivity(intent)
+                                }
                             )
                         }
                     )
@@ -304,7 +284,7 @@ fun SettingsMainView(
                                         mainViewModel.appSettings.value.clone(
                                             openLinkInsideApp = value
                                         )
-                                    mainViewModel.saveSettings()
+                                    mainViewModel.saveApplicationSettings(saveUserSettings = true)
                                 }
                             )
                             OptionItem(
@@ -342,51 +322,17 @@ fun SettingsMainView(
                                         modifier = Modifier.padding(end = 15.dp)
                                     )
                                 },
-                                title = context.getString(R.string.settings_category_about),
+                                title = context.getString(R.string.settings_option_about),
                                 description = context.getString(
                                     R.string.settings_option_version_description,
                                     BuildConfig.VERSION_NAME,
                                     BuildConfig.VERSION_CODE
                                 ),
                                 onClick = {
-                                    onShowSnackBar?.let { it(context.getString(R.string.feature_not_ready), true, null, null) }
-                                    /* TODO: Implement here: Check for updates */
-                                }
-                            )
-                            OptionItem(
-                                modifierInside = Modifier.padding(horizontal = 20.dp, vertical = 15.dp),
-                                leadingIcon = {
-                                    Icon(
-                                        imageVector = ImageVector.vectorResource(R.drawable.google_fonts_device_reset_24),
-                                        "",
-                                        modifier = Modifier.padding(end = 15.dp)
-                                    )
-                                },
-                                title = context.getString(R.string.settings_option_changelog),
-                                description = context.getString(R.string.settings_option_changelog_description),
-                                onClick = {
-                                    context.openLink(
-                                        url = GlobalVariables.LINK_CHANGELOG,
-                                        customTab = mainViewModel.appSettings.value.openLinkInsideApp,
-                                    )
-                                }
-                            )
-                            OptionItem(
-                                modifierInside = Modifier.padding(horizontal = 20.dp, vertical = 15.dp),
-                                leadingIcon = {
-                                    Icon(
-                                        imageVector = ImageVector.vectorResource(R.drawable.github_mark_24),
-                                        "repository",
-                                        modifier = Modifier.padding(end = 15.dp)
-                                    )
-                                },
-                                title = context.getString(R.string.settings_option_github),
-                                description = GlobalVariables.LINK_REPOSITORY,
-                                onClick = {
-                                    context.openLink(
-                                        url = GlobalVariables.LINK_REPOSITORY,
-                                        customTab = mainViewModel.appSettings.value.openLinkInsideApp,
-                                    )
+                                    // onMessageReceived?.let { it(context.getString(R.string.feature_not_ready), true, null, null) }
+                                    val intent = Intent(context, SettingsActivity::class.java)
+                                    intent.action = SettingsActivity.INTENT_ABOUTACTIVITY
+                                    context.startActivity(intent)
                                 }
                             )
                         }
@@ -406,60 +352,13 @@ fun SettingsMainView(
                 themeMode = themeMode,
                 dynamicColor = dynamicColor
             )
-            mainViewModel.saveSettings()
+            mainViewModel.saveApplicationSettings(saveUserSettings = true)
         }
     )
-    DialogAppBackgroundSettings(
-        context = context,
-        value = mainViewModel.appSettings.value.backgroundImage,
-        isVisible = dialogBackground.value,
-        onDismiss = { dialogBackground.value = false }
-    ) { value ->
-        when (value) {
-            BackgroundImageOption.None -> {
-                mainViewModel.appSettings.value =
-                    mainViewModel.appSettings.value.clone(
-                        backgroundImage = value
-                    )
-            }
-
-            BackgroundImageOption.YourCurrentWallpaper -> {
-                val compPer =
-                    PermissionsActivity.checkPermissionManageExternalStorage().isGranted
-                if (compPer) {
-                    mainViewModel.appSettings.value =
-                        mainViewModel.appSettings.value.clone(
-                            backgroundImage = value
-                        )
-                } else {
-                    onShowSnackBar?.let {
-                        it(
-                            context.getString(R.string.permission_missing_all_file_access),
-                            true,
-                            context.getString(R.string.action_grant)
-                        ) {
-                            Intent(context, PermissionsActivity::class.java).also {
-                                context.startActivity(it)
-                            }
-                        }
-                    }
-                }
-            }
-
-            BackgroundImageOption.PickFileFromMedia -> {
-                // Launch the photo picker and let the user choose only images.
-                mediaRequest()
-            }
-        }
-
-        dialogBackground.value = false
-        mainViewModel.saveSettings()
-    }
     BackHandler(
-        enabled = dialogAppTheme.value || dialogBackground.value,
+        enabled = dialogAppTheme.value,
         onBack = {
             dialogAppTheme.value = false
-            dialogBackground.value = false
         }
     )
 }

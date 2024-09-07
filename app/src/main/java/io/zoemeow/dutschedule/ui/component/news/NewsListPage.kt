@@ -13,23 +13,22 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import io.dutwrapper.dutwrapper.model.news.NewsGlobalItem
+import io.dutwrapper.dutwrapper.News.NewsItem
 import io.zoemeow.dutschedule.model.ProcessState
-import io.zoemeow.dutschedule.utils.CustomDateUtil
+import io.zoemeow.dutschedule.utils.CustomDateUtils
 import io.zoemeow.dutschedule.utils.endOfListReached
 
 @Composable
 fun NewsListPage(
-    newsList: List<NewsGlobalItem> = listOf(),
+    newsList: List<NewsItem> = listOf(),
     processState: ProcessState = ProcessState.NotRunYet,
     endOfListReached: (() -> Unit)? = null,
-    itemClicked: ((NewsGlobalItem) -> Unit)? = null,
+    itemClicked: ((NewsItem) -> Unit)? = null,
     lazyListState: LazyListState = rememberLazyListState(),
     opacity: Float = 1f
 ) {
@@ -57,7 +56,7 @@ fun NewsListPage(
                                         horizontalArrangement = Arrangement.Center,
                                         content = {
                                             Text(
-                                                text = CustomDateUtil.dateUnixToString(newsGroup.key, "dd/MM/yyyy"),
+                                                text = CustomDateUtils.dateUnixToString(newsGroup.key, "dd/MM/yyyy"),
                                                 modifier = Modifier.padding(bottom = 5.dp)
                                             )
                                         }
@@ -66,7 +65,7 @@ fun NewsListPage(
                                 items (newsGroup.value) { newsItem ->
                                     NewsListItem(
                                         title = newsItem.title ?: "",
-                                        description = newsItem.contentString ?: "",
+                                        description = newsItem.content ?: "",
                                         opacity = opacity,
                                         onClick = {
                                             itemClicked?.let { it(newsItem) }

@@ -3,15 +3,15 @@ package io.zoemeow.dutschedule.model.account
 import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
-import io.dutwrapper.dutwrapper.model.accounts.AccountInformation
-import io.dutwrapper.dutwrapper.model.accounts.SubjectFeeItem
-import io.dutwrapper.dutwrapper.model.accounts.SubjectScheduleItem
-import io.dutwrapper.dutwrapper.model.accounts.trainingresult.AccountTrainingStatus
+import io.dutwrapper.dutwrapper.AccountInformation.StudentInformation
+import io.dutwrapper.dutwrapper.AccountInformation.SubjectFee
+import io.dutwrapper.dutwrapper.AccountInformation.SubjectInformation
+import io.dutwrapper.dutwrapper.AccountInformation.TrainingStatus
 import io.zoemeow.dutschedule.model.ProcessState
 import io.zoemeow.dutschedule.model.VariableListState
 import io.zoemeow.dutschedule.model.VariableState
 import io.zoemeow.dutschedule.repository.DutRequestRepository
-import kotlinx.coroutines.CoroutineExceptionHandler
+import io.zoemeow.dutschedule.utils.launchOnScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -40,27 +40,10 @@ class DUTAccountInstance(
     @Suppress("KDocUnresolvedReference")
     val accountSession: VariableState<AccountSession> = VariableState(data = mutableStateOf(null))
     private val schoolYear: MutableState<SchoolYearItem?> = mutableStateOf(null)
-    val subjectSchedule: VariableListState<SubjectScheduleItem> = VariableListState()
-    val subjectFee: VariableListState<SubjectFeeItem> = VariableListState()
-    val accountInformation: VariableState<AccountInformation> = VariableState(data = mutableStateOf(null))
-    val accountTrainingStatus: VariableState<AccountTrainingStatus> = VariableState(data = mutableStateOf(null))
-
-    private fun launchOnScope(
-        script: () -> Unit,
-        onCompleted: ((Throwable?) -> Unit)? = null
-    ) {
-        val handler = CoroutineExceptionHandler { _, throwable ->
-            onCompleted?.let { it(throwable) }
-        }
-
-        CoroutineScope(Dispatchers.Main).launch(handler) {
-            withContext(Dispatchers.IO) {
-                script()
-            }
-        }.invokeOnCompletion { thr ->
-            onCompleted?.let { it(thr) }
-        }
-    }
+    val subjectSchedule: VariableListState<SubjectInformation> = VariableListState()
+    val subjectFee: VariableListState<SubjectFee> = VariableListState()
+    val accountInformation: VariableState<StudentInformation> = VariableState(data = mutableStateOf(null))
+    val accountTrainingStatus: VariableState<TrainingStatus> = VariableState(data = mutableStateOf(null))
 
     private fun checkVariable(): Boolean {
         return when {
@@ -82,12 +65,12 @@ class DUTAccountInstance(
         this.accountSession.data.value = accountSession.clone()
     }
 
-    fun setSubjectScheduleCache(data: List<SubjectScheduleItem>) {
+    fun setSubjectScheduleCache(data: List<SubjectInformation>) {
         this.subjectSchedule.data.clear()
         this.subjectSchedule.data.addAll(data)
     }
 
-    fun getSubjectScheduleCache(): List<SubjectScheduleItem> {
+    fun getSubjectScheduleCache(): List<SubjectInformation> {
         return this.subjectSchedule.data.toList()
     }
 
@@ -184,7 +167,7 @@ class DUTAccountInstance(
                     throw Exception()
                 }
             },
-            onCompleted = {
+            invokeOnCompleted = {
                 // TODO: Throwable here
                 Log.d("login", "done login")
                 it?.printStackTrace()
@@ -258,7 +241,7 @@ class DUTAccountInstance(
                     }
                 }
             },
-            onCompleted = { throwable ->
+            invokeOnCompleted = { throwable ->
                 // Reset to NotRunYet (not logged in before)
                 accountSession.processState.value = ProcessState.NotRunYet
                 onEventSent?.let { it(1) }
@@ -303,7 +286,7 @@ class DUTAccountInstance(
                     subjectSchedule.data.addAll(data)
                 }
             },
-            onCompleted = {
+            invokeOnCompleted = {
                 it?.printStackTrace()
                 subjectSchedule.processState.value = when {
                     (it != null) -> ProcessState.Failed
@@ -351,7 +334,7 @@ class DUTAccountInstance(
                     subjectFee.data.addAll(data)
                 }
             },
-            onCompleted = {
+            invokeOnCompleted = {
                 it?.printStackTrace()
                 subjectFee.processState.value = when {
                     (it != null) -> ProcessState.Failed
@@ -392,7 +375,7 @@ class DUTAccountInstance(
                     accountInformation.data.value = data
                 }
             },
-            onCompleted = {
+            invokeOnCompleted = {
                 it?.printStackTrace()
                 accountInformation.processState.value = when {
                     (it != null) -> ProcessState.Failed
@@ -433,7 +416,7 @@ class DUTAccountInstance(
                     accountTrainingStatus.data.value = data
                 }
             },
-            onCompleted = {
+            invokeOnCompleted = {
                 it?.printStackTrace()
                 accountTrainingStatus.processState.value = when {
                     (it != null) -> ProcessState.Failed

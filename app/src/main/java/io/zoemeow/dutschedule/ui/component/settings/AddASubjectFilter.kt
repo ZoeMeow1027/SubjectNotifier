@@ -19,11 +19,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import io.zoemeow.dutschedule.R
-import io.zoemeow.dutschedule.activity.SettingsActivity
 import io.zoemeow.dutschedule.ui.component.base.DialogBase
 
 @Composable
-fun SettingsActivity.AddNewSubjectFilterDialog(
+fun Dialog_Settings_NewsNotificationSettings_Add(
     context: Context,
     isVisible: Boolean = false,
     onDismiss: (() -> Unit)? = null,
@@ -32,6 +31,12 @@ fun SettingsActivity.AddNewSubjectFilterDialog(
     val schoolYearId = remember { mutableStateOf("") }
     val classId = remember { mutableStateOf("") }
     val subjectName = remember { mutableStateOf("") }
+
+    fun clearAllTextField() {
+        schoolYearId.value = ""
+        classId.value = ""
+        subjectName.value = ""
+    }
 
     DialogBase(
         modifier = Modifier.fillMaxWidth().padding(25.dp),
@@ -96,12 +101,18 @@ fun SettingsActivity.AddNewSubjectFilterDialog(
         },
         actionButtons = {
             TextButton(
-                onClick = { onDismiss?.let { it() } },
+                onClick = {
+                    onDismiss?.let { it() }
+                    clearAllTextField()
+                },
                 content = { Text(context.getString(R.string.action_cancel)) },
                 modifier = Modifier.padding(start = 8.dp),
             )
             TextButton(
-                onClick = { onDone?.let { it(schoolYearId.value, classId.value,subjectName.value) } },
+                onClick = { onDone?.let {
+                    it(schoolYearId.value, classId.value,subjectName.value) }
+                    clearAllTextField()
+                },
                 content = { Text(context.getString(R.string.action_save)) },
                 modifier = Modifier.padding(start = 8.dp),
             )

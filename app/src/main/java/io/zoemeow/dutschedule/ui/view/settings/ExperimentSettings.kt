@@ -31,11 +31,12 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
 import io.zoemeow.dutschedule.R
 import io.zoemeow.dutschedule.model.AppearanceState
-import io.zoemeow.dutschedule.ui.component.base.DividerItem
-import io.zoemeow.dutschedule.ui.component.base.OptionItem
-import io.zoemeow.dutschedule.ui.component.base.OptionSwitchItem
-import io.zoemeow.dutschedule.ui.component.settings.ContentRegion
-import io.zoemeow.dutschedule.ui.component.settings.DialogSchoolYearSettings
+import io.zoemeow.dutschedule.ui.component.DividerItem
+import io.zoemeow.dutschedule.ui.component.OptionItem
+import io.zoemeow.dutschedule.ui.component.OptionSwitchItem
+import io.zoemeow.dutschedule.ui.view.settings.controls.ContentRegion
+import io.zoemeow.dutschedule.ui.view.settings.controls.DialogSchoolYearSettings
+import io.zoemeow.dutschedule.utils.ActivityUtils
 import io.zoemeow.dutschedule.viewmodel.MainViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -171,16 +172,7 @@ fun Activity_Settings_ExperimentSettings(
                                         mainViewModel.saveApplicationSettings(
                                             saveUserSettings = true,
                                             onCompleted = {
-                                                val packageManager: PackageManager =
-                                                    context.packageManager
-                                                val intent: Intent =
-                                                    packageManager.getLaunchIntentForPackage(context.packageName)!!
-                                                val componentName: ComponentName =
-                                                    intent.component!!
-                                                val restartIntent: Intent =
-                                                    Intent.makeRestartActivityTask(componentName)
-                                                context.startActivity(restartIntent)
-                                                Runtime.getRuntime().exit(0)
+                                                ActivityUtils.restartApp(context)
                                             }
                                         )
                                     }

@@ -32,7 +32,7 @@ import io.dutwrapper.dutwrapper.News.NewsSubjectItem
 import io.zoemeow.dutschedule.R
 import io.zoemeow.dutschedule.activity.NewsActivity
 import io.zoemeow.dutschedule.model.AppearanceState
-import io.zoemeow.dutschedule.ui.component.news.NewsDetailScreen
+import io.zoemeow.dutschedule.ui.view.news.controls.NewsDetailScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

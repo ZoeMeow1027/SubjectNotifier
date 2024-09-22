@@ -38,7 +38,7 @@ import androidx.compose.ui.unit.dp
 import io.zoemeow.dutschedule.R
 import io.zoemeow.dutschedule.model.AppearanceState
 import io.zoemeow.dutschedule.model.NotificationHistory
-import io.zoemeow.dutschedule.ui.component.main.NotificationItem
+import io.zoemeow.dutschedule.ui.view.main.controls.NotificationItem
 import io.zoemeow.dutschedule.utils.CustomDateUtils
 
 @OptIn(ExperimentalMaterial3Api::class)

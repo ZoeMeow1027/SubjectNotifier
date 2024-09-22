@@ -42,7 +42,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import io.zoemeow.dutschedule.R
 import io.zoemeow.dutschedule.model.AppearanceState
-import io.zoemeow.dutschedule.ui.component.permissionrequest.PermissionInformation
+import io.zoemeow.dutschedule.ui.view.permissionrequest.controls.PermissionInformation
 
 class PermissionsActivity : BaseActivity() {
     private val permissionStatusList = mutableStateListOf<PermissionCheckResult>()

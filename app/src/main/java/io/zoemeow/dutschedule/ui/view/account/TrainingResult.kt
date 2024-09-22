@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -53,10 +52,10 @@ import io.zoemeow.dutschedule.R
 import io.zoemeow.dutschedule.activity.AccountActivity
 import io.zoemeow.dutschedule.model.AppearanceState
 import io.zoemeow.dutschedule.model.ProcessState
-import io.zoemeow.dutschedule.ui.component.base.ButtonBase
-import io.zoemeow.dutschedule.ui.component.base.CheckboxOption
-import io.zoemeow.dutschedule.ui.component.base.OutlinedTextBox
-import io.zoemeow.dutschedule.ui.component.base.SimpleCardItem
+import io.zoemeow.dutschedule.ui.component.ButtonBase
+import io.zoemeow.dutschedule.ui.component.CheckboxOption
+import io.zoemeow.dutschedule.ui.component.OutlinedTextBox
+import io.zoemeow.dutschedule.ui.component.SimpleCardItem
 import io.zoemeow.dutschedule.viewmodel.MainViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)

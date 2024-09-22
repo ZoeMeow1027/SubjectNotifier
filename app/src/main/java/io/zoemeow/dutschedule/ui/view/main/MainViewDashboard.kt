@@ -38,11 +38,11 @@ import io.zoemeow.dutschedule.activity.AccountActivity
 import io.zoemeow.dutschedule.model.AppearanceState
 import io.zoemeow.dutschedule.model.CustomClock
 import io.zoemeow.dutschedule.model.ProcessState
-import io.zoemeow.dutschedule.ui.component.main.DateAndTimeSummaryItem
-import io.zoemeow.dutschedule.ui.component.main.LessonTodaySummaryItem
-import io.zoemeow.dutschedule.ui.component.main.SchoolNewsSummaryItem
-import io.zoemeow.dutschedule.ui.component.main.SummaryItem
-import io.zoemeow.dutschedule.ui.component.main.UpdateAvailableSummaryItem
+import io.zoemeow.dutschedule.ui.view.main.controls.DateAndTimeSummaryItem
+import io.zoemeow.dutschedule.ui.view.main.controls.LessonTodaySummaryItem
+import io.zoemeow.dutschedule.ui.view.main.controls.SchoolNewsSummaryItem
+import io.zoemeow.dutschedule.ui.view.main.controls.SummaryItem
+import io.zoemeow.dutschedule.ui.view.main.controls.UpdateAvailableSummaryItem
 import io.zoemeow.dutschedule.utils.CustomDateUtils
 import io.zoemeow.dutschedule.utils.openLink
 import io.zoemeow.dutschedule.viewmodel.MainViewModel

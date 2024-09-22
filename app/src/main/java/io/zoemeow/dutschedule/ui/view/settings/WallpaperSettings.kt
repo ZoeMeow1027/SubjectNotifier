@@ -31,10 +31,10 @@ import io.zoemeow.dutschedule.R
 import io.zoemeow.dutschedule.activity.PermissionsActivity
 import io.zoemeow.dutschedule.model.AppearanceState
 import io.zoemeow.dutschedule.model.settings.BackgroundImageOption
-import io.zoemeow.dutschedule.ui.component.base.DividerItem
-import io.zoemeow.dutschedule.ui.component.base.RadioButtonOption
-import io.zoemeow.dutschedule.ui.component.settings.ContentRegion
-import io.zoemeow.dutschedule.ui.component.settings.SliderWithValue
+import io.zoemeow.dutschedule.ui.component.DividerItem
+import io.zoemeow.dutschedule.ui.component.RadioButtonOption
+import io.zoemeow.dutschedule.ui.view.settings.controls.ContentRegion
+import io.zoemeow.dutschedule.ui.view.settings.controls.SliderWithValue
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

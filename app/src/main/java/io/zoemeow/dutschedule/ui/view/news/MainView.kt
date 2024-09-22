@@ -1,7 +1,6 @@
 package io.zoemeow.dutschedule.ui.view.news
 
 import android.content.Context
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -51,7 +50,7 @@ import io.zoemeow.dutschedule.activity.NewsActivity
 import io.zoemeow.dutschedule.model.AppearanceState
 import io.zoemeow.dutschedule.model.ProcessState
 import io.zoemeow.dutschedule.model.news.NewsFetchType
-import io.zoemeow.dutschedule.ui.component.news.NewsListPage
+import io.zoemeow.dutschedule.ui.view.news.controls.NewsListPage
 import io.zoemeow.dutschedule.viewmodel.MainViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

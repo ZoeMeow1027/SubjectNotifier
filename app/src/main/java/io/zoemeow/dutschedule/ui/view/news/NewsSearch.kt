@@ -43,8 +43,8 @@ import io.zoemeow.dutschedule.R
 import io.zoemeow.dutschedule.activity.NewsActivity
 import io.zoemeow.dutschedule.model.AppearanceState
 import io.zoemeow.dutschedule.model.ProcessState
-import io.zoemeow.dutschedule.ui.component.news.NewsSearchOptionAndHistory
-import io.zoemeow.dutschedule.ui.component.news.NewsSearchResult
+import io.zoemeow.dutschedule.ui.view.news.controls.NewsSearchOptionAndHistory
+import io.zoemeow.dutschedule.ui.view.news.controls.NewsSearchResult
 import io.zoemeow.dutschedule.viewmodel.NewsSearchViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)

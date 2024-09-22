@@ -1,5 +1,9 @@
 package io.zoemeow.dutschedule.utils
 
+import android.content.ComponentName
+import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Color
 import android.os.StrictMode
 import androidx.activity.ComponentActivity
@@ -32,6 +36,22 @@ class ActivityUtils {
                     detectDarkMode = { true }
                 )
             )
+        }
+
+        /**
+         * Fully restart application.
+         */
+        fun restartApp(context: Context) {
+            val packageManager: PackageManager =
+                context.packageManager
+            val intent: Intent =
+                packageManager.getLaunchIntentForPackage(context.packageName)!!
+            val componentName: ComponentName =
+                intent.component!!
+            val restartIntent: Intent =
+                Intent.makeRestartActivityTask(componentName)
+            context.startActivity(restartIntent)
+            Runtime.getRuntime().exit(0)
         }
     }
 }

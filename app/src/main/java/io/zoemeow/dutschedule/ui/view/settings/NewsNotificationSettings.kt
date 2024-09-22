@@ -49,16 +49,16 @@ import androidx.compose.ui.unit.dp
 import io.zoemeow.dutschedule.R
 import io.zoemeow.dutschedule.model.AppearanceState
 import io.zoemeow.dutschedule.model.settings.SubjectCode
-import io.zoemeow.dutschedule.ui.component.base.CheckboxOption
-import io.zoemeow.dutschedule.ui.component.base.DividerItem
-import io.zoemeow.dutschedule.ui.component.base.OptionItem
-import io.zoemeow.dutschedule.ui.component.base.RadioButtonOption
-import io.zoemeow.dutschedule.ui.component.base.SimpleCardItem
-import io.zoemeow.dutschedule.ui.component.base.SwitchWithTextInSurface
-import io.zoemeow.dutschedule.ui.component.settings.Dialog_Settings_NewsNotificationSettings_Add
-import io.zoemeow.dutschedule.ui.component.settings.ContentRegion
-import io.zoemeow.dutschedule.ui.component.settings.Dialog_Settings_NewsNotificationSettings_ClearAll
-import io.zoemeow.dutschedule.ui.component.settings.Dialog_Settings_NewsNotificationSettings_Delete
+import io.zoemeow.dutschedule.ui.component.CheckboxOption
+import io.zoemeow.dutschedule.ui.component.DividerItem
+import io.zoemeow.dutschedule.ui.component.OptionItem
+import io.zoemeow.dutschedule.ui.component.RadioButtonOption
+import io.zoemeow.dutschedule.ui.component.SimpleCardItem
+import io.zoemeow.dutschedule.ui.component.SwitchWithTextInSurface
+import io.zoemeow.dutschedule.ui.view.settings.controls.Dialog_Settings_NewsNotificationSettings_Add
+import io.zoemeow.dutschedule.ui.view.settings.controls.ContentRegion
+import io.zoemeow.dutschedule.ui.view.settings.controls.Dialog_Settings_NewsNotificationSettings_ClearAll
+import io.zoemeow.dutschedule.ui.view.settings.controls.Dialog_Settings_NewsNotificationSettings_Delete
 
 @OptIn(ExperimentalLayoutApi::class, ExperimentalMaterial3Api::class)
 @Composable
@@ -397,27 +397,37 @@ fun Activity_Settings_NewsNotificationSettings(
                         }
                     )
                     @Suppress("KotlinConstantConditions")
-                    OptionItem(
-                        modifierInside = Modifier.padding(horizontal = 20.dp, vertical = 15.dp),
-                        title = context.getString(R.string.settings_newsnotify_newsfilter_add),
-                        leadingIcon = { Icon(Icons.Default.Add, context.getString(R.string.settings_newsnotify_newsfilter_add)) },
-                        isEnabled = isNewsSubjectEnabled == 2,
-                        onClick = {
-                            // Add a subject news filter
-                            dialogAddNew.value = true
-                        }
-                    )
+                    (OptionItem(
+        modifierInside = Modifier.padding(horizontal = 20.dp, vertical = 15.dp),
+        title = context.getString(R.string.settings_newsnotify_newsfilter_add),
+        leadingIcon = {
+            Icon(
+                Icons.Default.Add,
+                context.getString(R.string.settings_newsnotify_newsfilter_add)
+            )
+        },
+        isEnabled = isNewsSubjectEnabled == 2,
+        onClick = {
+            // Add a subject news filter
+            dialogAddNew.value = true
+        }
+    ))
                     @Suppress("KotlinConstantConditions")
-                    OptionItem(
-                        modifierInside = Modifier.padding(horizontal = 20.dp, vertical = 15.dp),
-                        title = context.getString(R.string.settings_newsnotify_newsfilter_deleteall),
-                        leadingIcon = { Icon(Icons.Default.Delete, context.getString(R.string.settings_newsnotify_newsfilter_deleteall)) },
-                        isEnabled = isNewsSubjectEnabled == 2,
-                        onClick = {
-                            // Clear all subject news filter list
-                            dialogDeleteAll.value = true
-                        }
-                    )
+                    (OptionItem(
+        modifierInside = Modifier.padding(horizontal = 20.dp, vertical = 15.dp),
+        title = context.getString(R.string.settings_newsnotify_newsfilter_deleteall),
+        leadingIcon = {
+            Icon(
+                Icons.Default.Delete,
+                context.getString(R.string.settings_newsnotify_newsfilter_deleteall)
+            )
+        },
+        isEnabled = isNewsSubjectEnabled == 2,
+        onClick = {
+            // Clear all subject news filter list
+            dialogDeleteAll.value = true
+        }
+    ))
                 }
             }
         }

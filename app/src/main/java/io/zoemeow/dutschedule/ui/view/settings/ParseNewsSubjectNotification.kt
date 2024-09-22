@@ -34,7 +34,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import io.zoemeow.dutschedule.R
 import io.zoemeow.dutschedule.model.AppearanceState
-import io.zoemeow.dutschedule.ui.component.base.SwitchWithTextInSurface
+import io.zoemeow.dutschedule.ui.component.SwitchWithTextInSurface
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

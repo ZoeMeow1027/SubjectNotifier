@@ -10,10 +10,14 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
-        maven {
-            name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/dutwrapper/dutwrapper-java")
-        }
+//        maven {
+//            name = "GitHubPackages"
+//            url = uri("https://maven.pkg.github.com/dutwrapper/dutwrapper-java")
+//            credentials {
+//                username = project.findProperty("gpr.user") ?: System.getenv("GitHub_Username")
+//                password = project.findProperty("gpr.key") ?: System.getenv("GitHub_TokenPkg")
+//            }
+//        }
     }
 }
 

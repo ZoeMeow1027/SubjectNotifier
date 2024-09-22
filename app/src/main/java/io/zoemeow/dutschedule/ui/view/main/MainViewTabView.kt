@@ -37,7 +37,7 @@ import io.zoemeow.dutschedule.activity.NewsActivity
 import io.zoemeow.dutschedule.activity.SettingsActivity
 import io.zoemeow.dutschedule.model.AppearanceState
 import io.zoemeow.dutschedule.model.NavBarItem
-import io.zoemeow.dutschedule.ui.component.news.NewsPopup
+import io.zoemeow.dutschedule.ui.view.news.controls.NewsPopup
 import io.zoemeow.dutschedule.ui.view.account.Activity_Account
 import io.zoemeow.dutschedule.ui.view.news.Activity_News
 import io.zoemeow.dutschedule.utils.BackgroundImageUtils

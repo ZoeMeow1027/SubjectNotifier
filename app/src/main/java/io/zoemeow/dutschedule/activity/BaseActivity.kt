@@ -1,6 +1,7 @@
 package io.zoemeow.dutschedule.activity
 
 import android.content.Context
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -22,6 +23,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
+import io.zoemeow.dutschedule.di.LocaleService
 import io.zoemeow.dutschedule.model.AppearanceState
 import io.zoemeow.dutschedule.model.settings.BackgroundImageOption
 import io.zoemeow.dutschedule.model.settings.ThemeMode
@@ -31,7 +33,6 @@ import io.zoemeow.dutschedule.utils.BackgroundImageUtils
 import io.zoemeow.dutschedule.viewmodel.MainViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-
 
 abstract class BaseActivity: ComponentActivity() {
     companion object {
@@ -203,6 +204,16 @@ abstract class BaseActivity: ComponentActivity() {
     fun clearSnackBar() {
         snackBarScope.launch {
             snackBarHostState.currentSnackbarData?.dismiss()
+        }
+    }
+
+    override fun attachBaseContext(newBase: Context?) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+            val lang = LocaleService.getCurrentLocaleTag(newBase!!)
+            val context1 = LocaleService.generateContextFromLocale(newBase, lang)
+            super.attachBaseContext(context1)
+        } else {
+            super.attachBaseContext(newBase)
         }
     }
 }

@@ -39,14 +39,15 @@ import io.zoemeow.dutschedule.BuildConfig
 import io.zoemeow.dutschedule.R
 import io.zoemeow.dutschedule.activity.PermissionsActivity
 import io.zoemeow.dutschedule.activity.SettingsActivity
+import io.zoemeow.dutschedule.di.LocaleService
 import io.zoemeow.dutschedule.model.AppearanceState
 import io.zoemeow.dutschedule.model.settings.BackgroundImageOption
 import io.zoemeow.dutschedule.model.settings.ThemeMode
-import io.zoemeow.dutschedule.ui.component.base.DividerItem
-import io.zoemeow.dutschedule.ui.component.base.OptionItem
-import io.zoemeow.dutschedule.ui.component.base.OptionSwitchItem
-import io.zoemeow.dutschedule.ui.component.settings.ContentRegion
-import io.zoemeow.dutschedule.ui.component.settings.DialogAppThemeSettings
+import io.zoemeow.dutschedule.ui.component.DividerItem
+import io.zoemeow.dutschedule.ui.component.OptionItem
+import io.zoemeow.dutschedule.ui.component.OptionSwitchItem
+import io.zoemeow.dutschedule.ui.view.settings.controls.ContentRegion
+import io.zoemeow.dutschedule.ui.view.settings.controls.DialogAppThemeSettings
 import io.zoemeow.dutschedule.viewmodel.MainViewModel
 import java.util.Locale
 
@@ -234,7 +235,7 @@ fun Activity_Settings(
                                     )
                                 },
                                 title = context.getString(R.string.settings_option_applanguage),
-                                description = Locale.getDefault().displayName,
+                                description = LocaleService.getCurrentLocaleDisplayName(context),
                                 onClick = {
                                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                                         val intent = Intent(Settings.ACTION_APP_LOCALE_SETTINGS)
@@ -251,8 +252,8 @@ fun Activity_Settings(
                                 modifierInside = Modifier.padding(horizontal = 20.dp, vertical = 15.dp),
                                 leadingIcon = {
                                     Icon(
-                                        imageVector = ImageVector.vectorResource(R.drawable.blank_24),
-                                        "",
+                                        imageVector = ImageVector.vectorResource(R.drawable.ic_outline_encrypted_24),
+                                        contentDescription = context.getString(R.string.settings_option_apppermission),
                                         modifier = Modifier.padding(end = 15.dp)
                                     )
                                 },

@@ -38,7 +38,7 @@ import io.zoemeow.dutschedule.BuildConfig
 import io.zoemeow.dutschedule.GlobalVariables
 import io.zoemeow.dutschedule.R
 import io.zoemeow.dutschedule.model.AppearanceState
-import io.zoemeow.dutschedule.ui.component.base.OptionItem
+import io.zoemeow.dutschedule.ui.component.OptionItem
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

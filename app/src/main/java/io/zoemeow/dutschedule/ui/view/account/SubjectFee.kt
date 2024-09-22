@@ -35,7 +35,7 @@ import androidx.compose.ui.unit.dp
 import io.zoemeow.dutschedule.R
 import io.zoemeow.dutschedule.model.AppearanceState
 import io.zoemeow.dutschedule.model.ProcessState
-import io.zoemeow.dutschedule.ui.component.account.AccountSubjectFeeInformation
+import io.zoemeow.dutschedule.ui.view.account.controls.AccountSubjectFeeInformation
 import io.zoemeow.dutschedule.viewmodel.MainViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)

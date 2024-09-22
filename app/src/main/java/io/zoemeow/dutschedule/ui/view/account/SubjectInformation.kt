@@ -37,8 +37,8 @@ import io.dutwrapper.dutwrapper.AccountInformation.SubjectInformation
 import io.zoemeow.dutschedule.R
 import io.zoemeow.dutschedule.model.AppearanceState
 import io.zoemeow.dutschedule.model.ProcessState
-import io.zoemeow.dutschedule.ui.component.account.AccountSubjectMoreInformation
-import io.zoemeow.dutschedule.ui.component.account.SubjectInformation
+import io.zoemeow.dutschedule.ui.view.account.controls.AccountSubjectMoreInformation
+import io.zoemeow.dutschedule.ui.view.account.controls.SubjectInformation
 import io.zoemeow.dutschedule.viewmodel.MainViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)

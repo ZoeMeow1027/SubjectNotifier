@@ -31,7 +31,7 @@ import androidx.compose.ui.unit.dp
 import io.zoemeow.dutschedule.R
 import io.zoemeow.dutschedule.model.NotificationHistory
 import io.zoemeow.dutschedule.utils.CustomDateUtils
-import io.zoemeow.dutschedule.utils.getRandomString
+import io.zoemeow.dutschedule.utils.ExtensionUtils.Companion.getRandomString
 
 @Composable
 fun NotificationItem(

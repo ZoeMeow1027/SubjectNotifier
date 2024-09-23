@@ -37,19 +37,18 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import io.zoemeow.dutschedule.BuildConfig
 import io.zoemeow.dutschedule.R
-import io.zoemeow.dutschedule.activity.PermissionsActivity
+import io.zoemeow.dutschedule.activity.MiscellaneousActivity
 import io.zoemeow.dutschedule.activity.SettingsActivity
 import io.zoemeow.dutschedule.di.LocaleService
 import io.zoemeow.dutschedule.model.AppearanceState
 import io.zoemeow.dutschedule.model.settings.BackgroundImageOption
 import io.zoemeow.dutschedule.model.settings.ThemeMode
-import io.zoemeow.dutschedule.ui.component.DividerItem
-import io.zoemeow.dutschedule.ui.component.OptionItem
-import io.zoemeow.dutschedule.ui.component.OptionSwitchItem
+import io.zoemeow.dutschedule.ui.components.DividerItem
+import io.zoemeow.dutschedule.ui.components.OptionItem
+import io.zoemeow.dutschedule.ui.components.OptionSwitchItem
 import io.zoemeow.dutschedule.ui.view.settings.controls.ContentRegion
 import io.zoemeow.dutschedule.ui.view.settings.controls.DialogAppThemeSettings
 import io.zoemeow.dutschedule.viewmodel.MainViewModel
-import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -260,12 +259,9 @@ fun Activity_Settings(
                                 title = context.getString(R.string.settings_option_apppermission),
                                 description = context.getString(R.string.settings_option_apppermission_description),
                                 onClick = {
-                                    context.startActivity(
-                                        Intent(
-                                            context,
-                                            PermissionsActivity::class.java
-                                        )
-                                    )
+                                    val intent = Intent(context, MiscellaneousActivity::class.java)
+                                    intent.action = MiscellaneousActivity.INTENT_PERMISSIONREQUEST
+                                    context.startActivity(intent)
                                 }
                             )
                             OptionSwitchItem(

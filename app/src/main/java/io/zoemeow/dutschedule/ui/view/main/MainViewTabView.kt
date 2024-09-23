@@ -41,7 +41,7 @@ import io.zoemeow.dutschedule.ui.view.news.controls.NewsPopup
 import io.zoemeow.dutschedule.ui.view.account.Activity_Account
 import io.zoemeow.dutschedule.ui.view.news.Activity_News
 import io.zoemeow.dutschedule.utils.BackgroundImageUtils
-import io.zoemeow.dutschedule.utils.openLink
+import io.zoemeow.dutschedule.utils.ExtensionUtils.Companion.openLink
 import io.zoemeow.dutschedule.viewmodel.MainViewModel
 
 @Composable

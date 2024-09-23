@@ -9,7 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import io.zoemeow.dutschedule.ui.component.SimpleCardItem
+import io.zoemeow.dutschedule.ui.components.SimpleCardItem
 
 @Composable
 fun SummaryItem(

@@ -22,7 +22,7 @@ import io.dutwrapper.dutwrapper.AccountInformation.SubjectInformation
 import io.zoemeow.dutschedule.GlobalVariables
 import io.zoemeow.dutschedule.R
 import io.zoemeow.dutschedule.model.settings.SubjectCode
-import io.zoemeow.dutschedule.ui.component.DialogBase
+import io.zoemeow.dutschedule.ui.components.DialogBase
 import io.zoemeow.dutschedule.utils.CustomDateUtils
 
 @Composable

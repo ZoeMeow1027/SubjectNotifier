@@ -1,9 +1,6 @@
 package io.zoemeow.dutschedule.ui.view.settings
 
-import android.content.ComponentName
 import android.content.Context
-import android.content.Intent
-import android.content.pm.PackageManager
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -31,9 +28,9 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
 import io.zoemeow.dutschedule.R
 import io.zoemeow.dutschedule.model.AppearanceState
-import io.zoemeow.dutschedule.ui.component.DividerItem
-import io.zoemeow.dutschedule.ui.component.OptionItem
-import io.zoemeow.dutschedule.ui.component.OptionSwitchItem
+import io.zoemeow.dutschedule.ui.components.DividerItem
+import io.zoemeow.dutschedule.ui.components.OptionItem
+import io.zoemeow.dutschedule.ui.components.OptionSwitchItem
 import io.zoemeow.dutschedule.ui.view.settings.controls.ContentRegion
 import io.zoemeow.dutschedule.ui.view.settings.controls.DialogSchoolYearSettings
 import io.zoemeow.dutschedule.utils.ActivityUtils

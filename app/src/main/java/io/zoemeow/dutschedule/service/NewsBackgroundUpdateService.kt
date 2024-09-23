@@ -11,7 +11,6 @@ import io.dutwrapper.dutwrapper.News
 import io.dutwrapper.dutwrapper.News.NewsItem
 import io.zoemeow.dutschedule.R
 import io.zoemeow.dutschedule.activity.NewsActivity
-import io.zoemeow.dutschedule.activity.PermissionsActivity
 import io.zoemeow.dutschedule.model.NotificationHistory
 import io.zoemeow.dutschedule.model.ProcessState
 import io.zoemeow.dutschedule.model.news.DUTNewsInstance
@@ -23,7 +22,8 @@ import io.zoemeow.dutschedule.repository.FileModuleRepository
 import io.zoemeow.dutschedule.utils.CustomDateUtils.Companion.dateUnixToString
 import io.zoemeow.dutschedule.utils.CustomDateUtils.Companion.getCurrentDateAndTimeToString
 import io.zoemeow.dutschedule.utils.NotificationUtils
-import io.zoemeow.dutschedule.utils.calcMD5
+import io.zoemeow.dutschedule.utils.ExtensionUtils.Companion.calcMD5
+import io.zoemeow.dutschedule.utils.PermissionUtils
 
 class NewsBackgroundUpdateService : BaseService(
     nNotifyId = "notification.id.service",
@@ -106,7 +106,7 @@ class NewsBackgroundUpdateService : BaseService(
         }
 
         // If no notification permission, news notification must be aborted to avoid exception
-        val notificationPermission = PermissionsActivity.checkPermissionNotification(this).isGranted
+        val notificationPermission = PermissionUtils.checkPermissionNotification(this).isGranted
 
         val dutNewsInstance = DUTNewsInstance(
             dutRequestRepository = dutRequestRepository,
@@ -367,7 +367,7 @@ class NewsBackgroundUpdateService : BaseService(
 
             // Check if any news need to be notify here using newsFiltered!
             // If no notification permission, aborting...
-            if (!PermissionsActivity.checkPermissionNotification(this).isGranted) {
+            if (!PermissionUtils.checkPermissionNotification(this).isGranted) {
                 return
             }
 
@@ -484,7 +484,7 @@ class NewsBackgroundUpdateService : BaseService(
 
             // Check if any news need to be notify here using newsFiltered!
             // If no notification permission, aborting...
-            if (!PermissionsActivity.checkPermissionNotification(this).isGranted) {
+            if (!PermissionUtils.checkPermissionNotification(this).isGranted) {
                 return
             }
 

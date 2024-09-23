@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.dp
 import io.dutwrapper.dutwrapper.AccountInformation.SubjectFee
 import io.zoemeow.dutschedule.GlobalVariables
 import io.zoemeow.dutschedule.R
-import io.zoemeow.dutschedule.ui.component.Tag
+import io.zoemeow.dutschedule.ui.components.Tag
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable

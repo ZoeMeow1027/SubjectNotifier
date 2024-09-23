@@ -44,7 +44,7 @@ import io.zoemeow.dutschedule.ui.view.main.controls.SchoolNewsSummaryItem
 import io.zoemeow.dutschedule.ui.view.main.controls.SummaryItem
 import io.zoemeow.dutschedule.ui.view.main.controls.UpdateAvailableSummaryItem
 import io.zoemeow.dutschedule.utils.CustomDateUtils
-import io.zoemeow.dutschedule.utils.openLink
+import io.zoemeow.dutschedule.utils.ExtensionUtils.Companion.openLink
 import io.zoemeow.dutschedule.viewmodel.MainViewModel
 import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDateTime

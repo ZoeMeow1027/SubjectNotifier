@@ -24,7 +24,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.zoemeow.dutschedule.R
-import io.zoemeow.dutschedule.ui.component.SimpleCardItem
+import io.zoemeow.dutschedule.ui.components.SimpleCardItem
 import java.text.DecimalFormat
 
 @Composable

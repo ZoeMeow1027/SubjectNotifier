@@ -31,8 +31,8 @@ import io.dutwrapper.dutwrapper.Utils
 import io.zoemeow.dutschedule.R
 import io.zoemeow.dutschedule.model.ProcessState
 import io.zoemeow.dutschedule.model.account.SchoolYearItem
-import io.zoemeow.dutschedule.ui.component.DataAdjuster
-import io.zoemeow.dutschedule.ui.component.DialogBase
+import io.zoemeow.dutschedule.ui.components.DataAdjuster
+import io.zoemeow.dutschedule.ui.components.DialogBase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

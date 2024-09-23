@@ -17,7 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import io.zoemeow.dutschedule.activity.MainActivity
-import io.zoemeow.dutschedule.ui.component.ButtonBase
+import io.zoemeow.dutschedule.ui.components.ButtonBase
 
 @Composable
 fun MainActivity.NavButton(

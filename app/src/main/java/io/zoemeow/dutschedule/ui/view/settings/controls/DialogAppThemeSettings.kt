@@ -18,9 +18,9 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import io.zoemeow.dutschedule.R
 import io.zoemeow.dutschedule.model.settings.ThemeMode
-import io.zoemeow.dutschedule.ui.component.DialogBase
-import io.zoemeow.dutschedule.ui.component.DialogCheckboxButton
-import io.zoemeow.dutschedule.ui.component.DialogRadioButton
+import io.zoemeow.dutschedule.ui.components.DialogBase
+import io.zoemeow.dutschedule.ui.components.DialogCheckboxButton
+import io.zoemeow.dutschedule.ui.components.DialogRadioButton
 
 @Composable
 fun DialogAppThemeSettings(

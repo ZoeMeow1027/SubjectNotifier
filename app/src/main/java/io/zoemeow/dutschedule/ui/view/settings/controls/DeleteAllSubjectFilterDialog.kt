@@ -15,7 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import io.zoemeow.dutschedule.R
-import io.zoemeow.dutschedule.ui.component.DialogBase
+import io.zoemeow.dutschedule.ui.components.DialogBase
 
 @Composable
 fun Dialog_Settings_NewsNotificationSettings_ClearAll(

@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.dp
 import io.dutwrapper.dutwrapper.News.NewsItem
 import io.zoemeow.dutschedule.R
 import io.zoemeow.dutschedule.model.ProcessState
-import io.zoemeow.dutschedule.utils.endOfListReached
+import io.zoemeow.dutschedule.utils.ExtensionUtils.Companion.endOfListReached
 
 @Composable
 fun NewsSearchResult(

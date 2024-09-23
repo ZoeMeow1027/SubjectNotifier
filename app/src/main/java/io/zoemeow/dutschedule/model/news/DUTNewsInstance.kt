@@ -3,7 +3,7 @@ package io.zoemeow.dutschedule.model.news
 import io.zoemeow.dutschedule.model.ProcessState
 import io.zoemeow.dutschedule.model.VariableListState
 import io.zoemeow.dutschedule.repository.DutRequestRepository
-import io.zoemeow.dutschedule.utils.launchOnScope
+import io.zoemeow.dutschedule.utils.ExtensionUtils.Companion.launchOnScope
 
 /**
  * @param onEventSent Event when done:

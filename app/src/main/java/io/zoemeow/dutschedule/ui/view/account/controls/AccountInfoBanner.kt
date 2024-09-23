@@ -26,7 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.zoemeow.dutschedule.GlobalVariables
 import io.zoemeow.dutschedule.R
-import io.zoemeow.dutschedule.utils.capitalized
+import io.zoemeow.dutschedule.utils.ExtensionUtils.Companion.capitalized
 
 @Composable
 fun AccountInfoBanner(

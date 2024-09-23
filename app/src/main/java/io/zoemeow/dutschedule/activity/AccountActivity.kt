@@ -11,7 +11,7 @@ import io.zoemeow.dutschedule.ui.view.account.Activity_Account_SubjectInformatio
 import io.zoemeow.dutschedule.ui.view.account.Activity_Account_SubjectFee
 import io.zoemeow.dutschedule.ui.view.account.Activity_Account_TrainingResult
 import io.zoemeow.dutschedule.ui.view.account.Activity_Account_TrainingSubjectResult
-import io.zoemeow.dutschedule.utils.openLink
+import io.zoemeow.dutschedule.utils.ExtensionUtils.Companion.openLink
 
 @AndroidEntryPoint
 class AccountActivity: BaseActivity() {

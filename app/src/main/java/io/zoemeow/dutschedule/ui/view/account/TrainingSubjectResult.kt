@@ -71,8 +71,8 @@ import io.zoemeow.dutschedule.R
 import io.zoemeow.dutschedule.model.AppearanceState
 import io.zoemeow.dutschedule.model.ProcessState
 import io.zoemeow.dutschedule.ui.view.account.controls.SubjectResult
-import io.zoemeow.dutschedule.ui.component.OutlinedTextBox
-import io.zoemeow.dutschedule.utils.toNonAccent
+import io.zoemeow.dutschedule.ui.components.OutlinedTextBox
+import io.zoemeow.dutschedule.utils.ExtensionUtils.Companion.toNonAccent
 import io.zoemeow.dutschedule.viewmodel.MainViewModel
 import java.util.Locale
 

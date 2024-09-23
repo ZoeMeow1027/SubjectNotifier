@@ -20,7 +20,8 @@ import io.zoemeow.dutschedule.ui.view.settings.Activity_Settings_ParseNewsSubjec
 import io.zoemeow.dutschedule.ui.view.settings.Activity_Settings_WallpaperAndControlsSettings
 import io.zoemeow.dutschedule.utils.BackgroundImageUtils
 import io.zoemeow.dutschedule.utils.NotificationUtils
-import io.zoemeow.dutschedule.utils.openLink
+import io.zoemeow.dutschedule.utils.ExtensionUtils.Companion.openLink
+import io.zoemeow.dutschedule.utils.PermissionUtils
 
 @AndroidEntryPoint
 class SettingsActivity : BaseActivity() {
@@ -157,7 +158,7 @@ class SettingsActivity : BaseActivity() {
                     fetchNewsInBackgroundDuration = getMainViewModel().appSettings.value.newsBackgroundDuration,
                     onFetchNewsStateChanged = { duration ->
                         if (duration > 0) {
-                            if (PermissionsActivity.checkPermissionScheduleExactAlarm(context).isGranted && PermissionsActivity.checkPermissionNotification(context).isGranted) {
+                            if (PermissionUtils.checkPermissionScheduleExactAlarm(context).isGranted && PermissionUtils.checkPermissionNotification(context).isGranted) {
                                 // Fetch news in background onClick
                                 val dataTemp = getMainViewModel().appSettings.value.clone(
                                     fetchNewsBackgroundDuration = duration
@@ -177,9 +178,9 @@ class SettingsActivity : BaseActivity() {
                                     clearPrevious = true,
                                     actionText = context.getString(R.string.action_grant),
                                     action = {
-                                        Intent(context, PermissionsActivity::class.java).also { intent ->
-                                            context.startActivity(intent)
-                                        }
+                                        val intent = Intent(context, MiscellaneousActivity::class.java)
+                                        intent.action = MiscellaneousActivity.INTENT_PERMISSIONREQUEST
+                                        context.startActivity(intent)
                                     }
                                 )
                             }
@@ -324,7 +325,7 @@ class SettingsActivity : BaseActivity() {
 
                             BackgroundImageOption.YourCurrentWallpaper -> {
                                 val compPer =
-                                    PermissionsActivity.checkPermissionManageExternalStorage(context = context).isGranted
+                                    PermissionUtils.checkPermissionManageExternalStorage(context = context).isGranted
                                 if (compPer) {
                                     getMainViewModel().appSettings.value =
                                         getMainViewModel().appSettings.value.clone(
@@ -343,9 +344,9 @@ class SettingsActivity : BaseActivity() {
                                         clearPrevious = true,
                                         actionText = context.getString(R.string.action_grant)
                                     ) {
-                                        Intent(context, PermissionsActivity::class.java).also { intent ->
-                                            context.startActivity(intent)
-                                        }
+                                        val intent = Intent(context, MiscellaneousActivity::class.java)
+                                        intent.action = MiscellaneousActivity.INTENT_PERMISSIONREQUEST
+                                        context.startActivity(intent)
                                     }
                                 }
                             }

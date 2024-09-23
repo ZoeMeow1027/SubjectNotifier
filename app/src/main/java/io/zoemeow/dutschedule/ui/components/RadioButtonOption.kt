@@ -1,4 +1,4 @@
-package io.zoemeow.dutschedule.ui.component
+package io.zoemeow.dutschedule.ui.components
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.RadioButton

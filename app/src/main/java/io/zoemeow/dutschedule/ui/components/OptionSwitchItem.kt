@@ -1,4 +1,4 @@
-package io.zoemeow.dutschedule.ui.component
+package io.zoemeow.dutschedule.ui.components
 
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.padding

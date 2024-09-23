@@ -52,10 +52,10 @@ import io.zoemeow.dutschedule.R
 import io.zoemeow.dutschedule.activity.AccountActivity
 import io.zoemeow.dutschedule.model.AppearanceState
 import io.zoemeow.dutschedule.model.ProcessState
-import io.zoemeow.dutschedule.ui.component.ButtonBase
-import io.zoemeow.dutschedule.ui.component.CheckboxOption
-import io.zoemeow.dutschedule.ui.component.OutlinedTextBox
-import io.zoemeow.dutschedule.ui.component.SimpleCardItem
+import io.zoemeow.dutschedule.ui.components.ButtonBase
+import io.zoemeow.dutschedule.ui.components.CheckboxOption
+import io.zoemeow.dutschedule.ui.components.OutlinedTextBox
+import io.zoemeow.dutschedule.ui.components.SimpleCardItem
 import io.zoemeow.dutschedule.viewmodel.MainViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)

@@ -80,7 +80,7 @@ fun Activity_MainView_Dashboard(
         topBar = {
             TopAppBar(
                 title = { Text(text = context.getString(R.string.app_name)) },
-                colors = TopAppBarDefaults.largeTopAppBarColors(
+                colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = Color.Transparent,
                     scrolledContainerColor = Color.Transparent
                 ),

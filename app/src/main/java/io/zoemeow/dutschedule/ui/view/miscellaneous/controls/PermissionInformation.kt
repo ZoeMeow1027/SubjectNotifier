@@ -1,4 +1,4 @@
-package io.zoemeow.dutschedule.ui.view.permissionrequest.controls
+package io.zoemeow.dutschedule.ui.view.miscellaneous.controls
 
 import android.content.Context
 import androidx.compose.foundation.BorderStroke
@@ -27,10 +27,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import io.zoemeow.dutschedule.GlobalVariables
 import io.zoemeow.dutschedule.R
 
 @Composable
-fun PermissionInformation(
+    fun PermissionInformation(
     context: Context,
     title: String,
     permissionCode: String? = null,
@@ -47,9 +48,9 @@ fun PermissionInformation(
             .wrapContentHeight()
             .border(
                 border = BorderStroke(3.dp, if (isGranted) Color.Green else if (isRequired) Color.Red else Color(0xFFfc9003)),
-                shape = RoundedCornerShape(7.dp),
+                shape = RoundedCornerShape(GlobalVariables.ROUNDED_CORNER_SHAPE_SIZE),
             )
-            .clip(shape = RoundedCornerShape(7.dp))
+            .clip(shape = RoundedCornerShape(GlobalVariables.ROUNDED_CORNER_SHAPE_SIZE))
             .clickable { clicked?.let { it() } },
         color = MaterialTheme.colorScheme.onSecondary.copy(alpha = opacity),
         content = {
@@ -74,7 +75,7 @@ fun PermissionInformation(
                                 modifier = Modifier.padding(vertical = 5.dp),
                                 color = if (isGranted) Color.Green else Color.Red,
                                 contentColor = if (isGranted) Color.Black else Color.White,
-                                shape = RoundedCornerShape(15.dp)
+                                shape = RoundedCornerShape(GlobalVariables.ROUNDED_CORNER_SHAPE_SIZE)
                             ) {
                                 Row(
                                     modifier = Modifier.padding(horizontal = 10.dp, vertical = 3.dp),

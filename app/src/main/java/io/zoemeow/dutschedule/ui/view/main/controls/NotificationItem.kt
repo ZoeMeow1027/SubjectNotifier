@@ -28,6 +28,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import io.zoemeow.dutschedule.GlobalVariables
 import io.zoemeow.dutschedule.R
 import io.zoemeow.dutschedule.model.NotificationHistory
 import io.zoemeow.dutschedule.utils.CustomDateUtils
@@ -51,7 +52,7 @@ fun NotificationItem(
     ) {
         Surface(
             modifier = modifier.clickable { onClick?.let { it() } },
-            shape = RoundedCornerShape(5.dp),
+            shape = RoundedCornerShape(GlobalVariables.ROUNDED_CORNER_SHAPE_SIZE),
             color = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = opacity),
             content = {
                 Row(

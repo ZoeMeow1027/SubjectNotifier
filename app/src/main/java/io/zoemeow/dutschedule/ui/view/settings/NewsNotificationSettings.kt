@@ -25,7 +25,6 @@ import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Slider
@@ -34,6 +33,7 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SuggestionChip
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -43,7 +43,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.zoemeow.dutschedule.R
@@ -55,8 +54,8 @@ import io.zoemeow.dutschedule.ui.components.OptionItem
 import io.zoemeow.dutschedule.ui.components.RadioButtonOption
 import io.zoemeow.dutschedule.ui.components.SimpleCardItem
 import io.zoemeow.dutschedule.ui.components.SwitchWithTextInSurface
-import io.zoemeow.dutschedule.ui.view.settings.controls.Dialog_Settings_NewsNotificationSettings_Add
 import io.zoemeow.dutschedule.ui.view.settings.controls.ContentRegion
+import io.zoemeow.dutschedule.ui.view.settings.controls.Dialog_Settings_NewsNotificationSettings_Add
 import io.zoemeow.dutschedule.ui.view.settings.controls.Dialog_Settings_NewsNotificationSettings_ClearAll
 import io.zoemeow.dutschedule.ui.view.settings.controls.Dialog_Settings_NewsNotificationSettings_Delete
 
@@ -80,7 +79,6 @@ fun Activity_Settings_NewsNotificationSettings(
     onSubjectFilterDelete: ((SubjectCode) -> Unit)? = null,
     onSubjectFilterClear: (() -> Unit)? = null
 ) {
-    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
     val durationTemp = remember {
         mutableIntStateOf(fetchNewsInBackgroundDuration)
     }
@@ -91,8 +89,7 @@ fun Activity_Settings_NewsNotificationSettings(
     val dialogDeleteAll = remember { mutableStateOf(false) }
 
     Scaffold(
-        modifier = Modifier.fillMaxSize()
-            .nestedScroll(scrollBehavior.nestedScrollConnection),
+        modifier = Modifier.fillMaxSize(),
         snackbarHost = {
             snackBarHostState?.let {
                 SnackbarHost(hostState = it)
@@ -101,9 +98,9 @@ fun Activity_Settings_NewsNotificationSettings(
         containerColor = appearanceState.containerColor,
         contentColor = appearanceState.contentColor,
         topBar = {
-            LargeTopAppBar(
+            TopAppBar(
                 title = { Text(context.getString(R.string.settings_newsnotify_title)) },
-                colors = TopAppBarDefaults.largeTopAppBarColors(
+                colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = Color.Transparent,
                     scrolledContainerColor = Color.Transparent
                 ),
@@ -120,8 +117,7 @@ fun Activity_Settings_NewsNotificationSettings(
                             )
                         }
                     )
-                },
-                scrollBehavior = scrollBehavior
+                }
             )
         }
     ) { paddingValues ->

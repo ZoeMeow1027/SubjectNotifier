@@ -23,6 +23,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -49,19 +50,15 @@ fun Activity_Settings_AboutApplication(
     onLinkClicked: ((String) -> Unit)? = null,
     onBack: () -> Unit
 ) {
-    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
-
     Scaffold(
-        modifier = Modifier
-            .fillMaxSize()
-            .nestedScroll(scrollBehavior.nestedScrollConnection),
+        modifier = Modifier.fillMaxSize(),
         snackbarHost = { SnackbarHost(hostState = snackBarHostState) },
         containerColor = appearanceState.containerColor,
         contentColor = appearanceState.contentColor,
         topBar = {
-            LargeTopAppBar(
+            TopAppBar(
                 title = { Text(context.getString(R.string.settings_about_title)) },
-                colors = TopAppBarDefaults.largeTopAppBarColors(
+                colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = Color.Transparent,
                     scrolledContainerColor = Color.Transparent
                 ),
@@ -78,8 +75,7 @@ fun Activity_Settings_AboutApplication(
                             )
                         }
                     )
-                },
-                scrollBehavior = scrollBehavior
+                }
             )
         }
     ) { paddingValues ->

@@ -16,22 +16,22 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
+import io.zoemeow.dutschedule.GlobalVariables
 import io.zoemeow.dutschedule.R
 import io.zoemeow.dutschedule.model.AppearanceState
 import io.zoemeow.dutschedule.ui.components.SwitchWithTextInSurface
@@ -46,18 +46,15 @@ fun Activity_Settings_ParseNewsSubjectNotification(
     onChange: () -> Unit,
     onBack: () -> Unit
 ) {
-    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
-
     Scaffold(
-        modifier = Modifier.fillMaxSize()
-            .nestedScroll(scrollBehavior.nestedScrollConnection),
+        modifier = Modifier.fillMaxSize(),
         snackbarHost = { SnackbarHost(hostState = snackBarHostState) },
         containerColor = appearanceState.containerColor,
         contentColor = appearanceState.contentColor,
         topBar = {
-            LargeTopAppBar(
+            TopAppBar(
                 title = { Text(context.getString(R.string.settings_parsenewssubject_title)) },
-                colors = TopAppBarDefaults.largeTopAppBarColors(
+                colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = Color.Transparent,
                     scrolledContainerColor = Color.Transparent
                 ),
@@ -74,8 +71,7 @@ fun Activity_Settings_ParseNewsSubjectNotification(
                             )
                         }
                     )
-                },
-                scrollBehavior = scrollBehavior
+                }
             )
         },
         content = {
@@ -89,7 +85,7 @@ fun Activity_Settings_ParseNewsSubjectNotification(
                             .fillMaxWidth()
                             .padding(horizontal = 20.dp)
                             .padding(bottom = 5.dp),
-                        shape = RoundedCornerShape(30.dp),
+                        shape = RoundedCornerShape(GlobalVariables.ROUNDED_CORNER_SHAPE_SIZE),
                         color = MaterialTheme.colorScheme.secondaryContainer.copy(
                             alpha = appearanceState.componentOpacity
                         ),

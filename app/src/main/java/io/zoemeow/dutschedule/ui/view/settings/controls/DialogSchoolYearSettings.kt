@@ -28,6 +28,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import io.dutwrapper.dutwrapper.Utils
+import io.zoemeow.dutschedule.GlobalVariables
 import io.zoemeow.dutschedule.R
 import io.zoemeow.dutschedule.model.ProcessState
 import io.zoemeow.dutschedule.model.account.SchoolYearItem
@@ -108,7 +109,7 @@ fun DialogSchoolYearSettings(
                 )
                 Surface(
                     modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(10.dp)
+                    shape = RoundedCornerShape(GlobalVariables.ROUNDED_CORNER_SHAPE_SIZE)
                 ) {
                     Column(
                         modifier = Modifier.padding(10.dp)
@@ -139,7 +140,7 @@ fun DialogSchoolYearSettings(
                 }
                 Surface(
                     modifier = Modifier.fillMaxWidth().padding(top = 10.dp, bottom = 7.dp),
-                    shape = RoundedCornerShape(10.dp)
+                    shape = RoundedCornerShape(GlobalVariables.ROUNDED_CORNER_SHAPE_SIZE)
                 ) {
                     Column(
                         modifier = Modifier.padding(10.dp)

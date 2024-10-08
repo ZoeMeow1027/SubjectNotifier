@@ -27,6 +27,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import io.zoemeow.dutschedule.GlobalVariables
 
 @Composable
 fun ButtonBase(
@@ -37,7 +38,7 @@ fun ButtonBase(
     content: @Composable RowScope.() -> Unit,
     isOutlinedButton: Boolean = false,
     horizontalArrangement: Arrangement.Horizontal = Arrangement.Center,
-    cornerSize: Dp = 5.dp,
+    cornerSize: Dp = GlobalVariables.ROUNDED_CORNER_SHAPE_SIZE,
     opacity: Float = 1f
 ) {
     Surface(
@@ -48,7 +49,7 @@ fun ButtonBase(
                     if (opacity == 1f) 2.dp else 0.dp,
                     MaterialTheme.colorScheme.inversePrimary
                 ),
-                shape = RoundedCornerShape(5.dp)
+                shape = RoundedCornerShape(cornerSize)
             )
             .run {
                 if (isEnabled) return@run this.clickable { clicked?.let { it() } }

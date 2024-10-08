@@ -6,35 +6,58 @@
 ## Known issues
 - `Your current wallpaper` option in app background settings will be disabled on Android 14 and later. You can check why in `Issue` tab in repository.
 
+## 2.0-draft23 (1882)
+- Just a version about improve codes :)
+
+<details>
+<summary>More details for developments</summary>
+
+- [Implemented] Updated dependencies to latest.
+  - [Changed] Updated `dutwrapper` dependency with `jar` file (due to GitHub Packages limitation).
+  - [Changed] Updated AGP to 8.7.0.
+- [Changed] Permission Request activity has been merged with Miscellaneous activity.
+</details>
+
 ## 2.0-draft22 (1702)
+- [Changed] Add a button to copy all information to clipboard in `Training Result` -> `Subject Result`.
+- [Fixed] Fix a issue cause save settings slower than expected when enable background image.
+
+<details>
+<summary>More details for developments</summary>
+
 - [Implemented] Updated dependencies to latest.
   - [Changed] Updated `dutwrapper` dependency with GitHub Packages.
 - [Changed] Removed all deprecated functions due to updated dependencies.
-- [Changed] Add a button to copy all information to clipboard in `Training Result` -> `Subject Result`.
-- [Fixed] Fix a issue cause save settings slower than expected when enable background image.
+</details>
 
 ## 2.0-draft21 (1653)
 - [Changed] Wallpaper settings and background opacity/component opacity will be grouped into one.
 - [Fixed] Fix a issue cause account session remains even after logged out.
 
 ## 2.0-draft20 (1638)
-- [Implemented] Updated dependencies to latest.
-  - [Changed] Need to modify any file to update functions about `dutwrapper` dependency.
 - [Changed] This application will no longer direct links when URL Protocol is used (ex: example://,...).
   - A option that enable them will be available in future version.
 
+<details>
+<summary>More details for developments</summary>
+
+- [Implemented] Updated dependencies to latest.
+  - [Changed] Need to modify any file to update functions about `dutwrapper` dependency.
+</details>
+
 ## 2.0-draft19 (1605)
 - [Reworked] Account Training Subject Result screen.
+- [Fixed] Account Training Result score isn't readable when in dark mode.
+
+<details>
+<summary>More details for developments</summary>
+
 - [Implemented] Update dependencies to latest.
   - This will resolve crash app when sv.dut.udn.vn is not reachable.
-- [Fixed] Account Training Result score isn't readable when in dark mode.
 - [Changed] Removed ~~NewsGlobalGroupByDate~~, ~~NewsSubjectGroupByDate~~.
+</details>
 
 ## 2.0-draft18 (1448)
-- [Implemented] Update dependencies to latest
-  - Gradle to 8.8
-  - AGP to 8.5.0
-  - This will resolve login issue when server rebooted
 - [Implemented] When you're failed when logging in but done it before, this will show a option for you to re-login instead.
 - [Implemented] Improve Vietnamese strings
 - [Changed] SchoolYearChooser will choose between two arrows instead of ComboBox
@@ -45,21 +68,35 @@
 - [Changed] Main Screen (tab mode)
   - Remove SnackbarState in Notifications (fixes duplicate SnackbarState)
 
+<details>
+<summary>More details for developments</summary>
+
+- [Implemented] Update dependencies to latest
+  - Gradle to 8.8
+  - AGP to 8.5.0
+  - This will resolve login issue when server rebooted
+</details>
+
 ## 2.0-draft17 (1404)
-- [Reworked] Subject Fee (not final yet).
 - [New] News notification settings: Change your preferences about news notifications.
 - [New] Add a option to get current school year from Internet.
   - To access that, please go to `Settings` -> `Experiment Settings` -> `Current School Year`.
+- [Reworked] Subject Fee (not final yet).
 - [Implemented] Login screen will let you relogin if previous attempt was failed.
   - You can clear previous login to attempt with another account.
 - [Implemented] Now you can turn off notifications about news global and news subject.
   - In news subject notifications, you can choose about "All", "Match your filter" and "Off".
   - News filter settings will now only shown when enabled (this mean it will hidden at default).
 - [Implemented] Update Vietnamese strings for most screens, but not done yet.
-- [Implemented] Optimized codes and updated dependencies to latest.
-  - Updated dependencies to latest to fix issues about Account feature.
 - [Fixed] [#24](https://github.com/ZoeMeow1027/DutSchedule/issues/24).
 - [Known Issue] Some settings won't load after update. You might need to reconfig them in settings. I'm sorry about that.
+
+<details>
+<summary>More details for developments</summary>
+
+- [Implemented] Optimized codes and updated dependencies to latest.
+  - Updated dependencies to latest to fix issues about Account feature.
+</details>
 
 ## 2.0-draft16 (1063)
 - AccountActivity:

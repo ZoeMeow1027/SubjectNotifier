@@ -36,6 +36,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import io.zoemeow.dutschedule.GlobalVariables
 
 @Composable
 fun DialogBase(
@@ -67,7 +68,7 @@ fun DialogBase(
                         indication = null,
                     ) { },
                     color = MaterialTheme.colorScheme.secondaryContainer,
-                    shape = RoundedCornerShape(10.dp),
+                    shape = RoundedCornerShape(GlobalVariables.ROUNDED_CORNER_SHAPE_SIZE),
                     content = {
                         Column(
                             horizontalAlignment = Alignment.Start,
@@ -104,87 +105,4 @@ fun DialogBase(
             }
         )
     }
-}
-
-@Composable
-fun DialogBaseLegacy(
-    content: @Composable () -> Unit,
-    actionButtons: @Composable (RowScope.() -> Unit)? = null,
-    title: String,
-    padding: PaddingValues = PaddingValues(0.dp),
-    isVisible: Boolean = false,
-    canDismiss: Boolean = true,
-    dismissClicked: (() -> Unit)? = null,
-    isTitleCentered: Boolean = false,
-    fillMaxWidth: Boolean = true,
-    fillMaxHeight: Boolean = false,
-    enterTransition: EnterTransition = fadeIn(animationSpec = tween(200)),
-    exitTransition: ExitTransition = fadeOut(animationSpec = tween(200)),
-) {
-    val modifier: MutableState<Modifier> = remember {
-        mutableStateOf(
-            Modifier.padding(padding)
-        )
-    }
-    modifier.value =
-        if (fillMaxWidth) modifier.value.fillMaxWidth() else modifier.value.wrapContentWidth()
-    modifier.value =
-        if (fillMaxHeight) modifier.value.fillMaxHeight() else modifier.value.wrapContentHeight()
-
-    AnimatedVisibility(
-        visible = isVisible,
-        enter = enterTransition,
-        exit = exitTransition,
-        content = {
-            Surface(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .clickable {
-                        if (canDismiss) {
-                            dismissClicked?.let { it() }
-                        }
-                    },
-                color = MaterialTheme.colorScheme.background.copy(alpha = 0.7f),
-                content = {
-                    Surface(
-                        color = MaterialTheme.colorScheme.secondaryContainer,
-                        modifier = modifier.value
-                            .clip(RoundedCornerShape(7.dp))
-                            .clickable { },
-                        content = {
-                            Column(
-                                horizontalAlignment = Alignment.Start,
-                                verticalArrangement = Arrangement.Top,
-                                modifier = Modifier.padding(20.dp),
-                            ) {
-                                Column(
-                                    horizontalAlignment = if (isTitleCentered) Alignment.CenterHorizontally else Alignment.Start,
-                                    verticalArrangement = Arrangement.Top,
-                                    modifier = Modifier.fillMaxWidth(),
-                                ) {
-                                    Text(
-                                        title,
-                                        style = TextStyle(fontSize = 27.sp),
-                                        modifier = Modifier.padding(bottom = 15.dp)
-                                    )
-                                }
-                                content()
-                                actionButtons?.let {
-                                    Row(
-                                        horizontalArrangement = Arrangement.End,
-                                        verticalAlignment = Alignment.CenterVertically,
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                            .wrapContentHeight()
-                                            .padding(top = 10.dp),
-                                        content = it,
-                                    )
-                                }
-                            }
-                        },
-                    )
-                }
-            )
-        }
-    )
 }

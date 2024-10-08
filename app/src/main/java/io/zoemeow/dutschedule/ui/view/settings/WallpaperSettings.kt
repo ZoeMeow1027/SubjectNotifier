@@ -14,16 +14,15 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -50,12 +49,8 @@ fun Activity_Settings_WallpaperAndControlsSettings(
     valueComponentOpacity: Float = 1f,
     onValueComponentOpacityChanged: ((Float) -> Unit)? = null
 ) {
-    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
-
     Scaffold(
-        modifier = Modifier
-            .fillMaxSize()
-            .nestedScroll(scrollBehavior.nestedScrollConnection),
+        modifier = Modifier.fillMaxSize(),
         snackbarHost = {
             snackBarHostState?.let {
                 SnackbarHost(hostState = it)
@@ -64,9 +59,9 @@ fun Activity_Settings_WallpaperAndControlsSettings(
         containerColor = appearanceState.containerColor,
         contentColor = appearanceState.contentColor,
         topBar = {
-            LargeTopAppBar(
+            TopAppBar(
                 title = { Text(context.getString(R.string.settings_wallpaperandcontrols_title)) },
-                colors = TopAppBarDefaults.largeTopAppBarColors(
+                colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = Color.Transparent,
                     scrolledContainerColor = Color.Transparent
                 ),
@@ -83,8 +78,7 @@ fun Activity_Settings_WallpaperAndControlsSettings(
                             )
                         }
                     )
-                },
-                scrollBehavior = scrollBehavior
+                }
             )
         }
     ) { paddingValues ->

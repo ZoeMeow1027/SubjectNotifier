@@ -12,6 +12,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import io.zoemeow.dutschedule.GlobalVariables
 import io.zoemeow.dutschedule.model.HelpLinkInfo
 
 @Composable
@@ -28,7 +29,7 @@ fun ClickableExternalLinks(
                 else return@run this
             },
         color = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = opacity),
-        shape = RoundedCornerShape(10.dp)
+        shape = RoundedCornerShape(GlobalVariables.ROUNDED_CORNER_SHAPE_SIZE)
     ) {
         Column(
             modifier = Modifier.padding(horizontal = 15.dp, vertical = 10.dp)

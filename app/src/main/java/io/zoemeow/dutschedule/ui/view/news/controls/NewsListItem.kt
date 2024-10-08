@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import io.zoemeow.dutschedule.GlobalVariables
 import io.zoemeow.dutschedule.utils.CustomDateUtils
 
 @Composable
@@ -33,7 +34,7 @@ fun NewsListItem(
             .fillMaxWidth()
             .padding(vertical = 5.dp)
             // https://www.android--code.com/2021/09/jetpack-compose-box-rounded-corners_25.html
-            .clip(RoundedCornerShape(10.dp))
+            .clip(RoundedCornerShape(GlobalVariables.ROUNDED_CORNER_SHAPE_SIZE))
             //.background(MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 1.0f))
             .clickable {
                 onClick?.let { it() }

@@ -20,6 +20,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import io.zoemeow.dutschedule.GlobalVariables
 
 @Composable
 fun SimpleCardItem(
@@ -38,7 +39,7 @@ fun SimpleCardItem(
             .fillMaxWidth()
             .wrapContentHeight()
             .padding(padding)
-            .clip(RoundedCornerShape(7.dp))
+            .clip(RoundedCornerShape(GlobalVariables.ROUNDED_CORNER_SHAPE_SIZE))
             .background(MaterialTheme.colorScheme.secondaryContainer.copy(alpha = opacity))
             .run {
                 if (clicked != null) return@run this.clickable { clicked() }

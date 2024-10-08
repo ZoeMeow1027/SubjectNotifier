@@ -61,7 +61,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import io.zoemeow.dutschedule.R
 import io.zoemeow.dutschedule.model.AppearanceState
 import io.zoemeow.dutschedule.model.settings.ThemeMode
-import io.zoemeow.dutschedule.utils.openLink
+import io.zoemeow.dutschedule.utils.ExtensionUtils.Companion.openLink
 
 @AndroidEntryPoint
 class BrowserActivity : BaseActivity() {

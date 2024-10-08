@@ -19,11 +19,11 @@ import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -32,23 +32,22 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import io.zoemeow.dutschedule.BuildConfig
 import io.zoemeow.dutschedule.R
-import io.zoemeow.dutschedule.activity.PermissionsActivity
+import io.zoemeow.dutschedule.activity.MiscellaneousActivity
 import io.zoemeow.dutschedule.activity.SettingsActivity
+import io.zoemeow.dutschedule.di.LocaleService
 import io.zoemeow.dutschedule.model.AppearanceState
 import io.zoemeow.dutschedule.model.settings.BackgroundImageOption
 import io.zoemeow.dutschedule.model.settings.ThemeMode
-import io.zoemeow.dutschedule.ui.component.base.DividerItem
-import io.zoemeow.dutschedule.ui.component.base.OptionItem
-import io.zoemeow.dutschedule.ui.component.base.OptionSwitchItem
-import io.zoemeow.dutschedule.ui.component.settings.ContentRegion
-import io.zoemeow.dutschedule.ui.component.settings.DialogAppThemeSettings
+import io.zoemeow.dutschedule.ui.components.DividerItem
+import io.zoemeow.dutschedule.ui.components.OptionItem
+import io.zoemeow.dutschedule.ui.components.OptionSwitchItem
+import io.zoemeow.dutschedule.ui.view.settings.controls.ContentRegion
+import io.zoemeow.dutschedule.ui.view.settings.controls.DialogAppThemeSettings
 import io.zoemeow.dutschedule.viewmodel.MainViewModel
-import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -61,20 +60,17 @@ fun Activity_Settings(
     onMessageReceived: ((String, Boolean, String?, (() -> Unit)?) -> Unit)? = null,
     onBack: (() -> Unit)? = null
 ) {
-    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
-
     val dialogAppTheme: MutableState<Boolean> = remember { mutableStateOf(false) }
 
     Scaffold(
-        modifier = Modifier.fillMaxSize()
-            .nestedScroll(scrollBehavior.nestedScrollConnection),
+        modifier = Modifier.fillMaxSize(),
         snackbarHost = { snackBarHostState?.let { SnackbarHost(hostState = it) } },
         containerColor = appearanceState.containerColor,
         contentColor = appearanceState.contentColor,
         topBar = {
-            LargeTopAppBar(
+            TopAppBar(
                 title = { Text(context.getString(R.string.settings_title)) },
-                colors = TopAppBarDefaults.largeTopAppBarColors(
+                colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = Color.Transparent,
                     scrolledContainerColor = Color.Transparent
                 ),
@@ -93,8 +89,7 @@ fun Activity_Settings(
                             }
                         )
                     }
-                },
-                scrollBehavior = scrollBehavior
+                }
             )
         },
         content = {
@@ -234,7 +229,7 @@ fun Activity_Settings(
                                     )
                                 },
                                 title = context.getString(R.string.settings_option_applanguage),
-                                description = Locale.getDefault().displayName,
+                                description = LocaleService.getCurrentLocaleDisplayName(context),
                                 onClick = {
                                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                                         val intent = Intent(Settings.ACTION_APP_LOCALE_SETTINGS)
@@ -251,20 +246,17 @@ fun Activity_Settings(
                                 modifierInside = Modifier.padding(horizontal = 20.dp, vertical = 15.dp),
                                 leadingIcon = {
                                     Icon(
-                                        imageVector = ImageVector.vectorResource(R.drawable.blank_24),
-                                        "",
+                                        imageVector = ImageVector.vectorResource(R.drawable.ic_outline_encrypted_24),
+                                        contentDescription = context.getString(R.string.settings_option_apppermission),
                                         modifier = Modifier.padding(end = 15.dp)
                                     )
                                 },
                                 title = context.getString(R.string.settings_option_apppermission),
                                 description = context.getString(R.string.settings_option_apppermission_description),
                                 onClick = {
-                                    context.startActivity(
-                                        Intent(
-                                            context,
-                                            PermissionsActivity::class.java
-                                        )
-                                    )
+                                    val intent = Intent(context, MiscellaneousActivity::class.java)
+                                    intent.action = MiscellaneousActivity.INTENT_PERMISSIONREQUEST
+                                    context.startActivity(intent)
                                 }
                             )
                             OptionSwitchItem(

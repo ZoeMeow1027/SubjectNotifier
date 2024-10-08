@@ -9,7 +9,6 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
@@ -39,7 +38,7 @@
             <meta-data android:name="photopicker_activity:0:required" android:value="" />
         </service>
 
-        <!-- This service will ensure application will load your language -->
+        <!-- This service will ensure application will load your language (but for AppCompatActivity) -->
         <service
             android:name="androidx.appcompat.app.AppLocalesMetadataHolderService"
             android:enabled="false"
@@ -85,13 +84,6 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.DutSchedule"
             android:windowSoftInputMode="adjustPan" />
-        <activity
-            android:name=".activity.PermissionsActivity"
-            android:exported="false"
-            android:label="DutSchedule - Permission Request"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.DutSchedule"
-            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".activity.SettingsActivity"
             android:exported="false"

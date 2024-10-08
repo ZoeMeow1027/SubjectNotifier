@@ -38,13 +38,13 @@ import io.zoemeow.dutschedule.activity.AccountActivity
 import io.zoemeow.dutschedule.model.AppearanceState
 import io.zoemeow.dutschedule.model.CustomClock
 import io.zoemeow.dutschedule.model.ProcessState
-import io.zoemeow.dutschedule.ui.component.main.DateAndTimeSummaryItem
-import io.zoemeow.dutschedule.ui.component.main.LessonTodaySummaryItem
-import io.zoemeow.dutschedule.ui.component.main.SchoolNewsSummaryItem
-import io.zoemeow.dutschedule.ui.component.main.SummaryItem
-import io.zoemeow.dutschedule.ui.component.main.UpdateAvailableSummaryItem
+import io.zoemeow.dutschedule.ui.view.main.controls.DateAndTimeSummaryItem
+import io.zoemeow.dutschedule.ui.view.main.controls.LessonTodaySummaryItem
+import io.zoemeow.dutschedule.ui.view.main.controls.SchoolNewsSummaryItem
+import io.zoemeow.dutschedule.ui.view.main.controls.SummaryItem
+import io.zoemeow.dutschedule.ui.view.main.controls.UpdateAvailableSummaryItem
 import io.zoemeow.dutschedule.utils.CustomDateUtils
-import io.zoemeow.dutschedule.utils.openLink
+import io.zoemeow.dutschedule.utils.ExtensionUtils.Companion.openLink
 import io.zoemeow.dutschedule.viewmodel.MainViewModel
 import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDateTime
@@ -80,7 +80,7 @@ fun Activity_MainView_Dashboard(
         topBar = {
             TopAppBar(
                 title = { Text(text = context.getString(R.string.app_name)) },
-                colors = TopAppBarDefaults.largeTopAppBarColors(
+                colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = Color.Transparent,
                     scrolledContainerColor = Color.Transparent
                 ),

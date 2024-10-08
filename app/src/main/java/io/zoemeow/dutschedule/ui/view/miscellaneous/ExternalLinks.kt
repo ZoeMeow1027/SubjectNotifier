@@ -55,7 +55,7 @@ import androidx.compose.ui.unit.dp
 import io.zoemeow.dutschedule.R
 import io.zoemeow.dutschedule.model.AppearanceState
 import io.zoemeow.dutschedule.model.HelpLinkInfo
-import io.zoemeow.dutschedule.ui.component.helpandexternallink.ClickableExternalLinks
+import io.zoemeow.dutschedule.ui.view.miscellaneous.controls.ClickableExternalLinks
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)

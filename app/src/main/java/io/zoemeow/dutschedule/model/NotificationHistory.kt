@@ -2,7 +2,7 @@ package io.zoemeow.dutschedule.model
 
 import android.content.Context
 import android.content.Intent
-import io.zoemeow.dutschedule.utils.getRandomString
+import io.zoemeow.dutschedule.utils.ExtensionUtils.Companion.getRandomString
 import java.io.Serializable
 
 data class NotificationHistory(

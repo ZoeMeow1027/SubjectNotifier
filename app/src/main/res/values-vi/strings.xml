@@ -132,6 +132,11 @@
     <string name="settings_wallpaperandcontrols_option_componentopacity_description">Điều này sẽ thay đổi độ mờ thành phần điều khiển</string>
     <!-- Settings Language activity string-->
     <string name="settings_applanguage_title">Ngôn ngữ ứng dụng</string>
+    <string name="settings_applanguage_yoursystemlang">Ngôn ngữ hệ thống của bạn</string>
+    <string name="settings_applanguage_restartrequired_title">Yêu cầu khởi động lại</string>
+    <string name="settings_applanguage_restartrequired_content">Bạn bắt buộc phải khởi động lại ứng dụng để lưu thay đổi và có hiệu lực. Khởi động lại?</string>
+    <string name="settings_applanguage_restartrequired_yes">Lưu và khởi động lại</string>
+    <string name="settings_applanguage_restartrequired_no">Không</string>
     <!-- Settings Parse news subject activity string -->
     <string name="settings_parsenewssubject_title">Xử lý tin tức lớp học phần trong thông báo</string>
     <string name="settings_parsenewssubject_preview_titleenabled">Thông báo {học bù} của {giáo viên} về {danh sách lớp học}</string>

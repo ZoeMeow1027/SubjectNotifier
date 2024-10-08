@@ -15,6 +15,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import io.zoemeow.dutschedule.R
 import io.zoemeow.dutschedule.activity.NewsActivity
+import io.zoemeow.dutschedule.utils.ExtensionUtils.Companion.calcToSumByCharArray
 
 class NotificationUtils {
     companion object {

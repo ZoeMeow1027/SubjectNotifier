@@ -132,6 +132,11 @@
     <string name="settings_wallpaperandcontrols_option_componentopacity_description">This will change your component opacity</string>
     <!-- Settings Language activity string-->
     <string name="settings_applanguage_title">App language</string>
+    <string name="settings_applanguage_yoursystemlang">Your system language</string>
+    <string name="settings_applanguage_restartrequired_title">Restart required</string>
+    <string name="settings_applanguage_restartrequired_content">You must restart app to save changes and take effect. Restart?</string>
+    <string name="settings_applanguage_restartrequired_yes">Save and restart</string>
+    <string name="settings_applanguage_restartrequired_no">Not now</string>
     <!-- Settings Parse news subject activity string -->
     <string name="settings_parsenewssubject_title">Parse subject news in notification</string>
     <string name="settings_parsenewssubject_preview_titleenabled">{Making up} lesson(s) with {Lecturer} about {Class List}</string>

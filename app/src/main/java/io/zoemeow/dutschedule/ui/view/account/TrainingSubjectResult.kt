@@ -29,7 +29,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.FloatingActionButton
@@ -71,9 +70,9 @@ import io.dutwrapper.dutwrapper.AccountInformation
 import io.zoemeow.dutschedule.R
 import io.zoemeow.dutschedule.model.AppearanceState
 import io.zoemeow.dutschedule.model.ProcessState
-import io.zoemeow.dutschedule.ui.component.account.SubjectResult
-import io.zoemeow.dutschedule.ui.component.base.OutlinedTextBox
-import io.zoemeow.dutschedule.utils.toNonAccent
+import io.zoemeow.dutschedule.ui.view.account.controls.SubjectResult
+import io.zoemeow.dutschedule.ui.components.OutlinedTextBox
+import io.zoemeow.dutschedule.utils.ExtensionUtils.Companion.toNonAccent
 import io.zoemeow.dutschedule.viewmodel.MainViewModel
 import java.util.Locale
 

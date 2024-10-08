@@ -48,7 +48,7 @@ import androidx.compose.ui.unit.dp
 import io.zoemeow.dutschedule.R
 import io.zoemeow.dutschedule.model.AppearanceState
 import io.zoemeow.dutschedule.model.ProcessState
-import io.zoemeow.dutschedule.ui.component.base.OutlinedTextBox
+import io.zoemeow.dutschedule.ui.components.OutlinedTextBox
 import io.zoemeow.dutschedule.viewmodel.MainViewModel
 import kotlinx.coroutines.launch
 

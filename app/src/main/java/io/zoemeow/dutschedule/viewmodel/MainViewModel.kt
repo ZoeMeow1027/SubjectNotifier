@@ -19,7 +19,7 @@ import io.zoemeow.dutschedule.model.news.NewsFetchType
 import io.zoemeow.dutschedule.model.settings.AppSettings
 import io.zoemeow.dutschedule.repository.DutRequestRepository
 import io.zoemeow.dutschedule.repository.FileModuleRepository
-import io.zoemeow.dutschedule.utils.launchOnScope
+import io.zoemeow.dutschedule.utils.ExtensionUtils.Companion.launchOnScope
 import javax.inject.Inject
 
 @HiltViewModel

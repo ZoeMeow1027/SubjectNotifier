@@ -14,9 +14,7 @@ import io.zoemeow.dutschedule.model.settings.AppSettings
 import java.io.File
 
 @Suppress("PrivatePropertyName", "SpellCheckingInspection")
-class FileModuleRepository(
-    context: Context
-) {
+class FileModuleRepository(context: Context) {
     private val PATH_CACHE_NEWSGLOBAL = "${context.filesDir.path}/news.global.cache.json"
     private val PATH_CACHE_NEWSSUBJECT = "${context.filesDir.path}/news.subject.cache.json"
     private val PATH_APPSETTINGS = "${context.filesDir.path}/settings.json"

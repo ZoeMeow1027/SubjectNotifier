@@ -35,11 +35,11 @@ import io.zoemeow.dutschedule.activity.AccountActivity
 import io.zoemeow.dutschedule.model.AppearanceState
 import io.zoemeow.dutschedule.model.ProcessState
 import io.zoemeow.dutschedule.model.account.AccountAuth
-import io.zoemeow.dutschedule.ui.component.account.AccountInfoBanner
-import io.zoemeow.dutschedule.ui.component.account.LoginBox
-import io.zoemeow.dutschedule.ui.component.account.LogoutDialog
-import io.zoemeow.dutschedule.ui.component.base.ButtonBase
-import io.zoemeow.dutschedule.utils.openLink
+import io.zoemeow.dutschedule.ui.view.account.controls.AccountInfoBanner
+import io.zoemeow.dutschedule.ui.view.account.controls.LoginBox
+import io.zoemeow.dutschedule.ui.view.account.controls.LogoutDialog
+import io.zoemeow.dutschedule.ui.components.ButtonBase
+import io.zoemeow.dutschedule.utils.ExtensionUtils.Companion.openLink
 import io.zoemeow.dutschedule.viewmodel.MainViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

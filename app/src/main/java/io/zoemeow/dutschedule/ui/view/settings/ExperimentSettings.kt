@@ -1,9 +1,6 @@
 package io.zoemeow.dutschedule.ui.view.settings
 
-import android.content.ComponentName
 import android.content.Context
-import android.content.Intent
-import android.content.pm.PackageManager
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,26 +13,26 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
 import io.zoemeow.dutschedule.R
 import io.zoemeow.dutschedule.model.AppearanceState
-import io.zoemeow.dutschedule.ui.component.base.DividerItem
-import io.zoemeow.dutschedule.ui.component.base.OptionItem
-import io.zoemeow.dutschedule.ui.component.base.OptionSwitchItem
-import io.zoemeow.dutschedule.ui.component.settings.ContentRegion
-import io.zoemeow.dutschedule.ui.component.settings.DialogSchoolYearSettings
+import io.zoemeow.dutschedule.ui.components.DividerItem
+import io.zoemeow.dutschedule.ui.components.OptionItem
+import io.zoemeow.dutschedule.ui.components.OptionSwitchItem
+import io.zoemeow.dutschedule.ui.view.settings.controls.ContentRegion
+import io.zoemeow.dutschedule.ui.view.settings.controls.DialogSchoolYearSettings
+import io.zoemeow.dutschedule.utils.ActivityUtils
 import io.zoemeow.dutschedule.viewmodel.MainViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -48,19 +45,17 @@ fun Activity_Settings_ExperimentSettings(
     onMessageReceived: (String, Boolean, String?, (() -> Unit)?) -> Unit, // (msg, forceDismissBefore, actionText, action)
     onBack: () -> Unit
 ) {
-    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
     val dialogSchoolYear = remember { mutableStateOf(false) }
 
     Scaffold(
-        modifier = Modifier.fillMaxSize()
-            .nestedScroll(scrollBehavior.nestedScrollConnection),
+        modifier = Modifier.fillMaxSize(),
         snackbarHost = { SnackbarHost(hostState = snackBarHostState) },
         containerColor = appearanceState.containerColor,
         contentColor = appearanceState.contentColor,
         topBar = {
-            LargeTopAppBar(
+            TopAppBar(
                 title = { Text(context.getString(R.string.settings_experiment_title)) },
-                colors = TopAppBarDefaults.largeTopAppBarColors(
+                colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = Color.Transparent,
                     scrolledContainerColor = Color.Transparent
                 ),
@@ -77,8 +72,7 @@ fun Activity_Settings_ExperimentSettings(
                             )
                         }
                     )
-                },
-                scrollBehavior = scrollBehavior
+                }
             )
         },
         content = {
@@ -171,16 +165,7 @@ fun Activity_Settings_ExperimentSettings(
                                         mainViewModel.saveApplicationSettings(
                                             saveUserSettings = true,
                                             onCompleted = {
-                                                val packageManager: PackageManager =
-                                                    context.packageManager
-                                                val intent: Intent =
-                                                    packageManager.getLaunchIntentForPackage(context.packageName)!!
-                                                val componentName: ComponentName =
-                                                    intent.component!!
-                                                val restartIntent: Intent =
-                                                    Intent.makeRestartActivityTask(componentName)
-                                                context.startActivity(restartIntent)
-                                                Runtime.getRuntime().exit(0)
+                                                ActivityUtils.restartApp(context)
                                             }
                                         )
                                     }

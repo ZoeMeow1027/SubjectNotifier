@@ -11,7 +11,7 @@ import io.zoemeow.dutschedule.model.ProcessState
 import io.zoemeow.dutschedule.model.VariableListState
 import io.zoemeow.dutschedule.model.VariableState
 import io.zoemeow.dutschedule.repository.DutRequestRepository
-import io.zoemeow.dutschedule.utils.launchOnScope
+import io.zoemeow.dutschedule.utils.ExtensionUtils.Companion.launchOnScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

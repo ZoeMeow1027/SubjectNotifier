@@ -9,7 +9,7 @@ import io.zoemeow.dutschedule.model.AppearanceState
 import io.zoemeow.dutschedule.ui.view.news.Activity_News_NewsDetail
 import io.zoemeow.dutschedule.ui.view.news.Activity_News
 import io.zoemeow.dutschedule.ui.view.news.Activity_News_NewsSearch
-import io.zoemeow.dutschedule.utils.openLink
+import io.zoemeow.dutschedule.utils.ExtensionUtils.Companion.openLink
 
 @AndroidEntryPoint
 class NewsActivity : BaseActivity() {
